@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · Assessment &amp; Feedback with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:640px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:700px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── PRINCIPLE BANNER ── */
+.principle{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;border-radius:var(--radius);padding:1.4rem 1.7rem;margin:1.2rem auto 0;max-width:760px;box-shadow:var(--shadow-md)}
+.principle .p-icon{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--orange-light);flex-shrink:0}
+.principle p{font-size:.9rem;line-height:1.55;color:rgba(255,255,255,0.9)}
+.principle strong{color:#fff}
+
+/* ── ACTIVITY: SORT / ORDER STEPS ── */
+.order-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.order-wrap{grid-template-columns:1fr}}
+.order-pool{display:flex;flex-direction:column;gap:.6rem}
+.step-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;font-size:.85rem;line-height:1.45;cursor:pointer;transition:all .2s;font-weight:500;user-select:none;position:relative}
+.step-chip:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.step-chip .chip-sub{font-size:.72rem;color:var(--text-muted);margin-top:.25rem;font-style:italic}
+.step-chip.used{opacity:0;pointer-events:none;position:absolute;visibility:hidden}
+.step-chip.shake{animation:shake .35s ease;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.order-slots{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:120px;background:rgba(255,255,255,0.5)}
+.order-slot-line{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem .3rem;font-size:.84rem;line-height:1.5;animation:fadeIn .35s ease;border-bottom:1px dashed var(--border)}
+.order-slot-line:last-child{border-bottom:none}
+.slot-num{font-family:var(--mono);font-size:.7rem;font-weight:600;color:#fff;background:var(--orange);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.05rem}
+.order-hint{margin-top:.8rem;padding:.7rem .9rem;background:var(--red-light);border-left:3px solid var(--red);border-radius:4px;font-size:.78rem;color:#7A2A1E;line-height:1.55;display:none}
+.order-hint.show{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── HUMAN-IN-THE-LOOP MARKING ── */
+.mark-case{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.4rem;margin-top:1rem}
+.mark-label{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);margin-bottom:.5rem;display:block}
+.student-work{background:var(--bg-light);border-left:3px solid var(--border);border-radius:4px;padding:.8rem 1rem;font-size:.84rem;line-height:1.6;color:var(--text-secondary);font-style:italic;margin-bottom:1rem}
+.ai-draft{background:#1A1B2E;border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:1rem;position:relative}
+.ai-draft .ai-tag{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-light);display:block;margin-bottom:.5rem}
+.ai-draft .ai-grade{font-family:var(--mono);font-size:.9rem;color:#fff;font-weight:600;margin-bottom:.4rem}
+.ai-draft .ai-comment{font-size:.82rem;color:#E8E8EC;line-height:1.6}
+.mark-choices{display:grid;gap:.5rem;margin-top:.4rem}
+.mark-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .95rem;font-size:.84rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.mark-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.mark-opt:disabled{cursor:default;opacity:.75}
+.mark-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.mark-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.mark-explain{margin-top:.8rem;padding:.8rem 1rem;border-radius:6px;font-size:.79rem;line-height:1.6;display:none}
+.mark-explain.show{display:block;animation:fadeIn .3s ease}
+.mark-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.mark-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── COMPARE / CRITERIA CARDS ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card.good .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card.bad .compare-icon{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card.good li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.compare-card.bad li::before{content:'✗';color:var(--red);font-weight:700;flex-shrink:0}
+
+/* ── CLASSIFY BUCKETS ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+
+/* ── REDESIGN QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── COMPLETION SUMMARY ── */
+.summary-card{background:linear-gradient(135deg,#FFF,var(--bg-light));border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-top:1.5rem;box-shadow:var(--shadow-md);position:relative;overflow:hidden}
+.summary-card::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:var(--orange-glow)}
+.summary-card h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:.4rem;position:relative}
+.summary-card>p{font-size:.9rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.2rem;position:relative}
+.summary-list{list-style:none;display:grid;gap:.6rem;position:relative}
+.summary-list li{display:flex;gap:.7rem;align-items:flex-start;font-size:.85rem;line-height:1.5;color:var(--text-primary)}
+.summary-list li .s-check{color:var(--green);font-weight:700;flex-shrink:0;font-size:1rem}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── NEXT UP ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .f-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff;margin-bottom:.3rem}
+.site-footer .f-logo span{color:var(--orange)}
+.site-footer .f-tag{font-size:.72rem;color:var(--text-muted);letter-spacing:.02em;margin-bottom:1rem}
+.site-footer .f-copy{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1rem}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 · Week 1</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 1 · AI for Teachers</div>
+  <h1>Assessment &amp; Feedback with AI — <em>AI drafts, the teacher decides</em></h1>
+  <p class="hero-sub">Three hands-on activities. Order the assessment loop from goal to adjustment, sit in the marker's chair and decide whether to accept or override an AI's first-pass grade, then sort tasks by how easily AI can game them — and redesign the weak ones into authentic assessment. You'll write no code. You'll practise judgement.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<div style="max-width:1080px;margin:0 auto;padding:0 2rem">
+  <div class="principle">
+    <span class="p-icon">“</span>
+    <p><strong>The through-line for this hour:</strong> AI can draft rubrics, generate items, and suggest feedback in seconds — but it cannot know your student, your context, or your professional standard. Every activity below keeps a human decision at the point where it matters. AI proposes; <strong>you</strong> dispose.</p>
+  </div>
+</div>
+
+<!-- ── ACTIVITY 1: ORDER THE ASSESSMENT LOOP ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Order the assessment loop</h2>
+    <p class="lesson-intro">Good assessment isn't "set a test." It's a repeatable loop where every step depends on the one before it — and where AI can accelerate the middle without ever owning the ends. The seven steps below are scrambled. Click them in the order a thoughtful teacher would run them. A wrong click explains why that step can't come yet.</p>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem">Click the next step of the loop</h4>
+      <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:.4rem">Full loop: <strong>Define → Format → Items → Rubric → Mark → Feedback → Adjust</strong></p>
+      <div class="order-wrap">
+        <div class="order-pool" id="stepPool"></div>
+        <div>
+          <div class="order-slots" id="stepSlots">
+            <div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="stepPlaceholder">Your ordered loop will build here, step by step…</div>
+          </div>
+          <div class="order-hint" id="stepHint"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: HUMAN-IN-THE-LOOP MARKING ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">The marker's chair — accept or override?</h2>
+    <p class="lesson-intro">Letting AI mark unsupervised is where teachers get burned: it's confident, fast, and sometimes flatly wrong. The durable skill is <strong>reviewing an AI first pass</strong> and deciding — with justification — whether to accept it, edit it, or throw it out. Read each student response, read the AI's draft grade and comment, then choose the professional move.</p>
+
+    <div id="markWrap"></div>
+    <div class="activity-feedback" id="feedback2"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetActivity2()">↻ Retry cases</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: AI-VULNERABILITY CLASSIFY + REDESIGN ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">3</span>
+    <h2 class="lesson-title">AI-resistant or easily gamed?</h2>
+    <p class="lesson-intro">A student with a chatbot can complete some tasks in ten seconds — and learn nothing. Others resist that shortcut because they demand process, personal context, or live thinking. Study the two profiles, sort each assessment task into its bucket, then pick the authentic redesign that turns a gameable task into a meaningful one.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-icon">R</div>
+        <h4>AI-resistant</h4>
+        <p>Hard to fake because the value is in the <strong>doing</strong>, not the artefact.</p>
+        <ul>
+          <li>Requires in-class or oral demonstration</li>
+          <li>Ties to the student's own data, draft, or experience</li>
+          <li>Assesses process: notes, revisions, reasoning aloud</li>
+          <li>Asks "why did you choose this?" not just "what is the answer?"</li>
+        </ul>
+      </div>
+      <div class="compare-card bad">
+        <div class="compare-icon">G</div>
+        <h4>Easily gamed</h4>
+        <p>A generic prompt-and-paste produces a passable answer with <strong>no learning</strong>.</p>
+        <ul>
+          <li>Take-home essay on a common, public topic</li>
+          <li>Definition or summary of a well-known text</li>
+          <li>Answer has one findable "correct" form</li>
+          <li>No process, no context, no defence required</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.2rem">Sort each task into its bucket</h4>
+      <p style="font-size:.8rem;color:var(--text-muted);margin-bottom:.4rem">Drag each assessment task. Hover a wrong pill afterwards to see the reasoning.</p>
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="taskList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="resistant">
+            <div class="bucket-title">AI-resistant</div>
+            <div class="bucket-sub">Value is in the doing</div>
+            <div class="bucket-drop" data-drop="resistant"></div>
+          </div>
+          <div class="bucket" data-bucket="gamed">
+            <div class="bucket-title">Easily gamed</div>
+            <div class="bucket-sub">Prompt-and-paste passes</div>
+            <div class="bucket-drop" data-drop="gamed"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3a"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetSort()">↻ Reshuffle</button>
+        <button class="btn btn-primary" onclick="showSortAnswers()">Show answers</button>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Now redesign the gameable task</h4>
+      <div id="redesignWrap"></div>
+      <div class="activity-feedback" id="feedback3b"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetRedesign()">↻ Retry</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMPLETION SUMMARY ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <div class="summary-card">
+      <h3>What you can now do</h3>
+      <p>You didn't learn a tool — you rehearsed three judgement calls that hold up no matter which AI you use next year.</p>
+      <ul class="summary-list">
+        <li><span class="s-check">✓</span> <strong>Run the loop:</strong> Define → Format → Items → Rubric → Mark → Feedback → Adjust — and know that AI helps most in the middle, never at the ends you own.</li>
+        <li><span class="s-check">✓</span> <strong>Mark with a human in the loop:</strong> treat every AI grade and comment as a draft to verify against the rubric and the actual student, not a verdict.</li>
+        <li><span class="s-check">✓</span> <strong>Design for integrity:</strong> spot easily-gamed tasks and redesign them around process, personal context, and live defence.</li>
+        <li><span class="s-check">✓</span> <strong>Stay honest about the risks:</strong> AI hallucinates confident wrong feedback, can carry bias into grading, and mishandles student data — so the teacher's review is the safeguard, not an optional extra.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-top:0;padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into practice. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Think of one assessment you set this term that would be "easily gamed" by a chatbot. What single change would make it AI-resistant without doubling your workload?</div>
+        <textarea placeholder="I could add an in-class defence, tie it to their own draft, or ask them to explain their reasoning aloud because..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">When you use AI to draft feedback, what will you always check before it reaches a student — and why is that check non-negotiable?</div>
+        <textarea placeholder="I'll always verify the grade against the rubric and check the comment is true for THIS student, because AI can sound confident and still be wrong or biased..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 4 · Communication, Admin &amp; Professional Growth</h3>
+      <p>You can assess and give feedback with AI as a trusted drafting partner. Next: protect student privacy before a single word reaches a chatbot, tune the tone of a parent message, and assemble the whole week into one human-reviewed workflow.</p>
+      <a href="04-communication-admin.html" class="btn btn-primary">Continue to Lesson 4 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="f-logo">Moksh<span>Path</span></div>
+  <div class="f-tag">Guided Path to True Learning</div>
+  <p style="font-size:.78rem;max-width:520px;margin:0 auto;line-height:1.6">School of AI Careers · AI for Teachers. Durable workflows over tool tutorials — because the tools will change and your judgement won't.</p>
+  <div class="f-copy">© 2026 MokshPath. For educators, by educators.</div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Order the assessment loop ─── */
+const STEPS = [
+  {order:1, tag:'Define', text:'Define the learning goal', sub:'What must students actually be able to do? Everything else serves this.'},
+  {order:2, tag:'Format', text:'Choose the format', sub:'Quiz, essay, oral, project — pick the form that best evidences the goal.'},
+  {order:3, tag:'Items', text:'Draft the items or tasks', sub:'AI can generate a first batch of questions — you cull and fix them.'},
+  {order:4, tag:'Rubric', text:'Build the rubric', sub:'Define what good looks like at each level before anyone answers.'},
+  {order:5, tag:'Mark', text:'Mark the work', sub:'AI can do a first pass; you verify every grade against the rubric.'},
+  {order:6, tag:'Feedback', text:'Give feedback', sub:'Turn marks into growth: specific, kind, actionable — reviewed by you.'},
+  {order:7, tag:'Adjust', text:'Adjust teaching', sub:'The results feed back into what you reteach and what you set next.'}
+];
+const STEP_HINTS = {
+  1:'Start by defining the learning goal — you can\'t choose a format or write items for a target you haven\'t named.',
+  2:'Once the goal is set, choose the format that best evidences it. Format before items: you write different questions for an oral vs an essay.',
+  3:'With goal and format decided, now draft the items or tasks. This is where AI can generate a first batch for you to cull.',
+  4:'Build the rubric next — define what "good" looks like before marking, not after. A rubric written mid-marking drifts to fit the pile.',
+  5:'Now mark the work. AI can take a first pass, but marking comes after the rubric exists to measure against.',
+  6:'Feedback follows marking: you turn the grade into specific, actionable guidance — reviewed by you before it reaches the student.',
+  7:'Finally, adjust your teaching. The whole point of the loop is that results change what you do next.'
+};
+let stepPos = 0, stepMistakes = 0;
+function renderSteps(){
+  const shuffled = [...STEPS].sort(()=>Math.random()-0.5);
+  $('stepPool').innerHTML = shuffled.map(s =>
+    `<div class="step-chip" data-order="${s.order}" onclick="pickStep(${s.order}, this)">
+      ${s.text}<div class="chip-sub">${s.sub}</div>
+    </div>`).join('');
+}
+function pickStep(order, chip){
+  const hint = $('stepHint');
+  if (order !== stepPos + 1) {
+    stepMistakes++;
+    chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
+    hint.innerHTML = `<strong>Not yet.</strong> ${STEP_HINTS[stepPos + 1]}`;
+    hint.classList.add('show');
+    return;
+  }
+  hint.classList.remove('show');
+  stepPos++;
+  chip.classList.add('used');
+  const step = STEPS.find(s => s.order === order);
+  const ph = $('stepPlaceholder'); if (ph) ph.remove();
+  const line = document.createElement('div');
+  line.className = 'order-slot-line';
+  line.innerHTML = `<span class="slot-num">${stepPos}</span><span><strong>${step.tag}:</strong> ${step.text}</span>`;
+  $('stepSlots').appendChild(line);
+  if (stepPos === STEPS.length) finishSteps();
+}
+function finishSteps(){
+  const fb = $('feedback1');
+  if (stepMistakes === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect order — zero wrong clicks.</strong> Notice where AI belongs: it accelerates <em>Items, Mark, and Feedback</em> in the middle, but <strong>Define</strong> (the goal) and <strong>Adjust</strong> (what you do next) are irreducibly yours. Automate the middle; own the ends.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Ordered — with ${stepMistakes} wrong click${stepMistakes>1?'s':''}.</strong> The order <em>is</em> the lesson. The two most common slips: writing items before the rubric (so the rubric bends to fit the questions), and marking before the rubric exists (so "good" gets invented mid-pile). Goal first, rubric before marking, adjust last. Start over for a clean run.`;
+  }
+  $('prog1').classList.add('done');
+}
+function resetActivity1(){
+  stepPos = 0; stepMistakes = 0;
+  $('stepHint').classList.remove('show');
+  $('feedback1').className = 'activity-feedback';
+  $('stepSlots').innerHTML = '<div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="stepPlaceholder">Your ordered loop will build here, step by step…</div>';
+  renderSteps();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Human-in-the-loop marking ─── */
+const CASES = [
+  {
+    label:'Case A · Year 9 Science, short answer',
+    task:'Question: "Explain why we see lightning before we hear thunder."',
+    work:'"Light travels much faster than sound, so the light from the lightning reaches our eyes almost instantly while the sound takes longer to travel the same distance to our ears."',
+    grade:'AI grade: 2 / 5',
+    comment:'"The answer is vague and does not mention the speed of light in metres per second or give the exact speed of sound. Missing scientific precision."',
+    opts:[
+      {t:'Accept the AI grade — the student didn\'t give the numbers.', ok:false},
+      {t:'Override: the answer is correct and complete for the question asked; regrade to 5/5.', ok:true},
+      {t:'Accept, but add a comment praising the effort.', ok:false}
+    ],
+    ex:'Override. The question asked *why*, not for exact velocities — the student nailed the concept and the causal reasoning. The AI invented a stricter standard than the rubric or the question set. This is the classic failure mode: AI penalising a correct answer for not matching an imagined "ideal" it hallucinated. Your rubric, not the model\'s mood, defines full marks.'
+  },
+  {
+    label:'Case B · Year 11 History, paragraph',
+    task:'Question: "Give one cause of the 1789 French Revolution and explain it."',
+    work:'"One cause was that Napoleon raised taxes on the poor which made everyone angry and start the revolution in 1789."',
+    grade:'AI grade: 4 / 5',
+    comment:'"Strong, clearly written response that identifies a cause and explains its effect. Good historical detail."',
+    opts:[
+      {t:'Accept — the AI says it\'s strong and well written.', ok:false},
+      {t:'Override: it\'s fluent but factually wrong (Napoleon rose to power after 1789); regrade and correct the error.', ok:true},
+      {t:'Accept the grade but ask the student to add a date.', ok:false}
+    ],
+    ex:'Override. The response is confident, fluent — and historically false: Napoleon didn\'t cause the 1789 Revolution. The AI graded the *writing* and missed the *fact*, exactly what fluent-but-wrong AI feedback does to fluent-but-wrong student work. Accepting would reward and reinforce a misconception. A human who knows the subject catches this in one read; the model didn\'t.'
+  },
+  {
+    label:'Case C · Year 8 English, personal recount',
+    task:'Prompt: "Write about a time you felt proud." (Marked for structure & voice.)',
+    work:'"When my little sister was in hospital I read to her every night even though I was scared. When she came home she said I was brave and I felt proud of myself."',
+    grade:'AI grade: 3 / 5',
+    comment:'"Consider using more sophisticated vocabulary and varied sentence openers to elevate the writing to a higher band."',
+    opts:[
+      {t:'Send the AI comment as-is — it\'s technically valid feedback.', ok:false},
+      {t:'Keep the grade but rewrite the feedback to first acknowledge the personal, emotional content before the technical next step.', ok:true},
+      {t:'Override the grade to 5/5 because the story is moving.', ok:false}
+    ],
+    ex:'Edit the feedback. The technical note isn\'t wrong, but sending it cold to a child who just shared something vulnerable is tone-deaf — AI has no sense of who it\'s talking to. Good feedback here names what worked (honest, moving voice) first, then offers one growth step. The grade may be fair; the *humanity* of the message is the teacher\'s job. AI drafts; you make it fit the child.'
+  }
+];
+let caseAnswered = 0, caseScore = 0;
+function renderCases(){
+  caseAnswered = 0; caseScore = 0;
+  $('markWrap').innerHTML = CASES.map((c, ci) => {
+    const order = c.opts.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    return `<div class="mark-case" id="case${ci}">
+      <span class="mark-label">${c.label}</span>
+      <div style="font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.6rem">${c.task}</div>
+      <div class="student-work">${c.work}</div>
+      <div class="ai-draft">
+        <span class="ai-tag">◆ AI first-pass draft — review before it counts</span>
+        <div class="ai-grade">${c.grade}</div>
+        <div class="ai-comment">${c.comment}</div>
+      </div>
+      <div style="font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-bottom:.5rem">Your professional decision:</div>
+      <div class="mark-choices">${order.map(oi =>
+        `<button class="mark-opt" onclick="answerCase(${ci}, ${oi}, this)">${c.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="mark-explain" id="mx${ci}"></div>
+    </div>`;
+  }).join('');
+  $('feedback2').className = 'activity-feedback';
+}
+function answerCase(ci, oi, btn){
+  const c = CASES[ci];
+  const box = $('case' + ci);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = c.opts[oi];
+  const rightText = c.opts.find(o => o.ok).t;
+  box.querySelectorAll('.mark-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === rightText.trim()) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('mx' + ci);
+  ex.className = 'mark-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>That\'s the professional call.</strong> ' : '<strong>Not the strongest move.</strong> ') + c.ex;
+  caseAnswered++;
+  if (opt.ok) caseScore++;
+  if (caseAnswered === CASES.length) finishCases();
+}
+function finishCases(){
+  const fb = $('feedback2');
+  if (caseScore === CASES.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>3/3 — you kept the human firmly in the loop.</strong> Each case was a different AI failure: an invented stricter standard, fluent-but-false content, and tone-deafness to a real child. The pattern across all three: <em>the AI draft was a starting point, never the verdict.</em> Speed from the machine, judgement from you.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You got ${caseScore}/3.</strong> Re-read the explanations on any you missed — they map the three ways AI marking goes wrong: hallucinating a harsher rubric, rewarding confident falsehoods, and ignoring the human on the other end. None of these are caught by trusting the grade; all are caught by a teacher who reads the work. Retry the cases.`;
+  }
+  $('prog2').classList.add('done');
+}
+function resetActivity2(){
+  renderCases();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3a: Classify by AI-vulnerability ─── */
+const TASKS = [
+  {id:'t1', text:'In-class 5-minute oral defence of the essay they submitted', hint:'Live, unscripted, tied to their own work.', bucket:'resistant', why:'You can\'t outsource a live conversation. If they can defend the choices, they understand them; if AI wrote it, the defence collapses.'},
+  {id:'t2', text:'Take-home essay: "Discuss the themes of Romeo and Juliet"', hint:'A public topic with millions of existing answers.', bucket:'gamed', why:'A single generic prompt produces a passable essay in seconds. Nothing about it is tied to this student or requires them to think.'},
+  {id:'t3', text:'Annotate and reflect on three drafts of their own project, explaining what changed and why', hint:'Their process is the evidence.', bucket:'resistant', why:'The value is the visible thinking across their own drafts — a record AI can\'t fabricate because it never lived the process.'},
+  {id:'t4', text:'Write a definition of "photosynthesis" for homework', hint:'One findable correct answer.', bucket:'gamed', why:'There is a single well-known answer a chatbot returns instantly. It tests recall of a public fact, not the student\'s learning.'},
+  {id:'t5', text:'Solve a problem using data the class collected in today\'s experiment', hint:'The inputs exist only in your room.', bucket:'resistant', why:'AI has no access to your class\'s live data. The task forces the student to actually work with what they gathered.'},
+  {id:'t6', text:'Summarise the plot of a famous novel in 200 words', hint:'Summaries of famous books are everywhere.', bucket:'gamed', why:'Plot summaries of well-known texts are the easiest thing for AI to produce. It demonstrates nothing about the student\'s reading.'}
+];
+const TASK_BUCKETS = {resistant:'AI-resistant', gamed:'Easily gamed'};
+let sortPlaced = {};
+function renderTasks(){
+  const list = $('taskList');
+  const shuffled = [...TASKS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(t => `
+    <div class="scenario-card" draggable="true" data-id="${t.id}">
+      <div class="scenario-text">${t.text}</div>
+      <div class="scenario-hint">${t.hint}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', e => { e.dataTransfer.setData('id', card.dataset.id); card.classList.add('dragging'); });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupSortBuckets(){
+  document.querySelectorAll('#activity-3 .bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => { e.preventDefault(); b.classList.remove('drag-over'); handleTaskDrop(e.dataTransfer.getData('id'), b.dataset.bucket); });
+  });
+}
+function handleTaskDrop(id, bucket){
+  const task = TASKS.find(t => t.id === id);
+  if (!task || sortPlaced[id]) return;
+  const correct = task.bucket === bucket;
+  sortPlaced[id] = {bucket, correct};
+  const card = document.querySelector(`#taskList .scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + task.text.substring(0, 34) + (task.text.length > 34 ? '…' : '');
+  pill.title = correct ? task.why : `Correct bucket: ${TASK_BUCKETS[task.bucket]}. ${task.why}`;
+  document.querySelector(`#activity-3 [data-drop="${bucket}"]`).appendChild(pill);
+  checkSortDone();
+}
+function checkSortDone(){
+  if (Object.keys(sortPlaced).length === TASKS.length) {
+    const right = Object.values(sortPlaced).filter(p => p.correct).length;
+    const fb = $('feedback3a');
+    if (right === TASKS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six sorted correctly.</strong> The tell is consistent: <em>gameable</em> tasks have a public, single-shot answer with no personal stake; <em>resistant</em> tasks demand live demonstration, the student\'s own process, or context that lives only in your room. You don\'t have to ban AI — you design so it can\'t do the learning for them.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the reasoning. Rule of thumb: if a stranger with a chatbot could produce a passing answer in ten seconds without knowing your student, it\'s gameable. Reshuffle to try again.`;
+    }
+    $('prog3').classList.add('done');
+    checkActivity3Complete();
+  }
+}
+function resetSort(){
+  sortPlaced = {};
+  $('feedback3a').className = 'activity-feedback';
+  document.querySelectorAll('#activity-3 .bucket-drop').forEach(d => d.innerHTML = '');
+  renderTasks();
+}
+function showSortAnswers(){
+  TASKS.forEach(t => { if (!sortPlaced[t.id]) handleTaskDrop(t.id, t.bucket); });
+}
+
+/* ─── ACTIVITY 3b: Pick the authentic redesign ─── */
+const REDESIGN = {
+  q:'The gameable task "Take-home essay: Discuss the themes of Romeo and Juliet" needs redesigning. Which version makes it authentic — genuinely AI-resistant — without simply banning technology?',
+  opts:[
+    {t:'Keep the essay but add "do not use AI" to the instructions and hope for the best.', ok:false, ex:'A rule you can\'t verify isn\'t a redesign — it just moves the problem to trust. The task is still a public prompt with a paste-ready answer. Integrity comes from design, not disclaimers.'},
+    {t:'Make it a longer essay covering more plays, so there\'s more to write.', ok:false, ex:'More volume of a gameable task is just more for the chatbot to generate. Length doesn\'t create authenticity; it multiplies the same weakness.'},
+    {t:'Have students connect one theme to a specific choice a named character makes, then defend that reading in a short in-class discussion referencing their own annotated text.', ok:true, ex:'This is the authentic move. It ties the response to the student\'s own annotations (personal process), demands a specific defensible claim (not a generic summary), and adds a live defence (can\'t be outsourced). Same content, but now the learning has to actually happen. AI can still help them prepare — it just can\'t do it for them.'},
+    {t:'Turn it into a multiple-choice quiz on the play\'s themes.', ok:false, ex:'A quiz on a famous text is even more gameable — the answers are one lookup away and it tests recall, not the interpretive thinking the essay was meant to build. You\'d be trading a weak task for a weaker one.'}
+  ]
+};
+let redesignDone = false;
+function renderRedesign(){
+  redesignDone = false;
+  const order = REDESIGN.opts.map((_,i)=>i).sort(()=>Math.random()-0.5);
+  $('redesignWrap').innerHTML = `<div class="quiz-q" id="rq">
+    <div class="quiz-q-num">Pick the authentic redesign</div>
+    <div class="quiz-q-text">${REDESIGN.q}</div>
+    <div class="quiz-opts">${order.map(oi =>
+      `<button class="quiz-opt" onclick="answerRedesign(${oi}, this)">${REDESIGN.opts[oi].t}</button>`).join('')}
+    </div>
+    <div class="quiz-explain" id="rqx"></div>
+  </div>`;
+  $('feedback3b').className = 'activity-feedback';
+}
+function answerRedesign(oi, btn){
+  if (redesignDone) return;
+  redesignDone = true;
+  const opt = REDESIGN.opts[oi];
+  const rightText = REDESIGN.opts.find(o => o.ok).t;
+  document.querySelectorAll('#rq .quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === rightText.trim()) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('rqx');
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Exactly.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  checkActivity3Complete();
+}
+
+function checkActivity3Complete(){
+  if (Object.keys(sortPlaced).length === TASKS.length && redesignDone) {
+    $('prog3').classList.add('done');
+  }
+}
+function resetRedesign(){ renderRedesign(); }
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderSteps();
+  renderCases();
+  renderTasks();
+  setupSortBuckets();
+  renderRedesign();
+});
+</script>
+</body>
+</html>

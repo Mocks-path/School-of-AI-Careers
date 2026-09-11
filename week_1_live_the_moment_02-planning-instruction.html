@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · Planning &amp; Designing Instruction with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:820px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:640px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:700px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: BUILD-A-BRIEF ── */
+.brief-prompt{background:var(--bg-light);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:var(--radius-sm);padding:1rem 1.2rem;margin-bottom:1.3rem}
+.brief-prompt .bp-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.3rem}
+.brief-prompt .bp-text{font-family:var(--mono);font-size:.9rem;color:var(--navy);line-height:1.5}
+.brief-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media (max-width:760px){.brief-grid{grid-template-columns:1fr}}
+.brief-h{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem}
+.chip-pool{display:flex;flex-direction:column;gap:.6rem}
+.brief-chip{display:flex;align-items:flex-start;gap:.6rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .9rem;font-size:.84rem;line-height:1.45;cursor:pointer;transition:all .2s;user-select:none}
+.brief-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.brief-chip.selected{border-color:var(--orange);background:var(--orange-glow)}
+.brief-chip .chk{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;transition:all .2s;margin-top:.05rem}
+.brief-chip.selected .chk{background:var(--orange);border-color:var(--orange)}
+.brief-chip.reveal-good{border-color:var(--green);background:var(--green-light)}
+.brief-chip.reveal-good .chk{background:var(--green);border-color:var(--green)}
+.brief-chip.reveal-bad{border-color:var(--red);background:var(--red-light)}
+.brief-chip.reveal-bad .chk{background:var(--red);border-color:var(--red)}
+.brief-chip .bc-tag{display:block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:.15rem}
+.brief-preview{background:var(--bg-light);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem;font-size:.85rem;line-height:1.6;color:var(--text-secondary);min-height:120px}
+.brief-preview .bpv-line{margin-bottom:.35rem}
+.brief-preview .bpv-key{font-weight:700;color:var(--navy)}
+.brief-preview em{color:var(--text-muted);font-style:italic}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 2: MATCH DIFFERENTIATION ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-pool{display:flex;flex-direction:column;gap:.6rem}
+.match-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.84rem;line-height:1.5;font-weight:500;cursor:grab;transition:all .2s;user-select:none}
+.match-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.match-chip.dragging{opacity:.4}
+.match-chip.placed{opacity:.35;pointer-events:none}
+.match-chip.placed.correct{border-color:var(--green);background:var(--green-light)}
+.match-chip.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.match-slots{display:flex;flex-direction:column;gap:.7rem}
+.match-slot{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;transition:all .25s;background:rgba(255,255,255,0.5)}
+.match-slot.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.match-slot-need{font-size:.83rem;color:var(--text-primary);font-weight:600;line-height:1.5;margin-bottom:.15rem}
+.match-slot-sub{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.match-drop{margin-top:.5rem;min-height:24px;display:flex;flex-wrap:wrap;gap:.35rem}
+.match-pill{border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;border:1px solid var(--border);background:var(--bg-card)}
+.match-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.match-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+
+/* ── ACTIVITY 3: KEEP / FIX / DISCARD ── */
+.kfd-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem;font-size:.75rem}
+.kfd-legend span{display:inline-flex;align-items:center;gap:.35rem;font-weight:600;color:var(--text-secondary)}
+.kfd-legend .dot{width:11px;height:11px;border-radius:50%}
+.kfd-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem 1.3rem;margin-bottom:1rem;transition:all .25s}
+.kfd-card.right{border-color:var(--green)}
+.kfd-card.miss{border-color:var(--red)}
+.kfd-context{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.4rem}
+.kfd-output{font-size:.9rem;color:var(--navy);line-height:1.6;background:var(--bg-light);border-left:3px solid var(--border);border-radius:4px;padding:.8rem 1rem;margin-bottom:.9rem;font-family:var(--mono);font-size:.82rem}
+.kfd-buttons{display:flex;gap:.5rem;flex-wrap:wrap}
+.kfd-btn{padding:.45rem 1.1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.76rem;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.kfd-btn:hover{border-color:var(--orange);color:var(--orange)}
+.kfd-btn:disabled{cursor:not-allowed;opacity:.5}
+.kfd-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.kfd-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.kfd-btn.show-answer{border-color:var(--green);color:var(--green);opacity:1}
+.kfd-explain{display:none;margin-top:.8rem;font-size:.82rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.7rem}
+.kfd-explain.show{display:block;animation:fadeIn .3s ease}
+.kfd-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:.35rem}
+.kfd-verdict.v-right{color:#256B29}
+.kfd-verdict.v-miss{color:#A03A2C}
+
+/* ── HONEST LIMITS ── */
+.limits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem}
+@media (max-width:760px){.limits-grid{grid-template-columns:1fr}}
+.limit-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);border-top:3px solid var(--red);padding:1.3rem;transition:all .3s}
+.limit-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.limit-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.limit-card h4 .lc-badge{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--red-light);color:#A03A2C;padding:.2rem .5rem;border-radius:50px}
+.limit-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem}
+.limit-card .lc-guard{font-size:.78rem;line-height:1.55;color:#2E6B30;background:var(--green-light);border-radius:6px;padding:.55rem .7rem;border-left:3px solid var(--green)}
+.limit-card .lc-guard strong{color:#1F5723}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── SUMMARY / COMPLETION ── */
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-top:1.5rem;box-shadow:var(--shadow-sm)}
+.summary-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
+.summary-check{width:44px;height:44px;border-radius:50%;background:var(--green-light);border:2px solid var(--green);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.summary-head h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--navy)}
+.summary-list{display:grid;gap:.7rem;margin-top:.5rem}
+.summary-item{display:flex;gap:.7rem;font-size:.87rem;line-height:1.6;color:var(--text-secondary)}
+.summary-item .si-dot{color:var(--orange);font-weight:800;flex-shrink:0}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+/* ── SITE FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .footer-logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#fff;margin-bottom:.3rem}
+.site-footer .footer-logo span{color:var(--orange)}
+.site-footer .footer-tag{font-size:.75rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;letter-spacing:.04em}
+.site-footer .footer-fine{font-size:.72rem;color:rgba(255,255,255,0.4);line-height:1.7;max-width:560px;margin:0 auto}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 · Week 1</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 1 · AI for Teachers</div>
+  <h1>Planning &amp; Designing Instruction — <em>a vague prompt gets a vague plan</em></h1>
+  <p class="hero-sub">Three hands-on activities. Build a strong lesson brief by picking the elements that actually matter, match differentiation supports to real learners, then judge AI-generated output with keep, fix, or discard — including spotting a hallucinated standard before it reaches your class.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: BUILD-A-BRIEF ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Build the brief — turn a vague prompt into a strong one</h2>
+    <p class="lesson-intro">AI answers the prompt you actually gave it. "Make me a lesson on fractions" produces something generic, off-level, and untethered from your class. A strong brief carries the context only you have. Select the <strong>five elements</strong> that turn the weak prompt below into a brief worth sending — watch the preview build, then check your choices.</p>
+
+    <div class="lesson-card">
+      <div class="brief-prompt">
+        <div class="bp-label">The weak prompt</div>
+        <div class="bp-text">"Make me a lesson on fractions."</div>
+      </div>
+
+      <div class="brief-grid">
+        <div>
+          <div class="brief-h">Pick the elements that strengthen it</div>
+          <div class="chip-pool" id="chipPool"></div>
+        </div>
+        <div>
+          <div class="brief-h">Your brief, building live</div>
+          <div class="brief-preview" id="briefPreview">
+            <em>Select elements on the left and your brief assembles here…</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkBrief()">Check my brief</button>
+        <button class="btn btn-ghost" onclick="resetBrief()">↻ Reset</button>
+      </div>
+      <div class="tip-note">💡 <strong>The five that matter:</strong> audience &amp; grade, the specific standard, time available, and real constraints. Flattery, tool-name-dropping, and "make it amazing" add words, not clarity. AI drafts from your brief — a precise brief is you deciding before the AI generates.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: MATCH DIFFERENTIATION ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Match the support to the learner</h2>
+    <p class="lesson-intro">Differentiation is not "easier" and "harder" — it is the <strong>right support for a specific need</strong>. AI can draft a scaffold, a core task, an extension, or a language-support version in seconds; your job is knowing which learner needs which. Drag each AI-drafted support to the learner it fits. Wrong pills carry a hover hint.</p>
+
+    <div class="lesson-card">
+      <div class="match-grid">
+        <div>
+          <div class="brief-h">AI-drafted supports — drag each one</div>
+          <div class="match-pool" id="matchPool"></div>
+        </div>
+        <div>
+          <div class="brief-h">The learners in your class</div>
+          <div class="match-slots" id="matchSlots"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMatch()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showMatchAnswers()">Show me the answers</button>
+      </div>
+      <div class="tip-note">💡 <strong>The teacher's call:</strong> AI produced four versions in seconds — but only you know that Leo is capable and bored, or that Amira understands the maths and is still building English. Matching support to a real child, using context AI cannot see, is the professional decision. Never paste a named pupil's data to get it.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: KEEP / FIX / DISCARD ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Judge the AI output — keep, fix, or discard?</h2>
+    <p class="lesson-intro">AI just returned a lesson plan. Some of it is genuinely useful, some needs a quick edit, and one line is quietly dangerous — a <strong>hallucinated standard</strong> that sounds official but does not exist. Read each piece of output and decide: <strong>keep</strong> it as-is, <strong>fix</strong> it before use, or <strong>discard</strong> it entirely. This is "AI drafts, the teacher decides" in action.</p>
+
+    <div class="lesson-card">
+      <div class="kfd-legend">
+        <span><span class="dot" style="background:var(--green)"></span> KEEP — good as-is</span>
+        <span><span class="dot" style="background:#E89B2E"></span> FIX — usable after editing</span>
+        <span><span class="dot" style="background:var(--red)"></span> DISCARD — do not use</span>
+      </div>
+      <div id="kfdGrid"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetKFD()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HONEST LIMITS ── -->
+<section class="lesson" id="limits" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:var(--navy)">!</span>
+    <h2 class="lesson-title">Three checks to run on every AI-generated plan</h2>
+    <p class="lesson-intro">Activity 3 showed the traps in one plan. Here they are as a permanent checklist. A polished draft can still be wrong, skewed, or unsafe — and a plan looks finished precisely when it is most tempting to skip the check. Run these three every time before a plan reaches your class.</p>
+    <div class="lesson-card">
+      <div class="limits-grid">
+        <div class="limit-card">
+          <h4>Verify <span class="lc-badge">Hallucination</span></h4>
+          <p>AI invents standards, objectives, and "facts" that read as official but do not exist — exactly the trap in Activity 3. It has no live curriculum access and fills gaps with confident fiction.</p>
+          <div class="lc-guard"><strong>Check:</strong> cross-reference every cited standard and factual claim against the real curriculum document. Unverified means discard, not keep.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Balance <span class="lc-badge">Bias</span></h4>
+          <p>AI reaches for default names, examples, and contexts that can quietly exclude the children in front of you — and it treats one cultural frame as the neutral one without telling you.</p>
+          <div class="lc-guard"><strong>Check:</strong> read the plan for who is represented and who is missing. Swap in names, examples, and contexts that reflect your actual class.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Protect <span class="lc-badge">Privacy</span></h4>
+          <p>It is tempting to paste a struggling pupil's real details to get a "personalised" plan. That data can be stored and used to train the model — a breach dressed up as convenience.</p>
+          <div class="lc-guard"><strong>Check:</strong> brief in generic terms only. Match the plan to the real child yourself, adding the personal context during your own edit.</div>
+        </div>
+      </div>
+      <div class="tip-note">💡 <strong>Verify, balance, protect.</strong> A strong brief gets you a strong draft; these three checks turn a strong draft into a safe lesson. The AI generates fast — you decide what is true, fair, and safe enough to teach.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">Type a sentence each. Writing it down helps the habit settle. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Write a one-line brief for a real lesson you teach — audience, grade, standard, time, and one constraint.</div>
+        <textarea placeholder="Design a 40-minute Year 4 lesson on comparing fractions, aligned to [your curriculum reference], for a mixed-ability class with no printer access this week."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">How will you check a standard or citation in an AI-generated plan before you build on it?</div>
+        <textarea placeholder="I'll cross-check every cited standard against the official curriculum document myself, because AI can invent a convincing reference that doesn't exist."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SUMMARY / COMPLETION ── -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="summary-card">
+      <div class="summary-head">
+        <div class="summary-check">✓</div>
+        <h3>Lesson 2 complete — what you now carry</h3>
+      </div>
+      <div class="summary-list">
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>A strong brief beats a strong tool.</strong> Audience, grade, standard, time, and constraints turn a vague prompt into a plan worth using.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Differentiation is matching, not sorting.</strong> AI drafts scaffold, core, extension, and language support; you decide which learner needs which.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Judge every output: keep, fix, or discard.</strong> Most AI plans are a useful draft, never a finished lesson.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Hunt the hallucinated standard.</strong> AI can invent official-sounding citations — verify every reference against the real curriculum before you build on it.</span></div>
+      </div>
+    </div>
+
+    <div class="next-up">
+      <h3>Week 1 complete — you have the foundation</h3>
+      <p>You can now draw the AI boundary, hold the "AI drafts, the teacher decides" pattern, write a brief that gets a strong plan, and judge what comes back. Week 2 puts these workflows to work across resources, feedback, and communication.</p>
+      <a href="../../week_2_live_the_moment/01-resources-and-materials.html" class="btn btn-primary">Continue to Week 2 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SITE FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">Moksh<span>Path</span></div>
+  <div class="footer-tag">Guided Path to True Learning</div>
+  <div class="footer-fine">School of AI Careers · AI for Teachers · Week 1. This lesson teaches durable planning workflows and professional judgment, not tool tutorials. AI can hallucinate standards, carry bias, and misjudge reading level — verify before you use. No pupil data should be entered into any AI tool. AI drafts — the teacher always decides.</div>
+</footer>
+
+<script>
+/* ─── ACTIVITY 1: Build-a-Brief ─── */
+const BRIEF_CHIPS = [
+  {id:'c1', tag:'Audience &amp; grade', text:'"…for a mixed-ability Year 4 class (ages 8–9)."', good:true, key:'Audience', val:'Year 4, ages 8–9, mixed ability'},
+  {id:'c2', tag:'Standard', text:'"…aligned to our curriculum objective on comparing fractions with the same denominator."', good:true, key:'Standard', val:'Comparing fractions, same denominator'},
+  {id:'c3', tag:'Time', text:'"…that fits a single 40-minute lesson."', good:true, key:'Time', val:'One 40-minute lesson'},
+  {id:'c4', tag:'Constraint', text:'"…with no printer access this week, so on-screen or hands-on only."', good:true, key:'Constraint', val:'No printing — on-screen / hands-on'},
+  {id:'c5', tag:'Prior knowledge', text:'"…assuming pupils can already identify halves and quarters."', good:true, key:'Prior knowledge', val:'Knows halves and quarters'},
+  {id:'c6', tag:'Filler', text:'"…and please make it absolutely amazing and world-class!"', good:false, key:null, val:null},
+  {id:'c7', tag:'Filler', text:'"…use the most advanced AI model you have."', good:false, key:null, val:null},
+  {id:'c8', tag:'Filler', text:'"…you are the world\'s best teacher, I trust you completely."', good:false, key:null, val:null}
+];
+let briefSel = {};
+function renderBrief(){
+  const pool = document.getElementById('chipPool');
+  pool.innerHTML = BRIEF_CHIPS.map(c => `
+    <div class="brief-chip" id="bc_${c.id}" onclick="toggleBrief('${c.id}')">
+      <span class="chk">✓</span>
+      <span><span class="bc-tag">${c.tag}</span>${c.text}</span>
+    </div>`).join('');
+  updateBriefPreview();
+}
+function toggleBrief(id){
+  if (document.getElementById('feedback1').classList.contains('show')) return;
+  briefSel[id] = !briefSel[id];
+  document.getElementById('bc_' + id).classList.toggle('selected', briefSel[id]);
+  updateBriefPreview();
+}
+function updateBriefPreview(){
+  const chosen = BRIEF_CHIPS.filter(c => briefSel[c.id] && c.good);
+  const prev = document.getElementById('briefPreview');
+  if (Object.keys(briefSel).filter(k=>briefSel[k]).length === 0){
+    prev.innerHTML = '<em>Select elements on the left and your brief assembles here…</em>';
+    return;
+  }
+  let lines = '<div class="bpv-line" style="margin-bottom:.6rem">"Design a lesson on fractions</div>';
+  chosen.forEach(c => {
+    lines += `<div class="bpv-line"><span class="bpv-key">${c.key}:</span> ${c.val}</div>`;
+  });
+  const fillerCount = BRIEF_CHIPS.filter(c => briefSel[c.id] && !c.good).length;
+  if (fillerCount) lines += `<div class="bpv-line"><em>(+ ${fillerCount} filler line${fillerCount>1?'s':''} that add words, not context)</em></div>`;
+  prev.innerHTML = lines;
+}
+function checkBrief(){
+  const fb = document.getElementById('feedback1');
+  const goodPicked = BRIEF_CHIPS.filter(c => briefSel[c.id] && c.good).length;
+  const badPicked = BRIEF_CHIPS.filter(c => briefSel[c.id] && !c.good).length;
+  const totalGood = BRIEF_CHIPS.filter(c => c.good).length;
+  BRIEF_CHIPS.forEach(c => {
+    const el = document.getElementById('bc_' + c.id);
+    if (briefSel[c.id]) el.classList.add(c.good ? 'reveal-good' : 'reveal-bad');
+    else if (c.good) el.classList.add('reveal-good');
+  });
+  if (goodPicked >= 5 && badPicked === 0){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Strong brief.</strong> You included audience &amp; grade, the standard, time, a real constraint, and prior knowledge — and skipped the flattery and tool-name-dropping. That context is you <em>deciding</em> before the AI generates, which is exactly why the plan comes back usable. Every green element is now highlighted.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    let note = `<strong>You picked ${goodPicked} strong element${goodPicked!==1?'s':''}`;
+    if (badPicked) note += ` and ${badPicked} filler line${badPicked>1?'s':''}`;
+    note += `.</strong> The five that actually shape the plan are highlighted green: audience &amp; grade, standard, time, constraint, and prior knowledge. Flattery, "make it amazing", and naming the AI model add words but no context — AI drafts from substance, not praise. Hit <em>Reset</em> and try for all five, no filler.`;
+    fb.innerHTML = note;
+  }
+  document.getElementById('prog1').classList.add('done');
+}
+function resetBrief(){
+  briefSel = {};
+  document.getElementById('feedback1').className = 'activity-feedback';
+  renderBrief();
+  document.getElementById('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Match Differentiation ─── */
+const LEARNERS = [
+  {id:'l1', need:'Leo grasps the concept in minutes and then disrupts when he\'s bored.', sub:'Ready to go further', match:'extension'},
+  {id:'l2', need:'Priya finds the multi-step task overwhelming and freezes at the start.', sub:'Needs a way in', match:'scaffold'},
+  {id:'l3', need:'The bulk of the class is working right at grade level.', sub:'On-level majority', match:'core'},
+  {id:'l4', need:'Amira understands the maths but is still building her English.', sub:'Language, not ability', match:'eal'}
+];
+const SUPPORTS = [
+  {id:'scaffold', label:'Scaffold', text:'A step-by-step version with sentence starters, a worked example, and the task broken into smaller chunks.', hint:'Sentence starters and a worked example are a scaffold — for the learner who freezes at the start, not the bored one.'},
+  {id:'core', label:'Core task', text:'The standard grade-level task most pupils will do, with no added support or challenge.', hint:'The plain grade-level task is the core — meant for the on-level majority.'},
+  {id:'extension', label:'Extension', text:'An open "prove it another way" challenge that stretches thinking beyond the objective.', hint:'A stretch-beyond challenge is an extension — for the pupil who finishes fast and needs depth.'},
+  {id:'eal', label:'EAL / language support', text:'The same task with key vocabulary glossed, visuals added, and instructions in plainer language.', hint:'Glossed vocabulary and visuals are language support (EAL) — for the pupil whose barrier is English, not the maths.'}
+];
+let matchPlaced = {};
+function renderMatch(){
+  const pool = document.getElementById('matchPool');
+  const slots = document.getElementById('matchSlots');
+  const shuffled = [...SUPPORTS].sort(()=>Math.random()-0.5);
+  pool.innerHTML = shuffled.map(s => `
+    <div class="match-chip" draggable="true" data-id="${s.id}">
+      <strong style="font-family:'DM Serif Display',serif;font-size:.9rem;color:var(--navy);display:block;margin-bottom:.2rem">${s.label}</strong>${s.text}
+    </div>`).join('');
+  slots.innerHTML = LEARNERS.map(l => `
+    <div class="match-slot" data-need="${l.match}">
+      <div class="match-slot-need">${l.need}</div>
+      <div class="match-slot-sub">${l.sub}</div>
+      <div class="match-drop" data-drop="${l.match}"></div>
+    </div>`).join('');
+  pool.querySelectorAll('.match-chip').forEach(chip => {
+    chip.addEventListener('dragstart', e => { e.dataTransfer.setData('id', chip.dataset.id); chip.classList.add('dragging'); });
+    chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+  });
+  slots.querySelectorAll('.match-slot').forEach(slot => {
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault(); slot.classList.remove('drag-over');
+      handleMatch(e.dataTransfer.getData('id'), slot.dataset.need);
+    });
+  });
+}
+function handleMatch(id, need){
+  const support = SUPPORTS.find(s => s.id === id);
+  if (!support || matchPlaced[id]) return;
+  const correct = support.id === need;
+  matchPlaced[id] = {need, correct};
+  const chip = document.querySelector(`.match-chip[data-id="${id}"]`);
+  chip.classList.add('placed', correct ? 'correct' : 'wrong');
+  const drop = document.querySelector(`.match-drop[data-drop="${need}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'match-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + support.label;
+  pill.title = correct ? support.hint : `Not the right fit here. ${support.hint}`;
+  drop.appendChild(pill);
+  checkMatchDone();
+}
+function checkMatchDone(){
+  if (Object.keys(matchPlaced).length === SUPPORTS.length){
+    const right = Object.values(matchPlaced).filter(p => p.correct).length;
+    const fb = document.getElementById('feedback2');
+    if (right === SUPPORTS.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All four matched.</strong> Scaffold for the pupil who freezes, extension for the one who races ahead, core for the majority, and language support for the learner whose barrier is English — not maths. AI drafted every version; you did the part that matters — deciding which real child needs which.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You matched ${right} of 4.</strong> Hover any red pill for the fit. Watch the trap: a language barrier is not a low-ability signal — Amira needs EAL support, not a scaffold. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    document.getElementById('prog2').classList.add('done');
+  }
+}
+function resetMatch(){
+  matchPlaced = {};
+  document.getElementById('feedback2').className = 'activity-feedback';
+  renderMatch();
+  document.getElementById('prog2').classList.remove('done');
+}
+function showMatchAnswers(){
+  SUPPORTS.forEach(s => { if (!matchPlaced[s.id]) handleMatch(s.id, s.id); });
+}
+
+/* ─── ACTIVITY 3: Keep / Fix / Discard ─── */
+const KFD = [
+  {
+    context:'Lesson objective',
+    output:'"By the end of the lesson, pupils can compare two fractions with the same denominator and explain which is larger."',
+    answer:'keep',
+    exp:'Clear, measurable, and correctly scoped to the standard. This is exactly the kind of clean objective AI can draft well — keep it as-is.'
+  },
+  {
+    context:'Cited curriculum standard',
+    output:'"This lesson meets National Numeracy Standard 6.4c, which requires all Year 4 pupils to divide fractions by whole numbers."',
+    answer:'discard',
+    exp:'This is the hallucinated-standard trap. The citation sounds official but is invented — and dividing fractions is well beyond a Year-4 comparing-fractions lesson. AI fabricates confident, specific references it cannot actually verify. Discard it, and never build a plan on an unverified standard: check every citation against the real curriculum yourself.'
+  },
+  {
+    context:'Worked example',
+    output:'"Example: 3/8 vs 5/8. Both have eighths, so compare the top numbers — 5 is more than 3, so 5/8 is larger."',
+    answer:'keep',
+    exp:'Mathematically correct, on-level, and clearly explained. A solid draft example you can use directly — keep it.'
+  },
+  {
+    context:'Real-world hook',
+    output:'"Hook: ask pupils which is bigger, a pizza where you ate 3 slices or one where you ate 5 slices."',
+    answer:'fix',
+    exp:'The pizza idea is good, but it forgets the fractions must share a denominator — "3 slices" and "5 slices" of different pizzas is not a same-denominator comparison and could confuse pupils. Fix it: specify two pizzas each cut into 8 slices. A useful draft that needs your edit before it goes in.'
+  },
+  {
+    context:'Assessment question',
+    output:'"Exit ticket: Circle the larger fraction — 2/6 or 4/6 — and write one sentence explaining how you know."',
+    answer:'keep',
+    exp:'Aligned to the objective, correctly a same-denominator pair, and asks for reasoning. A clean, usable exit ticket — keep it.'
+  },
+  {
+    context:'Timing note',
+    output:'"Allow 5 minutes for the starter, 45 for direct teaching, 30 for independent work, and 15 to review."',
+    answer:'fix',
+    exp:'The structure is fine but the times sum to 95 minutes — this was briefed as a single 40-minute lesson. AI ignored your time constraint. Fix the timings to fit 40 minutes rather than discarding the sensible shape.'
+  }
+];
+let kfdAnswered = {};
+function renderKFD(){
+  const grid = document.getElementById('kfdGrid');
+  grid.innerHTML = KFD.map((k, i) => `
+    <div class="kfd-card" id="kfdCard${i}">
+      <div class="kfd-context">${k.context}</div>
+      <div class="kfd-output">${k.output}</div>
+      <div class="kfd-buttons">
+        <button class="kfd-btn" id="kfd_${i}_keep" onclick="answerKFD(${i},'keep')">KEEP</button>
+        <button class="kfd-btn" id="kfd_${i}_fix" onclick="answerKFD(${i},'fix')">FIX</button>
+        <button class="kfd-btn" id="kfd_${i}_discard" onclick="answerKFD(${i},'discard')">DISCARD</button>
+      </div>
+      <div class="kfd-explain" id="kfdEx${i}"></div>
+    </div>`).join('');
+}
+function answerKFD(i, choice){
+  if (kfdAnswered[i] !== undefined) return;
+  const k = KFD[i];
+  const right = choice === k.answer;
+  kfdAnswered[i] = right;
+  const card = document.getElementById('kfdCard' + i);
+  card.classList.add(right ? 'right' : 'miss');
+  ['keep','fix','discard'].forEach(opt => {
+    const btn = document.getElementById(`kfd_${i}_${opt}`);
+    btn.disabled = true;
+    if (opt === choice) btn.classList.add(right ? 'picked-right' : 'picked-wrong');
+    else if (opt === k.answer && !right) btn.classList.add('show-answer');
+  });
+  const ex = document.getElementById('kfdEx' + i);
+  ex.className = 'kfd-explain show';
+  ex.innerHTML = `<span class="kfd-verdict ${right ? 'v-right' : 'v-miss'}">${right ? '✓ Correct — ' + k.answer.toUpperCase() : '✗ Not quite — the answer is ' + k.answer.toUpperCase()}</span>${k.exp}`;
+  if (Object.keys(kfdAnswered).length === KFD.length){
+    const score = Object.values(kfdAnswered).filter(Boolean).length;
+    const fb = document.getElementById('feedback3');
+    if (score === KFD.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>6 of 6 — you judged every piece.</strong> Most of the plan was a useful draft, two lines needed your edit, and one — the invented standard — had to go. That is the whole job of the augmented teacher: AI drafts fast, and you decide what is true, what needs fixing, and what never reaches your class.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You scored ${score} of 6.</strong> Re-read the ones you missed — especially the cited standard. If you can't verify a citation against the real curriculum, treat it as discard, not keep. AI plans are drafts to judge, never finished lessons to trust. Hit <em>Try again</em> to retake it.`;
+    }
+    document.getElementById('prog3').classList.add('done');
+  }
+}
+function resetKFD(){
+  kfdAnswered = {};
+  document.getElementById('feedback3').className = 'activity-feedback';
+  renderKFD();
+  document.getElementById('prog3').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderBrief();
+  renderMatch();
+  renderKFD();
+});
+</script>
+</body>
+</html>

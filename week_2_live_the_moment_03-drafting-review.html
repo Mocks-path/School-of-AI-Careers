@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · Drafting &amp; Document Review with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:820px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:660px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:720px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── PRINCIPLE BANNER ── */
+.principle{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;border-radius:var(--radius);padding:1.4rem 1.7rem;margin:1.2rem auto 0;max-width:760px;box-shadow:var(--shadow-md)}
+.principle .p-icon{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--orange-light);flex-shrink:0}
+.principle p{font-size:.9rem;line-height:1.55;color:rgba(255,255,255,0.9)}
+.principle strong{color:#fff}
+
+/* ── ACTIVITY BUTTONS / FEEDBACK ── */
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── ACTIVITY 1: ORDER THE LOOP ── */
+.order-help{font-size:.8rem;color:var(--text-muted);margin-bottom:1rem}
+.order-bank{display:flex;flex-direction:column;gap:.6rem}
+.order-step{display:flex;align-items:center;gap:.9rem;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;cursor:grab;transition:all .2s;user-select:none}
+.order-step:hover{border-color:var(--orange);box-shadow:var(--shadow-sm)}
+.order-step.dragging{opacity:.4;border-style:dashed}
+.order-step.locked{cursor:default;background:var(--green-light);border-color:var(--green)}
+.order-handle{font-family:var(--mono);font-size:1.1rem;color:var(--text-muted);flex-shrink:0;line-height:1}
+.order-idx{font-family:var(--mono);font-size:.8rem;font-weight:600;width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.order-step.locked .order-idx{background:var(--green)}
+.order-body h5{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.15rem}
+.order-body p{font-size:.78rem;color:var(--text-secondary);line-height:1.45}
+
+/* ── ACTIVITY 2: REVIEWER'S CHAIR (MCQ) ── */
+.chair-issue{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.chair-flag{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.3rem .7rem;border-radius:50px;margin-bottom:.7rem}
+.chair-flag.ai-flag{color:#7A4A0A;background:#FFF4E5}
+.chair-flag.ai-miss{color:#7A2A1E;background:var(--red-light)}
+.chair-clause{font-size:.85rem;color:var(--text-primary);background:var(--bg-light);border-left:3px solid var(--border);border-radius:4px;padding:.7rem .9rem;margin-bottom:.7rem;line-height:1.6;font-family:var(--mono);font-size:.8rem}
+.chair-ainote{font-size:.82rem;color:var(--text-secondary);font-style:italic;margin-bottom:.9rem;line-height:1.55}
+.chair-ainote strong{color:var(--navy);font-style:normal}
+.chair-q{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .95rem;font-size:.83rem;line-height:1.55;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── ACTIVITY 3: CLASSIFY CLAUSES ── */
+.classify-help{font-size:.8rem;color:var(--text-muted);margin-bottom:1rem}
+.clause-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1.1rem;margin-bottom:.7rem;transition:all .2s}
+.clause-chip .cc-text{font-size:.83rem;color:var(--text-primary);line-height:1.55;margin-bottom:.6rem;font-family:var(--mono);font-size:.79rem}
+.cc-buttons{display:flex;gap:.5rem;flex-wrap:wrap}
+.cc-btn{font-size:.75rem;font-weight:600;padding:.4rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-light);color:var(--text-secondary);cursor:pointer;transition:all .2s;font-family:inherit}
+.cc-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.cc-btn:disabled{cursor:default}
+.cc-btn.chosen-right{background:var(--green-light);border-color:var(--green);color:#1F5723}
+.cc-btn.chosen-wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E}
+.cc-btn.reveal-right{border-color:var(--green);color:var(--green)}
+.cc-explain{margin-top:.6rem;padding:.6rem .8rem;border-radius:6px;font-size:.77rem;line-height:1.55;display:none}
+.cc-explain.show{display:block;animation:fadeIn .3s ease}
+.cc-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.cc-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REDLINE PICK ── */
+.redline-block{margin-top:1.6rem;border-top:1px dashed var(--border);padding-top:1.4rem}
+.redline-block h4{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);margin-bottom:.4rem}
+.redline-block>p{font-size:.83rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem}
+.redline-opt{text-align:left;width:100%;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1.05rem;font-size:.82rem;line-height:1.6;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary);margin-bottom:.5rem;display:block}
+.redline-opt:hover:not(:disabled){border-color:var(--orange)}
+.redline-opt:disabled{cursor:default;opacity:.8}
+.redline-opt .ro-label{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:.3rem}
+.redline-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723}
+.redline-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E}
+.del{color:var(--red);text-decoration:line-through}
+.ins{color:var(--green);font-weight:600}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.3rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card.good .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card.bad .compare-icon{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card.good li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.compare-card.bad li::before{content:'✗';color:var(--red);font-weight:700;flex-shrink:0}
+
+/* ── DONE CARD ── */
+.done-card{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:1.5rem;text-align:center;position:relative;overflow:hidden;display:none}
+.done-card.show{display:block;animation:fadeIn .5s ease}
+.done-card::before{content:'';position:absolute;top:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.15)}
+.done-card::after{content:'';position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(102,187,106,0.12)}
+.done-badge{display:inline-block;font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-light);background:rgba(232,122,46,0.15);border-radius:50px;padding:.35rem 1rem;margin-bottom:1rem;position:relative}
+.done-card h3{font-family:'DM Serif Display',serif;font-size:1.7rem;margin-bottom:.6rem;position:relative}
+.done-card>p{font-size:.92rem;color:rgba(255,255,255,0.8);margin:0 auto 1.2rem;max-width:560px;line-height:1.6;position:relative}
+.done-recap{list-style:none;max-width:560px;margin:0 auto;text-align:left;display:grid;gap:.5rem;position:relative}
+.done-recap li{display:flex;gap:.6rem;align-items:flex-start;font-size:.85rem;line-height:1.5;color:rgba(255,255,255,0.9)}
+.done-recap li .r-check{color:#7BD67F;font-weight:700;flex-shrink:0}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .f-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff;margin-bottom:.3rem}
+.site-footer .f-logo span{color:var(--orange)}
+.site-footer .f-tag{font-size:.72rem;color:var(--text-muted);letter-spacing:.02em;margin-bottom:1rem}
+.site-footer .f-copy{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1rem}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 · Week 2</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 2 · AI for Lawyers</div>
+  <h1>Drafting &amp; Document Review — <em>AI drafts, the lawyer verifies and decides</em></h1>
+  <p class="hero-sub">Three hands-on activities built around real legal judgement. First, order the drafting-and-review loop so speed never skips verification. Then take the reviewer's chair: weigh what AI flagged in a contract and decide, with justification, what to accept and what to override — including the issue it missed and the one it over-flagged. Finally, sort clauses against a playbook and pick the redline you'd actually send.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<div style="max-width:1080px;margin:0 auto;padding:0 2rem">
+  <div class="principle">
+    <span class="p-icon">“</span>
+    <p><strong>The rule that keeps you on the right side of your duty:</strong> AI can generate a first draft or flag a possible issue in seconds — but a citation it invents, a term it misreads, or a risk it never noticed is <em>your</em> signature on the page. The durable workflow is <strong>AI drafts, the lawyer verifies and decides.</strong> Speed is the tool's gift; judgement, and the accountability that comes with it, stay human.</p>
+  </div>
+</div>
+
+<!-- ── ACTIVITY 1: ORDER THE LOOP ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Order the drafting &amp; review loop</h2>
+    <p class="lesson-intro">A good AI-assisted drafting workflow isn't "ask the bot, paste the answer." It's a loop with the human wrapped around it — and the order matters. Skip <em>Define</em> and you get a generic draft; skip <em>Verify</em> and you send something you can't stand behind. <strong>Drag the six stages into the correct order</strong>, from setting the goal to finalising the document.</p>
+
+    <div class="lesson-card">
+      <p class="order-help">Drag to reorder. When the sequence is right, every step locks green.</p>
+      <div class="order-bank" id="orderBank"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkOrder()">Check my order</button>
+        <button class="btn btn-ghost" onclick="shuffleOrder()">↻ Shuffle</button>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: THE REVIEWER'S CHAIR ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">The reviewer's chair</h2>
+    <p class="lesson-intro">An AI contract-review tool has read a draft services agreement and produced a list of flagged issues. But the tool has no judgement — it flags patterns, not consequences. <strong>Your job is to decide</strong>: accept what it caught, override what it got wrong, and — crucially — catch what it never saw. One issue below is an AI <em>over-flag</em> (it's actually fine), and one real problem is an AI <em>miss</em> the machine sailed past. Read each, then choose the call a careful lawyer makes.</p>
+
+    <div id="chairWrap"></div>
+    <div class="activity-feedback" id="feedback2"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetChair()">↻ Retake</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: CLASSIFY CLAUSES + REDLINE ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">3</span>
+    <h2 class="lesson-title">Playbook-compliant, or risky?</h2>
+    <p class="lesson-intro">Most firms review against a <strong>playbook</strong> — a standard of what's acceptable and what isn't. AI can pre-sort clauses against it, but the standard is set by lawyers, and the close calls are yours. For each clause pulled from a vendor's draft, decide whether it's <strong>playbook-compliant</strong> (acceptable as written) or <strong>risky</strong> (needs a redline). Then, at the bottom, pick the better redline for the clause that matters most.</p>
+
+    <div class="lesson-card">
+      <p class="classify-help">Choose one label per clause. You'll see why it lands where it does.</p>
+      <div id="classifyWrap"></div>
+
+      <div class="redline-block">
+        <h4>Now pick the redline</h4>
+        <p>The limitation-of-liability clause is risky as written — it caps the vendor's liability at a token amount and carves out nothing. Two AI-suggested redlines are below. Both change the number; only one protects your client the way a careful lawyer would. <strong>Which redline do you send?</strong></p>
+        <div id="redlineWrap"></div>
+        <div class="quiz-explain" id="redlineExplain"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHERE AI HELPS / WHERE THE LAWYER IS THE POINT ── -->
+<section class="lesson" style="background:var(--bg-light);padding-top:2.4rem;padding-bottom:2.4rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.6rem">Where AI speeds you up — and where it can't stand in for you</h2>
+    <p class="lesson-intro" style="margin-bottom:1.2rem">Drafting and review are exactly where generative AI feels most magical — and most dangerous. The honest picture: it's a superb first-drafter and a tireless first-pass reader, and a terrible final authority. Know which is which.</p>
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-icon">+</div>
+        <h4>Where AI genuinely earns its keep</h4>
+        <p>High-volume, low-final-authority work — draft fast, then verify.</p>
+        <ul>
+          <li>A first draft of a standard clause or a routine letter you'll edit</li>
+          <li>Summarising a long document so you know where to read closely</li>
+          <li>Surfacing candidate issues and inconsistencies for you to weigh</li>
+          <li>Turning your bullet points into structured, formatted prose</li>
+        </ul>
+      </div>
+      <div class="compare-card bad">
+        <div class="compare-icon">–</div>
+        <h4>Where the lawyer is the point</h4>
+        <p>Authority, accuracy, and duty of care never delegate.</p>
+        <ul>
+          <li>Verifying every citation, statute, and defined term against source</li>
+          <li>Deciding what risk your client can and can't accept</li>
+          <li>Catching the issue the model never flagged</li>
+          <li>Signing your name to advice you haven't independently checked</li>
+        </ul>
+      </div>
+    </div>
+    <div class="principle" style="margin-top:1.4rem;max-width:none">
+      <span class="p-icon">→</span>
+      <p><strong>The honest caveats you carry into every AI draft:</strong> models invent citations and case law that don't exist, quietly misstate terms, and inherit bias from their training data. Anything touching a client's confidential facts may be stored by a public tool and could threaten <strong>privilege</strong>. So: never trust an authority you haven't pulled yourself, never paste unprotected client detail, and never let a fast draft substitute for your own read.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-top:2rem;padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — carry it into your next matter</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">On your real work, which step of the loop are you most tempted to shortcut when a deadline is tight — <em>Verify</em> or <em>Review/Redline</em> — and what will you do to protect it?</div>
+        <textarea placeholder="When I'm under deadline I'm tempted to skip pulling the authorities myself, so I'll..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Write your personal rule for citations and defined terms in any AI-assisted draft. What will you refuse to sign until you've checked it yourself?</div>
+        <textarea placeholder="I will not rely on any case, statute, or defined term unless I've pulled it from the source myself, because..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DONE / SUMMARY -->
+<section class="lesson" id="summary" style="padding-top:0">
+  <div class="container">
+    <div class="done-card show" style="display:block">
+      <span class="done-badge">Lesson 3 · Week 2</span>
+      <h3>Drafting &amp; review, done the durable way.</h3>
+      <p>You didn't learn a tool — you practised a workflow that survives whatever tool comes next. AI moved fast; at every stage that mattered, you stayed in the reviewer's chair.</p>
+      <ul class="done-recap">
+        <li><span class="r-check">✓</span> <strong>The loop</strong> — Define → Inputs → Draft → Review/Redline → Verify → Finalize, with a human wrapped around it.</li>
+        <li><span class="r-check">✓</span> <strong>The reviewer's chair</strong> — you accepted, overrode, caught the AI's miss, and dismissed its over-flag.</li>
+        <li><span class="r-check">✓</span> <strong>The playbook</strong> — you sorted compliant from risky and picked the redline that actually protects the client.</li>
+        <li><span class="r-check">✓</span> <strong>The caveats</strong> — hallucinated authorities, misstated terms, bias, and privilege stay front of mind.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;text-align:center;position:relative;overflow:hidden">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative">Next: the client, the matter, and your growth</h3>
+      <p style="font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;max-width:560px;margin-left:auto;margin-right:auto;position:relative;line-height:1.6">You can draft and review with AI and keep control. Lesson 4 takes the same principle to the client-facing side — the confidentiality firewall before a prompt ever leaves your desk, plain-language communication that's still accurate, and a capstone that assembles the whole week into one human-owned matter.</p>
+      <a href="04-client-matter-management.html" class="btn btn-primary" style="position:relative">On to Lesson 4 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="f-logo">Moksh<span>Path</span></div>
+  <div class="f-tag">Guided Path to True Learning</div>
+  <p style="font-size:.78rem;max-width:520px;margin:0 auto;line-height:1.6">School of AI Careers · AI for Lawyers. Durable workflows over tool tutorials — because the tools will change and your judgement won't.</p>
+  <div class="f-copy">© 2026 MokshPath. Jurisdiction-neutral. Not legal advice.</div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Order the loop ─── */
+const LOOP = [
+  {k:'define', n:'Define', d:'Set the goal, jurisdiction, audience, and the standard the document must meet — before AI writes a word.'},
+  {k:'inputs', n:'Inputs', d:'Gather your facts, precedents, and playbook. Redact anything that must not reach an unprotected tool.'},
+  {k:'draft', n:'Draft', d:'Let AI produce a first draft against your brief. Treat it as raw clay, never the final shape.'},
+  {k:'review', n:'Review / Redline', d:'Read critically, mark up against your playbook, and reshape clauses to protect your client.'},
+  {k:'verify', n:'Verify', d:'Pull every citation, statute, and defined term from the source yourself. Confirm nothing was invented.'},
+  {k:'finalize', n:'Finalize', d:'Own the document in full, sign off, and record that a human made the final call.'}
+];
+const CORRECT = LOOP.map(s => s.k);
+let orderState = [];
+
+function renderOrder(seq){
+  const bank = $('orderBank');
+  bank.innerHTML = seq.map((k, i) => {
+    const s = LOOP.find(x => x.k === k);
+    return `<div class="order-step" draggable="true" data-k="${k}">
+      <span class="order-handle">⋮⋮</span>
+      <span class="order-idx">${i+1}</span>
+      <div class="order-body"><h5>${s.n}</h5><p>${s.d}</p></div>
+    </div>`;
+  }).join('');
+  attachDrag();
+}
+function attachDrag(){
+  const bank = $('orderBank');
+  let dragEl = null;
+  bank.querySelectorAll('.order-step').forEach(step => {
+    step.addEventListener('dragstart', () => { dragEl = step; step.classList.add('dragging'); });
+    step.addEventListener('dragend', () => {
+      step.classList.remove('dragging');
+      orderState = [...bank.querySelectorAll('.order-step')].map(s => s.dataset.k);
+      renumber();
+    });
+  });
+  bank.addEventListener('dragover', e => {
+    e.preventDefault();
+    const after = getAfter(bank, e.clientY);
+    const dragging = bank.querySelector('.dragging');
+    if (!dragging) return;
+    if (after == null) bank.appendChild(dragging);
+    else bank.insertBefore(dragging, after);
+  });
+}
+function getAfter(container, y){
+  const els = [...container.querySelectorAll('.order-step:not(.dragging)')];
+  return els.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) return {offset, element: child};
+    return closest;
+  }, {offset: -Infinity}).element;
+}
+function renumber(){
+  $('orderBank').querySelectorAll('.order-step').forEach((s, i) => {
+    s.querySelector('.order-idx').textContent = i + 1;
+  });
+}
+function shuffleOrder(){
+  let seq;
+  do { seq = [...CORRECT].sort(() => Math.random() - 0.5); }
+  while (seq.join() === CORRECT.join());
+  orderState = seq;
+  renderOrder(seq);
+  $('feedback1').className = 'activity-feedback';
+  $('prog1').classList.remove('done');
+}
+function checkOrder(){
+  orderState = [...$('orderBank').querySelectorAll('.order-step')].map(s => s.dataset.k);
+  const fb = $('feedback1');
+  const correct = orderState.join() === CORRECT.join();
+  if (correct){
+    $('orderBank').querySelectorAll('.order-step').forEach(s => { s.classList.add('locked'); s.setAttribute('draggable','false'); });
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>That's the loop.</strong> Notice the two human bookends doing the heavy lifting: <em>Define</em> at the front means AI drafts against your standard, not a generic one — and <em>Verify</em> near the end is where invented citations and misstated terms get caught before your name goes on it. AI lives in the middle three steps; the judgement wraps around it.`;
+    $('prog1').classList.add('done');
+  } else {
+    // count how many are in the right slot
+    let hits = 0;
+    orderState.forEach((k, i) => { if (k === CORRECT[i]) hits++; });
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>${hits} of 6 in the right place — keep going.</strong> A quick sanity check: the goal (<em>Define</em>) has to come before AI can draft to it, and you can't <em>Finalize</em> until you've <em>Verified</em> that nothing was invented. The AI-heavy step (<em>Draft</em>) belongs in the middle, never at the start or the end.`;
+  }
+}
+
+/* ─── ACTIVITY 2: The reviewer's chair ─── */
+const CHAIR = [
+  {
+    tag:'AI-flagged', tagClass:'ai-flag',
+    clause:'"Either party may terminate this Agreement for convenience upon 3 days’ written notice."',
+    ainote:'<strong>AI flag:</strong> "Short termination-for-convenience window; consider negotiating a longer notice period."',
+    q:'The clause is genuinely one-sided against your client, who is the vendor here and needs runway to wind down. What’s the call?',
+    opts:[
+      {t:'Accept the flag and redline the notice period to something workable (e.g. 30–60 days), tied to your client’s actual wind-down cost.', ok:true},
+      {t:'Override — 3 days is standard, and the flag is just the AI being cautious.', ok:false},
+      {t:'Delete the whole termination clause so neither side can walk away.', ok:false}
+    ],
+    ex_ok:'<strong>Correct call.</strong> The AI surfaced a real asymmetry, but it can’t know your client’s wind-down economics — you do. You accept the flag <em>and</em> set the number to something grounded in the client’s reality. That’s the pattern: AI points, the lawyer decides how far.',
+    ex_no:'The flag was right — 3 days really is punishing for a vendor with wind-down obligations. Overriding it, or nuking the clause entirely, both trade one problem for a worse one. Accept the flag and set a notice period grounded in your client’s actual cost to exit.'
+  },
+  {
+    tag:'AI-flagged', tagClass:'ai-flag',
+    clause:'"This Agreement shall be governed by the laws of the State of Delaware." (Both parties are based in, and perform entirely within, Delaware.)',
+    ainote:'<strong>AI flag:</strong> "Governing-law clause detected — verify it matches the client’s preferred jurisdiction."',
+    q:'This is the AI over-flagging: the clause already names the parties’ home jurisdiction, where they both operate. What’s the call?',
+    opts:[
+      {t:'Override the flag — note that Delaware is already the parties’ home and performance jurisdiction, so it’s appropriate, and move on.', ok:true},
+      {t:'Accept the flag and change the governing law to a different state to be safe.', ok:false},
+      {t:'Escalate to a partner because any AI flag must be actioned.', ok:false}
+    ],
+    ex_ok:'<strong>Right — and this is the skill the machine can’t do.</strong> AI flags patterns, not context. Here the clause is fine <em>because you know the facts</em>: both parties are in Delaware. You override with a short justification for the file. Blindly "fixing" a non-problem is how AI-assisted review introduces new errors.',
+    ex_no:'This one was a trap — an AI over-flag. Changing the governing law away from the parties’ own home jurisdiction would <em>create</em> a problem, and escalating every automated flag drowns real issues in noise. The judgement move is to override with a one-line justification and keep moving.'
+  },
+  {
+    tag:'AI missed this', tagClass:'ai-miss',
+    clause:'"Vendor grants Client a perpetual, irrevocable, worldwide licence to all Vendor Background IP." (Your client is the Vendor. The AI review produced no flag on this line.)',
+    ainote:'<strong>AI flag:</strong> — none. The tool read this as boilerplate licensing language and stayed silent.',
+    q:'The AI missed it entirely. Reading as your client’s lawyer, what have you spotted — and what do you do?',
+    opts:[
+      {t:'A perpetual, irrevocable licence to the client’s own Background IP gives away the vendor’s core assets forever — flag it, redline to a limited licence for the deal’s purpose and term.', ok:true},
+      {t:'Nothing to do — the AI didn’t flag it, so it must be standard.', ok:false},
+      {t:'It’s fine because it’s only "background" IP, which is never valuable.', ok:false}
+    ],
+    ex_ok:'<strong>This is the whole lesson in one clause.</strong> The AI stayed silent on the single most dangerous term — signing away your client’s core IP <em>perpetually and irrevocably</em>. Its silence is not a clearance. You catch it, scope the licence to this deal’s purpose and term, and protect the asset. The lawyer’s read is the last line of defence.',
+    ex_no:'Trusting the AI’s silence as a clearance is exactly the failure mode this activity exists to prevent. A perpetual, irrevocable, worldwide licence to your client’s own Background IP is a giveaway of core assets — and "background" IP is often a company’s crown jewels. The tool missed it; you can’t.'
+  }
+];
+let chairAnswered = 0, chairScore = 0;
+function renderChair(){
+  chairAnswered = 0; chairScore = 0;
+  $('chairWrap').innerHTML = CHAIR.map((c, ci) => {
+    const order = c.opts.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    return `<div class="chair-issue" id="c${ci}">
+      <span class="chair-flag ${c.tagClass}">${c.tag}</span>
+      <div class="chair-clause">${c.clause}</div>
+      <div class="chair-ainote">${c.ainote}</div>
+      <div class="chair-q">${c.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerChair(${ci}, ${oi}, this)">${c.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="cx${ci}"></div>
+    </div>`;
+  }).join('');
+  $('feedback2').className = 'activity-feedback';
+}
+function answerChair(ci, oi, btn){
+  const c = CHAIR[ci];
+  const box = $('c' + ci);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = c.opts[oi];
+  const rightText = c.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === rightText.trim()) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('cx' + ci);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = opt.ok ? c.ex_ok : c.ex_no;
+  chairAnswered++;
+  if (opt.ok) chairScore++;
+  if (chairAnswered === CHAIR.length) finishChair();
+}
+function finishChair(){
+  const fb = $('feedback2');
+  if (chairScore === CHAIR.length){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>3/3 — that’s the reviewer’s judgement.</strong> You accepted a real flag and set the number yourself, overrode an over-flag with a justification instead of "fixing" a non-problem, and — the hard one — caught the giveaway the AI never saw. The tool triages; you decide. Its silence is never a clearance.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You got ${chairScore}/3.</strong> The three calls test three different muscles: accepting a real flag but sizing the fix to your client’s facts, overriding an over-flag without introducing a new error, and catching the miss the AI stayed silent on. That last one is the whole point — a model’s silence is not a clean bill of health. Retake it.`;
+  }
+  $('prog2').classList.add('done');
+}
+function resetChair(){ renderChair(); $('prog2').classList.remove('done'); }
+
+/* ─── ACTIVITY 3: Classify clauses + redline ─── */
+const CLAUSES = [
+  {
+    text:'"Confidential Information shall be protected for a period of five (5) years from the date of disclosure, using at least the same care the receiving party uses for its own confidential information."',
+    answer:'compliant',
+    ex_ok:'<strong>Compliant.</strong> A fixed, reasonable term and a "same care as your own" standard is exactly what most confidentiality playbooks accept. Nothing to redline here — and recognising a clean clause saves you from over-lawyering.',
+    ex_no:'This one is actually fine. A five-year term with a "same standard of care" obligation is a standard, playbook-compliant confidentiality provision. Flagging it as risky is over-lawyering — part of the skill is knowing what to leave alone.'
+  },
+  {
+    text:'"Client agrees to indemnify Vendor against any and all claims, losses, and liabilities arising from or in any way connected to this Agreement, without limitation."',
+    answer:'risky',
+    ex_ok:'<strong>Risky — correctly caught.</strong> An uncapped, all-encompassing indemnity ("any and all… without limitation") shifts unbounded risk onto your client. This needs a redline: cap it, carve out the vendor’s own negligence, and tie it to actual breach.',
+    ex_no:'Look again at "any and all… without limitation." An uncapped indemnity flowing one direction is one of the highest-risk clauses in any agreement — it exposes your client to unbounded liability. This is a redline, not a rubber stamp.'
+  },
+  {
+    text:'"This Agreement, including all schedules, constitutes the entire agreement between the parties and supersedes all prior discussions."',
+    answer:'compliant',
+    ex_ok:'<strong>Compliant.</strong> A standard entire-agreement (merger) clause. As long as the schedules that matter are actually attached and referenced, this is boilerplate you can accept.',
+    ex_no:'This is a routine entire-agreement / merger clause — standard boilerplate in commercial contracts. Provided the referenced schedules are attached, there’s nothing risky here. Save your redlines for the clause that shifts real risk.'
+  },
+  {
+    text:'"Vendor may amend the fees and service levels at any time upon posting an updated version to its website, effective immediately."',
+    answer:'risky',
+    ex_ok:'<strong>Risky — correctly caught.</strong> A unilateral right to change price and service levels "effective immediately" by a website posting gives your client no notice, no consent, and no ability to plan. Redline to require advance written notice and a right to terminate on a material change.',
+    ex_no:'Read the mechanism: the vendor can change fees and service levels unilaterally, immediately, just by updating a web page. That leaves your client with no notice and no consent right — clearly risky. It needs a redline requiring notice and an exit on material change.'
+  }
+];
+let classifyAnswered = 0, classifyScore = 0;
+function renderClassify(){
+  classifyAnswered = 0; classifyScore = 0;
+  $('classifyWrap').innerHTML = CLAUSES.map((c, ci) => `
+    <div class="clause-chip" id="cl${ci}">
+      <div class="cc-text">${c.text}</div>
+      <div class="cc-buttons">
+        <button class="cc-btn" onclick="answerClassify(${ci},'compliant',this)">Playbook-compliant</button>
+        <button class="cc-btn" onclick="answerClassify(${ci},'risky',this)">Risky — needs a redline</button>
+      </div>
+      <div class="cc-explain" id="clx${ci}"></div>
+    </div>`).join('');
+}
+function answerClassify(ci, choice, btn){
+  const chip = $('cl' + ci);
+  if (chip.dataset.done) return;
+  chip.dataset.done = '1';
+  const c = CLAUSES[ci];
+  const correct = choice === c.answer;
+  chip.querySelectorAll('.cc-btn').forEach(b => { b.disabled = true; });
+  if (correct){ btn.classList.add('chosen-right'); classifyScore++; }
+  else {
+    btn.classList.add('chosen-wrong');
+    // highlight the correct one
+    chip.querySelectorAll('.cc-btn').forEach(b => {
+      const isRight = (c.answer === 'compliant' && b.textContent.includes('compliant')) ||
+                      (c.answer === 'risky' && b.textContent.includes('Risky'));
+      if (isRight) b.classList.add('reveal-right');
+    });
+  }
+  const ex = $('clx' + ci);
+  ex.className = 'cc-explain show ' + (correct ? 'ok' : 'no');
+  ex.innerHTML = correct ? c.ex_ok : c.ex_no;
+  classifyAnswered++;
+}
+
+/* ─── Redline pick ─── */
+const REDLINES = [
+  {
+    label:'Redline A',
+    html:'Vendor’s total liability shall not exceed <span class="del">$100</span> <span class="ins">$500</span> in the aggregate.',
+    ok:false,
+    ex:'<strong>Not this one.</strong> It only nudges the number — $500 is still a token cap, and it carves out <em>nothing</em>. If the vendor breaches confidentiality, infringes IP, or acts with gross negligence, your client is still capped at pocket change. Changing the figure without changing the structure is theatre, not protection.'
+  },
+  {
+    label:'Redline B',
+    html:'Vendor’s total liability shall not exceed <span class="del">$100</span> <span class="ins">the fees paid in the 12 months preceding the claim</span>; <span class="ins">provided that this cap shall not apply to breaches of confidentiality, IP infringement, or gross negligence or wilful misconduct.</span>',
+    ok:true,
+    ex:'<strong>This is the redline a careful lawyer sends.</strong> It ties the cap to something proportionate (fees paid) <em>and</em> — crucially — carves out the categories where a token cap would be indefensible: confidentiality, IP, and gross negligence/wilful misconduct. It fixes the structure, not just the number. That distinction is exactly the judgement AI can suggest but can’t own.'
+  }
+];
+function renderRedline(){
+  $('redlineWrap').innerHTML = REDLINES.map((r, i) => `
+    <button class="redline-opt" onclick="answerRedline(${i}, this)">
+      <span class="ro-label">${r.label}</span>${r.html}
+    </button>`).join('');
+}
+function answerRedline(i, btn){
+  const wrap = $('redlineWrap');
+  if (wrap.dataset.done) return;
+  wrap.dataset.done = '1';
+  const r = REDLINES[i];
+  const opts = wrap.querySelectorAll('.redline-opt');
+  opts.forEach((b, bi) => {
+    b.disabled = true;
+    if (REDLINES[bi].ok) b.classList.add('right');
+  });
+  if (!r.ok) btn.classList.add('wrong');
+  const ex = $('redlineExplain');
+  ex.className = 'quiz-explain show ' + (r.ok ? 'ok' : 'no');
+  ex.innerHTML = r.ok ? r.ex : r.ex + '<br><br><em>The stronger redline (B) ties the cap to fees paid and carves out confidentiality, IP, and gross negligence — fixing the structure, not just the number.</em>';
+  $('prog3').classList.add('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  shuffleOrder();
+  renderChair();
+  renderClassify();
+  renderRedline();
+});
+</script>
+</body>
+</html>

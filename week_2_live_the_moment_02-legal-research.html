@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · Legal Research &amp; Analysis with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:800px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:640px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:700px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: BUILD-A-BRIEF ELEMENT PICKER ── */
+.vague-box{background:var(--red-light);border:1.5px solid var(--red);border-left:4px solid var(--red);border-radius:var(--radius-sm);padding:1rem 1.2rem;margin-bottom:1.4rem}
+.vague-box .vb-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#A03A2C;margin-bottom:.3rem}
+.vague-box .vb-text{font-size:.95rem;color:var(--text-primary);font-style:italic;line-height:1.5}
+.element-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem}
+@media (max-width:760px){.element-grid{grid-template-columns:1fr}}
+.element-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:pointer;transition:all .2s;position:relative;user-select:none}
+.element-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.element-card.selected{border-color:var(--orange);background:var(--orange-glow)}
+.element-card.reveal-good{border-color:var(--green);background:var(--green-light)}
+.element-card.reveal-bad{border-color:var(--red);background:var(--red-light)}
+.element-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem}
+.element-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;flex-shrink:0;transition:all .2s}
+.element-card.selected .element-check{background:var(--orange);border-color:var(--orange)}
+.element-card.reveal-good .element-check{background:var(--green);border-color:var(--green)}
+.element-card.reveal-bad .element-check{background:var(--red);border-color:var(--red)}
+.element-name{font-size:.88rem;font-weight:700;color:var(--navy)}
+.element-desc{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+.element-verdict{display:none;margin-top:.5rem;font-size:.75rem;line-height:1.5;padding-top:.5rem;border-top:1px dashed var(--border)}
+.element-card.reveal-good .element-verdict,.element-card.reveal-bad .element-verdict{display:block}
+.element-card.reveal-good .element-verdict{color:#2E6B30}
+.element-card.reveal-bad .element-verdict{color:#A03A2C}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.brief-preview{display:none;margin-top:1.2rem;background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem;font-size:.83rem;line-height:1.7;color:var(--text-primary)}
+.brief-preview.show{display:block;animation:fadeIn .4s ease}
+.brief-preview .bp-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--orange);margin-bottom:.4rem}
+.brief-preview .bp-el{display:inline}
+.brief-preview .bp-el strong{color:var(--navy)}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── INTRO COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 2: VERIFY-OR-TRUST QUIZ ── */
+.quiz-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-bottom:1rem;transition:all .25s}
+.quiz-output{background:var(--bg-light);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:.9rem 1.1rem;margin-bottom:.9rem;font-size:.84rem;line-height:1.6;color:var(--text-primary)}
+.quiz-output .qo-tag{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);font-family:var(--mono);display:block;margin-bottom:.35rem}
+.quiz-q{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-q .qnum{color:var(--orange);font-family:var(--mono);font-size:.82rem;margin-right:.3rem}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}
+@media (max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+.quiz-opt{display:flex;align-items:center;gap:.6rem;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .9rem;cursor:pointer;transition:all .2s;font-size:.84rem;line-height:1.4;font-weight:600}
+.quiz-opt:hover{border-color:var(--orange)}
+.quiz-opt.locked{cursor:not-allowed}
+.quiz-opt .opt-key{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.quiz-opt.reveal-right{border-color:var(--green);background:var(--green-light)}
+.quiz-opt.reveal-right .opt-key{background:var(--green);border-color:var(--green);color:#fff}
+.quiz-opt.reveal-wrong{border-color:var(--red);background:var(--red-light)}
+.quiz-opt.reveal-wrong .opt-key{background:var(--red);border-color:var(--red);color:#fff}
+.quiz-explain{display:none;margin-top:.9rem;font-size:.82rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.7rem}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:.35rem}
+.quiz-verdict.v-right{color:#256B29}
+.quiz-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 3: ORDER THE WORKFLOW ── */
+.order-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.order-wrap{grid-template-columns:1fr}}
+.order-col-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.6rem}
+.order-pool,.order-target{display:flex;flex-direction:column;gap:.6rem;min-height:60px}
+.order-target{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.7rem;background:rgba(255,255,255,0.5);transition:all .2s}
+.order-target.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.order-item{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;cursor:grab;transition:all .2s;display:flex;align-items:center;gap:.7rem;user-select:none}
+.order-item:hover{border-color:var(--orange);box-shadow:var(--shadow-sm)}
+.order-item.dragging{opacity:.4}
+.order-item .oi-icon{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.order-item.emph .oi-icon{background:linear-gradient(135deg,var(--red),#c53a2a)}
+.order-item .oi-name{font-size:.86rem;font-weight:700;color:var(--navy)}
+.order-item .oi-slot{margin-left:auto;font-family:var(--mono);font-size:.75rem;color:var(--text-muted)}
+.order-item.correct{border-color:var(--green);background:var(--green-light)}
+.order-item.wrong{border-color:var(--red);background:var(--red-light)}
+
+/* ── HONEST LIMITS ── */
+.limits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem}
+@media (max-width:760px){.limits-grid{grid-template-columns:1fr}}
+.limit-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);border-top:3px solid var(--red);padding:1.3rem;transition:all .3s}
+.limit-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.limit-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.limit-card h4 .lc-badge{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--red-light);color:#A03A2C;padding:.2rem .5rem;border-radius:50px}
+.limit-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem}
+.limit-card .lc-guard{font-size:.78rem;line-height:1.55;color:#2E6B30;background:var(--green-light);border-radius:6px;padding:.55rem .7rem;border-left:3px solid var(--green)}
+.limit-card .lc-guard strong{color:#1F5723}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── SUMMARY / COMPLETION ── */
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-top:1.5rem;box-shadow:var(--shadow-sm)}
+.summary-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
+.summary-check{width:44px;height:44px;border-radius:50%;background:var(--green-light);border:2px solid var(--green);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.summary-head h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--navy)}
+.summary-list{display:grid;gap:.7rem;margin-top:.5rem}
+.summary-item{display:flex;gap:.7rem;font-size:.87rem;line-height:1.6;color:var(--text-secondary)}
+.summary-item .si-dot{color:var(--orange);font-weight:800;flex-shrink:0}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+/* ── SITE FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .footer-logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#fff;margin-bottom:.3rem}
+.site-footer .footer-logo span{color:var(--orange)}
+.site-footer .footer-tag{font-size:.75rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;letter-spacing:.04em}
+.site-footer .footer-fine{font-size:.72rem;color:rgba(255,255,255,0.4);line-height:1.7;max-width:560px;margin:0 auto}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 · Week 2</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 2 · AI for Lawyers</div>
+  <h1>Legal Research &amp; Analysis with AI — <em>frame it well, verify it always</em></h1>
+  <p class="hero-sub">Three hands-on activities. Turn a vague question into a research brief AI can actually answer, decide which AI research outputs you can trust and which demand primary-source verification — including one fabricated case designed to trap you — and order the research workflow that keeps a hallucinated authority out of your work.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<!-- INTRO COMPARE -->
+<section class="lesson" id="intro">
+  <div class="container">
+    <span class="lesson-num">i</span>
+    <h2 class="lesson-title">Good research is framing plus verification</h2>
+    <p class="lesson-intro">AI research tools are fast, fluent, and sometimes confidently wrong. Two disciplines make them safe to use: give the tool enough <strong>frame</strong> to answer the real question, and <strong>verify</strong> every authority it returns against a primary source before you rely on it. The rest of this lesson drills both.</p>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">Q</div>
+        <h4>Frame the question</h4>
+        <p>A vague query returns vague — or invented — answers. Jurisdiction, area of law, the material facts, procedural posture, and what you actually need turn a prompt into a brief.</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">✓</div>
+        <h4>Verify the authority</h4>
+        <p>Every case, statute, and quotation is checked in an authoritative primary source. If you cannot pull it up and read it, you do not cite it — no exceptions.</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">You</div>
+        <h4>Own the analysis</h4>
+        <p>AI can surface leads and draft structure. Applying the law to the facts, and deciding what the answer is, remains the lawyer's professional judgment.</p>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>The through-line from Lesson 1:</strong> AI drafts the research; the lawyer verifies and decides. In research, "verify" has a precise meaning — read the actual authority in a primary source.</div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 1: BUILD-A-RESEARCH-BRIEF ── -->
+<section class="lesson" id="activity-1" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Build a research brief — pick what turns a vague query into a strong one</h2>
+    <p class="lesson-intro">Here is a weak query a busy lawyer might type. Select the elements that would turn it into a brief an AI research tool can actually answer well — and leave out the ones that add nothing or would leak confidential detail. Choose, then check your brief.</p>
+
+    <div class="lesson-card">
+      <div class="vague-box">
+        <div class="vb-label">Weak query as typed</div>
+        <div class="vb-text">"Can my client get out of the contract?"</div>
+      </div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.4rem;font-weight:600">Tap the elements to include in your brief:</p>
+      <div class="element-grid" id="elementGrid"></div>
+      <div class="brief-preview" id="briefPreview"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Reset</button>
+        <button class="btn btn-primary" onclick="checkBrief()">Check my brief</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: VERIFY OR TRUST ── -->
+<section class="lesson" id="activity-2">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Verify or trust? — flag every AI output that needs primary-source checking</h2>
+    <p class="lesson-intro">Below are real-looking outputs from an AI research assistant. For each, decide: is this something you could reasonably act on as drafting help, or a legal proposition that <strong>must</strong> be verified in a primary source before it goes anywhere near a client or court? One of them is a case that does not exist — catch it. Answer all four to see your score.</p>
+
+    <div class="lesson-card">
+      <div id="quizGrid"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetQuiz()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: ORDER THE WORKFLOW ── -->
+<section class="lesson" id="activity-3" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Order the research workflow — where verification has to sit</h2>
+    <p class="lesson-intro">A sound AI-assisted research process has a fixed shape, and one step is non-negotiable: <strong>VERIFY</strong> comes before you synthesise or apply anything. Drag the six steps into the right order. The verification step is highlighted — notice it can never move to the end.</p>
+
+    <div class="lesson-card">
+      <div class="order-wrap">
+        <div>
+          <div class="order-col-label">Steps (shuffled)</div>
+          <div class="order-pool" id="orderPool"></div>
+        </div>
+        <div>
+          <div class="order-col-label">Your order (drop here, top to bottom)</div>
+          <div class="order-target" id="orderTarget"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetOrder()">↻ Reset</button>
+        <button class="btn btn-primary" onclick="checkOrder()">Check my order</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HONEST LIMITS ── -->
+<section class="lesson" id="limits">
+  <div class="container">
+    <span class="lesson-num" style="background:var(--navy)">!</span>
+    <h2 class="lesson-title">The honest part — how AI research goes wrong</h2>
+    <p class="lesson-intro">Legal research is where AI's failure modes bite hardest, because a fabricated authority can end up in a court filing. Three risks, three guards — the discipline that keeps you on the right side of your professional duties.</p>
+    <div class="lesson-card">
+      <div class="limits-grid">
+        <div class="limit-card">
+          <h4>Fabricated cases <span class="lc-badge">Invents authority</span></h4>
+          <p>AI invents case names, citations, and holdings that read like real law and fit your argument perfectly — which is exactly why they are dangerous. Lawyers have faced sanctions for citing cases that never existed.</p>
+          <div class="lc-guard"><strong>Guard:</strong> pull every cited case and statute in an authoritative source and read it yourself. If it will not come up, it is not real — do not cite it.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Outdated or overruled law <span class="lc-badge">Stale answers</span></h4>
+          <p>Even a real case may have been overruled, distinguished, or superseded by statute since the model's training data. AI often will not know it is quoting law that no longer governs.</p>
+          <div class="lc-guard"><strong>Guard:</strong> confirm each authority is current and good law before you rely on it, using an up-to-date primary source or citator — not the model's word.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Confidentiality in the prompt <span class="lc-badge">Leaks the matter</span></h4>
+          <p>To get a "better" answer it is tempting to paste the real facts, party names, and documents into a public tool — which can breach confidentiality and risk waiving privilege.</p>
+          <div class="lc-guard"><strong>Guard:</strong> frame the question in generic, hypothetical terms. Give the tool the legal shape of the problem, never the identifying detail of the matter.</div>
+        </div>
+      </div>
+      <div class="tip-note">💡 <strong>One habit ties them together:</strong> nothing an AI research tool tells you is authority until you have read it yourself in a primary source and confirmed it is current — and you got there without handing over the client's confidential matter. That is verification, and it is the whole job.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">Type a sentence each. Writing it down helps the habit settle. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Write the five-part frame you will add to your next AI research query — jurisdiction, area of law, facts, procedural posture, and what you need.</div>
+        <textarea placeholder="Jurisdiction: ... Area of law: ... Key facts (generic): ... Procedural posture: ... What I need: ..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">In one line, how will you verify an AI-supplied authority before it ever reaches a client note or a court filing?</div>
+        <textarea placeholder="I will pull every cited case and statute in a primary source, read it, and confirm it is still good law before..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SUMMARY / COMPLETION ── -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="summary-card">
+      <div class="summary-head">
+        <div class="summary-check">✓</div>
+        <h3>Lesson 2 complete — what you now carry</h3>
+      </div>
+      <div class="summary-list">
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Frame before you search.</strong> Jurisdiction, area of law, material facts, procedural posture, and what you need turn a vague query into a brief AI can answer — without leaking confidential detail.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Verify every authority.</strong> Cases, statutes, and quotations are read in a primary source and confirmed current. A citation you cannot pull up does not exist.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Verification sits before synthesis.</strong> Issue → Frame → Search → VERIFY → Synthesise → Apply. Checking after you have built on the answer is too late.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Watch for the fabricated case.</strong> The most convincing AI output is the most dangerous — a perfect-fit authority that never existed. Catch it in verification, every time.</span></div>
+      </div>
+    </div>
+
+    <div class="next-up">
+      <h3>You have finished Week 2 · Lessons 1 &amp; 2</h3>
+      <p>You can now sort legal tasks by stakes, hold the "AI drafts, the lawyer verifies and decides" pattern, frame a research brief, and catch a hallucinated authority before it costs you. Carry the discipline into every matter — and into the tools you will meet next.</p>
+      <a href="01-ai-augmented-lawyer.html" class="btn btn-primary">← Revisit Lesson 1</a>
+    </div>
+  </div>
+</section>
+
+<!-- SITE FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">Moksh<span>Path</span></div>
+  <div class="footer-tag">Guided Path to True Learning</div>
+  <div class="footer-fine">School of AI Careers · AI for Lawyers · Week 2. This lesson teaches durable research judgment, not tool tutorials, and is jurisdiction-neutral. No privileged or client data was used and none should be entered into any public AI tool. Every AI-supplied authority must be verified in a primary source. AI drafts — the lawyer always verifies and decides.</div>
+</footer>
+
+<script>
+/* ─── ACTIVITY 1: Build-a-Research-Brief element picker ─── */
+const ELEMENTS = [
+  {id:'e1', name:'Jurisdiction', desc:'Which legal system\'s law governs — country, state, or forum.', good:true, verdict:'Essential. The same facts resolve differently across jurisdictions; without it, AI guesses or blends systems.', brief:'in [jurisdiction]'},
+  {id:'e2', name:'Area of law', desc:'The doctrine at issue — e.g. contract, tenancy, employment.', good:true, verdict:'Essential. It points the search at the right body of rules instead of a generic answer.', brief:'under [area of law]'},
+  {id:'e3', name:'Material facts (generic)', desc:'The facts that drive the issue, stated without identifying the client.', good:true, verdict:'Essential — but kept generic. Facts shape which rule applies; identifying detail stays out of a public tool.', brief:'where [key generic facts]'},
+  {id:'e4', name:'Procedural posture', desc:'Where the matter sits — pre-action, motion stage, appeal, etc.', good:true, verdict:'Essential. The posture changes the test, the standard, and what relief is even available.', brief:'at the [procedural] stage'},
+  {id:'e5', name:'What you need', desc:'The specific output — a rule, the elements of a test, authorities, options.', good:true, verdict:'Essential. Naming the deliverable turns a fishing prompt into a targeted, checkable request.', brief:'I need [the specific output]'},
+  {id:'e6', name:'The client\'s real name and file number', desc:'Add the client identity so the answer is "personalised".', good:false, verdict:'Leave out. Client-identifying detail in a public tool risks confidentiality and privilege — and adds nothing to the legal analysis.'},
+  {id:'e7', name:'"Give me a strong answer for my side"', desc:'Tell the AI which conclusion you want it to reach.', good:false, verdict:'Leave out. Steering the tool toward a conclusion invites a confident, one-sided — and possibly fabricated — answer. Ask for the law, not the verdict you want.'},
+  {id:'e8', name:'The exact wording of your final advice', desc:'Have the AI write the advice you will send, verbatim.', good:false, verdict:'Leave out of the research brief. The advice is your professional judgment; research frames the question, it does not replace your call.'}
+];
+let selected = {};
+function renderElements(){
+  const grid = document.getElementById('elementGrid');
+  grid.innerHTML = ELEMENTS.map(e => `
+    <div class="element-card" id="${e.id}" onclick="toggleElement('${e.id}')">
+      <div class="element-head">
+        <span class="element-check">${'✓'}</span>
+        <span class="element-name">${e.name}</span>
+      </div>
+      <div class="element-desc">${e.desc}</div>
+      <div class="element-verdict">${e.verdict}</div>
+    </div>`).join('');
+}
+function toggleElement(id){
+  const card = document.getElementById(id);
+  if (card.classList.contains('reveal-good') || card.classList.contains('reveal-bad')) return;
+  if (selected[id]) { delete selected[id]; card.classList.remove('selected'); }
+  else { selected[id] = true; card.classList.add('selected'); }
+}
+function checkBrief(){
+  let rightIncluded = 0, wrongIncluded = 0, missed = 0;
+  ELEMENTS.forEach(e => {
+    const card = document.getElementById(e.id);
+    card.classList.remove('selected');
+    const picked = !!selected[e.id];
+    if (e.good && picked) { card.classList.add('reveal-good'); rightIncluded++; }
+    else if (!e.good && picked) { card.classList.add('reveal-bad'); wrongIncluded++; }
+    else if (e.good && !picked) { card.classList.add('reveal-bad'); missed++; }
+    else { card.classList.add('reveal-good'); }
+  });
+  const goodPicks = ELEMENTS.filter(e => e.good && selected[e.id]);
+  const preview = document.getElementById('briefPreview');
+  if (goodPicks.length) {
+    const parts = goodPicks.map(e => `<span class="bp-el">${e.brief}</span>`).join(', ');
+    preview.className = 'brief-preview show';
+    preview.innerHTML = `<div class="bp-label">Your brief takes shape</div>"Can my client exit the contract" becomes: <strong>${parts}</strong>. That is a question an AI research tool can answer usefully — and one whose answer you can verify.`;
+  } else {
+    preview.className = 'brief-preview';
+  }
+  const fb = document.getElementById('feedback1');
+  if (rightIncluded === 5 && wrongIncluded === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect brief.</strong> You included all five framing elements — jurisdiction, area of law, generic facts, procedural posture, and the specific output — and left out the three that leak confidential detail or steer the tool toward a conclusion. That is exactly the frame that makes AI research reliable and verifiable.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    let notes = [];
+    if (missed) notes.push(`you missed ${missed} of the five framing element${missed>1?'s':''} (now marked in red)`);
+    if (wrongIncluded) notes.push(`you included ${wrongIncluded} element${wrongIncluded>1?'s':''} that should stay out — steering the answer or pasting client-identifying detail weakens or endangers the query`);
+    fb.innerHTML = `<strong>Close — ${rightIncluded} of 5 framing elements in.</strong> ${notes.join('; ')}. A strong brief is jurisdiction + area of law + generic facts + procedural posture + what you need — and nothing that identifies the client or tells the AI what to conclude.`;
+  }
+  document.getElementById('prog1').classList.add('done');
+}
+function resetActivity1(){
+  selected = {};
+  document.getElementById('feedback1').className = 'activity-feedback';
+  document.getElementById('briefPreview').className = 'brief-preview';
+  renderElements();
+  document.getElementById('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Verify or Trust? ─── */
+const QUIZ = [
+  {
+    tag:'AI research output · plain-language explainer',
+    output:'"In general terms, a party may be released from a contract where the other side has committed a serious breach going to the root of the agreement, or where performance has become impossible. The exact test depends on your jurisdiction."',
+    q:'How should you treat this output?',
+    correct:0,
+    exp:{
+      right:'This is a generic, hedged explanation with no specific authority attached — safe as a starting orientation or drafting scaffold. It becomes verification work the moment you attach a specific case or apply it to your facts.',
+      wrong:'This particular output cites nothing specific and openly flags that the test is jurisdiction-dependent, so there is no phantom authority to catch. Treat it as orientation, then frame and verify a proper answer. (The real verification traps are the specific-citation outputs.)'
+    }
+  },
+  {
+    tag:'AI research output · case citation',
+    output:'"The leading authority is <em>Harrington v. Delcourt Holdings</em> (2019), which held that a material breach entitling termination must be assessed at the date of breach, not with hindsight."',
+    q:'How should you treat this output?',
+    correct:1,
+    exp:{
+      right:'Correct — and this is the trap. A named case with a year and a tidy holding that fits your argument is exactly what AI fabricates. Before it goes anywhere, pull "Harrington v. Delcourt Holdings" in an authoritative source. If it will not come up, it does not exist — do not cite it.',
+      wrong:'A confident case name, year, and holding is precisely what a hallucination looks like. Never take a citation on trust because it sounds authoritative and fits your side — this is the fabricated-case trap. Verify it in a primary source first.'
+    }
+  },
+  {
+    tag:'AI research output · statutory rule',
+    output:'"Under section 12 of the Consumer Contracts Act, a consumer has a 14-day cooling-off period to cancel a distance contract without giving a reason."',
+    q:'How should you treat this output?',
+    correct:1,
+    exp:{
+      right:'Correct. A specific statute and section number stated as fact must be verified — the section may not exist, the number may be wrong, or the provision may have been amended or repealed. Pull the actual statute, in force for your jurisdiction and date, and read it.',
+      wrong:'A precise statutory citation is a legal proposition you will rely on — and AI can invent section numbers or quote provisions that have since changed. This always needs primary-source verification before use.'
+    }
+  },
+  {
+    tag:'AI research output · drafting suggestion',
+    output:'"Here is a neutral first-draft structure for your research memo: (1) Issue, (2) Short answer, (3) Applicable law, (4) Application to facts, (5) Conclusion — fill each section with verified authority."',
+    q:'How should you treat this output?',
+    correct:0,
+    exp:{
+      right:'This is structure and process, not a legal proposition — safe to use as a drafting scaffold. It even reminds you to fill it with verified authority. The substance you drop into it is what will need verifying, not the outline itself.',
+      wrong:'This output makes no legal claim and cites nothing — it is just a memo skeleton. Structural help like this is exactly what AI is safe for; the verification burden falls on the authorities you place inside it, not the template.'
+    }
+  }
+];
+let quizAnswered = {};
+function renderQuiz(){
+  const grid = document.getElementById('quizGrid');
+  grid.innerHTML = QUIZ.map((item, i) => `
+    <div class="quiz-card" id="quizCard${i}">
+      <div class="quiz-output"><span class="qo-tag">${item.tag}</span>${item.output}</div>
+      <div class="quiz-q"><span class="qnum">Q${i+1}.</span>${item.q}</div>
+      <div class="quiz-opts">
+        <div class="quiz-opt" id="qo${i}_0" onclick="answerQuiz(${i},0)">
+          <span class="opt-key">🟢</span><span>Safe as drafting help — no specific authority to verify</span>
+        </div>
+        <div class="quiz-opt" id="qo${i}_1" onclick="answerQuiz(${i},1)">
+          <span class="opt-key">🔴</span><span>Must be verified in a primary source before use</span>
+        </div>
+      </div>
+      <div class="quiz-explain" id="qex${i}"></div>
+    </div>`).join('');
+}
+function answerQuiz(i, j){
+  if (quizAnswered[i] !== undefined) return;
+  const item = QUIZ[i];
+  const right = j === item.correct;
+  quizAnswered[i] = right;
+  document.querySelectorAll(`#quizCard${i} .quiz-opt`).forEach((el, idx) => {
+    el.classList.add('locked');
+    el.setAttribute('onclick','');
+    if (idx === item.correct) el.classList.add('reveal-right');
+  });
+  if (!right) document.getElementById(`qo${i}_${j}`).classList.add('reveal-wrong');
+  const ex = document.getElementById('qex' + i);
+  ex.className = 'quiz-explain show';
+  const msg = right ? item.exp.right : item.exp.wrong;
+  ex.innerHTML = `<span class="quiz-verdict ${right ? 'v-right' : 'v-miss'}">${right ? '✓ Correct' : '✗ Not quite'}</span>${msg}`;
+  if (Object.keys(quizAnswered).length === QUIZ.length) {
+    const score = Object.values(quizAnswered).filter(Boolean).length;
+    const fb = document.getElementById('feedback2');
+    if (score === QUIZ.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>4 of 4 — sharp eye.</strong> You spotted the pattern: specific authorities (the fabricated <em>Harrington</em> case and the statutory section) must always be verified, while generic explanations and structural scaffolds are safe drafting help. That distinction is what keeps a hallucinated authority out of your filings.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You scored ${score} of 4.</strong> Re-read the ones you missed. The rule: any output that names a specific case, statute, or quotation is a legal proposition you must verify in a primary source — especially when it fits your argument perfectly. Generic explanations and templates are safe. Hit <em>Try again</em>.`;
+    }
+    document.getElementById('prog2').classList.add('done');
+  }
+}
+function resetQuiz(){
+  quizAnswered = {};
+  document.getElementById('feedback2').className = 'activity-feedback';
+  renderQuiz();
+  document.getElementById('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Order the Research Workflow ─── */
+const STEPS = [
+  {id:'st1', name:'Issue — identify the legal question', pos:0},
+  {id:'st2', name:'Frame — build the brief (jurisdiction, facts, posture, need)', pos:1},
+  {id:'st3', name:'Search — let AI surface leads and structure', pos:2},
+  {id:'st4', name:'VERIFY — read every authority in a primary source', pos:3, emph:true},
+  {id:'st5', name:'Synthesise — pull the verified law together', pos:4},
+  {id:'st6', name:'Apply — apply the law to your facts and decide', pos:5}
+];
+let orderState = [];
+function renderOrder(){
+  orderState = [];
+  const pool = document.getElementById('orderPool');
+  const target = document.getElementById('orderTarget');
+  target.innerHTML = '';
+  const shuffled = [...STEPS].sort(()=>Math.random()-0.5);
+  pool.innerHTML = shuffled.map(s => stepHTML(s)).join('');
+  bindDrag();
+  bindTarget();
+}
+function stepHTML(s){
+  return `<div class="order-item${s.emph?' emph':''}" draggable="true" data-id="${s.id}" data-pos="${s.pos}">
+    <span class="oi-icon">${s.emph?'!':'⋮'}</span>
+    <span class="oi-name">${s.name}</span>
+  </div>`;
+}
+function bindDrag(){
+  document.querySelectorAll('.order-item').forEach(item => {
+    item.addEventListener('dragstart', e => { e.dataTransfer.setData('id', item.dataset.id); item.classList.add('dragging'); });
+    item.addEventListener('dragend', () => item.classList.remove('dragging'));
+  });
+}
+function bindTarget(){
+  const target = document.getElementById('orderTarget');
+  target.addEventListener('dragover', e => { e.preventDefault(); target.classList.add('drag-over'); });
+  target.addEventListener('dragleave', () => target.classList.remove('drag-over'));
+  target.addEventListener('drop', e => {
+    e.preventDefault();
+    target.classList.remove('drag-over');
+    const id = e.dataTransfer.getData('id');
+    const item = document.querySelector(`.order-item[data-id="${id}"]`);
+    if (item) { item.classList.remove('correct','wrong'); target.appendChild(item); }
+  });
+}
+function checkOrder(){
+  const target = document.getElementById('orderTarget');
+  const items = [...target.querySelectorAll('.order-item')];
+  const fb = document.getElementById('feedback3');
+  if (items.length < STEPS.length) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Drag all six steps into the order column first,</strong> top to bottom, then check.`;
+    return;
+  }
+  let correct = 0;
+  items.forEach((item, idx) => {
+    item.classList.remove('correct','wrong');
+    if (parseInt(item.dataset.pos, 10) === idx) { item.classList.add('correct'); correct++; }
+    else item.classList.add('wrong');
+  });
+  if (correct === STEPS.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Correct order.</strong> Issue → Frame → Search → <em>VERIFY</em> → Synthesise → Apply. The one thing that cannot move: verification sits <em>before</em> you synthesise or apply. If you check only at the end, you have already built your advice on authority you never confirmed.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>${correct} of 6 in place.</strong> Green rows are right; red are out of position. The sequence is Issue → Frame → Search → VERIFY → Synthesise → Apply. The load-bearing rule: VERIFY comes fourth — before synthesising or applying — never last. Reset and try again.`;
+  }
+  document.getElementById('prog3').classList.add('done');
+}
+function resetOrder(){
+  document.getElementById('feedback3').className = 'activity-feedback';
+  renderOrder();
+  document.getElementById('prog3').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderElements();
+  renderQuiz();
+  renderOrder();
+});
+</script>
+</body>
+</html>

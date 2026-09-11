@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 4 · Client Communication, Matter Management &amp; Growth — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:840px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:660px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:720px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── PRINCIPLE BANNER ── */
+.principle{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;border-radius:var(--radius);padding:1.4rem 1.7rem;margin:1.2rem auto 0;max-width:760px;box-shadow:var(--shadow-md)}
+.principle .p-icon{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--orange-light);flex-shrink:0}
+.principle p{font-size:.9rem;line-height:1.55;color:rgba(255,255,255,0.9)}
+.principle strong{color:#fff}
+
+/* ── ACTIVITY 1: CONFIDENTIALITY FIREWALL ── */
+.firewall-note{font-size:.8rem;color:var(--text-muted);margin-bottom:.6rem}
+.message-draft{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.4rem 1.5rem;font-size:.95rem;line-height:2.1;color:var(--text-primary);margin-top:1rem}
+.risk{cursor:pointer;border-radius:4px;padding:.05rem .18rem;transition:all .18s;border-bottom:2px dotted var(--text-muted);position:relative}
+.risk:hover{background:var(--orange-glow)}
+.risk.found{background:var(--navy);color:#fff;border-bottom:none;padding:.1rem .4rem;font-family:var(--mono);font-size:.82rem}
+.risk.found::after{content:' 🔒'}
+.decoy.clicked{background:var(--red-light);border-bottom:2px solid var(--red);animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.firewall-status{margin-top:1.2rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.status-count{font-family:var(--mono);font-size:.8rem;font-weight:600;color:var(--navy);background:var(--bg-light);border:1px solid var(--border);border-radius:50px;padding:.4rem 1rem}
+.status-count strong{color:var(--orange)}
+.decoy-note{margin-top:.8rem;padding:.7rem .9rem;background:var(--red-light);border-left:3px solid var(--red);border-radius:4px;font-size:.78rem;color:#7A2A1E;line-height:1.55;display:none}
+.decoy-note.show{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.safe-preview{margin-top:1.2rem;background:#1A1B2E;border-radius:var(--radius-sm);padding:1.2rem 1.4rem;font-family:var(--mono);font-size:.78rem;line-height:1.85;color:#E8E8EC;display:none;border:1px solid var(--navy)}
+.safe-preview.show{display:block;animation:fadeIn .4s ease}
+.safe-preview .sp-label{color:var(--orange-light);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.6rem}
+.safe-preview .redacted{background:#3A3C52;color:#8EA0FF;border-radius:3px;padding:0 .3rem}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── ACTIVITY 2: PLAIN-LANGUAGE QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-scenario{font-size:.82rem;color:var(--text-secondary);font-style:italic;background:var(--bg-light);border-left:3px solid var(--border);border-radius:4px;padding:.6rem .8rem;margin-bottom:.8rem;line-height:1.55}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .95rem;font-size:.83rem;line-height:1.55;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── ACTIVITY 3: CAPSTONE CHECKLIST ── */
+.capstone-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:720px;margin-bottom:1.4rem}
+.stage-track{display:flex;gap:.4rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.stage-pill{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.35rem .8rem;border-radius:50px;background:var(--bg-light);border:1.5px solid var(--border);color:var(--text-muted);transition:all .3s}
+.stage-pill.lit{color:#fff;border-color:transparent}
+.stage-pill:nth-child(1).lit{background:#5B8FE0}
+.stage-pill:nth-child(3).lit{background:var(--orange)}
+.stage-pill:nth-child(5).lit{background:#66BB6A}
+.stage-pill:nth-child(7).lit{background:#8E6BC0}
+.stage-arrow{color:var(--text-muted);font-weight:700;align-self:center;font-size:.75rem}
+.capstone-stage{margin-bottom:1.4rem}
+.capstone-stage h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem;display:flex;align-items:center;gap:.5rem}
+.stage-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.capstone-stage:nth-of-type(1) .stage-dot{background:#5B8FE0}
+.capstone-stage:nth-of-type(2) .stage-dot{background:var(--orange)}
+.capstone-stage:nth-of-type(3) .stage-dot{background:#66BB6A}
+.capstone-stage:nth-of-type(4) .stage-dot{background:#8E6BC0}
+.capstone-stage p{font-size:.8rem;color:var(--text-muted);margin:0 0 .5rem 1.7rem}
+.check-item{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem .6rem;margin:.25rem 0 .25rem 1.2rem;border-radius:6px;font-size:.84rem;line-height:1.5;cursor:pointer;transition:all .2s;border:1px solid transparent}
+.check-item:hover{background:var(--bg-light)}
+.check-item.checked{background:var(--green-light);border-color:var(--green)}
+.check-item input{margin-top:.15rem;accent-color:var(--green);width:16px;height:16px;cursor:pointer;flex-shrink:0}
+.check-item .human-tag{font-family:var(--mono);font-size:.6rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);border-radius:4px;padding:.1rem .4rem;margin-left:.3rem;white-space:nowrap}
+.capstone-progress{margin-top:1.4rem}
+.cp-bar-track{height:10px;background:var(--border);border-radius:5px;overflow:hidden}
+.cp-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:5px;transition:width .4s ease}
+.cp-label{font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-top:.5rem;text-align:center}
+
+/* ── DONE CARD ── */
+.done-card{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:1.5rem;text-align:center;position:relative;overflow:hidden;display:none}
+.done-card.show{display:block;animation:fadeIn .5s ease}
+.done-card::before{content:'';position:absolute;top:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.15)}
+.done-card::after{content:'';position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(102,187,106,0.12)}
+.done-badge{display:inline-block;font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-light);background:rgba(232,122,46,0.15);border-radius:50px;padding:.35rem 1rem;margin-bottom:1rem;position:relative}
+.done-card h3{font-family:'DM Serif Display',serif;font-size:1.7rem;margin-bottom:.6rem;position:relative}
+.done-card>p{font-size:.92rem;color:rgba(255,255,255,0.8);margin:0 auto 1.2rem;max-width:560px;line-height:1.6;position:relative}
+.done-recap{list-style:none;max-width:560px;margin:0 auto;text-align:left;display:grid;gap:.5rem;position:relative}
+.done-recap li{display:flex;gap:.6rem;align-items:flex-start;font-size:.85rem;line-height:1.5;color:rgba(255,255,255,0.9)}
+.done-recap li .r-check{color:#7BD67F;font-weight:700;flex-shrink:0}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.3rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card.good .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card.bad .compare-icon{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card.good li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.compare-card.bad li::before{content:'✗';color:var(--red);font-weight:700;flex-shrink:0}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .f-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff;margin-bottom:.3rem}
+.site-footer .f-logo span{color:var(--orange)}
+.site-footer .f-tag{font-size:.72rem;color:var(--text-muted);letter-spacing:.02em;margin-bottom:1rem}
+.site-footer .f-copy{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1rem}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+  .message-draft{line-height:2.3}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 4 · Week 2</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 2 · AI for Lawyers</div>
+  <h1>Client Communication, Matter Management &amp; Growth — <em>protect privilege, then let AI polish</em></h1>
+  <p class="hero-sub">Three hands-on activities on the client-facing side of practice. First, build a confidentiality firewall: redact the privileged and identifying details before any prompt could reach a public AI tool. Then tune a dense legal message into plain, client-appropriate language that stays accurate. Finally, assemble the whole week — research, draft, review, communicate — into one matter that a human owns end to end.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<div style="max-width:1080px;margin:0 auto;padding:0 2rem">
+  <div class="principle">
+    <span class="p-icon">“</span>
+    <p><strong>The rule that protects your client and your licence:</strong> anything you type into a public AI tool may be stored and used to train it — and confidential client facts pasted into one can put <strong>privilege</strong> at risk. So the safe workflow is <strong>redact first, draft second, review always</strong>. AI can turn a dense legal update into something a client actually understands — but only if you never hand it an identity, and never send its words unread.</p>
+  </div>
+</div>
+
+<!-- ── ACTIVITY 1: CONFIDENTIALITY FIREWALL ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">The confidentiality firewall</h2>
+    <p class="lesson-intro">Before you ask a public AI tool to help simplify a client update, you have to strip out anything that identifies the client, the matter, or the privileged substance. Below is a note a lawyer was about to paste into a chatbot. <strong>Click every piece of identifying or privileged information</strong> that must be redacted first. Some phrases are safe, generic context — click those and you'll be told why they can stay.</p>
+
+    <div class="lesson-card">
+      <p class="firewall-note">Click the risky bits. A correct catch locks it behind a redaction; a safe phrase clicked by mistake explains why it's fine to keep.</p>
+      <div class="message-draft" id="msgDraft">
+        Re the matter for <span class="risk" data-type="risk" data-note="A named client is the most direct identifier — never paste a client's name into a public tool where it could be stored." onclick="clickBit(this)">Northgate Logistics Pty Ltd</span>, our contact <span class="risk" data-type="risk" data-note="An individual's name and role identifies a real person tied to the matter. Redact it." onclick="clickBit(this)">Ms. Priya Sharma, their CFO</span> asked for an update. This is our <span class="risk decoy" data-type="safe" data-note="Describing the type of dispute in generic terms ('a contract dispute') is fine — it's not identifying and it's exactly the context AI needs to help you word things." onclick="clickBit(this)">contract dispute with a supplier</span>. Internally, we've assessed our <span class="risk" data-type="risk" data-note="Your own assessment of the client's chance of success is the heart of privileged legal advice. This must never leave your protected systems." onclick="clickBit(this)">chance of success at roughly 55%, and advised settling below $400,000</span>. The matter number is <span class="risk" data-type="risk" data-note="An internal matter or file number can be matched straight back to the client and file. Redact it." onclick="clickBit(this)">MTR-2026-0881</span>. I'd like to <span class="risk decoy" data-type="safe" data-note="Your professional intention — explaining next steps clearly — is exactly what you want AI to help you phrase. Safe to keep." onclick="clickBit(this)">explain the next steps in plain language</span>. You can reach me or Priya <span class="risk" data-type="risk" data-note="A direct phone number is personal contact data tied to the client — redact it before any AI sees the text." onclick="clickBit(this)">on +1 415 555 0148</span>, and the settlement meeting is at <span class="risk" data-type="risk" data-note="A specific venue and time reveals real, identifying matter logistics. Generalise it." onclick="clickBit(this)">their office, 22 Harbour Street, on 14 August</span>.
+      </div>
+      <div class="firewall-status">
+        <span class="status-count">Redacted: <strong id="redCount">0</strong> / 6 risks</span>
+        <button class="btn btn-primary" onclick="revealSafe()">Generate the AI-safe version</button>
+        <button class="btn btn-ghost" onclick="resetFirewall()">↻ Reset</button>
+      </div>
+      <div class="decoy-note" id="decoyNote"></div>
+      <div class="safe-preview" id="safePreview"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: PLAIN-LANGUAGE QUIZ ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Plain language, still accurate</h2>
+    <p class="lesson-intro">AI is genuinely good at turning dense legalese into something a client can read — but it can also flatten a message until it's <em>wrong</em>, or over-promise in the name of sounding friendly. For each dense legal message, all four rewrites are more readable than the original. Pick the one that's <strong>plain, client-appropriate, and still legally accurate</strong> — the version you'd actually be willing to sign.</p>
+
+    <div id="plainWrap"></div>
+    <div class="activity-feedback" id="feedback2"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetPlain()">↻ Retake</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: CAPSTONE CHECKLIST ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">3</span>
+    <h2 class="lesson-title">Capstone — the matter, complete</h2>
+    <p class="capstone-intro">This is where the whole week clicks together. A complete AI-assisted legal matter runs <strong>research → draft → review → communicate</strong>, and at every stage a human verifies and owns the result before anything is real or sent. Tick each step as you commit to it. Every item carries a <span style="font-family:var(--mono);font-size:.62rem;color:var(--orange)">HUMAN OWNED</span> tag — because that verification <em>is</em> the practice of law, not an add-on. Complete all four stages to mark the matter complete.</p>
+
+    <div class="stage-track">
+      <span class="stage-pill" id="sp1">Research</span><span class="stage-arrow">→</span>
+      <span class="stage-pill" id="sp2">Draft</span><span class="stage-arrow">→</span>
+      <span class="stage-pill" id="sp3">Review</span><span class="stage-arrow">→</span>
+      <span class="stage-pill" id="sp4">Communicate</span>
+    </div>
+
+    <div class="lesson-card">
+      <div class="capstone-stage" data-stage="1">
+        <h4><span class="stage-dot"></span> 1 · Research</h4>
+        <p>AI surfaces starting points; you confirm the law is real.</p>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I used AI to <strong>orient and find leads</strong>, then <strong>pulled and read every authority</strong> from the primary source myself <span class="human-tag">Human owned</span></span></label>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I <strong>confirmed no case, statute, or citation was hallucinated</strong> before relying on a single one of them <span class="human-tag">Human owned</span></span></label>
+      </div>
+      <div class="capstone-stage" data-stage="2">
+        <h4><span class="stage-dot"></span> 2 · Draft</h4>
+        <p>AI produces a first draft; you make it fit this matter.</p>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I gave AI a clear brief and <strong>edited its draft</strong> to match this client, jurisdiction, and standard <span class="human-tag">Human owned</span></span></label>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I <strong>verified every defined term and cross-reference</strong> the AI produced, and rewrote what it misstated <span class="human-tag">Human owned</span></span></label>
+      </div>
+      <div class="capstone-stage" data-stage="3">
+        <h4><span class="stage-dot"></span> 3 · Review</h4>
+        <p>AI triages; you accept, override, and catch the miss.</p>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I treated AI's flags as a <strong>first pass to weigh</strong> — accepting real issues, overriding over-flags with a justification <span class="human-tag">Human owned</span></span></label>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I did my <strong>own read against the playbook</strong> to catch the risk the AI stayed silent on <span class="human-tag">Human owned</span></span></label>
+      </div>
+      <div class="capstone-stage" data-stage="4">
+        <h4><span class="stage-dot"></span> 4 · Communicate</h4>
+        <p>AI polishes wording; you protect privilege and send.</p>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I <strong>redacted every identifying and privileged detail</strong> before any client information reached a public AI tool <span class="human-tag">Human owned</span></span></label>
+        <label class="check-item"><input type="checkbox" onchange="tickItem(this)"><span>I <strong>read the final message in full</strong>, confirmed it was plain but still accurate, and made it sound like me before it went to the client <span class="human-tag">Human owned</span></span></label>
+      </div>
+
+      <div class="capstone-progress">
+        <div class="cp-bar-track"><div class="cp-bar-fill" id="cpFill"></div></div>
+        <div class="cp-label" id="cpLabel">0 of 8 commitments made · 0 of 4 stages complete</div>
+      </div>
+
+      <div class="done-card" id="doneCard">
+        <span class="done-badge">Matter complete · Week 2</span>
+        <h3>Matter complete.</h3>
+        <p>You just ran a complete AI-assisted legal matter — and at every single stage, a human verified and stayed accountable. That's the whole philosophy of this course in one screen: <strong>AI drafts, the lawyer verifies and decides.</strong></p>
+        <ul class="done-recap">
+          <li><span class="r-check">✓</span> <strong>Research</strong> — AI finds leads, you pull every authority and confirm nothing was invented.</li>
+          <li><span class="r-check">✓</span> <strong>Draft</strong> — AI drafts, you fit it to the matter and verify every term.</li>
+          <li><span class="r-check">✓</span> <strong>Review</strong> — you accept, override, and catch the miss AI stayed silent on.</li>
+          <li><span class="r-check">✓</span> <strong>Communicate</strong> — privilege redacted first, plain but accurate, every word read before it's sent.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROFESSIONAL GROWTH ── -->
+<section class="lesson" style="background:var(--bg-light);padding-top:2.4rem;padding-bottom:2.4rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.6rem">Where this frees your time — and grows you</h2>
+    <p class="lesson-intro" style="margin-bottom:1.2rem">"Professional growth" isn't a buzzword here. The hours AI hands back on drafting and admin are hours you can spend on the parts of lawyering only a human can do — client trust, judgement, strategy — and on getting better at your craft. Two honest framings to take with you.</p>
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-icon">+</div>
+        <h4>Where AI can genuinely lighten the load</h4>
+        <p>High-volume, no-identity, first-draft work — draft it fast, then verify.</p>
+        <ul>
+          <li>First drafts of client updates and routine correspondence (you add the specifics)</li>
+          <li>Turning a dense legal analysis into a plain-language explainer to edit</li>
+          <li>Summarising long documents so you know where to read closely</li>
+          <li>Drafting matter timelines and status notes from your own bullet points</li>
+        </ul>
+      </div>
+      <div class="compare-card bad">
+        <div class="compare-icon">–</div>
+        <h4>Where the lawyer is the point</h4>
+        <p>The relationship, the judgement, and the duty of care never delegate.</p>
+        <ul>
+          <li>The advice itself, and the decision on what risk a client accepts</li>
+          <li>A difficult conversation with a worried or angry client</li>
+          <li>Anything involving unredacted client facts or privileged assessments</li>
+          <li>Signing your name to advice or a message you haven't actually read</li>
+        </ul>
+      </div>
+    </div>
+    <div class="principle" style="margin-top:1.4rem;max-width:none">
+      <span class="p-icon">→</span>
+      <p><strong>Growth mindset for the AI era:</strong> the lawyers who thrive won't be the ones who memorise the trendiest tool — those change yearly. They'll be the ones fluent in the durable move you practised all week: <strong>let the machine draft, then bring your judgement, your knowledge of the matter, and your professional and ethical standard to every word before it counts.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-top:0;padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — carry it into your next matter</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">What's your personal, non-negotiable rule for what you will <em>never</em> type into a public AI tool — and how will you make redaction automatic to protect privilege?</div>
+        <textarea placeholder="I'll never paste a client name, matter number, contact detail, or privileged assessment. To make it automatic I'll..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Across research → draft → review → communicate, where are you most tempted to skip the human verification when you're busy — and what will you do to protect that step?</div>
+        <textarea placeholder="I'm most tempted to skip pulling the authorities myself when a filing is due, so I'll..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEEK COMPLETE -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;text-align:center;position:relative;overflow:hidden">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative">Week 2 complete — that's the practice</h3>
+      <p style="font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;max-width:560px;margin-left:auto;margin-right:auto;position:relative;line-height:1.6">You've built durable workflows for research, drafting, review, and client communication — none of them tied to a tool that might not exist next year. Every one runs on the same principle: the machine drafts, the lawyer verifies and decides, and a human owns the outcome.</p>
+      <a href="../week_1_live_the_moment/04-communication-admin.html" class="btn btn-primary" style="position:relative">Revisit the workflow →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="f-logo">Moksh<span>Path</span></div>
+  <div class="f-tag">Guided Path to True Learning</div>
+  <p style="font-size:.78rem;max-width:520px;margin:0 auto;line-height:1.6">School of AI Careers · AI for Lawyers. Durable workflows over tool tutorials — because the tools will change and your judgement won't.</p>
+  <div class="f-copy">© 2026 MokshPath. Jurisdiction-neutral. Not legal advice.</div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Confidentiality Firewall ─── */
+const TOTAL_RISKS = 6;
+let foundRisks = 0;
+function clickBit(el){
+  if (el.classList.contains('found') || el.classList.contains('clicked')) return;
+  if (el.dataset.type === 'risk') {
+    el.classList.add('found');
+    el.textContent = 'REDACTED';
+    foundRisks++;
+    $('redCount').textContent = foundRisks;
+    $('decoyNote').classList.remove('show');
+    if (foundRisks === TOTAL_RISKS) {
+      const fb = $('feedback1');
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six identifiers caught — that's the firewall working.</strong> Client name, the named CFO, your privileged assessment (chance of success and settlement figure), the matter number, the contact number, and the venue/time: every one could identify the client or expose privileged substance in data you don't control. Notice what stayed: the <em>generic type of dispute</em> and your <em>intention</em> to explain next steps — exactly the part you actually need AI's help wording. Redact the who and the privileged what; keep the generic what.`;
+    }
+  } else {
+    el.classList.add('clicked');
+    const note = $('decoyNote');
+    note.innerHTML = `<strong>That one's safe to keep.</strong> ${el.dataset.note}`;
+    note.classList.add('show');
+    setTimeout(() => el.classList.remove('clicked'), 400);
+  }
+}
+function revealSafe(){
+  const preview = $('safePreview');
+  preview.innerHTML = `<span class="sp-label">AI-safe version — this is what you'd actually paste</span>` +
+    `Re the matter for <span class="redacted">[CLIENT]</span>, our contact <span class="redacted">[CONTACT]</span> asked for an update. This is a contract dispute with a supplier. I'd like to explain the next steps in plain language. — <em>Then ask AI: "Rewrite this update in plain, reassuring but accurate language for a business client." You add the client name, the assessment, and the logistics back yourself, in your own protected system, after AI is done.</em>`;
+  preview.classList.add('show');
+  const fb = $('feedback1');
+  if (foundRisks < TOTAL_RISKS) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You've redacted ${foundRisks} of 6 — the safe version above shows the goal.</strong> Anything you missed is still a live identifier or privileged detail. The workflow is the lesson: strip the <em>who</em> (client, people, matter number, contacts, logistics) and the <em>privileged what</em> (your assessment and settlement figure), keep only the generic context, let AI polish the wording, then re-personalise it yourself in your own system. Reset and try to catch all six.`;
+  }
+  $('prog1').classList.add('done');
+}
+function resetFirewall(){
+  foundRisks = 0;
+  $('redCount').textContent = '0';
+  $('feedback1').className = 'activity-feedback';
+  $('safePreview').className = 'safe-preview';
+  $('decoyNote').classList.remove('show');
+  document.querySelectorAll('#msgDraft .risk').forEach(el => {
+    el.classList.remove('found','clicked');
+    if (el.dataset.orig) el.textContent = el.dataset.orig;
+  });
+  $('prog1').classList.remove('done');
+}
+document.querySelectorAll('#msgDraft .risk').forEach(el => el.dataset.orig = el.textContent);
+
+/* ─── ACTIVITY 2: Plain-language quiz ─── */
+const PLAIN = [
+  {
+    scenario:'A small-business client, no legal training, has asked what a "force majeure" clause in their supply contract actually means for them.',
+    q:'Which rewrite is plain, client-appropriate, AND still accurate?',
+    opts:[
+      {t:'"The force majeure provision operates to suspend the parties\' obligations upon the occurrence of an event beyond their reasonable control, subject to notice and mitigation requirements."', ok:false, ex:'Accurate, but it just restates the legalese. The client asked what it means <em>for them</em> — this answers a different question. Plain language means translating, not paraphrasing at the same reading level.'},
+      {t:'"In plain terms: if something outside either side\'s control — like a natural disaster — makes it impossible to perform, this clause can pause your obligations for a while. There are conditions, such as giving prompt notice, and it won\'t cover ordinary business problems. Happy to walk through how it applies to your situation."', ok:true, ex:'This translates the concept, gives a concrete example, flags the conditions honestly, and — crucially — stays accurate by <em>not</em> over-promising. It also invites a conversation for the client\'s specific facts. Plain and correct: the version you can sign.'},
+      {t:'"Force majeure basically means you\'re off the hook if anything goes wrong — don\'t worry about that clause."', ok:false, ex:'Readable but dangerously wrong. "Off the hook if anything goes wrong" over-promises massively — force majeure is narrow, conditional, and won\'t cover ordinary business problems. AI will happily generate reassuring text; accuracy is your job.'},
+      {t:'"That\'s a complex area of law and I\'d rather not simplify it in writing. Let\'s just say it\'s standard."', ok:false, ex:'It dodges the question. The client deserves an actual explanation, and "it\'s standard" tells them nothing. Plain language is a service you owe the client, not a risk to avoid.'}
+    ]
+  },
+  {
+    scenario:'You must tell a client that their case has a genuine but uncertain chance of success, and you don\'t want to over- or under-promise.',
+    q:'Which message communicates uncertainty clearly and responsibly?',
+    opts:[
+      {t:'"Based on the facts as we currently understand them, we think you have a reasonable but not guaranteed chance of success — roughly even. Litigation always carries uncertainty, and our view may shift as more evidence emerges. I\'d like to talk through the risks and costs before we decide the next step."', ok:true, ex:'Honest, plain, and properly hedged. It gives a real sense of the odds, names the uncertainty explicitly, ties the view to current facts, and moves toward a decision conversation. This is what responsible client communication sounds like.'},
+      {t:'"Great news — I\'m confident we\'ll win this one!"', ok:false, ex:'Cheerful and reckless. Guaranteeing an outcome you\'ve assessed as merely even is both inaccurate and a professional-conduct hazard. AI will match an upbeat tone if you ask for one — but the accuracy has to be yours.'},
+      {t:'"It is impossible to say anything about your prospects at this stage."', ok:false, ex:'Under-promising to the point of unhelpfulness. You <em>have</em> formed a view (roughly even); refusing to share any of it leaves the client unable to make an informed decision. Uncertainty should be communicated, not used as a shield.'},
+      {t:'"Your prospects are contingent upon the evidentiary matrix and the tribunal\'s exercise of discretion, quantifiable only ex post."', ok:false, ex:'Technically hedged, but incomprehensible to a client. Dense hedging isn\'t the same as clear communication — the client still has no idea what to do. Plain <em>and</em> honest, not one at the expense of the other.'}
+    ]
+  },
+  {
+    scenario:'A client emails asking whether they can just sign a contract you haven\'t finished reviewing, because the other side is "pushing hard."',
+    q:'Which reply is clear, protective, and appropriately plain?',
+    opts:[
+      {t:'"I understand the pressure to move quickly. I\'d strongly recommend not signing until I\'ve finished the review — there are a couple of terms I still need to check that could cost you significantly. It won\'t take long. Can I call you today to explain?"', ok:true, ex:'Acknowledges the pressure, gives a clear recommendation with a concrete reason, offers a fast path, and moves to a call. Plain, protective, and it puts the decision in the client\'s hands with the information they need. That\'s the balance.'},
+      {t:'"Do whatever you think is best — it\'s your call!"', ok:false, ex:'It abandons the client at the exact moment they need your judgement. Deferring entirely on a decision with real legal risk isn\'t respecting autonomy — it\'s withholding the advice they\'re paying for.'},
+      {t:'"You must not sign under any circumstances. I forbid it."', ok:false, ex:'The instinct to protect is right, but the tone removes the client\'s agency and reads as high-handed. Advise strongly, explain why, and let the informed client decide — "I forbid it" isn\'t your call to make.'},
+      {t:'"Execution of an unreviewed instrument would be inadvisable pending completion of due diligence on the enumerated provisions."', ok:false, ex:'Correct advice, buried in jargon a stressed client won\'t parse quickly. Under time pressure, clarity is protection — say plainly "don\'t sign yet, here\'s why, let\'s talk today."'}
+    ]
+  }
+];
+let plainAnswered = 0, plainScore = 0;
+function renderPlain(){
+  plainAnswered = 0; plainScore = 0;
+  $('plainWrap').innerHTML = PLAIN.map((t, ti) => {
+    const order = t.opts.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="p${ti}">
+      <div class="quiz-q-num">Scenario ${ti+1} of ${PLAIN.length}</div>
+      <div class="quiz-scenario">${t.scenario}</div>
+      <div class="quiz-q-text">${t.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerPlain(${ti}, ${oi}, this)">${t.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="px${ti}"></div>
+    </div>`;
+  }).join('');
+  $('feedback2').className = 'activity-feedback';
+}
+function answerPlain(ti, oi, btn){
+  const t = PLAIN[ti];
+  const box = $('p' + ti);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = t.opts[oi];
+  const rightText = t.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === rightText.trim()) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('px' + ti);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Plain and accurate.</strong> ' : '<strong>Not the version you\'d sign.</strong> ') + opt.ex;
+  plainAnswered++;
+  if (opt.ok) plainScore++;
+  if (plainAnswered === PLAIN.length) finishPlain();
+}
+function finishPlain(){
+  const fb = $('feedback2');
+  if (plainScore === PLAIN.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>3/3 — plain without losing the truth.</strong> Every winning message did the same three things: translated the concept instead of restating it, stayed honest about limits and uncertainty, and moved toward a decision the client could actually make. That's the standard you hold AI to — it can make anything sound friendly and simple, but only you can confirm it's still accurate enough to sign.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You got ${plainScore}/3.</strong> The traps are instructive: over-promising ("off the hook," "we'll win") reads well but is inaccurate; dense hedging is accurate but useless to a client; and dodging the question isn't communication at all. AI will write in whichever register you ask for — so the skill is keeping it plain <em>and</em> true at the same time. Retake it.`;
+  }
+  $('prog2').classList.add('done');
+}
+function resetPlain(){ renderPlain(); $('prog2').classList.remove('done'); }
+
+/* ─── ACTIVITY 3: Capstone Checklist ─── */
+const TOTAL_ITEMS = 8;
+function tickItem(cb){
+  cb.closest('.check-item').classList.toggle('checked', cb.checked);
+  updateCapstone();
+}
+function updateCapstone(){
+  const boxes = document.querySelectorAll('#activity-3 .check-item input');
+  let checked = 0;
+  boxes.forEach(b => { if (b.checked) checked++; });
+  let stagesDone = 0;
+  document.querySelectorAll('#activity-3 .capstone-stage').forEach((stage, i) => {
+    const ins = stage.querySelectorAll('input');
+    const all = [...ins].every(b => b.checked);
+    const pill = $('sp' + (i+1));
+    if (all) { pill.classList.add('lit'); stagesDone++; }
+    else { pill.classList.remove('lit'); }
+  });
+  const pct = (checked / TOTAL_ITEMS) * 100;
+  $('cpFill').style.width = pct + '%';
+  $('cpLabel').textContent = `${checked} of ${TOTAL_ITEMS} commitments made · ${stagesDone} of 4 stages complete`;
+  if (checked === TOTAL_ITEMS) {
+    $('doneCard').classList.add('show');
+    $('prog3').classList.add('done');
+    $('cpLabel').textContent = 'All 8 commitments made · 4 of 4 stages complete — matter complete!';
+  } else {
+    $('doneCard').classList.remove('show');
+    $('prog3').classList.remove('done');
+  }
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderPlain();
+});
+</script>
+</body>
+</html>

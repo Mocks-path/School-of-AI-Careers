@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · Clinical Information &amp; Evidence with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:800px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:640px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:700px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY BUTTONS / FEEDBACK ── */
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── ACTIVITY 1: PICO BUILDER ── */
+.pico-vague{background:var(--red-light);border-left:3px solid var(--red);border-radius:6px;padding:.8rem 1rem;font-size:.86rem;color:#8a2f22;line-height:1.55;margin-bottom:1.2rem}
+.pico-vague strong{color:#6d241a}
+.pico-groups{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media (max-width:760px){.pico-groups{grid-template-columns:1fr}}
+.pico-group{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;background:var(--bg-light)}
+.pico-group-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+.pico-letter{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:1rem;flex-shrink:0}
+.pico-group-name{font-weight:700;font-size:.9rem;color:var(--navy)}
+.pico-group-sub{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.pico-options{display:grid;gap:.45rem}
+.pico-opt{display:flex;align-items:flex-start;gap:.6rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:6px;padding:.6rem .8rem;cursor:pointer;transition:all .2s;font-size:.82rem;line-height:1.45}
+.pico-opt:hover{border-color:var(--orange)}
+.pico-opt.selected{border-color:var(--orange);background:var(--orange-glow)}
+.pico-opt.locked{cursor:not-allowed}
+.pico-opt.reveal-right{border-color:var(--green);background:var(--green-light);color:#1F5723}
+.pico-opt.reveal-wrong{border-color:var(--red);background:var(--red-light);color:#8a2f22}
+.pico-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;margin-top:.1rem;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:transparent}
+.pico-opt.selected .pico-check{background:var(--orange);border-color:var(--orange);color:#fff}
+.pico-opt.reveal-right .pico-check{background:var(--green);border-color:var(--green);color:#fff}
+.pico-built{margin-top:1.2rem;padding:1rem 1.1rem;background:var(--green-light);border-left:3px solid var(--green);border-radius:6px;font-size:.88rem;line-height:1.6;color:#1F5723;display:none}
+.pico-built.show{display:block;animation:fadeIn .4s ease}
+.pico-built strong{color:#164a1a}
+
+/* ── ACTIVITY 2: VERIFY-OR-TRUST QUIZ ── */
+.vt-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-bottom:1rem;transition:all .25s}
+.vt-scenario{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--orange);margin-bottom:.5rem}
+.vt-output{background:var(--bg-light);border:1px dashed var(--border);border-radius:6px;padding:.9rem 1rem;font-size:.87rem;line-height:1.6;color:var(--text-primary);margin-bottom:.9rem;font-family:var(--mono)}
+.vt-q{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.7rem}
+.vt-opts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+@media (max-width:520px){.vt-opts{grid-template-columns:1fr}}
+.vt-opt{display:flex;align-items:center;gap:.6rem;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;cursor:pointer;transition:all .2s;font-size:.85rem;font-weight:600}
+.vt-opt:hover{border-color:var(--orange)}
+.vt-opt.locked{cursor:not-allowed}
+.vt-opt .vt-ico{font-size:1rem}
+.vt-opt.reveal-right{border-color:var(--green);background:var(--green-light);color:#1F5723}
+.vt-opt.reveal-wrong{border-color:var(--red);background:var(--red-light);color:#8a2f22}
+.vt-explain{display:none;margin-top:.9rem;font-size:.82rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.7rem}
+.vt-explain.show{display:block;animation:fadeIn .3s ease}
+.vt-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:.35rem}
+.vt-verdict.v-right{color:#256B29}
+.vt-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 3: ORDER THE WORKFLOW ── */
+.order-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.order-wrap{grid-template-columns:1fr}}
+.order-col h4{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.6rem}
+.order-pool,.order-slots{display:flex;flex-direction:column;gap:.6rem;min-height:60px}
+.order-item{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;cursor:grab;font-size:.85rem;font-weight:500;line-height:1.45;transition:all .2s;user-select:none;display:flex;align-items:center;gap:.6rem}
+.order-item:hover{border-color:var(--orange);box-shadow:var(--shadow-sm)}
+.order-item.dragging{opacity:.4}
+.order-item .oi-tag{font-family:var(--mono);font-size:.7rem;color:var(--text-muted);font-weight:700}
+.order-slot{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.5rem;min-height:52px;transition:all .2s;display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,0.5)}
+.order-slot.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.order-slot-num{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.78rem;flex-shrink:0}
+.order-slot .order-item{flex:1;margin:0;cursor:default}
+.order-slot.correct{border-color:var(--green);background:var(--green-light);border-style:solid}
+.order-slot.correct .order-item{border-color:var(--green);background:#fff}
+.order-slot.wrong{border-color:var(--red);background:var(--red-light);border-style:solid}
+.order-slot.wrong .order-item{border-color:var(--red);background:#fff}
+
+/* ── COMPARE / TIP ── */
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+
+/* ── HONEST LIMITS ── */
+.limits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem}
+@media (max-width:760px){.limits-grid{grid-template-columns:1fr}}
+.limit-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);border-top:3px solid var(--red);padding:1.3rem;transition:all .3s}
+.limit-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.limit-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.limit-card h4 .lc-badge{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--red-light);color:#A03A2C;padding:.2rem .5rem;border-radius:50px}
+.limit-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem}
+.limit-card .lc-guard{font-size:.78rem;line-height:1.55;color:#2E6B30;background:var(--green-light);border-radius:6px;padding:.55rem .7rem;border-left:3px solid var(--green)}
+.limit-card .lc-guard strong{color:#1F5723}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── SUMMARY / COMPLETION ── */
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-top:1.5rem;box-shadow:var(--shadow-sm)}
+.summary-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
+.summary-check{width:44px;height:44px;border-radius:50%;background:var(--green-light);border:2px solid var(--green);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.summary-head h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--navy)}
+.summary-list{display:grid;gap:.7rem;margin-top:.5rem}
+.summary-item{display:flex;gap:.7rem;font-size:.87rem;line-height:1.6;color:var(--text-secondary)}
+.summary-item .si-dot{color:var(--orange);font-weight:800;flex-shrink:0}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+/* ── SITE FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .footer-logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#fff;margin-bottom:.3rem}
+.site-footer .footer-logo span{color:var(--orange)}
+.site-footer .footer-tag{font-size:.75rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;letter-spacing:.04em}
+.site-footer .footer-fine{font-size:.72rem;color:rgba(255,255,255,0.4);line-height:1.7;max-width:560px;margin:0 auto}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 · Week 3</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 3 · AI for Doctors</div>
+  <h1>Clinical Information &amp; Evidence with AI — <em>ask sharply, verify always</em></h1>
+  <p class="hero-sub">Three hands-on activities. Build a vague query into a focused PICO question AI can actually help with. Then read AI evidence outputs and flag which ones need primary-source or guideline verification — including a fabricated study and an outdated recommendation. Finally, order the evidence workflow that keeps AI useful and care safe, from question to this patient.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<!-- ── WHY THIS MATTERS ── -->
+<section class="lesson" style="padding-bottom:1rem">
+  <div class="container">
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">Q</div>
+        <h4>A sharp question</h4>
+        <p>AI mirrors the question you give it. A vague prompt earns a vague, generic answer; a focused PICO question earns a targeted one you can actually appraise.</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">V</div>
+        <h4>Verified evidence</h4>
+        <p>AI can fabricate studies and repeat outdated guidance with total confidence. Every reference and recommendation is verified against a primary source before it touches care.</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">P</div>
+        <h4>This patient</h4>
+        <p>Evidence is a population average. The clinician decides whether it applies to the individual in front of them — comorbidities, values, and context AI cannot see.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 1: PICO BUILDER ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Build the PICO question — turn a vague query into a focused one</h2>
+    <p class="lesson-intro">A focused clinical question has four parts: <strong>P</strong>atient/Population, <strong>I</strong>ntervention, <strong>C</strong>omparison, and <strong>O</strong>utcome. Vague in, vague out. For each element, pick the option that makes the question focused and answerable. Choose one per box, then build your PICO question.</p>
+
+    <div class="pico-vague">🔎 <strong>The vague query:</strong> "What's the best thing for high blood pressure?" — too broad for AI or any source to answer usefully. Let's sharpen it.</div>
+
+    <div class="lesson-card">
+      <div class="pico-groups" id="picoGroups"></div>
+      <div class="pico-built" id="picoBuilt"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetPico()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="buildPico()">Build my PICO question</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: VERIFY OR TRUST ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Verify or trust? — read the AI evidence output and decide</h2>
+    <p class="lesson-intro">AI evidence outputs look authoritative even when they are wrong. For each output below, decide whether you can rely on it as-is or must flag it for primary-source or guideline verification. Two are traps: one cites a study that does not exist, one repeats a recommendation that has been superseded. When in doubt, verify.</p>
+
+    <div class="lesson-card">
+      <div id="vtGrid"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetVT()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: ORDER THE WORKFLOW ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Order the evidence workflow — from question to this patient</h2>
+    <p class="lesson-intro">Using evidence safely with AI follows a fixed sequence. AI can help at the start, but the appraisal, the synthesis, and the decision for this patient stay with you. Drag each step into the right order — the <strong>appraise &amp; verify</strong> step is the one that keeps AI honest, so notice where it sits.</p>
+
+    <div class="lesson-card">
+      <div class="order-wrap">
+        <div class="order-col">
+          <h4>Steps (drag from here)</h4>
+          <div class="order-pool" id="orderPool"></div>
+        </div>
+        <div class="order-col">
+          <h4>The workflow, in order</h4>
+          <div class="order-slots" id="orderSlots"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetOrder()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="checkOrder()">Check my order</button>
+      </div>
+      <div class="tip-note">💡 <strong>Notice the shape:</strong> AI helps you ask and search faster, but <em>APPRAISE &amp; VERIFY</em> sits in the middle for a reason — nothing moves toward a patient until a reference and a recommendation are confirmed in a primary source and judged current.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HONEST LIMITS ── -->
+<section class="lesson" id="limits" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:var(--navy)">!</span>
+    <h2 class="lesson-title">The honest part — three ways AI evidence misleads, and the guard for each</h2>
+    <p class="lesson-intro">A fluent evidence summary is not a verified one. Three failure modes recur — knowing them, and the guard for each, is what lets you use AI to move faster without moving carelessly.</p>
+    <div class="lesson-card">
+      <div class="limits-grid">
+        <div class="limit-card">
+          <h4>Fabricated studies <span class="lc-badge">Invents evidence</span></h4>
+          <p>AI produces real-sounding citations — authors, journals, years, even effect sizes — for studies that were never published. A plan built on a phantom trial is built on nothing.</p>
+          <div class="lc-guard"><strong>Guard:</strong> confirm every reference in a primary source you can open and read. If it is not findable in a real database or guideline, it does not exist.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Outdated recommendations <span class="lc-badge">Stale guidance</span></h4>
+          <p>AI is trained on a snapshot in time and can confidently repeat guidance that has since been revised or reversed. It will not tell you a recommendation has been superseded.</p>
+          <div class="lc-guard"><strong>Guard:</strong> check any recommendation against the current guideline before you apply it. Recency and the live source decide, not the model's fluent tone.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Population vs. patient <span class="lc-badge">Average ≠ individual</span></h4>
+          <p>Even sound evidence is a population average. AI cannot see your patient's comorbidities, values, or context — applying an average to an individual is a clinical judgment.</p>
+          <div class="lc-guard"><strong>Guard:</strong> after verifying the evidence, you decide whether it fits this patient. The final step is always yours, informed by evidence but not dictated by it.</div>
+        </div>
+      </div>
+      <div class="tip-note">💡 <strong>Put together, these are one habit:</strong> AI helps you ask sharply and orient quickly, but every reference is verified in a primary source, every recommendation is checked for currency, and the fit to this patient is your call. Evidence-informed, clinician-decided.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">Type a sentence each. Writing it down helps the habit settle. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Take a vague clinical question you asked recently and rewrite it as a PICO question — name the P, I, C, and O.</div>
+        <textarea placeholder="In adults with type 2 diabetes (P), does drug A (I) versus drug B (C) reduce cardiovascular events (O)?"></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">What is the one check you will always run on an AI-provided citation before it informs a plan — and how will you confirm a recommendation is still current?</div>
+        <textarea placeholder="Before I use any AI citation I will open the primary source and confirm it exists; for recommendations I will check..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SUMMARY / COMPLETION ── -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="summary-card">
+      <div class="summary-head">
+        <div class="summary-check">✓</div>
+        <h3>Lesson 2 complete — what you now carry</h3>
+      </div>
+      <div class="summary-list">
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Ask in PICO.</strong> Patient, Intervention, Comparison, Outcome turns a vague query into a focused, answerable one — for AI and for any evidence source.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Verify before you trust.</strong> AI fabricates studies and repeats outdated guidance with confidence. Every reference is confirmed in a primary source; every recommendation is checked for currency.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Follow the workflow.</strong> Ask/PICO → Search → Appraise &amp; Verify → Synthesize → Apply to this patient. Appraise &amp; Verify sits in the middle for a reason.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Evidence informs; the clinician decides.</strong> A population average is not a plan. Whether the evidence fits this patient is always your judgment.</span></div>
+      </div>
+    </div>
+
+    <div class="next-up">
+      <h3>You've completed Week 3 · Lesson 2</h3>
+      <p>You can now turn a vague question into a focused PICO, catch a fabricated study and an outdated recommendation, and run the evidence workflow that keeps AI a support, not a shortcut. Carry the same pattern forward: AI suggests, the clinician verifies and decides.</p>
+      <a href="01-ai-augmented-clinician.html" class="btn btn-primary">← Back to Lesson 1</a>
+    </div>
+  </div>
+</section>
+
+<!-- SITE FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">Moksh<span>Path</span></div>
+  <div class="footer-tag">Guided Path to True Learning</div>
+  <div class="footer-fine">School of AI Careers · AI for Doctors · Week 3. This lesson teaches durable clinical workflows and evidence judgment, not tool tutorials, and is jurisdiction-neutral. It is professional education, not medical advice. No identifiable patient data was used and none should be entered into any consumer AI tool. AI suggests — the clinician always verifies and decides.</div>
+</footer>
+
+<script>
+/* ─── ACTIVITY 1: PICO BUILDER ─── */
+const PICO = [
+  {
+    letter:'P', name:'Patient / Population', sub:'Who is the question about?',
+    correct:1,
+    opts:[
+      {t:'"People" — anyone with high blood pressure, any age or condition.', ok:false},
+      {t:'Adults aged 40–70 with newly diagnosed stage-1 hypertension and no diabetes.', ok:true},
+      {t:'"The best patients for the drug."', ok:false}
+    ]
+  },
+  {
+    letter:'I', name:'Intervention', sub:'What are we considering doing?',
+    correct:0,
+    opts:[
+      {t:'Starting a specific first-line antihypertensive medication.', ok:true},
+      {t:'"Treatment" — something that lowers blood pressure.', ok:false},
+      {t:'"Whatever the AI recommends."', ok:false}
+    ]
+  },
+  {
+    letter:'C', name:'Comparison', sub:'Compared with what alternative?',
+    correct:2,
+    opts:[
+      {t:'"Compared to nothing in particular."', ok:false},
+      {t:'"Compared to being unwell."', ok:false},
+      {t:'Compared with structured lifestyle modification alone.', ok:true}
+    ]
+  },
+  {
+    letter:'O', name:'Outcome', sub:'What result are we measuring?',
+    correct:1,
+    opts:[
+      {t:'"A good outcome" — the patient does better overall.', ok:false},
+      {t:'Reduction in major cardiovascular events over 5 years.', ok:true},
+      {t:'"Whatever looks best on the chart."', ok:false}
+    ]
+  }
+];
+let picoSel = {};
+function renderPico(){
+  const wrap = document.getElementById('picoGroups');
+  wrap.innerHTML = PICO.map((g, gi) => `
+    <div class="pico-group">
+      <div class="pico-group-head">
+        <span class="pico-letter">${g.letter}</span>
+        <div>
+          <div class="pico-group-name">${g.name}</div>
+          <div class="pico-group-sub">${g.sub}</div>
+        </div>
+      </div>
+      <div class="pico-options">
+        ${g.opts.map((o, oi) => `
+          <div class="pico-opt" id="pico${gi}_${oi}" onclick="selectPico(${gi},${oi})">
+            <span class="pico-check">✓</span><span>${o.t}</span>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function selectPico(gi, oi){
+  if (document.getElementById('picoBuilt').classList.contains('show')) return;
+  picoSel[gi] = oi;
+  document.querySelectorAll(`[id^="pico${gi}_"]`).forEach((el, idx) => {
+    el.classList.toggle('selected', idx === oi);
+  });
+}
+function buildPico(){
+  if (Object.keys(picoSel).length < PICO.length) {
+    const built = document.getElementById('picoBuilt');
+    built.className = 'pico-built show';
+    built.style.background = '#FFF4E5'; built.style.borderColor = '#E89B2E'; built.style.color = '#7A4A0A';
+    built.innerHTML = '<strong>Pick one option in every box first.</strong> A PICO question needs all four elements — Patient, Intervention, Comparison, and Outcome.';
+    return;
+  }
+  let allRight = true;
+  PICO.forEach((g, gi) => {
+    g.opts.forEach((o, oi) => {
+      const el = document.getElementById(`pico${gi}_${oi}`);
+      el.classList.add('locked');
+      el.setAttribute('onclick','');
+      if (o.ok) el.classList.add('reveal-right');
+      else if (picoSel[gi] === oi) el.classList.add('reveal-wrong');
+    });
+    if (picoSel[gi] !== g.correct) allRight = false;
+  });
+  const built = document.getElementById('picoBuilt');
+  built.className = 'pico-built show';
+  built.style.background = ''; built.style.borderColor = ''; built.style.color = '';
+  if (allRight) {
+    built.innerHTML = `<strong>Your focused PICO question:</strong> "In adults aged 40–70 with newly diagnosed stage-1 hypertension and no diabetes <em>(P)</em>, does starting a first-line antihypertensive medication <em>(I)</em> versus structured lifestyle modification alone <em>(C)</em> reduce major cardiovascular events over 5 years <em>(O)</em>?" That is a question AI can help you research and you can actually appraise — a world away from "what's best for high blood pressure?"`;
+  } else {
+    built.style.background = '#FFF4E5'; built.style.borderColor = '#E89B2E'; built.style.color = '#7A4A0A';
+    built.innerHTML = `<strong>Close — some elements are still vague.</strong> The green options are the focused ones. Notice the pattern: each element names something specific and measurable. "People", "treatment", "compared to nothing", and "a good outcome" are all too broad to appraise. Hit <em>Try again</em> to rebuild it.`;
+  }
+  document.getElementById('prog1').classList.add('done');
+}
+function resetPico(){
+  picoSel = {};
+  document.getElementById('picoBuilt').className = 'pico-built';
+  renderPico();
+  document.getElementById('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: VERIFY OR TRUST ─── */
+const VT = [
+  {
+    tag:'AI evidence output · citation',
+    output:'"A 2021 randomised trial, Ostberg et al. in the New England Journal of Medicine, found drug X cut cardiovascular events by 41% versus placebo."',
+    q:'Rely on it as-is, or flag for verification?',
+    answer:'verify',
+    exp:{
+      right:'This is the fabricated-study trap. The citation is specific and confident — authors, journal, year, effect size — which is exactly what a hallucination looks like. You cannot rely on a study you have not found and read. Open a real database and confirm the trial exists before it informs anything.',
+      wrong:'A confident, specific citation is precisely what a fabricated reference looks like. AI invents plausible study details. Never rely on a citation you have not opened in a primary source — this one needs verification before it goes anywhere near a plan.'
+    }
+  },
+  {
+    tag:'AI evidence output · recommendation',
+    output:'"Current guidelines recommend routine daily aspirin for primary prevention in most healthy older adults."',
+    q:'Rely on it as-is, or flag for verification?',
+    answer:'verify',
+    exp:{
+      right:'This is the outdated-recommendation trap. Guidance on this exact point has been revised in recent years, and AI trained on older text can repeat superseded advice with full confidence. Always check a recommendation against the current guideline before applying it — recency is decided by the live source, not the model.',
+      wrong:'AI is trained on a snapshot and can confidently repeat guidance that has since been revised. Recommendations phrased as "current guidelines" still need checking against the live, current guideline. This one is a superseded-recommendation trap — flag it.'
+    }
+  },
+  {
+    tag:'AI evidence output · concept summary',
+    output:'"PICO is a framework for structuring a clinical question into Patient, Intervention, Comparison, and Outcome to make it focused and searchable."',
+    q:'Rely on it as-is, or flag for verification?',
+    answer:'trust',
+    exp:{
+      right:'This is a stable, well-established definitional concept — the kind of general orientation AI handles well and low-stakes to accept. Even so, the moment a concept summary turns into a specific citation, dose, or recommendation that will touch care, the verification habit switches back on.',
+      wrong:'This one is a stable, well-established definition, not a claim about a specific study, dose, or current recommendation — it is reasonable to accept as orientation. The verify reflex is essential, but it applies to citations and care-changing recommendations, not to a textbook definition of a framework.'
+    }
+  },
+  {
+    tag:'AI evidence output · dose',
+    output:'"The standard adult dose is 500 mg twice daily; adjust in renal impairment as follows..."',
+    q:'Rely on it as-is, or flag for verification?',
+    answer:'verify',
+    exp:{
+      right:'Any dose that will reach a patient is verified against an authoritative formulary or reference — full stop. AI can state a wrong or hallucinated dose in the same fluent tone as a correct one, and a dosing error harms patients. Confirm every figure before it informs prescribing.',
+      wrong:'Doses are among the highest-stakes outputs and among the easiest for AI to get subtly wrong. A dose that will reach a patient is always confirmed against an authoritative formulary or reference — never accepted from an AI summary as-is.'
+    }
+  }
+];
+let vtAnswered = {};
+function renderVT(){
+  const grid = document.getElementById('vtGrid');
+  grid.innerHTML = VT.map((item, i) => `
+    <div class="vt-card" id="vtCard${i}">
+      <div class="vt-scenario">${item.tag}</div>
+      <div class="vt-output">${item.output}</div>
+      <div class="vt-q">${item.q}</div>
+      <div class="vt-opts">
+        <div class="vt-opt" id="vt${i}_trust" onclick="answerVT(${i},'trust')"><span class="vt-ico">✅</span><span>Rely as-is</span></div>
+        <div class="vt-opt" id="vt${i}_verify" onclick="answerVT(${i},'verify')"><span class="vt-ico">🔎</span><span>Flag for verification</span></div>
+      </div>
+      <div class="vt-explain" id="vtex${i}"></div>
+    </div>`).join('');
+}
+function answerVT(i, choice){
+  if (vtAnswered[i] !== undefined) return;
+  const item = VT[i];
+  const right = choice === item.answer;
+  vtAnswered[i] = right;
+  ['trust','verify'].forEach(c => {
+    const el = document.getElementById(`vt${i}_${c}`);
+    el.classList.add('locked'); el.setAttribute('onclick','');
+    if (c === item.answer) el.classList.add('reveal-right');
+  });
+  if (!right) document.getElementById(`vt${i}_${choice}`).classList.add('reveal-wrong');
+  const ex = document.getElementById('vtex' + i);
+  ex.className = 'vt-explain show';
+  ex.innerHTML = `<span class="vt-verdict ${right?'v-right':'v-miss'}">${right?'✓ Correct':'✗ Not quite'}</span>${right?item.exp.right:item.exp.wrong}`;
+  if (Object.keys(vtAnswered).length === VT.length) {
+    const score = Object.values(vtAnswered).filter(Boolean).length;
+    const fb = document.getElementById('feedback2');
+    if (score === VT.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>4 of 4 — your verify reflex is calibrated.</strong> You caught the fabricated study and the outdated recommendation, held the line on the dose, and accepted only the stable definition. That instinct — verify anything that will touch care, and confirm currency — is the whole skill.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You scored ${score} of 4.</strong> Re-read the explanations. The rule: any specific citation, dose, or care-changing recommendation gets verified against a primary source and checked for currency; a stable definitional concept can be accepted as orientation. When in doubt, verify.`;
+    }
+    document.getElementById('prog2').classList.add('done');
+  }
+}
+function resetVT(){
+  vtAnswered = {};
+  document.getElementById('feedback2').className = 'activity-feedback';
+  renderVT();
+  document.getElementById('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: ORDER THE WORKFLOW ─── */
+const STEPS = [
+  {id:'ask', tag:'Ask', text:'Ask / PICO — frame a focused, answerable question', order:0},
+  {id:'search', tag:'Search', text:'Search — use AI and databases to surface candidate evidence', order:1},
+  {id:'appraise', tag:'Appraise', text:'Appraise & Verify — confirm each source is real, current, and sound', order:2},
+  {id:'synth', tag:'Synthesize', text:'Synthesize — weigh what the verified evidence actually says', order:3},
+  {id:'apply', tag:'Apply', text:'Apply to THIS patient — decide whether it fits the individual', order:4}
+];
+let orderPlaced = {};
+function renderOrder(){
+  const pool = document.getElementById('orderPool');
+  const slots = document.getElementById('orderSlots');
+  orderPlaced = {};
+  const shuffled = [...STEPS].sort(()=>Math.random()-0.5);
+  pool.innerHTML = shuffled.map(s => `
+    <div class="order-item" draggable="true" data-id="${s.id}">
+      <span class="oi-tag">${s.tag}</span><span>${s.text}</span>
+    </div>`).join('');
+  slots.innerHTML = STEPS.map((s, i) => `
+    <div class="order-slot" data-slot="${i}">
+      <span class="order-slot-num">${i+1}</span>
+      <span class="slot-content" data-content="${i}"></span>
+    </div>`).join('');
+  attachOrderEvents();
+}
+function attachOrderEvents(){
+  document.querySelectorAll('#orderPool .order-item').forEach(item => {
+    item.addEventListener('dragstart', e => { e.dataTransfer.setData('id', item.dataset.id); item.classList.add('dragging'); });
+    item.addEventListener('dragend', () => item.classList.remove('dragging'));
+  });
+  document.querySelectorAll('.order-slot').forEach(slot => {
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('id');
+      const slotIdx = slot.dataset.slot;
+      placeOrder(id, slotIdx);
+    });
+  });
+}
+function placeOrder(id, slotIdx){
+  if (orderPlaced[slotIdx]) return;
+  const step = STEPS.find(s => s.id === id);
+  const poolItem = document.querySelector(`#orderPool .order-item[data-id="${id}"]`);
+  if (!poolItem) return;
+  orderPlaced[slotIdx] = id;
+  const content = document.querySelector(`.slot-content[data-content="${slotIdx}"]`);
+  content.innerHTML = `<div class="order-item"><span class="oi-tag">${step.tag}</span><span>${step.text}</span></div>`;
+  poolItem.remove();
+}
+function checkOrder(){
+  const fb = document.getElementById('feedback3');
+  if (Object.keys(orderPlaced).length < STEPS.length) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = '<strong>Fill every slot first.</strong> Drag all five steps into the ordered list, then check.';
+    return;
+  }
+  let allRight = true;
+  STEPS.forEach((s, i) => {
+    const slot = document.querySelector(`.order-slot[data-slot="${i}"]`);
+    const correct = orderPlaced[i] === STEPS[i].id;
+    slot.classList.remove('correct','wrong');
+    slot.classList.add(correct ? 'correct' : 'wrong');
+    if (!correct) allRight = false;
+  });
+  if (allRight) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect order.</strong> Ask/PICO → Search → Appraise &amp; Verify → Synthesize → Apply to this patient. AI can accelerate the first two steps, but appraise &amp; verify guards the gate, synthesis weighs the verified evidence, and the fit to the individual is your decision. Evidence-informed, clinician-decided.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Not quite — check the red slots.</strong> The safe sequence is: <em>Ask/PICO → Search → Appraise &amp; Verify → Synthesize → Apply to this patient.</em> Verification must come before synthesis and application — you never build on or apply evidence you have not confirmed. Hit <em>Try again</em>.`;
+  }
+  document.getElementById('prog3').classList.add('done');
+}
+function resetOrder(){
+  document.getElementById('feedback3').className = 'activity-feedback';
+  renderOrder();
+  document.getElementById('prog3').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderPico();
+  renderVT();
+  renderOrder();
+});
+</script>
+</body>
+</html>

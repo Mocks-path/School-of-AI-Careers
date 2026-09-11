@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 · The AI-Augmented Recruiter — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:800px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:640px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:700px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: CLASSIFIER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#E04E3C,#C0392B)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-pros{margin-top:.6rem;font-size:.75rem;line-height:1.6;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-pros .pro{color:#2E6B30;display:block}
+.compare-pros .con{color:#A03A2C;display:block}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 3: CLICK-TO-REVEAL WORKFLOWS ── */
+.reveal-grid{display:grid;gap:.8rem;margin-top:.5rem}
+.reveal-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;cursor:pointer;transition:all .25s}
+.reveal-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.reveal-card.open{border-color:var(--orange);background:var(--bg-light)}
+.reveal-head{display:flex;align-items:center;gap:.9rem}
+.reveal-step{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:.95rem;flex-shrink:0}
+.reveal-name{font-size:.95rem;font-weight:700;color:var(--navy);flex:1}
+.reveal-chevron{font-size:1.1rem;color:var(--text-muted);transition:transform .3s}
+.reveal-card.open .reveal-chevron{transform:rotate(90deg);color:var(--orange)}
+.reveal-body{display:none;margin-top:.9rem;padding-top:.9rem;border-top:1px dashed var(--border)}
+.reveal-card.open .reveal-body{display:block;animation:fadeIn .3s ease}
+.reveal-body .rb-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem}
+.rb-ai .rb-label{color:var(--orange)}
+.rb-human .rb-label{color:#3D72C9}
+.reveal-body p{font-size:.83rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem}
+.reveal-body .rb-block:last-child p{margin-bottom:0}
+
+/* ── ACTIVITY 2: QUIZ ── */
+.quiz-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-bottom:1rem;transition:all .25s}
+.quiz-q{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-q .qnum{color:var(--orange);font-family:var(--mono);font-size:.82rem;margin-right:.3rem}
+.quiz-opts{display:grid;gap:.55rem}
+.quiz-opt{display:flex;align-items:flex-start;gap:.7rem;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;cursor:pointer;transition:all .2s;font-size:.85rem;line-height:1.5}
+.quiz-opt:hover{border-color:var(--orange)}
+.quiz-opt.locked{cursor:not-allowed}
+.quiz-opt .opt-key{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-top:.05rem;font-family:var(--mono)}
+.quiz-opt.reveal-right{border-color:var(--green);background:var(--green-light)}
+.quiz-opt.reveal-right .opt-key{background:var(--green);border-color:var(--green);color:#fff}
+.quiz-opt.reveal-wrong{border-color:var(--red);background:var(--red-light)}
+.quiz-opt.reveal-wrong .opt-key{background:var(--red);border-color:var(--red);color:#fff}
+.quiz-explain{display:none;margin-top:.9rem;font-size:.82rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.7rem}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:.35rem}
+.quiz-verdict.v-right{color:#256B29}
+.quiz-verdict.v-miss{color:#A03A2C}
+
+/* ── HONEST LIMITS ── */
+.limits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem}
+@media (max-width:760px){.limits-grid{grid-template-columns:1fr}}
+.limit-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);border-top:3px solid var(--red);padding:1.3rem;transition:all .3s}
+.limit-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.limit-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.limit-card h4 .lc-badge{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--red-light);color:#A03A2C;padding:.2rem .5rem;border-radius:50px}
+.limit-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:.7rem}
+.limit-card .lc-guard{font-size:.78rem;line-height:1.55;color:#2E6B30;background:var(--green-light);border-radius:6px;padding:.55rem .7rem;border-left:3px solid var(--green)}
+.limit-card .lc-guard strong{color:#1F5723}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── SUMMARY / COMPLETION ── */
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-top:1.5rem;box-shadow:var(--shadow-sm)}
+.summary-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
+.summary-check{width:44px;height:44px;border-radius:50%;background:var(--green-light);border:2px solid var(--green);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.summary-head h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--navy)}
+.summary-list{display:grid;gap:.7rem;margin-top:.5rem}
+.summary-item{display:flex;gap:.7rem;font-size:.87rem;line-height:1.6;color:var(--text-secondary)}
+.summary-item .si-dot{color:var(--orange);font-weight:800;flex-shrink:0}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+/* ── SITE FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .footer-logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#fff;margin-bottom:.3rem}
+.site-footer .footer-logo span{color:var(--orange)}
+.site-footer .footer-tag{font-size:.75rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;letter-spacing:.04em}
+.site-footer .footer-fine{font-size:.72rem;color:rgba(255,255,255,0.4);line-height:1.7;max-width:560px;margin:0 auto}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 1 · Week 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 4 · AI for Recruiters</div>
+  <h1>The AI-Augmented Recruiter — <em>AI supports, the recruiter verifies and decides</em></h1>
+  <p class="hero-sub">Three hands-on activities. Sort real recruiting tasks into what AI can safely draft or support, what only a recruiter can judge, and what must never touch a consumer tool or run on autopilot. Then lock in the one pattern that keeps AI useful and fair — including how to catch a hallucinated qualification and why an auto-rejection with no human review is never acceptable — and reveal where AI helps across your five core recruiting workflows.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: TASK CLASSIFIER ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Sort the task — support it, judge it, or never touch it?</h2>
+    <p class="lesson-intro">Not every recruiting task belongs near an AI tool. The useful question is not "can AI do this?" but <strong>"what is at stake if it gets this wrong — a wasted edit, a candidate's career, or a breach of their privacy?"</strong> Three buckets, three risk levels. Study the cards, then drag each task where it belongs. Guess freely — wrong pills carry a hover hint with the answer.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">AI</div>
+        <h4>Great for AI — draft &amp; support</h4>
+        <p>Low-stakes, high-volume <strong>first drafts and background support</strong> you will read and verify anyway: a job-description draft, interview-question ideas, a summary of an anonymised resume, an outreach template. AI beats the blank page; your judgment finishes the job.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Clears the slow "blank page" minutes</span>
+          <span class="pro">+ Offers structure and phrasing to refine</span>
+          <span class="con">− Always verify claims against the real resume</span>
+          <span class="con">− A draft is never sent or acted on as-is</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">YOU</div>
+        <h4>Recruiter-only — judgment &amp; hiring decisions</h4>
+        <p>Calls that <strong>shape a person's candidacy and the hiring outcome</strong>: who advances, who is rejected, the final shortlist, the fit judgment. AI can inform, never decide — and never bears the duty owed to the candidate or the fairness owed to every applicant.</p>
+        <div class="compare-pros">
+          <span class="pro">+ You hold the accountability and the fairness duty</span>
+          <span class="pro">+ You see the whole person AI cannot</span>
+          <span class="con">− AI has no accountability for a bad call</span>
+          <span class="con">− Outsourcing the decision risks the candidate</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">NO</div>
+        <h4>Never — candidate PII in consumer tools OR fully-automated rejection</h4>
+        <p>Anything that would paste <strong>identifiable candidate data</strong> into a consumer tool — names, contact details, full resumes — <strong>or</strong> let AI auto-reject applicants with no human reviewing the decision.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Protects candidate privacy and trust</span>
+          <span class="pro">+ Keeps a human accountable for every rejection</span>
+          <span class="con">− A single paste can breach candidate privacy</span>
+          <span class="con">− Auto-rejection hides bias behind a machine</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>The rule of thumb:</strong> if a mistake would only cost you a minute of editing, AI can draft or support it. If a mistake would affect who gets hired or rejected, you judge it. If it would expose identifiable candidate data to a consumer tool, or let AI reject people with no human review, it never goes in.</div>
+
+    <div class="lesson-card" style="margin-top:1.5rem">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="scenarioList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="ai">
+            <div class="bucket-title">Great for AI — draft &amp; support</div>
+            <div class="bucket-sub">Low stakes · you verify before use</div>
+            <div class="bucket-drop" data-drop="ai"></div>
+          </div>
+          <div class="bucket" data-bucket="human">
+            <div class="bucket-title">Recruiter-only — judgment &amp; hiring decisions</div>
+            <div class="bucket-sub">Advance · reject · shortlist · accountability</div>
+            <div class="bucket-drop" data-drop="human"></div>
+          </div>
+          <div class="bucket" data-bucket="never">
+            <div class="bucket-title">Never — candidate PII in consumer tools / auto-rejection</div>
+            <div class="bucket-sub">Privacy · no unreviewed rejections</div>
+            <div class="bucket-drop" data-drop="never"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: THE PATTERN QUIZ ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">The pattern that keeps AI fair — "AI supports, the recruiter verifies &amp; decides"</h2>
+    <p class="lesson-intro">One durable habit outlasts every tool and update: AI produces a <strong>suggestion or draft</strong>; you <strong>verify it against the real candidate and evidence</strong> and <strong>decide</strong>. Four short questions test whether you have the pattern — including an auto-reject / adverse-decision scenario and one where AI credits a candidate with a qualification they never listed. Pick an answer for instant feedback and an honest explanation. Answer all four to see your score.</p>
+
+    <div class="lesson-card">
+      <div id="quizGrid"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetQuiz()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: CLICK-TO-REVEAL WORKFLOWS ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Your five core recruiting workflows — where AI helps, and where you must verify</h2>
+    <p class="lesson-intro">Most of a recruiter's week runs through five repeating workflows. AI does not replace any of them — it removes friction inside each so you spend more time on the part only a fair, accountable recruiter can do. Click each workflow to reveal where AI drafts or supports and where the recruiter must verify and decide.</p>
+
+    <div class="lesson-card">
+      <div class="reveal-grid" id="revealGrid"></div>
+      <div class="tip-note">💡 <strong>Notice the shape:</strong> in every workflow AI touches the <em>preparation and the paperwork</em>, never the <em>hiring decision</em> — and every claim, match, or "qualification" it surfaces must be checked against the actual application before it moves a candidate up or out. That boundary is what makes the augmented recruiter trustworthy rather than merely faster.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HONEST LIMITS ── -->
+<section class="lesson" id="limits" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:var(--navy)">!</span>
+    <h2 class="lesson-title">The honest part — what AI gets wrong, and how you guard against it</h2>
+    <p class="lesson-intro">Being augmented does not mean being uncritical. Four failure modes show up in recruiting AI tools, no matter how fluent. Knowing them — and the simple guard for each — is what separates a professional using AI from someone who let a chatbot quietly reject good people.</p>
+    <div class="lesson-card">
+      <div class="limits-grid">
+        <div class="limit-card">
+          <h4>Hallucinated qualifications <span class="lc-badge">Invents credentials</span></h4>
+          <p>AI will confidently attribute skills, degrees, job titles, or years of experience to a candidate that appear nowhere in their resume — and just as easily strip out real ones — all in fluent, plausible summary prose.</p>
+          <div class="lc-guard"><strong>Guard:</strong> treat every AI summary as a claim to check. Read the actual resume before you rely on any qualification, and never advance or reject on a summary you have not verified against the source.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Candidate privacy <span class="lc-badge">Leaks PII</span></h4>
+          <p>Resumes, names, and contact details pasted into a consumer tool can be stored and used to train future models. Personal data entered "just to get a quick summary" can breach a candidate's privacy and your obligations.</p>
+          <div class="lc-guard"><strong>Guard:</strong> never enter identifiable candidate data into a consumer tool. Work in anonymised, generic terms; keep names, contacts, and PII out and add context back in your own notes.</div>
+        </div>
+        <div class="limit-card">
+          <h4>Bias &amp; adverse impact <span class="lc-badge">Skews fairness</span></h4>
+          <p>Trained on past hiring data, AI can reproduce bias — favouring proxies for age, gender, or background, penalising employment gaps or non-traditional paths, and creating adverse impact against protected groups. It will not flag this for you.</p>
+          <div class="lc-guard"><strong>Guard:</strong> read every ranking and screen for what it is really rewarding. Apply your own judgment, watch for proxy bias and adverse impact, and never let a score become a decision on its own.</div>
+        </div>
+        <div class="limit-card">
+          <h4>No auto-rejection <span class="lc-badge">Human review required</span></h4>
+          <p>A consumer or vendor tool is not an accountable decision-maker. Letting it silently filter out or reject applicants with no human looking hides bias behind automation and denies candidates a fair, reviewable decision.</p>
+          <div class="lc-guard"><strong>Guard:</strong> use AI as decision-support only. Every advance and every rejection is reviewed and owned by a recruiter — no applicant is auto-rejected without a human in the loop.</div>
+        </div>
+      </div>
+      <div class="tip-note">💡 <strong>Put together, these are one habit:</strong> treat AI output as a fast but unreliable assistant's first draft — helpful, never trusted unread. You verify every qualification against the real resume, you watch the ranking for bias and adverse impact, you keep candidate PII out of consumer tools, and every hiring decision — especially a rejection — stays with a human. That is the whole discipline of the augmented recruiter.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">Type a sentence each. Writing it down helps the boundary settle. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Name one task in your week that is a perfect "AI drafts &amp; supports" candidate — and the one verification you would always run before you rely on its output.</div>
+        <textarea placeholder="Drafting a job description or outreach template. Before I use it I would always verify..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Where are you most tempted to let AI decide — and why must the hiring judgment (and every rejection) stay with you?</div>
+        <textarea placeholder="When a ranking looks authoritative, I'm tempted to accept it. But fairness to every applicant and accountability for the decision mean..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SUMMARY / COMPLETION ── -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="summary-card">
+      <div class="summary-head">
+        <div class="summary-check">✓</div>
+        <h3>Lesson 1 complete — what you now carry</h3>
+      </div>
+      <div class="summary-list">
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Sort by stakes, not by capability.</strong> Ask what a mistake would cost — an edit, a candidate's career, or a breach of privacy — before you ask whether AI can do the task.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>AI supports; the recruiter verifies and decides.</strong> The tool drafts and surfaces; you own who advances, who is rejected, and the fairness owed to every applicant. AI is decision-support, never the hiring decision-maker.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Candidate privacy and human review are hard lines.</strong> Identifiable candidate data never goes into a consumer tool, and no applicant is auto-rejected without a human reviewing the decision.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Be honest about limits.</strong> AI hallucinates qualifications, carries bias and adverse impact, leaks PII, and cannot judge a whole person — verification against the real application is part of the workflow, not an extra.</span></div>
+      </div>
+    </div>
+
+    <div class="next-up">
+      <h3>Lesson 2 · Sourcing &amp; Screening with AI</h3>
+      <p>You know the boundary. Next: build inclusive, defensible criteria and strip exclusionary language from a job description, judge which AI screening outputs need human review — including how to catch proxy bias and a hallucinated qualification — and order the sourcing-and-screening workflow that keeps hiring fair.</p>
+      <a href="02-sourcing-screening.html" class="btn btn-primary">Continue to Lesson 2 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SITE FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">Moksh<span>Path</span></div>
+  <div class="footer-tag">Guided Path to True Learning</div>
+  <div class="footer-fine">School of AI Careers · AI for Recruiters · Week 4. This lesson teaches durable recruiting workflows and professional judgment, not tool tutorials, and is jurisdiction-neutral. It is professional education, not legal advice. No identifiable candidate data was used and none should be entered into any consumer AI tool. AI supports — the recruiter always verifies and decides.</div>
+</footer>
+
+<script>
+/* ─── ACTIVITY 1: Drag & Drop Task Classifier ─── */
+const SCENARIOS = [
+  {id:'s1', text:'Draft a first version of a job description for a role, which you will review, fact-check, and edit before posting.', bucket:'ai', hint:'A first draft you will read and verify before it goes live — low stakes, high volume. Great for AI.'},
+  {id:'s2', text:'Decide which candidates advance to the interview stage and which are rejected.', bucket:'human', hint:'Advancing and rejecting candidates is the hiring decision itself — it carries accountability and fairness duties only the recruiter holds.'},
+  {id:'s3', text:'Paste a candidate\'s full resume with their name, email, and phone number into a consumer chatbot for a "quick take".', bucket:'never', hint:'Identifiable candidate data never goes into a consumer tool. This breaches candidate privacy. Never.'},
+  {id:'s4', text:'Generate a set of draft interview questions for a role for you to review, tailor, and approve.', bucket:'ai', hint:'Routine draft interview questions you will vet before use — an ideal AI draft.'},
+  {id:'s5', text:'Let an AI tool automatically reject applicants below a score with no recruiter ever reviewing the rejections.', bucket:'never', hint:'Fully-automated rejection with no human review hides bias behind a machine and denies a fair, reviewable decision. AI is decision-support only. Never.'},
+  {id:'s6', text:'Decide the final shortlist and judge who is the strongest overall fit for the team and the role.', bucket:'human', hint:'The shortlist and fit judgment shape who gets hired and carry accountability — core recruiting judgment, recruiter-only.'}
+];
+const BUCKET_NAMES = {ai:'Great for AI — draft & support', human:'Recruiter-only — judgment & hiring decisions', never:'Never — candidate PII in consumer tools / auto-rejection'};
+
+let placed = {};
+function renderScenarios(){
+  const list = document.getElementById('scenarioList');
+  const shuffled = [...SCENARIOS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('id');
+      handleDrop(id, b.dataset.bucket);
+    });
+  });
+}
+function handleDrop(id, bucket){
+  const scenario = SCENARIOS.find(s => s.id === id);
+  if (!scenario || placed[id]) return;
+  const correct = scenario.bucket === bucket;
+  placed[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const dropZone = document.querySelector(`[data-drop="${bucket}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + scenario.text.substring(0, 40) + (scenario.text.length > 40 ? '…' : '');
+  pill.title = correct ? scenario.hint : `Correct bucket: ${BUCKET_NAMES[scenario.bucket]}. ${scenario.hint}`;
+  dropZone.appendChild(pill);
+  checkActivity1Done();
+}
+function checkActivity1Done(){
+  if (Object.keys(placed).length === SCENARIOS.length) {
+    const right = Object.values(placed).filter(p => p.correct).length;
+    const fb = document.getElementById('feedback1');
+    if (right === SCENARIOS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six sorted correctly.</strong> You read each task by its stakes: a draft you will verify is safe for AI; who advances, who is rejected, and the shortlist stay with you; anything exposing candidate PII to a consumer tool — or letting AI reject people with no human review — never goes in. That single instinct will guide every tool decision in this course.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the right bucket and why. Ask three questions in order: <em>Would a mistake just cost me an edit?</em> → AI drafts &amp; supports. <em>Would it affect who gets hired or rejected?</em> → you judge. <em>Would it expose candidate PII, or auto-reject with no human review?</em> → never. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    document.getElementById('prog1').classList.add('done');
+  }
+}
+function resetActivity1(){
+  placed = {};
+  document.getElementById('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('.bucket-drop').forEach(d => d.innerHTML = '');
+  renderScenarios();
+  document.getElementById('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  SCENARIOS.forEach(s => { if (!placed[s.id]) handleDrop(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 2: The Pattern Quiz ─── */
+const QUIZ = [
+  {
+    q:'You ask AI to summarise an anonymised resume before you review the full application. What does "AI supports, the recruiter verifies & decides" mean here?',
+    opts:[
+      {k:'A', t:'Paste the full resume, including the candidate\'s name and contact details, so the summary is complete.'},
+      {k:'B', t:'Use AI for a neutral first-draft summary to orient you, then verify each qualification against the actual resume before you judge the candidate.'},
+      {k:'C', t:'Accept the summary\'s verdict and advance or reject on it — a summary is low stakes and saves time.'}
+    ],
+    correct:1,
+    exp:{
+      right:'The pattern in one move: AI drafts a structured first pass to orient you; you verify each claim against the real resume and own the judgment — and never paste identifiable candidate data into a consumer tool.',
+      wrongA:'Pasting the resume with name and contact details into a consumer tool breaches candidate privacy. AI should only get an anonymised prompt; the identifiers stay out.',
+      wrongC:'A resume summary shapes whether a real person advances — exactly the kind of output the recruiter must verify against the actual application, not rubber-stamp.'
+    }
+  },
+  {
+    q:'A screening app offers to automatically reject every applicant below a match score, with no recruiter reviewing the rejections. A colleague asks if that is fine because "it saves hours." What is the sound position?',
+    opts:[
+      {k:'A', t:'It is fine — if the score is well-tuned, auto-rejection saves recruiter time.'},
+      {k:'B', t:'No — a screening tool is decision-support, not the decision-maker. A recruiter must review and own every rejection; applicants must not be auto-rejected with no human in the loop.'},
+      {k:'C', t:'It is fine as long as rejected applicants get an automated email so they are informed.'}
+    ],
+    correct:1,
+    exp:{
+      right:'This is the adverse-decision line. A match score can encode proxy bias and adverse impact, and a tool has no accountability. AI supports; a recruiter verifies and decides. Fully-automated rejection with no human review is the failure mode.',
+      wrongA:'A "well-tuned" score can still create adverse impact against protected groups and penalise non-traditional paths. Auto-rejection removes the very safeguard — a human reviewing the decision — that fairness depends on.',
+      wrongC:'A polite automated email does not make an unreviewed rejection fair or accountable. A recruiter must review the rejection decision, not just the message.'
+    }
+  },
+  {
+    q:'An AI resume summary states a candidate holds a "certified project-management credential" and "8 years of leadership" that you cannot find anywhere in their actual resume. What is the right move?',
+    opts:[
+      {k:'A', t:'Advance them — the AI clearly read the resume carefully and surfaced strong qualifications.'},
+      {k:'B', t:'Treat it as a likely hallucination: do not credit any qualification you cannot see in the actual resume, and judge only what the candidate genuinely listed.'},
+      {k:'C', t:'Reject the candidate entirely — if the AI invented qualifications, the application must be untrustworthy.'}
+    ],
+    correct:1,
+    exp:{
+      right:'AI fabricates confident, plausible-sounding qualifications a candidate never claimed. This is a hallucinated qualification. The pattern holds: AI supports, you verify against the source. No credential you cannot find in the real resume exists — and no decision is built on one.',
+      wrongA:'AI invents credentials and experience that are not in the resume. Never advance (or reject) on a qualification you have not confirmed in the actual application; a fabricated credential misleads the decision.',
+      wrongC:'The hallucination is the tool\'s error, not the candidate\'s. Do not penalise the applicant for what AI invented — go back to the real resume and judge the candidate on what they actually listed.'
+    }
+  },
+  {
+    q:'What is the single best test of whether you are using AI the augmented-recruiter way?',
+    opts:[
+      {k:'A', t:'You used the newest, most powerful recruiting AI tool available.'},
+      {k:'B', t:'A recruiter verified every qualification against the real application, checked the process for bias, and took responsibility for every advance and rejection before it affected a candidate.'},
+      {k:'C', t:'The AI screened candidates faster than you could have.'}
+    ],
+    correct:1,
+    exp:{
+      right:'Speed and tool choice are secondary. The augmented recruiter is defined by a human verifying every claim against the real application, watching for bias, and staying accountable for every hiring decision. That is the durable habit this whole course is built on.',
+      wrongA:'A better tool changes nothing if no one verifies its output against the real application. The pattern is about the recruiter in the loop, not the model on the label.',
+      wrongC:'Faster but unverified is how hallucinated qualifications and proxy bias reach a hiring decision. Speed without verification is the failure mode, not the goal.'
+    }
+  }
+];
+let quizAnswered = {};
+function renderQuiz(){
+  const grid = document.getElementById('quizGrid');
+  grid.innerHTML = QUIZ.map((item, i) => `
+    <div class="quiz-card" id="quizCard${i}">
+      <div class="quiz-q"><span class="qnum">Q${i+1}.</span>${item.q}</div>
+      <div class="quiz-opts">
+        ${item.opts.map((o, j) => `
+          <div class="quiz-opt" id="qo${i}_${j}" onclick="answerQuiz(${i},${j})">
+            <span class="opt-key">${o.k}</span><span>${o.t}</span>
+          </div>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qex${i}"></div>
+    </div>`).join('');
+}
+function answerQuiz(i, j){
+  if (quizAnswered[i] !== undefined) return;
+  const item = QUIZ[i];
+  const right = j === item.correct;
+  quizAnswered[i] = right;
+  document.querySelectorAll(`#quizCard${i} .quiz-opt`).forEach((el, idx) => {
+    el.classList.add('locked');
+    el.setAttribute('onclick','');
+    if (idx === item.correct) el.classList.add('reveal-right');
+  });
+  if (!right) document.getElementById(`qo${i}_${j}`).classList.add('reveal-wrong');
+  const ex = document.getElementById('qex' + i);
+  ex.className = 'quiz-explain show';
+  let msg;
+  if (right) msg = item.exp.right;
+  else msg = j === 0 ? item.exp.wrongA : item.exp.wrongC;
+  ex.innerHTML = `<span class="quiz-verdict ${right ? 'v-right' : 'v-miss'}">${right ? '✓ Correct' : '✗ Not quite'}</span>${msg}`;
+  if (Object.keys(quizAnswered).length === QUIZ.length) {
+    const score = Object.values(quizAnswered).filter(Boolean).length;
+    const fb = document.getElementById('feedback2');
+    if (score === QUIZ.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>4 of 4 — you have the pattern, not just the buttons.</strong> Tools will change every year; "AI supports, the recruiter verifies and decides" will not. Keep it as your default and you can adopt any new tool fairly and safely.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You scored ${score} of 4.</strong> Re-read the explanations on the ones you missed. The through-line: AI produces a suggestion; a recruiter verifies every claim against the real application, watches for bias, and owns every advance and rejection. Hit <em>Try again</em> to retake it.`;
+    }
+    document.getElementById('prog2').classList.add('done');
+  }
+}
+function resetQuiz(){
+  quizAnswered = {};
+  document.getElementById('feedback2').className = 'activity-feedback';
+  renderQuiz();
+  document.getElementById('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Click-to-Reveal Workflows ─── */
+const WORKFLOWS = [
+  {
+    name:'Job descriptions &amp; role definition',
+    ai:'AI drafts a first job description, suggests inclusive phrasing, and produces a plain-language version of a role so you are never starting from a blank page.',
+    human:'You verify every requirement against the real role, strip exclusionary or biased language, confirm the must-haves are genuinely necessary, and own what gets posted. A drafted JD is never published unread.'
+  },
+  {
+    name:'Sourcing &amp; outreach',
+    ai:'AI drafts outreach templates, suggests search terms and adjacent skill keywords, and summarises anonymised profiles into a readable first structure.',
+    human:'You verify each profile against the source, keep candidate PII out of consumer tools, watch that search criteria are not proxies for age or background, and decide who to approach. AI widens the pool; it does not judge the person.'
+  },
+  {
+    name:'Screening &amp; resume review',
+    ai:'AI can summarise anonymised resumes, surface likely-relevant experience, and draft a first-pass comparison against the criteria, giving you a faster orientation.',
+    human:'You confirm every qualification against the actual resume, check the ranking for proxy bias and adverse impact, and decide who advances. No candidate is advanced or rejected on an unverified AI summary — and never auto-rejected.'
+  },
+  {
+    name:'Interview support',
+    ai:'AI drafts role-relevant interview questions, suggests structured scorecards, and produces neutral first-draft summaries of your own interview notes.',
+    human:'You choose and tailor the questions, run a fair and consistent process, verify any AI note against what was actually said, and make the fit judgment. The interview decision is yours to own.'
+  },
+  {
+    name:'Candidate communication &amp; coordination',
+    ai:'AI drafts scheduling messages, status updates, and respectful decline templates, and can reorganise anonymised information into a usable first form.',
+    human:'You verify every detail against the record, keep candidate PII out of consumer tools, ensure every rejection reflects a human-reviewed decision, and take responsibility for what each candidate is told.'
+  }
+];
+function renderWorkflows(){
+  const grid = document.getElementById('revealGrid');
+  grid.innerHTML = WORKFLOWS.map((w, i) => `
+    <div class="reveal-card" id="rev${i}" onclick="toggleReveal(${i})">
+      <div class="reveal-head">
+        <span class="reveal-step">${i+1}</span>
+        <span class="reveal-name">${w.name}</span>
+        <span class="reveal-chevron">›</span>
+      </div>
+      <div class="reveal-body">
+        <div class="rb-block rb-ai">
+          <div class="rb-label">Where AI helps — drafts &amp; supports</div>
+          <p>${w.ai}</p>
+        </div>
+        <div class="rb-block rb-human">
+          <div class="rb-label">Where the recruiter must verify — decides</div>
+          <p>${w.human}</p>
+        </div>
+      </div>
+    </div>`).join('');
+}
+let revealed = {};
+function toggleReveal(i){
+  const card = document.getElementById('rev' + i);
+  card.classList.toggle('open');
+  if (card.classList.contains('open')) revealed[i] = true;
+  if (Object.keys(revealed).length === WORKFLOWS.length) {
+    document.getElementById('prog3').classList.add('done');
+  }
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderScenarios();
+  setupBuckets();
+  renderQuiz();
+  renderWorkflows();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · Candidate Engagement &amp; Interviewing with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:860px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:730px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── PRINCIPLE BANNER ── */
+.principle{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;border-radius:var(--radius);padding:1.4rem 1.7rem;margin:1.2rem auto 0;max-width:760px;box-shadow:var(--shadow-md)}
+.principle .p-icon{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--orange-light);flex-shrink:0}
+.principle p{font-size:.9rem;line-height:1.55;color:rgba(255,255,255,0.9)}
+.principle strong{color:#fff}
+
+/* ── ACTIVITY: BUILD / ORDER ── */
+.build-note{font-size:.8rem;color:var(--text-muted);margin-bottom:.6rem}
+.build-pool,.build-target{list-style:none;display:grid;gap:.55rem;margin-top:.8rem}
+.build-slot{background:var(--bg-light);border:1.5px dashed var(--border);border-radius:var(--radius-sm);min-height:52px;display:flex;align-items:center;padding:.4rem;font-size:.78rem;color:var(--text-muted);transition:all .2s}
+.build-slot.filled{border-style:solid;background:var(--bg-card)}
+.build-chip{display:flex;align-items:center;gap:.7rem;width:100%;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.84rem;line-height:1.4;cursor:pointer;transition:all .2s;text-align:left;color:var(--text-primary);font-family:inherit}
+.build-chip:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.build-chip:disabled{cursor:default;opacity:.55}
+.build-chip .chip-idx{font-family:var(--mono);font-size:.7rem;font-weight:600;color:#fff;background:var(--orange);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.build-chip.placed{border-color:var(--green);background:var(--green-light)}
+.build-chip.placed .chip-idx{background:var(--green)}
+.build-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:1rem}
+@media (max-width:680px){.build-cols{grid-template-columns:1fr}}
+.build-cols h5{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.2rem}
+.build-cols .col-sub{font-size:.74rem;color:var(--text-muted);margin-bottom:.4rem}
+
+/* ── ACTIVITY: INTERVIEWER'S CHAIR (review cards) ── */
+.review-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.review-src{font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem;font-family:var(--mono)}
+.review-quote{font-size:.9rem;color:var(--navy);line-height:1.55;background:var(--bg-light);border-left:3px solid var(--border);border-radius:4px;padding:.7rem .9rem;margin-bottom:.9rem;font-style:italic}
+.review-q-text{font-size:.86rem;font-weight:600;color:var(--navy);margin-bottom:.7rem}
+.review-opts{display:grid;gap:.5rem;grid-template-columns:1fr 1fr}
+@media (max-width:560px){.review-opts{grid-template-columns:1fr}}
+.review-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.8rem;line-height:1.45;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.review-opt:hover:not(:disabled){border-color:var(--orange);transform:translateY(-1px)}
+.review-opt:disabled{cursor:default;opacity:.8}
+.review-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;font-weight:600;opacity:1}
+.review-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.review-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.review-explain.show{display:block;animation:fadeIn .3s ease}
+.review-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.review-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── ACTIVITY: CLASSIFY QUESTIONS ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-scenario{font-size:.82rem;color:var(--text-secondary);font-style:italic;background:var(--bg-light);border-left:3px solid var(--border);border-radius:4px;padding:.6rem .8rem;margin-bottom:.8rem;line-height:1.55}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .95rem;font-size:.83rem;line-height:1.55;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── DONE CARD ── */
+.done-card{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:1.5rem;text-align:center;position:relative;overflow:hidden;display:none}
+.done-card.show{display:block;animation:fadeIn .5s ease}
+.done-card::before{content:'';position:absolute;top:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.15)}
+.done-card::after{content:'';position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(102,187,106,0.12)}
+.done-badge{display:inline-block;font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-light);background:rgba(232,122,46,0.15);border-radius:50px;padding:.35rem 1rem;margin-bottom:1rem;position:relative}
+.done-card h3{font-family:'DM Serif Display',serif;font-size:1.7rem;margin-bottom:.6rem;position:relative}
+.done-card>p{font-size:.92rem;color:rgba(255,255,255,0.8);margin:0 auto 1.2rem;max-width:560px;line-height:1.6;position:relative}
+.done-recap{list-style:none;max-width:560px;margin:0 auto;text-align:left;display:grid;gap:.5rem;position:relative}
+.done-recap li{display:flex;gap:.6rem;align-items:flex-start;font-size:.85rem;line-height:1.5;color:rgba(255,255,255,0.9)}
+.done-recap li .r-check{color:#7BD67F;font-weight:700;flex-shrink:0}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.3rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card.good .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card.bad .compare-icon{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card.good li::before{content:'\2713';color:var(--green);font-weight:700;flex-shrink:0}
+.compare-card.bad li::before{content:'\2717';color:var(--red);font-weight:700;flex-shrink:0}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .f-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff;margin-bottom:.3rem}
+.site-footer .f-logo span{color:var(--orange)}
+.site-footer .f-tag{font-size:.72rem;color:var(--text-muted);letter-spacing:.02em;margin-bottom:1rem}
+.site-footer .f-copy{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1rem}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 · Week 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 4 · AI for Recruiters</div>
+  <h1>Candidate Engagement &amp; Interviewing — <em>structure the interview, judge the evidence yourself</em></h1>
+  <p class="hero-sub">This is the human heart of recruiting. First you'll build a structured interview — the single most reliable, fairest thing a recruiter can do — from competencies to consistent questions to scoring anchors. Then you'll sit in the interviewer's chair and separate fair, job-related evidence from an AI note-taker over-reading tone, "culture fit," and affect. Finally you'll learn to spot a leading or biased question and pick the version that actually predicts the job. AI can transcribe and summarise — but the recruiter decides what counts as evidence.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<div style="max-width:1080px;margin:0 auto;padding:0 2rem">
+  <div class="principle">
+    <span class="p-icon">&ldquo;</span>
+    <p><strong>The rule that makes interviewing fair — and defensible:</strong> a structured, job-related interview scored against the same anchors for every candidate is the most reliable predictor recruiters have, and the strongest protection against bias. AI can transcribe a conversation, draft a summary, and surface themes — but it cannot decide what is evidence. It will happily infer "confidence," "culture fit," or "enthusiasm" from tone and affect, and those inferences are exactly where bias and adverse impact creep in. <strong>AI supports; the recruiter verifies the evidence and decides.</strong></p>
+  </div>
+</div>
+
+<!-- ── ACTIVITY 1: BUILD A STRUCTURED INTERVIEW ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Build a structured interview</h2>
+    <p class="lesson-intro">A structured interview isn't rigid for its own sake — it's what makes every candidate comparable and every decision defensible. The parts have a logic: you start from the <strong>competencies the job actually needs</strong>, write <strong>consistent questions</strong> that probe them, define <strong>scoring anchors</strong> so "good" means the same thing for everyone, capture <strong>evidence</strong> in the candidate's own words, and only then complete a <strong>scorecard</strong>. Click the building blocks <em>in the order you'd build them</em>. Get the sequence right and you've built the fairest interview a recruiter can run.</p>
+
+    <div class="lesson-card">
+      <p class="build-note">Click each block in the correct order. A right click drops it into the next slot; a wrong one shakes and tells you what has to come first.</p>
+      <div class="build-cols">
+        <div>
+          <h5>Building blocks</h5>
+          <div class="col-sub">Click in build order</div>
+          <ul class="build-pool" id="buildPool"></ul>
+        </div>
+        <div>
+          <h5>Your structured interview</h5>
+          <div class="col-sub">Fills top to bottom</div>
+          <ul class="build-target" id="buildTarget"></ul>
+        </div>
+      </div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetBuild()">&#8635; Reset</button>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: INTERVIEWER'S CHAIR ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">The interviewer's chair</h2>
+    <p class="lesson-intro">Your AI note-taker sat in on the interviews and produced summaries. That's a genuine time-saver — but the summary is a <em>draft</em>, and some of what it wrote isn't evidence at all. It over-reads tone, guesses at "culture fit," and turns affect into judgement. For each note, decide: is this <strong>fair, job-related evidence you'd keep</strong>, or an <strong>inference you must strike</strong> before it reaches a scorecard? One is solid evidence worth keeping; watch for the ones where the AI is reading a personality into a voice.</p>
+
+    <div id="reviewWrap"></div>
+    <div class="activity-feedback" id="feedback2"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetReview()">&#8635; Retake</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: STRUCTURED vs LEADING/BIASED ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">3</span>
+    <h2 class="lesson-title">Structured &amp; job-related, or leading &amp; biased?</h2>
+    <p class="lesson-intro">The same competency can be probed by a fair, job-related question — or by a leading, biased one that steers the answer or smuggles in an assumption about who a candidate is. AI drafting help will offer you both without warning you which is which. For each pair, pick the version that is <strong>structured, behavioural, and job-related</strong> — the one you'd ask every candidate and could defend to anyone.</p>
+
+    <div id="classifyWrap"></div>
+    <div class="activity-feedback" id="feedback3"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetClassify()">&#8635; Retake</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── SUMMARY / DONE ── -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="done-card" id="doneCard">
+      <span class="done-badge">Lesson 3 complete · Week 4</span>
+      <h3>You ran the interview like a recruiter, not a tool.</h3>
+      <p>You built a structured interview, judged AI's notes against a real evidence standard, and told a job-related question from a leading one. Across all three, the machine did the drafting and the transcription — and you decided what counted. That's the whole discipline: <strong>AI supports; the recruiter verifies and decides.</strong></p>
+      <ul class="done-recap">
+        <li><span class="r-check">&#10003;</span> <strong>Structure first</strong> — competencies &rarr; consistent questions &rarr; anchors &rarr; evidence &rarr; scorecard makes every candidate comparable and every decision defensible.</li>
+        <li><span class="r-check">&#10003;</span> <strong>Evidence, not affect</strong> — you kept what a candidate demonstrably did and struck the AI's guesses at "culture fit," confidence, and tone.</li>
+        <li><span class="r-check">&#10003;</span> <strong>Fair questions</strong> — you chose behavioural, job-related questions over leading ones that steer answers or assume who someone is.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHERE AI HELPS / WHERE THE RECRUITER IS THE POINT ── -->
+<section class="lesson" style="background:var(--bg-light);padding-top:2.4rem;padding-bottom:2.4rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.6rem">Where AI earns its place in the interview loop</h2>
+    <p class="lesson-intro" style="margin-bottom:1.2rem">Used well, AI hands back the hours you'd lose to note-taking and logistics — hours you can spend actually listening to candidates and giving them a fair, humane experience. Used badly, it quietly makes the judgement for you. Two honest framings to carry into your next panel.</p>
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-icon">+</div>
+        <h4>Where AI can genuinely help</h4>
+        <p>High-volume, structured, first-draft work — draft it fast, then verify.</p>
+        <ul>
+          <li>Transcribing an interview so you can be present instead of scribbling</li>
+          <li>Drafting a first summary against your competencies for you to correct</li>
+          <li>Suggesting consistent, behavioural questions you review and standardise</li>
+          <li>Drafting warm, timely candidate updates and scheduling logistics you approve</li>
+        </ul>
+      </div>
+      <div class="compare-card bad">
+        <div class="compare-icon">&ndash;</div>
+        <h4>Where the recruiter is the point</h4>
+        <p>The judgement, the fairness, and the human experience never delegate.</p>
+        <ul>
+          <li>Deciding what counts as evidence versus tone, affect, or "culture fit"</li>
+          <li>The hire / no-hire judgement and the reasons behind it</li>
+          <li>Reading personality or "confidence" into a candidate's voice or manner</li>
+          <li>Putting a scorecard or decision to your name that you didn't actually verify</li>
+        </ul>
+      </div>
+    </div>
+    <div class="principle" style="margin-top:1.4rem;max-width:none">
+      <span class="p-icon">&rarr;</span>
+      <p><strong>The durable skill:</strong> tools that transcribe and summarise will change every year — the recruiter who thrives is the one fluent in the move you practised here. <strong>Let the machine draft the notes, then bring structure, an evidence standard, and your judgement of fairness to every line before it reaches a scorecard or a candidate.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-top:1.5rem;padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — carry it into your next interview</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">When an AI summary tells you a candidate seemed "confident," "a great culture fit," or "not enthusiastic" — what's your rule for turning that back into actual evidence, or striking it?</div>
+        <textarea placeholder="Before it touches a scorecard I'll ask: what did the candidate demonstrably say or do? If there's no behaviour behind the label, I'll strike it because..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Which of your usual interview questions is secretly leading or off-the-job — and what behavioural, job-related version will you ask every candidate instead?</div>
+        <textarea placeholder="I tend to ask... which steers the answer. I'll replace it with a question about what they actually did, asked the same way to everyone..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT LESSON -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;text-align:center;position:relative;overflow:hidden">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative">Next: assessment, decision &amp; hiring operations</h3>
+      <p style="font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;max-width:560px;margin-left:auto;margin-right:auto;position:relative;line-height:1.6">You've structured the interview and judged the evidence. In Lesson 4 you'll protect candidate privacy before a prompt ever reaches a consumer tool, make a fair evidence-based hiring decision, and assemble the whole week's workflow into a req filled — fairly.</p>
+      <a href="04-assessment-decision.html" class="btn btn-primary" style="position:relative">Go to Lesson 4 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="f-logo">Moksh<span>Path</span></div>
+  <div class="f-tag">Guided Path to True Learning</div>
+  <p style="font-size:.78rem;max-width:520px;margin:0 auto;line-height:1.6">School of AI Careers &middot; AI for Recruiters. Durable recruiting workflows over tool tutorials &mdash; because the tools will change and your judgement won't.</p>
+  <div class="f-copy">&copy; 2026 MokshPath. Jurisdiction-neutral. Professional education, not legal advice.</div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Build a structured interview ─── */
+const BUILD = [
+  {t:'Define the competencies the job actually needs', why:'Everything downstream — questions, anchors, evidence — has to point at real competencies from a job analysis. Start here or you\'re measuring the wrong things.'},
+  {t:'Write consistent questions that probe each competency', why:'Once you know the competencies, write behavioural questions you\'ll ask every candidate the same way. Consistency is what makes candidates comparable.'},
+  {t:'Set scoring anchors so "good" means the same for everyone', why:'Before you interview anyone, define what a strong, moderate, and weak answer looks like — so scores aren\'t just gut feeling that drifts by candidate.'},
+  {t:'Capture evidence in the candidate\'s own words', why:'During the interview, record what the candidate actually said and did — the behaviour — not your impression of their personality or tone.'},
+  {t:'Complete the scorecard against the anchors', why:'Only at the end, and only against the anchors you set in advance, do you score — turning evidence into a defensible, comparable rating.'}
+];
+let buildStep = 0;
+function renderBuild(){
+  buildStep = 0;
+  const order = BUILD.map((_,i)=>i).sort(()=>Math.random()-0.5);
+  $('buildPool').innerHTML = order.map(i =>
+    `<li><button class="build-chip" id="chip${i}" data-idx="${i}" onclick="placeBuild(${i})"><span class="chip-idx">?</span><span>${BUILD[i].t}</span></button></li>`
+  ).join('');
+  $('buildTarget').innerHTML = BUILD.map((_,i) =>
+    `<li class="build-slot" id="slot${i}">Step ${i+1}</li>`
+  ).join('');
+  $('feedback1').className = 'activity-feedback';
+}
+function placeBuild(i){
+  const chip = $('chip'+i);
+  if (chip.disabled) return;
+  if (i === buildStep){
+    const slot = $('slot'+buildStep);
+    slot.classList.add('filled');
+    slot.innerHTML = `<button class="build-chip placed" disabled><span class="chip-idx">${buildStep+1}</span><span>${BUILD[i].t}</span></button>`;
+    chip.disabled = true;
+    chip.querySelector('.chip-idx').textContent = buildStep+1;
+    chip.classList.add('placed');
+    buildStep++;
+    if (buildStep === BUILD.length){
+      const fb = $('feedback1');
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>That's a structured interview.</strong> Competencies &rarr; consistent questions &rarr; scoring anchors &rarr; evidence &rarr; scorecard. Notice the logic: you decide what "good" looks like <em>before</em> you meet anyone, you ask everyone the same way, and you score against fixed anchors — so the process is comparable, defensible, and far harder for bias to bend. AI can help you draft the questions and even the summary, but this structure — and the judgement inside it — stays yours.`;
+      $('prog1').classList.add('done');
+    }
+  } else {
+    chip.animate([{transform:'translateX(0)'},{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'translateX(0)'}],{duration:300});
+    const fb = $('feedback1');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Not yet — that block comes later.</strong> The next step you need is <em>"${BUILD[buildStep].t}."</em> ${BUILD[buildStep].why}`;
+  }
+}
+function resetBuild(){ renderBuild(); $('prog1').classList.remove('done'); }
+
+/* ─── ACTIVITY 2: The interviewer's chair ─── */
+const REVIEW = [
+  {
+    src:'AI interview note · Candidate A',
+    quote:'"Walked through migrating a monolith to services: identified the two highest-risk modules, shipped them behind feature flags, and cut deploy failures from ~1 in 5 to under 1 in 20 over the quarter."',
+    q:'Keep this as evidence, or strike it?',
+    opts:[
+      {t:'Keep — fair, job-related evidence', ok:true},
+      {t:'Strike — AI over-reading', ok:false}
+    ],
+    ex:{
+      ok:'Correct — this is exactly what you keep. It\'s a specific behaviour and outcome the candidate described: what they did, the approach, and a concrete result. It maps to a real competency and you could ask every candidate about it. This is the signal a structured interview is built to capture.',
+      no:'This one is solid evidence, not over-reading. It\'s a concrete behaviour and outcome — modules identified, feature flags, a measurable drop in deploy failures — tied directly to the job. Keep it; this is the kind of thing your scorecard exists to record.'
+    }
+  },
+  {
+    src:'AI interview note · Candidate B',
+    quote:'"Came across as a strong culture fit — warm, easygoing, the kind of person the team would enjoy grabbing a drink with. Would slot right in socially."',
+    q:'Keep this as evidence, or strike it?',
+    opts:[
+      {t:'Keep — fair, job-related evidence', ok:false},
+      {t:'Strike — AI over-reading', ok:true}
+    ],
+    ex:{
+      ok:'Right — strike it. "Culture fit," "warm," "grab a drink with," "slot in socially" describe your comfort, not the candidate\'s ability to do the job. This is where bias and adverse impact live: it favours people who look and sound like the existing team. Replace "culture fit" with "values alignment" or a specific behaviour, judged the same way for everyone.',
+      no:'Look again — this is the classic over-read. Nothing here is job-related evidence. "Culture fit," "easygoing," "grab a drink with" measure how much the interviewer liked the person, and that\'s precisely the channel through which bias and adverse impact enter hiring. Strike it, and if the role truly needs collaboration, define that as a behaviour and score it for everyone.'
+    }
+  },
+  {
+    src:'AI interview note · Candidate C',
+    quote:'"Sounded nervous and hesitant early on — not much executive presence. Probably lacks confidence and leadership potential."',
+    q:'Keep this as evidence, or strike it?',
+    opts:[
+      {t:'Keep — fair, job-related evidence', ok:false},
+      {t:'Strike — AI over-reading', ok:true}
+    ],
+    ex:{
+      ok:'Exactly — strike it. The AI turned tone and affect ("nervous," "hesitant") into sweeping trait judgements ("lacks confidence," "leadership potential"). Nervousness in an interview predicts almost nothing about the job, and reads differently across cultures, neurotypes, and backgrounds — a textbook bias trap. Score leadership on described behaviour, not on how someone\'s voice sounded in a stressful room.',
+      no:'Not this one. The note reads affect — a nervous voice — and inflates it into "lacks confidence and leadership potential." That\'s the AI (and the interviewer) over-reading tone into traits, and it penalises candidates who interview nervously for reasons unrelated to the job. Strike it; judge leadership on what the candidate actually described doing.'
+    }
+  }
+];
+let reviewAnswered = 0, reviewScore = 0;
+function renderReview(){
+  reviewAnswered = 0; reviewScore = 0;
+  $('reviewWrap').innerHTML = REVIEW.map((r, ri) => {
+    const order = r.opts.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    return `<div class="review-card" id="r${ri}">
+      <div class="review-src">${r.src}</div>
+      <div class="review-quote">${r.quote}</div>
+      <div class="review-q-text">${r.q}</div>
+      <div class="review-opts">${order.map(oi =>
+        `<button class="review-opt" onclick="answerReview(${ri}, ${oi}, this)">${r.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="review-explain" id="rx${ri}"></div>
+    </div>`;
+  }).join('');
+  $('feedback2').className = 'activity-feedback';
+}
+function answerReview(ri, oi, btn){
+  const r = REVIEW[ri];
+  const box = $('r'+ri);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = r.opts[oi];
+  const rightText = r.opts.find(o=>o.ok).t;
+  box.querySelectorAll('.review-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === rightText.trim()) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('rx'+ri);
+  ex.className = 'review-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right call.</strong> ' : '<strong>Reconsider.</strong> ') + (opt.ok ? r.ex.ok : r.ex.no);
+  reviewAnswered++;
+  if (opt.ok) reviewScore++;
+  if (reviewAnswered === REVIEW.length) finishReview();
+}
+function finishReview(){
+  const fb = $('feedback2');
+  if (reviewScore === REVIEW.length){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>3/3 — you kept the evidence and struck the over-reads.</strong> The keeper was a concrete behaviour with an outcome. The two you struck both dressed up affect and interviewer comfort as judgement — "culture fit" and "grab a drink with," and "nervous, so lacks confidence." Those are exactly the channels bias flows through. An AI note is a draft; the recruiter decides what is evidence.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You got ${reviewScore}/3.</strong> The test each time: is there a <em>behaviour</em> behind the note, or just a feeling? A migration with measured results is evidence you keep. "Culture fit / would grab a drink with" measures your comfort. "Nervous, so lacks confidence" inflates affect into a trait. Strike anything without a job-related behaviour behind it — that's how you keep bias out of the scorecard. Retake it.`;
+  }
+  $('prog2').classList.add('done');
+}
+function resetReview(){ renderReview(); $('prog2').classList.remove('done'); }
+
+/* ─── ACTIVITY 3: Structured vs leading/biased ─── */
+const CLASSIFY = [
+  {
+    scenario:'Competency: handling conflict on a team. You want to know how the candidate actually deals with disagreement.',
+    q:'Which question is structured, behavioural, and job-related?',
+    opts:[
+      {t:'"Tell me about a time you disagreed with a teammate on an approach. What did you do, and how did it turn out?"', ok:true, ex:'Behavioural and job-related: it asks for a real past situation, the candidate\'s actions, and the outcome — the same prompt you can ask everyone and score against anchors. This is what a structured interview is made of.'},
+      {t:'"You seem like someone who avoids drama — you\'re pretty easygoing, right?"', ok:false, ex:'Leading and biased. It hands the candidate the answer, assumes a trait, and rewards agreement over evidence. You learn nothing about how they actually handle conflict — only whether they\'ll nod along.'}
+    ]
+  },
+  {
+    scenario:'Competency: reliability and commitment for a role with occasional deadline crunches.',
+    q:'Which question is fair and job-related?',
+    opts:[
+      {t:'"Do you have kids at home, or plans to start a family? I need someone who can really commit."', ok:false, ex:'This is off-the-job and discriminatory. Family status is not a competency and asking about it invites bias and adverse impact against protected groups. It has no place in an interview — strike it entirely, don\'t just soften it.'},
+      {t:'"Describe a time you had to meet a tight deadline. How did you plan the work and what was the result?"', ok:true, ex:'Job-related and behavioural: it probes how the candidate actually handles deadline pressure through a real example, asked identically to everyone. It measures the competency without touching anything personal or protected.'}
+    ]
+  },
+  {
+    scenario:'Competency: communicating a technical idea to non-technical stakeholders.',
+    q:'Which version would you ask every candidate?',
+    opts:[
+      {t:'"Walk me through a time you had to explain something technical to a non-technical audience. How did you approach it, and how did they respond?"', ok:true, ex:'Structured and job-related: a behavioural prompt tied straight to the competency, with room for what they did and the result. Ask it the same way to everyone and score against your anchors — comparable and defensible.'},
+      {t:'"Where are you originally from? I find people from certain places just communicate more clearly."', ok:false, ex:'Leading, irrelevant, and discriminatory. Origin is a protected characteristic and utterly unrelated to communication skill — the premise is a bias in a sentence. It measures nothing about the job and exposes the process to an adverse-impact claim. Never ask it.'}
+    ]
+  }
+];
+let classAnswered = 0, classScore = 0;
+function renderClassify(){
+  classAnswered = 0; classScore = 0;
+  $('classifyWrap').innerHTML = CLASSIFY.map((c, ci) => {
+    const order = c.opts.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="c${ci}">
+      <div class="quiz-q-num">Pair ${ci+1} of ${CLASSIFY.length}</div>
+      <div class="quiz-scenario">${c.scenario}</div>
+      <div class="quiz-q-text">${c.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerClassify(${ci}, ${oi}, this)">${c.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="cx${ci}"></div>
+    </div>`;
+  }).join('');
+  $('feedback3').className = 'activity-feedback';
+}
+function answerClassify(ci, oi, btn){
+  const c = CLASSIFY[ci];
+  const box = $('c'+ci);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = c.opts[oi];
+  const rightText = c.opts.find(o=>o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === rightText.trim()) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('cx'+ci);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Fair and job-related.</strong> ' : '<strong>That\'s the biased one.</strong> ') + opt.ex;
+  classAnswered++;
+  if (opt.ok) classScore++;
+  if (classAnswered === CLASSIFY.length) finishClassify();
+}
+function finishClassify(){
+  const fb = $('feedback3');
+  if (classScore === CLASSIFY.length){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>3/3 — every pick was behavioural and job-related.</strong> The fair questions all did the same thing: asked for a real past situation, the candidate\'s actions, and the outcome — asked the same way to everyone. The traps steered the answer, assumed a trait, or reached into protected, off-the-job territory (family status, origin). AI will draft either kind on request; the recruiter is the one who keeps the question fair.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You got ${classScore}/3.</strong> A fair question asks what the candidate <em>did</em> in a real situation and can be asked identically to everyone. The traps here either lead the witness ("you\'re easygoing, right?") or reach into protected characteristics that have nothing to do with the job (family status, national origin) — a direct route to bias and adverse impact. Retake it and pick the behavioural version every time.`;
+  }
+  $('prog3').classList.add('done');
+  maybeDone();
+}
+function resetClassify(){ renderClassify(); $('prog3').classList.remove('done'); maybeDone(); }
+
+/* ─── Completion ─── */
+function maybeDone(){
+  const done = $('prog1').classList.contains('done') && $('prog2').classList.contains('done') && $('prog3').classList.contains('done');
+  $('doneCard').classList.toggle('show', done);
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderBuild();
+  renderReview();
+  renderClassify();
+});
+</script>
+</body>
+</html>

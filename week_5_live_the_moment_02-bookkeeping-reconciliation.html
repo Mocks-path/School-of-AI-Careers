@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · Bookkeeping, Reconciliation &amp; Data with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:820px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:660px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:720px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── BUTTONS / FEEDBACK ── */
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 1: REVIEWER'S DESK ── */
+.desk-intro-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.desk-intro-grid{grid-template-columns:1fr}}
+.desk-legend{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem}
+.desk-legend h4{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.35rem}
+.desk-legend p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+.txn-table{margin-top:.5rem;display:flex;flex-direction:column;gap:.7rem}
+.txn-row{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;transition:all .25s}
+.txn-row.answered.good{border-color:var(--green);background:var(--green-light)}
+.txn-row.answered.bad{border-color:var(--red);background:var(--red-light)}
+.txn-head{display:flex;align-items:flex-start;gap:.8rem;flex-wrap:wrap}
+.txn-tag{font-family:var(--mono);font-size:.72rem;font-weight:600;color:#fff;background:var(--navy);border-radius:6px;padding:.25rem .55rem;flex-shrink:0}
+.txn-fields{flex:1;min-width:220px}
+.txn-line{font-size:.85rem;color:var(--text-primary);line-height:1.5}
+.txn-line .fld{color:var(--text-muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;font-weight:700;margin-right:.3rem}
+.txn-line .val{font-family:var(--mono);font-weight:600}
+.txn-source{margin-top:.5rem;font-size:.76rem;color:var(--text-secondary);background:var(--bg-light);border-left:3px solid var(--border);border-radius:4px;padding:.5rem .7rem;line-height:1.5}
+.txn-source .src-label{font-weight:700;color:var(--navy);text-transform:uppercase;font-size:.66rem;letter-spacing:.05em}
+.txn-choices{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap}
+.txn-btn{border:1.5px solid var(--border);background:var(--bg-light);border-radius:50px;padding:.4rem .95rem;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.txn-btn:hover{border-color:var(--orange);color:var(--orange)}
+.txn-btn.chosen-keep{background:var(--green);border-color:var(--green);color:#fff}
+.txn-btn.chosen-fix{background:var(--red);border-color:var(--red);color:#fff}
+.txn-btn.locked{cursor:not-allowed;opacity:.55}
+.txn-verdict{display:none;margin-top:.8rem;font-size:.8rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.7rem}
+.txn-verdict.show{display:block;animation:fadeIn .3s ease}
+.txn-verdict .vk{font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:.3rem}
+.txn-verdict .vk.ok{color:#256B29}
+.txn-verdict .vk.no{color:#A03A2C}
+
+/* ── ACTIVITY 2: RECONCILE TO SOURCE ── */
+.recon-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1rem}
+@media (max-width:760px){.recon-grid{grid-template-columns:1fr}}
+.recon-col{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem}
+.recon-col h4{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.15rem}
+.recon-col .recon-sub{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);font-weight:700;margin-bottom:.7rem}
+.recon-line{display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:.45rem 0;border-bottom:1px dashed var(--border);font-size:.82rem}
+.recon-line:last-child{border-bottom:none}
+.recon-line .rl-desc{color:var(--text-secondary)}
+.recon-line .rl-amt{font-family:var(--mono);font-weight:600;color:var(--text-primary)}
+.recon-line.total{margin-top:.3rem;padding-top:.6rem;border-top:2px solid var(--navy);border-bottom:none;font-weight:700}
+.recon-line.total .rl-desc{color:var(--navy);font-weight:700}
+.recon-line.total .rl-amt{color:var(--navy);font-size:.9rem}
+.recon-warn{margin-top:1rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:6px;padding:.7rem .9rem;font-size:.8rem;color:#7A4A0A;line-height:1.55}
+.recon-prompt{margin-top:1.3rem}
+.recon-q-text{font-size:.9rem;font-weight:600;color:var(--navy);margin-bottom:.8rem}
+.recon-opts{display:grid;gap:.55rem}
+.recon-opt{display:flex;align-items:flex-start;gap:.7rem;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;cursor:pointer;transition:all .2s;font-size:.85rem;line-height:1.5}
+.recon-opt:hover{border-color:var(--orange)}
+.recon-opt .opt-key{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--text-muted);flex-shrink:0;margin-top:.05rem;font-family:var(--mono)}
+.recon-opt.locked{cursor:not-allowed}
+.recon-opt.reveal-right{border-color:var(--green);background:var(--green-light)}
+.recon-opt.reveal-right .opt-key{background:var(--green);border-color:var(--green);color:#fff}
+.recon-opt.reveal-wrong{border-color:var(--red);background:var(--red-light)}
+.recon-opt.reveal-wrong .opt-key{background:var(--red);border-color:var(--red);color:#fff}
+.recon-explain{display:none;margin-top:.9rem;font-size:.82rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.7rem}
+.recon-explain.show{display:block;animation:fadeIn .3s ease}
+.recon-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:.35rem}
+.recon-verdict.v-right{color:#256B29}
+.recon-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 3: ORDER THE WORKFLOW ── */
+.order-wrap{margin-top:1rem}
+.order-pool,.order-slots{display:flex;flex-direction:column;gap:.6rem}
+.order-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.5rem}
+.order-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+@media (max-width:760px){.order-cols{grid-template-columns:1fr}}
+.order-item{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;cursor:grab;font-size:.85rem;font-weight:600;color:var(--text-primary);transition:all .2s;user-select:none;display:flex;align-items:center;gap:.6rem}
+.order-item:hover{border-color:var(--orange);box-shadow:var(--shadow-sm)}
+.order-item.dragging{opacity:.4}
+.order-item .oi-icon{font-size:.9rem}
+.order-slot{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.5rem;min-height:56px;display:flex;align-items:center;gap:.6rem;transition:all .2s;background:rgba(255,255,255,0.5)}
+.order-slot.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.order-slot .slot-num{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.75rem;font-weight:600;flex-shrink:0}
+.order-slot .order-item{flex:1;margin:0;cursor:default}
+.order-slot.correct{border-color:var(--green);border-style:solid;background:var(--green-light)}
+.order-slot.wrong{border-color:var(--red);border-style:solid;background:var(--red-light)}
+
+/* ── SUMMARY / COMPLETION ── */
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-top:1.5rem;box-shadow:var(--shadow-sm)}
+.summary-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem}
+.summary-check{width:44px;height:44px;border-radius:50%;background:var(--green-light);border:2px solid var(--green);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.summary-head h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--navy)}
+.summary-list{display:grid;gap:.7rem;margin-top:.5rem}
+.summary-item{display:flex;gap:.7rem;font-size:.87rem;line-height:1.6;color:var(--text-secondary)}
+.summary-item .si-dot{color:var(--orange);font-weight:800;flex-shrink:0}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+/* ── SITE FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .footer-logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#fff;margin-bottom:.3rem}
+.site-footer .footer-logo span{color:var(--orange)}
+.site-footer .footer-tag{font-size:.75rem;color:rgba(255,255,255,0.5);margin-bottom:1rem;letter-spacing:.04em}
+.site-footer .footer-fine{font-size:.72rem;color:rgba(255,255,255,0.4);line-height:1.7;max-width:560px;margin:0 auto}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 · Week 5</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 5 · AI for Accountants</div>
+  <h1>Bookkeeping, Reconciliation &amp; Data — <em>the accountant reviews, recomputes, and reconciles to source</em></h1>
+  <p class="hero-sub">AI can capture, extract, and categorise transactions in seconds — and get some of them quietly wrong. Three hands-on activities put you in the reviewer's seat: catch the errors in an AI-processed batch, find the discrepancy in a ledger-versus-bank reconciliation by recomputing to source, and order the bookkeeping workflow so that nothing skips the step that protects the record — reconciling every figure to source before it is trusted.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: THE REVIEWER'S DESK ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">The reviewer's desk — catch the errors AI left behind</h2>
+    <p class="lesson-intro">An AI tool has extracted and categorised a small batch of transactions from the source documents. It looks clean and confident. Your job is the accountant's job: <strong>review each entry against its source</strong> and decide whether to <strong>keep it</strong> or <strong>fix it</strong>. One is a mis-read amount, one is a wrong tax code, one is a hallucinated total, and one is genuinely correct. Read the source line under each entry, then choose.</p>
+
+    <div class="desk-intro-grid">
+      <div class="desk-legend">
+        <h4>Keep</h4>
+        <p>The AI's extracted fields match the source document exactly — the amount, the code, and the total all tie out. Nothing to change.</p>
+      </div>
+      <div class="desk-legend">
+        <h4>Fix</h4>
+        <p>Something does not tie to source — a wrong amount, an incorrect tax code, or a figure that appears nowhere in the data. It must be corrected before it is posted.</p>
+      </div>
+    </div>
+
+    <div class="lesson-card" style="margin-top:1.2rem">
+      <div class="txn-table" id="txnTable"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="revealAll1()">Show me the answers</button>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>The reviewer's instinct:</strong> AI extraction is a fast first pass, never the record. Every amount is checked against the source document, every code against the real rate, and every total is recomputed. A confident-looking entry that ties to nothing is exactly the one that misstates the accounts.</div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: RECONCILE TO SOURCE ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Reconcile to source — find the discrepancy yourself</h2>
+    <p class="lesson-intro">An AI assistant summarised this reconciliation and declared the ledger and the bank "reconciled — balances agree." They do not. The ledger cash-book below lists four movements; the bank statement is the source of truth. <strong>Add up the ledger yourself, compare it to the bank's closing balance, and find the discrepancy.</strong> This is the habit that no tool replaces: recompute to source, never trust AI's arithmetic or its "reconciled" verdict.</p>
+
+    <div class="lesson-card">
+      <div class="recon-grid">
+        <div class="recon-col">
+          <h4>Ledger — cash book</h4>
+          <div class="recon-sub">Opening balance + movements</div>
+          <div class="recon-line"><span class="rl-desc">Opening balance</span><span class="rl-amt">12,000.00</span></div>
+          <div class="recon-line"><span class="rl-desc">+ Customer receipt (Invoice 204)</span><span class="rl-amt">3,450.00</span></div>
+          <div class="recon-line"><span class="rl-desc">− Supplier payment (Bill 88)</span><span class="rl-amt">1,200.00</span></div>
+          <div class="recon-line"><span class="rl-desc">− Bank charges</span><span class="rl-amt">50.00</span></div>
+          <div class="recon-line total"><span class="rl-desc">Ledger closing (per AI)</span><span class="rl-amt">14,150.00</span></div>
+        </div>
+        <div class="recon-col">
+          <h4>Bank statement — source</h4>
+          <div class="recon-sub">Authoritative closing balance</div>
+          <div class="recon-line"><span class="rl-desc">Opening balance</span><span class="rl-amt">12,000.00</span></div>
+          <div class="recon-line"><span class="rl-desc">Credit — deposit</span><span class="rl-amt">3,450.00</span></div>
+          <div class="recon-line"><span class="rl-desc">Debit — supplier</span><span class="rl-amt">1,200.00</span></div>
+          <div class="recon-line"><span class="rl-desc">Debit — charges</span><span class="rl-amt">50.00</span></div>
+          <div class="recon-line total"><span class="rl-desc">Bank closing (source)</span><span class="rl-amt">14,200.00</span></div>
+        </div>
+      </div>
+      <div class="recon-warn">⚠️ <strong>AI says:</strong> "Reconciliation complete — ledger and bank balances agree at 14,150.00." Do the arithmetic yourself before you accept that.</div>
+
+      <div class="recon-prompt">
+        <div class="recon-q-text">Recompute the ledger from its own lines (12,000 + 3,450 − 1,200 − 50) and compare to the bank's 14,200.00 source closing. What is actually going on?</div>
+        <div class="recon-opts" id="reconOpts"></div>
+        <div class="recon-explain" id="reconExplain"></div>
+      </div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetReconcile()">↻ Try again</button>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>The lesson:</strong> the ledger's own lines add to 14,200.00, but the "closing" AI printed was 14,150.00 — its arithmetic was wrong, and it still declared the accounts reconciled. Recomputing to source is what catches it. Never accept a "reconciled" verdict you have not reproduced yourself.</div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: ORDER THE WORKFLOW ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Order the bookkeeping workflow — keep the safeguard in place</h2>
+    <p class="lesson-intro">A safe AI-assisted bookkeeping process has a fixed shape. AI can help with the early steps, but the sequence must always route through the one step that protects the record: reconciling to source and verifying before anything is trusted. Drag the five steps into the correct order — the final steps are what make the workflow defensible, not just fast.</p>
+
+    <div class="lesson-card">
+      <div class="order-cols">
+        <div>
+          <div class="order-label">Steps — drag from here</div>
+          <div class="order-pool" id="orderPool"></div>
+        </div>
+        <div>
+          <div class="order-label">Correct order — drop here</div>
+          <div class="order-slots" id="orderSlots"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetOrder()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="checkOrder()">Check my order</button>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>Why the order matters:</strong> capture and extraction can be fast and AI-assisted, but <em>Reconcile to source</em> and <em>Verify / flag</em> must come before anything is trusted or posted. Skip them and a mis-read amount or a hallucinated total flows straight into the accounts. The safeguard is a step in the workflow, not an afterthought.</div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" id="reflect" style="background:var(--bg-light);padding-bottom:2rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">Type a sentence each. Writing it down helps the habit settle. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">When you review an AI-processed transaction batch, what are the exact three things you check against source before you keep an entry?</div>
+        <textarea placeholder="I check the amount against the source document, the tax code against the real rate, and I recompute any total because..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Why do you recompute a reconciliation yourself even when AI declares the balances "agree"?</div>
+        <textarea placeholder="Because AI hallucinates numbers and its arithmetic is unreliable, so a 'reconciled' verdict I have not reproduced to source is not..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SUMMARY / COMPLETION ── -->
+<section class="lesson">
+  <div class="container">
+    <div class="summary-card">
+      <div class="summary-head">
+        <div class="summary-check">✓</div>
+        <h3>Lesson 2 complete — what you now carry</h3>
+      </div>
+      <div class="summary-list">
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>AI extraction is a first pass, not the record.</strong> Every AI-processed entry is reviewed against its source — the amount, the tax code, and the total all tie out before anything is posted.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Recompute to source; never trust AI's arithmetic.</strong> A "reconciled" verdict you have not reproduced yourself is not a reconciliation. You add it up, tie it to the bank, and find the discrepancy.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Watch for the hallucinated total.</strong> A confident figure that appears nowhere in the data is exactly the one that misstates the accounts — trace every number to source.</span></div>
+        <div class="summary-item"><span class="si-dot">›</span><span><strong>Keep the safeguard in the sequence.</strong> Capture → Extract → Categorize → Reconcile to source → Verify / flag. The reconciliation and verification steps are what make the workflow defensible, and they never get skipped.</span></div>
+      </div>
+    </div>
+
+    <div class="next-up">
+      <h3>Week 5 · You have the core habit</h3>
+      <p>You can now sit at the reviewer's desk, catch a mis-read amount and a hallucinated total, and reconcile a ledger to the bank by recomputing to source rather than trusting AI's arithmetic. Carry the same skepticism into every workflow: AI supports and calculates, the accountant verifies every figure to source and signs.</p>
+      <a href="01-ai-augmented-accountant.html" class="btn btn-primary">← Back to Lesson 1</a>
+    </div>
+  </div>
+</section>
+
+<!-- SITE FOOTER -->
+<footer class="site-footer">
+  <div class="footer-logo">Moksh<span>Path</span></div>
+  <div class="footer-tag">Guided Path to True Learning</div>
+  <div class="footer-fine">School of AI Careers · AI for Accountants · Week 5. This lesson teaches durable bookkeeping and reconciliation workflows and professional judgment, not tool tutorials, and is jurisdiction-neutral. It is professional education, not accounting, tax, or financial advice. All figures are illustrative and no identifiable client financial data was used or should be entered into any consumer AI tool. AI supports and calculates — the accountant always verifies every figure to source and signs.</div>
+</footer>
+
+<script>
+/* ─── ACTIVITY 1: The Reviewer's Desk ─── */
+const TXNS = [
+  {
+    id:'t1', tag:'TXN 01', desc:'Office supplies invoice',
+    fields:'Amount extracted: <span class="val">184.00</span> · Tax code: <span class="val">Standard</span>',
+    source:'Source invoice reads: net 154.00, standard-rate tax, gross <strong>184.00</strong>. Extracted gross amount ties to the invoice.',
+    answer:'keep',
+    exp:{
+      keep:'Correct — keep it. The extracted gross amount of 184.00 matches the source invoice exactly, and the tax code is right. This is the one clean entry: verify, then post.',
+      fix:'This one actually ties to source — the gross 184.00 and the standard code both match the invoice. Keeping a correct entry is as much a skill as catching a wrong one; do not "fix" what already reconciles.'
+    }
+  },
+  {
+    id:'t2', tag:'TXN 02', desc:'Client lunch receipt',
+    fields:'Amount extracted: <span class="val">72.00</span> · Tax code: <span class="val">Standard</span>',
+    source:'Source receipt clearly reads <strong>27.00</strong>. The AI read the digits transposed as 72.00.',
+    answer:'fix',
+    exp:{
+      fix:'Correct — fix it. This is a mis-read amount: the receipt says 27.00 but the AI extracted 72.00, a transposed reading. Correct it to the source figure before posting; OCR/extraction errors like this are common.',
+      keep:'Look again at the source: the receipt reads 27.00, but the AI extracted 72.00 — the digits are transposed. A mis-read amount must be fixed to source, not kept.'
+    }
+  },
+  {
+    id:'t3', tag:'TXN 03', desc:'Export freight charge',
+    fields:'Amount extracted: <span class="val">300.00</span> · Tax code: <span class="val">Standard-rated</span>',
+    source:'Source document and the client\'s policy show this supply is <strong>zero-rated</strong>, not standard-rated. Amount 300.00 is correct.',
+    answer:'fix',
+    exp:{
+      fix:'Correct — fix it. The amount is right, but the AI applied the wrong tax code: this supply is zero-rated per the source, not standard-rated. A wrong tax code misstates the tax and must be corrected before posting.',
+      keep:'The amount is fine, but the tax code is wrong: the source shows this is zero-rated, and the AI marked it standard-rated. A wrong code has to be fixed — do not keep it.'
+    }
+  },
+  {
+    id:'t4', tag:'TXN 04', desc:'Monthly card statement — batch total',
+    fields:'Total extracted: <span class="val">2,415.00</span> (AI-generated sum of the batch)',
+    source:'The individual lines in the source batch add to <strong>2,145.00</strong>. The figure 2,415.00 appears nowhere in the data — the AI generated it.',
+    answer:'fix',
+    exp:{
+      fix:'Correct — fix it. This is a hallucinated total: the source lines add to 2,145.00, but the AI printed 2,415.00, a figure that is nowhere in the data. Never accept an AI-generated total — recompute it to source and correct it.',
+      keep:'Recompute it: the source lines add to 2,145.00, but the AI printed 2,415.00 — a hallucinated total that appears nowhere in the batch. It must be fixed, never kept on trust.'
+    }
+  }
+];
+let deskAnswered = {};
+function renderTxns(){
+  const wrap = document.getElementById('txnTable');
+  wrap.innerHTML = TXNS.map(t => `
+    <div class="txn-row" id="row_${t.id}">
+      <div class="txn-head">
+        <span class="txn-tag">${t.tag}</span>
+        <div class="txn-fields">
+          <div class="txn-line"><span class="fld">${t.desc}</span></div>
+          <div class="txn-line">${t.fields}</div>
+          <div class="txn-source"><span class="src-label">Source check</span><br>${t.source}</div>
+        </div>
+      </div>
+      <div class="txn-choices">
+        <button class="txn-btn" id="keep_${t.id}" onclick="answerTxn('${t.id}','keep')">✓ Keep</button>
+        <button class="txn-btn" id="fix_${t.id}" onclick="answerTxn('${t.id}','fix')">✎ Fix</button>
+      </div>
+      <div class="txn-verdict" id="verd_${t.id}"></div>
+    </div>`).join('');
+}
+function answerTxn(id, choice){
+  if (deskAnswered[id] !== undefined) return;
+  const t = TXNS.find(x => x.id === id);
+  const right = choice === t.answer;
+  deskAnswered[id] = right;
+  const row = document.getElementById('row_' + id);
+  row.classList.add('answered', right ? 'good' : 'bad');
+  document.getElementById('keep_' + id).classList.add('locked');
+  document.getElementById('fix_' + id).classList.add('locked');
+  document.getElementById(choice + '_' + id).classList.add(choice === 'keep' ? 'chosen-keep' : 'chosen-fix');
+  const v = document.getElementById('verd_' + id);
+  v.className = 'txn-verdict show';
+  v.innerHTML = `<span class="vk ${right ? 'ok' : 'no'}">${right ? '✓ Right call' : '✗ Reconsider'}</span>${t.exp[choice]}`;
+  if (Object.keys(deskAnswered).length === TXNS.length) {
+    const score = Object.values(deskAnswered).filter(Boolean).length;
+    const fb = document.getElementById('feedback1');
+    if (score === TXNS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>4 of 4 — you reviewed like an accountant.</strong> You kept the entry that tied to source, and you caught the mis-read amount, the wrong tax code, and the hallucinated total. That is the reviewer's desk in one pass: nothing is posted until it ties to source.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${score} of 4.</strong> Re-read the source line under each entry: one amount is transposed, one tax code is wrong, one total is invented, and one entry is genuinely correct. AI extraction is a first pass — you verify every field to source.`;
+    }
+    document.getElementById('prog1').classList.add('done');
+  }
+}
+function resetActivity1(){
+  deskAnswered = {};
+  document.getElementById('feedback1').className = 'activity-feedback';
+  renderTxns();
+  document.getElementById('prog1').classList.remove('done');
+}
+function revealAll1(){
+  TXNS.forEach(t => { if (deskAnswered[t.id] === undefined) answerTxn(t.id, t.answer); });
+}
+
+/* ─── ACTIVITY 2: Reconcile to Source ─── */
+const RECON = {
+  q:[
+    {k:'A', t:'The AI is right — 14,150.00 is correct, so mark it reconciled and move on.'},
+    {k:'B', t:'The ledger\'s own lines add to 14,200.00 and match the bank\'s 14,200.00 source closing. The AI\'s printed "closing" of 14,150.00 is an arithmetic error — the accounts reconcile at 14,200.00, and the AI\'s figure and verdict were wrong.'},
+    {k:'C', t:'The bank must be wrong — trust the AI\'s 14,150.00 because the tool processed the ledger directly.'}
+  ],
+  correct:1,
+  exp:{
+    right:'Exactly. 12,000 + 3,450 − 1,200 − 50 = 14,200.00, which ties to the bank statement — the source of truth. The AI printed a closing of 14,150.00 and still declared the accounts "reconciled." Recomputing to source is what exposes the arithmetic error. Never accept a reconciliation you have not reproduced yourself.',
+    wrongA:'Recompute it: 12,000 + 3,450 − 1,200 − 50 = 14,200.00, not 14,150.00. The AI\'s total is off by 50 and it still called the accounts reconciled. Its arithmetic and its verdict are both wrong — you tie to the bank source, which reads 14,200.00.',
+    wrongC:'The bank statement is the source of truth here, not the AI. The ledger\'s own lines add to 14,200.00 and match the bank exactly; the AI\'s 14,150.00 is the arithmetic error. Never override a verified source with an unverified AI figure.'
+  }
+};
+let reconAnswered = false;
+function renderReconcile(){
+  const wrap = document.getElementById('reconOpts');
+  wrap.innerHTML = RECON.q.map((o, j) => `
+    <div class="recon-opt" id="ro_${j}" onclick="answerReconcile(${j})">
+      <span class="opt-key">${o.k}</span><span>${o.t}</span>
+    </div>`).join('');
+}
+function answerReconcile(j){
+  if (reconAnswered) return;
+  reconAnswered = true;
+  const right = j === RECON.correct;
+  document.querySelectorAll('.recon-opt').forEach((el, idx) => {
+    el.classList.add('locked');
+    el.setAttribute('onclick','');
+    if (idx === RECON.correct) el.classList.add('reveal-right');
+  });
+  if (!right) document.getElementById('ro_' + j).classList.add('reveal-wrong');
+  const ex = document.getElementById('reconExplain');
+  ex.className = 'recon-explain show';
+  let msg = right ? RECON.exp.right : (j === 0 ? RECON.exp.wrongA : RECON.exp.wrongC);
+  ex.innerHTML = `<span class="recon-verdict ${right ? 'v-right' : 'v-miss'}">${right ? '✓ Correct' : '✗ Not quite'}</span>${msg}`;
+  document.getElementById('prog2').classList.add('done');
+}
+function resetReconcile(){
+  reconAnswered = false;
+  document.getElementById('reconExplain').className = 'recon-explain';
+  renderReconcile();
+  document.getElementById('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Order the Workflow ─── */
+const STEPS = [
+  {id:'capture',   label:'Capture',            icon:'📥', pos:0, note:'Collect the source documents — receipts, invoices, statements.'},
+  {id:'extract',   label:'Extract',            icon:'🔎', pos:1, note:'AI reads the fields — amounts, dates, parties — from each document.'},
+  {id:'categorize',label:'Categorize',         icon:'🗂️', pos:2, note:'Assign a first-pass account code and tax code to each entry.'},
+  {id:'reconcile', label:'RECONCILE to source',icon:'⚖️', pos:3, note:'Tie every figure back to the source document and the bank — recompute.'},
+  {id:'verify',    label:'Verify / flag',      icon:'✅', pos:4, note:'Confirm what ties out, flag what does not, and only then post.'}
+];
+let orderState = {};
+function renderOrder(){
+  orderState = {};
+  const pool = document.getElementById('orderPool');
+  const slots = document.getElementById('orderSlots');
+  const shuffled = [...STEPS].sort(()=>Math.random()-0.5);
+  pool.innerHTML = shuffled.map(s => `
+    <div class="order-item" draggable="true" data-id="${s.id}">
+      <span class="oi-icon">${s.icon}</span><span>${s.label}</span>
+    </div>`).join('');
+  slots.innerHTML = STEPS.map((s, i) => `
+    <div class="order-slot" data-slot="${i}">
+      <span class="slot-num">${i+1}</span>
+    </div>`).join('');
+  attachOrderDnD();
+  document.getElementById('feedback3').className = 'activity-feedback';
+  document.getElementById('prog3').classList.remove('done');
+}
+function attachOrderDnD(){
+  document.querySelectorAll('.order-item[draggable="true"]').forEach(item => {
+    item.addEventListener('dragstart', e => { e.dataTransfer.setData('id', item.dataset.id); item.classList.add('dragging'); });
+    item.addEventListener('dragend', () => item.classList.remove('dragging'));
+  });
+  document.querySelectorAll('.order-slot').forEach(slot => {
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('id');
+      dropIntoSlot(id, slot);
+    });
+  });
+}
+function dropIntoSlot(id, slot){
+  const slotIdx = slot.dataset.slot;
+  if (slot.querySelector('.order-item')) return; // occupied
+  const src = document.querySelector(`.order-item[data-id="${id}"]`);
+  if (!src) return;
+  const step = STEPS.find(s => s.id === id);
+  slot.classList.remove('correct','wrong');
+  const el = document.createElement('div');
+  el.className = 'order-item';
+  el.dataset.id = id;
+  el.innerHTML = `<span class="oi-icon">${step.icon}</span><span>${step.label}</span>`;
+  slot.appendChild(el);
+  src.remove();
+  orderState[slotIdx] = id;
+}
+function checkOrder(){
+  const fb = document.getElementById('feedback3');
+  if (Object.keys(orderState).length < STEPS.length) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Not all slots are filled.</strong> Drag all five steps into place, then check your order.`;
+    return;
+  }
+  let correct = 0;
+  document.querySelectorAll('.order-slot').forEach(slot => {
+    const idx = parseInt(slot.dataset.slot);
+    const id = orderState[idx];
+    const step = STEPS.find(s => s.id === id);
+    const ok = step && step.pos === idx;
+    slot.classList.remove('correct','wrong');
+    slot.classList.add(ok ? 'correct' : 'wrong');
+    if (ok) correct++;
+  });
+  if (correct === STEPS.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect order.</strong> Capture → Extract → Categorize → Reconcile to source → Verify / flag. AI can speed the first three, but reconciling to source and verifying come before anything is trusted or posted. That is what keeps the record defensible.`;
+    document.getElementById('prog3').classList.add('done');
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>${correct} of 5 in the right place.</strong> Think about the flow of a document: you Capture it, AI Extracts the fields, you Categorize, then — critically — you Reconcile to source and Verify / flag before anything is posted. Green slots are correct; drag the rest and check again.`;
+  }
+}
+function resetOrder(){ renderOrder(); }
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderTxns();
+  renderReconcile();
+  renderOrder();
+});
+</script>
+</body>
+</html>

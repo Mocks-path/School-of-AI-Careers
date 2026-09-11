@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · Analysis, Reporting &amp; Advisory with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:860px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:730px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── PRINCIPLE BANNER ── */
+.principle{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;border-radius:var(--radius);padding:1.4rem 1.7rem;margin:1.2rem auto 0;max-width:760px;box-shadow:var(--shadow-md)}
+.principle .p-icon{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--orange-light);flex-shrink:0}
+.principle p{font-size:.9rem;line-height:1.55;color:rgba(255,255,255,0.9)}
+.principle strong{color:#fff}
+
+/* ── ORDERING ── */
+.order-note{font-size:.8rem;color:var(--text-muted);margin-bottom:.6rem}
+.order-pool{display:grid;gap:.6rem;margin-top:1rem}
+.order-item{display:flex;align-items:center;gap:.9rem;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;font-size:.88rem;line-height:1.45;cursor:grab;transition:all .18s;user-select:none}
+.order-item:hover{border-color:var(--orange);box-shadow:var(--shadow-sm)}
+.order-item.dragging{opacity:.4;border-style:dashed}
+.order-item.over{border-color:var(--orange);background:var(--orange-glow)}
+.order-handle{font-family:var(--mono);font-size:.9rem;color:var(--text-muted);flex-shrink:0}
+.order-slot{width:26px;height:26px;border-radius:50%;background:var(--bg-card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.75rem;font-weight:600;color:var(--text-muted);flex-shrink:0}
+.order-item.correct{background:var(--green-light);border-color:var(--green)}
+.order-item.correct .order-slot{background:var(--green);color:#fff;border-color:var(--green)}
+.order-item.incorrect{background:var(--red-light);border-color:var(--red)}
+
+/* ── REVIEWER'S CHAIR ── */
+.commentary-doc{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.4rem 1.5rem;font-size:.92rem;line-height:1.95;color:var(--text-primary);margin-top:1rem}
+.commentary-doc .doc-label{font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);display:block;margin-bottom:.8rem}
+.claim{cursor:pointer;border-radius:4px;padding:.05rem .2rem;transition:all .18s;border-bottom:2px dotted var(--text-muted)}
+.claim:hover{background:var(--orange-glow)}
+.claim.flagged-err{background:var(--red-light);border-bottom:2px solid var(--red);color:#7A2A1E;font-weight:600}
+.claim.flagged-ok{background:var(--green-light);border-bottom:2px solid var(--green);color:#1F5723}
+.claim.wrongflag{background:var(--red-light);border-bottom:2px solid var(--red);animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.review-panel{margin-top:1.1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.83rem;line-height:1.6;display:none;background:var(--bg-light);border-left:3px solid var(--border)}
+.review-panel.show{display:block;animation:fadeIn .3s ease}
+.review-panel .rp-q{font-weight:600;color:var(--navy);margin-bottom:.7rem}
+.review-opts{display:grid;gap:.45rem}
+.review-opt{text-align:left;background:var(--bg-card);border:1.5px solid var(--border);border-radius:6px;padding:.6rem .85rem;font-size:.8rem;line-height:1.5;cursor:pointer;transition:all .18s;font-family:inherit;color:var(--text-primary)}
+.review-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.review-opt:disabled{cursor:default;opacity:.8}
+.review-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;font-weight:600;opacity:1}
+.review-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.review-explain{margin-top:.7rem;padding:.6rem .85rem;border-radius:6px;font-size:.78rem;line-height:1.55;display:none}
+.review-explain.show{display:block;animation:fadeIn .3s ease}
+.review-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.review-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+.review-status{margin-top:1.2rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.status-count{font-family:var(--mono);font-size:.8rem;font-weight:600;color:var(--navy);background:var(--bg-light);border:1px solid var(--border);border-radius:50px;padding:.4rem 1rem}
+.status-count strong{color:var(--orange)}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── CLASSIFY BUCKETS ── */
+.classify-note{font-size:.8rem;color:var(--text-muted);margin-bottom:.6rem}
+.classify-stack{display:grid;gap:.7rem;margin-top:1rem}
+.stmt-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem;transition:all .25s}
+.stmt-card.sorted{opacity:.65}
+.stmt-text{font-size:.86rem;line-height:1.5;color:var(--text-primary);margin-bottom:.7rem}
+.stmt-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.stmt-btn{flex:1;min-width:140px;padding:.5rem .7rem;border-radius:6px;font-size:.74rem;font-weight:600;border:1.5px solid var(--border);background:var(--bg-light);cursor:pointer;transition:all .18s;font-family:inherit;color:var(--text-secondary)}
+.stmt-btn:hover:not(:disabled){border-color:var(--orange);color:var(--orange)}
+.stmt-btn:disabled{cursor:default}
+.stmt-btn.picked-right{background:var(--green-light);border-color:var(--green);color:#1F5723}
+.stmt-btn.picked-wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E}
+.stmt-verdict{margin-top:.7rem;padding:.6rem .85rem;border-radius:6px;font-size:.77rem;line-height:1.55;display:none}
+.stmt-verdict.show{display:block;animation:fadeIn .3s ease}
+.stmt-verdict.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.stmt-verdict.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── BETTER-CAVEAT MCQ ── */
+.caveat-block{margin-top:1.4rem;border-top:1px dashed var(--border);padding-top:1.2rem}
+.caveat-q{font-size:.9rem;font-weight:600;color:var(--navy);margin-bottom:.8rem;line-height:1.5}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .95rem;font-size:.83rem;line-height:1.55;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.8}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── DONE CARD ── */
+.done-card{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:1.5rem;text-align:center;position:relative;overflow:hidden;display:none}
+.done-card.show{display:block;animation:fadeIn .5s ease}
+.done-card::before{content:'';position:absolute;top:-50px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.15)}
+.done-card::after{content:'';position:absolute;bottom:-60px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(102,187,106,0.12)}
+.done-badge{display:inline-block;font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-light);background:rgba(232,122,46,0.15);border-radius:50px;padding:.35rem 1rem;margin-bottom:1rem;position:relative}
+.done-card h3{font-family:'DM Serif Display',serif;font-size:1.7rem;margin-bottom:.6rem;position:relative}
+.done-card>p{font-size:.92rem;color:rgba(255,255,255,0.8);margin:0 auto 1.2rem;max-width:560px;line-height:1.6;position:relative}
+.done-recap{list-style:none;max-width:560px;margin:0 auto;text-align:left;display:grid;gap:.5rem;position:relative}
+.done-recap li{display:flex;gap:.6rem;align-items:flex-start;font-size:.85rem;line-height:1.5;color:rgba(255,255,255,0.9)}
+.done-recap li .r-check{color:#7BD67F;font-weight:700;flex-shrink:0}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.3rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card.good .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card.bad .compare-icon{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card.good li::before{content:'\2713';color:var(--green);font-weight:700;flex-shrink:0}
+.compare-card.bad li::before{content:'\2717';color:var(--red);font-weight:700;flex-shrink:0}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--navy-dark);color:rgba(255,255,255,0.7);padding:2.5rem 2rem;text-align:center}
+.site-footer .f-logo{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff;margin-bottom:.3rem}
+.site-footer .f-logo span{color:var(--orange)}
+.site-footer .f-tag{font-size:.72rem;color:var(--text-muted);letter-spacing:.02em;margin-bottom:1rem}
+.site-footer .f-copy{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1rem}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+  .commentary-doc{line-height:2.2}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 · Week 5</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <div class="nav-logo-text">
+      <div class="nav-logo-name">Moksh<span>Path</span></div>
+      <div class="nav-logo-tag">Guided Path to True Learning</div>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 5 · AI for Accountants</div>
+  <h1>Analysis, Reporting &amp; Advisory — <em>let AI draft the story, you verify every number</em></h1>
+  <p class="hero-sub">Clean books are only the start. The value you add is turning numbers into insight a client can act on. AI can pull a variance, draft the commentary, and structure the advice in seconds — but it also hallucinates growth rates, botches arithmetic, and invents tidy causal stories that the data never supported. In this lesson you'll sit in the reviewer's chair: order the analysis workflow, catch a fabricated figure and an unsupported claim in an AI-drafted commentary, and learn to tell a verified, defensible statement from confident false precision. The report goes out under your name — so it goes out verified.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+  </div>
+</header>
+
+<div style="max-width:1080px;margin:0 auto;padding:0 2rem">
+  <div class="principle">
+    <span class="p-icon">&ldquo;</span>
+    <p><strong>The rule that keeps your analysis defensible:</strong> AI is a fast, confident drafter that <strong>cannot be trusted with a number or a cause</strong>. It does arithmetic unreliably, invents growth percentages that sound plausible, and manufactures neat causal explanations the data never proves. So every figure ties back to the source ledger, every percentage is recomputed, and every "because" is either evidenced or downgraded to "may be associated with." <strong>AI supports and calculates a draft; the accountant verifies the figures, tests the claims, and signs.</strong></p>
+  </div>
+</div>
+
+<!-- ── ACTIVITY 1: ORDER THE WORKFLOW ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Order the analysis &amp; reporting workflow</h2>
+    <p class="lesson-intro">Good advisory work follows a disciplined sequence — and the verification step sits early, before any analysis is trusted, not bolted on at the end. Drag the five stages into the order a defensible engagement actually runs. Notice where the human verification lives: right after the data is pulled, so nothing downstream is built on a bad number.</p>
+
+    <div class="lesson-card">
+      <p class="order-note">Drag the cards to reorder. When you think it's right, check your sequence.</p>
+      <div class="order-pool" id="orderPool"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkOrder()">Check my sequence</button>
+        <button class="btn btn-ghost" onclick="shuffleOrder()">&#8635; Shuffle</button>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: THE REVIEWER'S CHAIR ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">The reviewer's chair</h2>
+    <p class="lesson-intro">An AI tool drafted the variance commentary below for a client's quarterly management report. It reads beautifully — which is exactly the danger. <strong>Click each highlighted claim</strong> and decide, with the source figures in front of you, whether it's a verified statement to keep or an error to fix. Hidden inside: a <em>hallucinated growth percentage</em>, a <em>wrong subtotal</em>, and an <em>unsupported causal claim</em>. One statement is solid and properly verified — keep that one. Catch all four calls to clear the review.</p>
+
+    <div class="lesson-card">
+      <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1.1rem;margin-bottom:.2rem">
+        <span style="font-family:var(--mono);font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--navy)">Source figures (from the verified ledger)</span>
+        <div style="font-family:var(--mono);font-size:.78rem;line-height:1.9;color:var(--text-secondary);margin-top:.5rem">
+          Revenue — Q2: 420,000 &nbsp;·&nbsp; Q1: 400,000<br>
+          Operating expenses — Q2: 310,000 &nbsp;·&nbsp; Q1: 295,000<br>
+          Marketing spend — Q2: 48,000 &nbsp;·&nbsp; Q1: 30,000<br>
+          Line items for operating expenses (Q2): Salaries 190,000 · Rent 60,000 · Other 60,000
+        </div>
+      </div>
+
+      <div class="commentary-doc" id="commentaryDoc">
+        <span class="doc-label">AI-drafted variance commentary — for review</span>
+        Revenue rose to 420,000 in Q2, <span class="claim" data-kind="err" data-note="hallucinated growth rate" data-q="The draft says revenue grew 12% quarter-on-quarter. Recompute from source: (420,000 − 400,000) / 400,000." data-opts='[{"t":"Keep it — 12% sounds about right for a good quarter.","ok":false},{"t":"Fix it — the real figure is 5%. AI invented a plausible-looking 12% that the source numbers do not support.","ok":true},{"t":"Keep it — the AI would not state a precise percentage unless it computed it.","ok":false}]' data-ex="Recomputing: 20,000 / 400,000 = 5%, not 12%. This is a classic AI hallucination — a confident, specific number with no basis in the data. Never trust a percentage you did not recompute yourself." onclick="clickClaim(this)">a 12% increase over Q1</span>. Operating expenses for the quarter totalled <span class="claim" data-kind="err" data-note="wrong subtotal" data-q="The draft totals Q2 operating expenses as 320,000. Add the line items: Salaries 190,000 + Rent 60,000 + Other 60,000." data-opts='[{"t":"Keep it — 320,000 is close enough to the ledger.","ok":false},{"t":"Fix it — the line items sum to 310,000, not 320,000. The AI got the arithmetic wrong.","ok":true},{"t":"Keep it — subtotals are low-risk, no need to re-add.","ok":false}]' data-ex="190,000 + 60,000 + 60,000 = 310,000, matching the ledger — not the 320,000 in the draft. AI does arithmetic unreliably; every subtotal must be re-added or tied to the source. A wrong subtotal quietly distorts every margin below it." onclick="clickClaim(this)">320,000</span>, up from Q1. <span class="claim" data-kind="err" data-note="unsupported causal claim" data-q="The draft asserts a cause for the margin change. Do the source figures actually establish that cause?" data-opts='[{"t":"Keep it — it is a reasonable-sounding explanation.","ok":false},{"t":"Fix it — nothing in the data proves the new marketing campaign caused the softer margin; this causal claim is unsupported and should be softened to a possible association.","ok":true},{"t":"Keep it — the marketing spend did rise, so it must be the cause.","ok":false}]' data-ex="Marketing spend rose (30,000 to 48,000), but rising alongside is not the same as causing the margin change — that is correlation dressed as causation. AI loves a tidy story. Downgrade to: marketing spend increased and may be associated with the margin movement, pending further analysis." onclick="clickClaim(this)">The softer operating margin was driven by the new marketing campaign, which clearly caused the higher cost base.</span> On the balance sheet, <span class="claim" data-kind="ok" data-note="verified statement to keep" data-q="The draft states marketing spend rose from 30,000 to 48,000, a 60% increase. Check it against the source." data-opts='[{"t":"Keep it — 48,000 vs 30,000 is a 60% rise, and it ties exactly to the source figures.","ok":true},{"t":"Fix it — you should never state any percentage in a client report.","ok":false},{"t":"Fix it — the figure is probably fabricated like the others.","ok":false}]' data-ex="Correct — this one is verified. Source marketing spend Q1 30,000, Q2 48,000; the increase is 18,000, and 18,000 / 30,000 = 60%. The figure and the percentage both tie to the ledger. Not every AI statement is wrong — the skill is verifying each one, and confidently keeping the ones that hold." onclick="clickClaim(this)">marketing spend rose from 30,000 to 48,000, a 60% increase that ties to the ledger</span>.
+      </div>
+
+      <div class="review-panel" id="reviewPanel">
+        <div class="rp-q" id="rpQ"></div>
+        <div class="review-opts" id="rpOpts"></div>
+        <div class="review-explain" id="rpEx"></div>
+      </div>
+
+      <div class="review-status">
+        <span class="status-count">Reviewed: <strong id="revCount">0</strong> / 4 claims</span>
+        <button class="btn btn-ghost" onclick="resetReview()">&#8635; Reset review</button>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: CLASSIFY + CAVEAT ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">3</span>
+    <h2 class="lesson-title">Verified &amp; defensible — or false precision?</h2>
+    <p class="lesson-intro">The final skill of analysis is knowing what you can actually stand behind. AI-generated reporting language tends toward two failure modes: <strong>false precision</strong> (a specific-sounding number or forecast with no verified basis) and <strong>spurious causation</strong> (a confident "because" the data cannot prove). For each statement, decide whether it's <strong>verified &amp; defensible</strong> or <strong>false precision / spurious causation</strong> — then pick the better, honestly caveated version to send.</p>
+
+    <div class="lesson-card">
+      <p class="classify-note">Classify each statement, then choose the version you'd actually put in front of a client.</p>
+      <div class="classify-stack" id="classifyStack"></div>
+
+      <div class="caveat-block">
+        <div class="caveat-q">Final judgement call: your AI draft ends the report with a forward-looking line. Which version do you send to the client?</div>
+        <div class="quiz-opts" id="caveatOpts"></div>
+        <div class="quiz-explain" id="caveatEx"></div>
+      </div>
+
+      <div class="done-card" id="doneCard">
+        <span class="done-badge">Review cleared · Week 5 · Lesson 3</span>
+        <h3>Signed off — because you verified it.</h3>
+        <p>You just did the part of advisory work that AI cannot do for you: you let it draft fast, then you <strong>tested every number and every claim against the source</strong> before anything reached a client. That is the whole discipline in one screen — AI is decision-support, the accountant verifies and signs.</p>
+        <ul class="done-recap">
+          <li><span class="r-check">&#10003;</span> <strong>Workflow ordered</strong> — verification sits early, right after the data is pulled, so nothing downstream is built on a bad figure.</li>
+          <li><span class="r-check">&#10003;</span> <strong>Reviewer's chair</strong> — you caught a hallucinated growth rate, a wrong subtotal, and an unsupported cause, and kept the one verified statement.</li>
+          <li><span class="r-check">&#10003;</span> <strong>Verified vs false precision</strong> — you told a defensible figure from confident fabrication and chose the honestly caveated wording.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHERE AI HELPS / WHERE THE ACCOUNTANT IS THE POINT ── -->
+<section class="lesson" style="background:var(--bg-light);padding-top:2.4rem;padding-bottom:2.4rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.6rem">Where this frees your time — and where it must not</h2>
+    <p class="lesson-intro" style="margin-bottom:1.2rem">AI hands back hours of drafting, structuring, and first-pass summarising — hours you can spend on the judgement that actually makes you an advisor. But the figures, the causal claims, and the sign-off never delegate. Two honest framings to carry into every report.</p>
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-icon">+</div>
+        <h4>Where AI can genuinely lighten the load</h4>
+        <p>First-draft, structuring, and phrasing work — draft it fast, then verify every figure.</p>
+        <ul>
+          <li>Drafting variance commentary and management-report narrative for you to fact-check</li>
+          <li>Structuring an analysis, suggesting ratios to examine, outlining an advisory memo</li>
+          <li>Rephrasing dense findings into plain client language you then verify</li>
+          <li>Proposing questions to investigate — which you answer from the verified ledger</li>
+        </ul>
+      </div>
+      <div class="compare-card bad">
+        <div class="compare-icon">&ndash;</div>
+        <h4>Where the accountant is the point</h4>
+        <p>The numbers, the causes, and the professional sign-off are yours to own.</p>
+        <ul>
+          <li>Any figure, percentage, or subtotal — recompute and tie to the source, never trust</li>
+          <li>Any causal "because" — evidence it, or downgrade it to a possible association</li>
+          <li>The professional judgement of what the numbers mean for the client</li>
+          <li>Signing off on a report or advice you have not verified line by line</li>
+        </ul>
+      </div>
+    </div>
+    <div class="principle" style="margin-top:1.4rem;max-width:none">
+      <span class="p-icon">&rarr;</span>
+      <p><strong>Growth mindset for the AI era:</strong> the accountants who thrive won't be the ones who memorise this quarter's reporting tool — those change yearly. They'll be the ones fluent in the durable move you practised here: <strong>let the machine draft the story fast, then bring professional skepticism, a source of record, and an audit trail to every figure and every claim before it goes out under your name.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-top:0;padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — carry it into your next report</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">What's your personal rule for verifying an AI-drafted figure before it reaches a client — how will you make "recompute and tie to source" automatic?</div>
+        <textarea placeholder="Before any AI figure goes in a report, I'll trace it to the ledger and re-run the arithmetic myself, because..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Where in your commentary are you most tempted to accept a tidy AI causal story — and what phrasing will you use to downgrade an unproven "because"?</div>
+        <textarea placeholder="I'm most tempted with variance explanations, so instead of 'X caused Y' I'll write 'X may be associated with Y, pending...'"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LESSON COMPLETE -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;text-align:center;position:relative;overflow:hidden">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative">Lesson 3 complete — analysis you can defend</h3>
+      <p style="font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;max-width:560px;margin-left:auto;margin-right:auto;position:relative;line-height:1.6">You've built a durable advisory workflow — order the analysis, verify the figures early, catch hallucinated numbers and spurious causes, and speak in verified, defensible language. None of it depends on a tool that might vanish next year. One lesson remains: compliance, client communication, and growing a practice — the finale of the whole course.</p>
+      <a href="04-compliance-communication.html" class="btn btn-primary" style="position:relative">On to the final lesson &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="f-logo">Moksh<span>Path</span></div>
+  <div class="f-tag">Guided Path to True Learning</div>
+  <p style="font-size:.78rem;max-width:520px;margin:0 auto;line-height:1.6">School of AI Careers &middot; AI for Accountants. Durable accounting workflows over tool tutorials &mdash; because the tools will change and your judgement won't.</p>
+  <div class="f-copy">&copy; 2026 MokshPath. Jurisdiction-neutral. Professional education, not accounting, tax, or financial advice.</div>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Order the workflow ─── */
+const STAGES = [
+  {id:'define', txt:'<strong>Define the question</strong> — pin down exactly what the client needs answered before touching any data'},
+  {id:'pull',   txt:'<strong>Pull &amp; verify the data</strong> — extract from the source ledger and confirm every figure ties to the record'},
+  {id:'analyze',txt:'<strong>Analyze</strong> — run the variances, ratios, and comparisons on the verified numbers'},
+  {id:'draft',  txt:'<strong>Draft the commentary</strong> — let AI structure the narrative, then fact-check every claim'},
+  {id:'advise', txt:'<strong>Advise</strong> — turn verified findings into a recommendation the client can act on, signed by you'}
+];
+const CORRECT = ['define','pull','analyze','draft','advise'];
+let dragEl = null;
+function renderOrder(seq){
+  $('orderPool').innerHTML = seq.map(id => {
+    const s = STAGES.find(x=>x.id===id);
+    return `<div class="order-item" draggable="true" data-id="${s.id}">
+      <span class="order-handle">&#8942;&#8942;</span>
+      <span class="order-slot">?</span>
+      <span>${s.txt}</span>
+    </div>`;
+  }).join('');
+  attachDrag();
+}
+function attachDrag(){
+  document.querySelectorAll('#orderPool .order-item').forEach(item => {
+    item.addEventListener('dragstart', e => { dragEl = item; item.classList.add('dragging'); });
+    item.addEventListener('dragend', e => { item.classList.remove('dragging'); document.querySelectorAll('.order-item').forEach(i=>i.classList.remove('over')); });
+    item.addEventListener('dragover', e => { e.preventDefault(); if(item!==dragEl) item.classList.add('over'); });
+    item.addEventListener('dragleave', e => item.classList.remove('over'));
+    item.addEventListener('drop', e => {
+      e.preventDefault(); item.classList.remove('over');
+      if(item===dragEl) return;
+      const pool = $('orderPool');
+      const items = [...pool.children];
+      const di = items.indexOf(dragEl), ti = items.indexOf(item);
+      if(di<ti) pool.insertBefore(dragEl, item.nextSibling);
+      else pool.insertBefore(dragEl, item);
+    });
+  });
+}
+function shuffleOrder(){
+  let seq = CORRECT.slice();
+  do { seq.sort(()=>Math.random()-0.5); } while(seq.join()===CORRECT.join());
+  renderOrder(seq);
+  $('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('#orderPool .order-item').forEach(i=>i.classList.remove('correct','incorrect'));
+}
+function checkOrder(){
+  const items = [...document.querySelectorAll('#orderPool .order-item')];
+  let allRight = true;
+  items.forEach((item, i) => {
+    const slot = item.querySelector('.order-slot');
+    slot.textContent = i+1;
+    if(item.dataset.id === CORRECT[i]){ item.classList.add('correct'); item.classList.remove('incorrect'); }
+    else { item.classList.add('incorrect'); item.classList.remove('correct'); allRight=false; }
+  });
+  const fb = $('feedback1');
+  if(allRight){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>That's the disciplined sequence.</strong> Define the question &rarr; pull &amp; verify the data &rarr; analyze &rarr; draft the commentary &rarr; advise. The load-bearing move is where verification sits: <em>immediately after the data is pulled</em>, not at the end. Verify early and everything downstream — the analysis, the commentary, the advice — stands on numbers you can defend. Skip it, and a bad figure poisons the whole report.`;
+    $('prog1').classList.add('done'); maybeDone();
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Not quite — check the highlighted cards.</strong> Think about what has to be true before the next step is safe: you can't analyze data you haven't verified, and you can't advise on commentary you haven't fact-checked. Verification belongs early, right after you pull the data. Reorder and check again.`;
+  }
+}
+
+/* ─── ACTIVITY 2: The reviewer's chair ─── */
+const TOTAL_CLAIMS = 4;
+let reviewedClaims = 0;
+let activeClaim = null;
+function clickClaim(el){
+  if(el.classList.contains('flagged-err') || el.classList.contains('flagged-ok')) return;
+  activeClaim = el;
+  const panel = $('reviewPanel');
+  $('rpQ').textContent = el.dataset.q;
+  const opts = JSON.parse(el.dataset.opts);
+  $('rpOpts').innerHTML = opts.map((o,i)=>`<button class="review-opt" onclick="answerClaim(${i})">${o.t}</button>`).join('');
+  $('rpEx').className = 'review-explain';
+  $('rpEx').innerHTML = '';
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function answerClaim(i){
+  const el = activeClaim;
+  const opts = JSON.parse(el.dataset.opts);
+  const chosen = opts[i];
+  const btns = $('rpOpts').querySelectorAll('.review-opt');
+  btns.forEach((b,bi)=>{ b.disabled=true; if(opts[bi].ok) b.classList.add('right'); });
+  if(!chosen.ok) btns[i].classList.add('wrong');
+  const ex = $('rpEx');
+  ex.className = 'review-explain show ' + (chosen.ok ? 'ok':'no');
+  ex.innerHTML = (chosen.ok ? '<strong>Right call.</strong> ' : '<strong>Look again.</strong> ') + el.dataset.ex;
+  // lock the claim visually per its kind
+  el.classList.add(el.dataset.kind === 'ok' ? 'flagged-ok' : 'flagged-err');
+  reviewedClaims++;
+  $('revCount').textContent = reviewedClaims;
+  if(reviewedClaims === TOTAL_CLAIMS){
+    const fb = $('feedback2');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Review cleared — all four claims tested.</strong> You caught the three defects that AI-drafted commentary loves to hide: a <em>hallucinated 12% growth rate</em> (really 5%), a <em>wrong subtotal</em> (320,000 vs the true 310,000), and an <em>unsupported cause</em> ("the campaign clearly caused it"). And you kept the one statement that actually tied to the ledger. That is the reviewer's discipline: not "is this AI text wrong?" but "does <em>this specific claim</em> hold against the source?" — asked of every line.`;
+    $('prog2').classList.add('done'); maybeDone();
+  }
+}
+function resetReview(){
+  reviewedClaims = 0; activeClaim = null;
+  $('revCount').textContent = '0';
+  $('reviewPanel').classList.remove('show');
+  $('feedback2').className = 'activity-feedback';
+  document.querySelectorAll('#commentaryDoc .claim').forEach(el=>el.classList.remove('flagged-err','flagged-ok','wrongflag'));
+  $('prog2').classList.remove('done'); maybeDone();
+}
+
+/* ─── ACTIVITY 3: Classify + caveat ─── */
+const STMTS = [
+  {
+    text:'"Revenue grew exactly 17.3% this quarter, and the client should budget for 17.3% growth again next quarter."',
+    correct:'false',
+    ex:'False precision. A single quarter\'s growth is not a verified forward projection — restating it to the decimal and then assuming it repeats manufactures a confidence the data cannot support. AI produces precise-sounding numbers freely; precision is not the same as evidence.'
+  },
+  {
+    text:'"Q2 operating expenses were 310,000, which reconciles to the general ledger and matches the sum of the underlying line items."',
+    correct:'verified',
+    ex:'Verified & defensible. The figure is stated, tied to the source of record, and cross-checked against the line items. This is exactly what a defensible report reads like — the number is traceable and it was actually verified.'
+  },
+  {
+    text:'"Because the office moved in March, customer satisfaction rose — the relocation clearly drove the improvement."',
+    correct:'false',
+    ex:'Spurious causation. Two things happening near each other in time does not prove one caused the other. AI reaches for tidy causal stories; a defensible report either evidences the link or reports the movements separately without asserting cause.'
+  }
+];
+let sortedCount = 0;
+function renderClassify(){
+  sortedCount = 0;
+  $('classifyStack').innerHTML = STMTS.map((s,i)=>`
+    <div class="stmt-card" id="stmt${i}">
+      <div class="stmt-text">${s.text}</div>
+      <div class="stmt-btns">
+        <button class="stmt-btn" onclick="pickStmt(${i},'verified')">Verified &amp; defensible</button>
+        <button class="stmt-btn" onclick="pickStmt(${i},'false')">False precision / spurious causation</button>
+      </div>
+      <div class="stmt-verdict" id="sv${i}"></div>
+    </div>`).join('');
+}
+function pickStmt(i, choice){
+  const card = $('stmt'+i);
+  if(card.classList.contains('sorted')) return;
+  card.classList.add('sorted');
+  const s = STMTS[i];
+  const right = choice === s.correct;
+  const btns = card.querySelectorAll('.stmt-btn');
+  btns.forEach(b=>b.disabled=true);
+  btns.forEach(b=>{
+    const isChosen = (b.textContent.includes('Verified') && choice==='verified') || (b.textContent.includes('False') && choice==='false');
+    if(isChosen) b.classList.add(right ? 'picked-right':'picked-wrong');
+  });
+  const v = $('sv'+i);
+  v.className = 'stmt-verdict show ' + (right ? 'ok':'no');
+  v.innerHTML = (right ? '<strong>Correct.</strong> ' : '<strong>Reconsider.</strong> ') + s.ex;
+  sortedCount++;
+  checkAct3Done();
+}
+
+/* better-caveat MCQ */
+const CAVEAT = {
+  opts:[
+    {t:'"The client will grow 15% next quarter and should hire two more staff on that basis."', ok:false, ex:'This is false precision dressed as advice — a specific forecast stated as fact, driving a real hiring decision, with no acknowledged uncertainty. AI will happily generate it; you must not send it.'},
+    {t:'"Recent revenue growth has been strong; if the trend holds, the client may wish to plan for expansion — though this is a projection, not a guarantee, and should be revisited as new figures come in."', ok:true, ex:'This is the version you send. It reflects the verified data, frames the forward-looking part honestly as a projection with its uncertainty stated, and leaves the judgement with the client. Verified where verifiable, caveated where not.'},
+    {t:'"Growth is guaranteed to continue based on our AI analysis."', ok:false, ex:'"Guaranteed" and "our AI analysis" are both red flags — nothing about a future outcome is guaranteed, and outsourcing the certainty to a model does not make it true. This is exactly the false confidence to strip out.'}
+  ]
+};
+let caveatAnswered = false;
+function renderCaveat(){
+  caveatAnswered = false;
+  const order = CAVEAT.opts.map((_,i)=>i).sort(()=>Math.random()-0.5);
+  $('caveatOpts').innerHTML = order.map(oi=>`<button class="quiz-opt" onclick="answerCaveat(${oi})">${CAVEAT.opts[oi].t}</button>`).join('');
+  $('caveatEx').className = 'quiz-explain';
+}
+function answerCaveat(oi){
+  if(caveatAnswered) return;
+  caveatAnswered = true;
+  const chosen = CAVEAT.opts[oi];
+  const rightText = CAVEAT.opts.find(o=>o.ok).t;
+  $('caveatOpts').querySelectorAll('.quiz-opt').forEach(b=>{
+    b.disabled = true;
+    if(b.textContent.trim() === rightText.trim()) b.classList.add('right');
+  });
+  if(!chosen.ok){
+    const btns = [...$('caveatOpts').querySelectorAll('.quiz-opt')];
+    btns.find(b=>b.textContent.trim()===chosen.t.trim()).classList.add('wrong');
+  }
+  const ex = $('caveatEx');
+  ex.className = 'quiz-explain show ' + (chosen.ok ? 'ok':'no');
+  ex.innerHTML = (chosen.ok ? '<strong>That\'s the one to send.</strong> ' : '<strong>Not that one.</strong> ') + chosen.ex;
+  checkAct3Done();
+}
+
+function checkAct3Done(){
+  if(sortedCount === STMTS.length && caveatAnswered){
+    $('prog3').classList.add('done'); maybeDone();
+  }
+}
+
+/* ─── Completion ─── */
+function maybeDone(){
+  const done = $('prog1').classList.contains('done') && $('prog2').classList.contains('done') && $('prog3').classList.contains('done');
+  $('doneCard').classList.toggle('show', done);
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  shuffleOrder();
+  renderClassify();
+  renderCaveat();
+});
+</script>
+</body>
+</html>

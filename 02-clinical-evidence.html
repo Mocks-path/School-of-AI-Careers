@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Clinical Information &amp; Evidence with AI · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.disclaimer{
+  background:var(--cream);border:1px solid var(--line);border-left:3px solid var(--orange);
+  border-radius:10px;padding:14px 18px;margin:22px 0;max-width:680px;
+  font-size:13.5px;color:var(--muted);
+}
+.disclaimer strong{color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · evidence flow ============ */
+.flow{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.fchain{display:flex;align-items:stretch;gap:0;margin-bottom:22px}
+.fnode{
+  flex:1;text-align:center;padding:15px 6px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;display:flex;flex-direction:column;justify-content:center;
+}
+.fnode .fidx{display:block;font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.fnode h5{font-family:'Fraunces',serif;font-size:14px;color:var(--brown-dark);line-height:1.1}
+.fnode:hover{border-color:var(--orange);transform:translateY(-3px)}
+.fnode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.fnode.active h5{color:var(--paper)}
+.fnode.active .fidx{color:var(--orange)}
+.fnode.gate{border-style:dashed;border-color:var(--orange-dark)}
+.fnode.gate .fidx{color:var(--orange-dark)}
+.fnode.gate.active{background:var(--orange-dark);border-color:var(--orange-dark);border-style:solid}
+.fnode.gate.active .fidx{color:var(--yellow)}
+.fnode.gate.active h5{color:#fff}
+.fnode .glock{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;color:var(--orange-dark);text-transform:uppercase;margin-top:4px}
+.fnode.active .glock{color:var(--yellow)}
+.flink{width:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--line);font-size:16px}
+.fpanel{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:22px;min-height:150px}
+.fpanel.gatepanel{background:var(--brown-dark);border-color:var(--brown-dark)}
+.fpanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fplab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--orange-dark);margin-bottom:8px}
+.fpanel.gatepanel .fplab{color:var(--yellow)}
+.fpanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:8px}
+.fpanel.gatepanel h4{color:var(--paper)}
+.fpanel p{font-size:14.5px;color:var(--brown-dark);max-width:none;margin:0}
+.fpanel.gatepanel p{color:#F3E7D5}
+.fpanel ul{list-style:none;margin-top:10px;display:grid;gap:6px}
+.fpanel li{font-size:13.5px;padding-left:20px;position:relative;color:var(--brown-dark)}
+.fpanel li::before{content:"✓";position:absolute;left:0;color:var(--orange-dark);font-weight:bold}
+.fpanel.gatepanel li{color:#F3E7D5}
+.fpanel.gatepanel li::before{color:var(--yellow)}
+@media(max-width:700px){
+  .fchain{flex-wrap:wrap;gap:6px}
+  .fnode{flex:1 1 40%}
+  .flink{display:none}
+}
+
+/* ============ Figure 2 · ungrounded vs grounded ============ */
+.gg{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.ggcard{border-radius:12px;padding:22px;transition:all .4s}
+.ggcard.ungrounded{background:#F7E0DA;border:1px solid #E3B3A6}
+.ggcard.grounded{background:#E6F0DC;border:1px solid #B7CFA0}
+.ggtag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ggcard.ungrounded .ggtag{color:#B23A22}
+.ggcard.grounded .ggtag{color:#4B6B2E}
+.ggquote{font-family:'Fraunces',serif;font-size:17px;line-height:1.4;color:var(--brown-dark);background:var(--paper);border-radius:10px;padding:16px 18px;border:1px solid rgba(0,0,0,0.06)}
+.ggquote .cite{display:block;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.04em}
+.ggcard.ungrounded .ggquote .cite{color:#B23A22}
+.ggflag{margin-top:14px;font-size:13.5px;color:var(--brown-dark);line-height:1.5}
+.ggchecklist{margin-top:16px;display:grid;gap:8px}
+.ggchk{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--brown-dark);line-height:1.4}
+.ggchk .mark{flex-shrink:0;width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;color:#fff;margin-top:1px}
+.ggchk .mark.pass{background:#4B6B2E}
+.ggchk .mark.fail{background:#B23A22}
+
+/* ============ Figure 3 · PICO builder ============ */
+.pico{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.pchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.pchip{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 14px;border-radius:8px;cursor:pointer;transition:all .25s;font-weight:600;
+  border:1.5px solid var(--line);background:var(--cream);color:var(--muted);
+  display:flex;align-items:center;gap:8px;
+}
+.pchip .pdot{width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .25s}
+.pchip.on{border-color:var(--brown-dark);background:var(--paper);color:var(--brown-dark)}
+.pchip.on .pdot{background:var(--orange)}
+.pchip:hover{border-color:var(--orange)}
+.pquery{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:22px}
+.pqlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.pqtext{font-family:'Fraunces',serif;font-size:19px;line-height:1.4;color:var(--brown-dark);min-height:60px}
+.pqtext .pfrag{color:var(--orange-dark);font-style:italic}
+.pmeta{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap;align-items:center}
+.pscore{flex:1;min-width:180px}
+.pscorebar{height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+.pscorefill{height:100%;background:linear-gradient(90deg,var(--orange),var(--accent));border-radius:6px;transition:width .5s ease;width:0}
+.pscorelab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.pverdict{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.04em;color:var(--brown-dark)}
+.pnote{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--brown-dark);line-height:1.5}
+
+@media(max-width:700px){
+  .pchip{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 3 · Lesson 02 · AI for Doctors</div>
+  <h1>Clinical evidence, <em>verified</em>.</h1>
+  <p class="lede">AI can find an answer to almost any clinical question in seconds. That is exactly the danger. A confident summary, a clean-looking citation, a precise-sounding dose — all can be fabricated, out of date, or simply wrong for the patient in front of you. This lesson builds the durable skill that makes AI safe for evidence work: a workflow with a verification gate in the middle that nothing gets past unchecked.</p>
+  <div class="disclaimer"><strong>A note before we begin.</strong> This is professional education for clinicians about evidence workflows — it is not medical advice, and no example here is a treatment recommendation. AI is decision-support only; the clinician appraises the evidence and decides. Never enter identifiable patient data into a consumer AI tool, and remember that many tools are not cleared or approved medical devices.</div>
+</section>
+
+<section>
+  <div class="section-num">01 / 03</div>
+  <h2>The evidence workflow, with a gate in the middle</h2>
+  <p class="lead">Answering a clinical question well has always followed a shape: ask a focused question, search for evidence, appraise it, synthesise, and apply it to this patient. AI can accelerate every step — but it also introduces a new failure mode at the search step, where a fabricated answer looks identical to a real one. So the workflow gains a hard gate: APPRAISE &amp; VERIFY, which nothing passes unchecked.</p>
+
+  <p>Older evidence teaching moved smoothly from search to synthesis, because a search returned real sources you could open. AI changes that. When you ask a general model a clinical question, it does not retrieve a source — it generates the most plausible-sounding text, which may include references, doses and figures that do not exist. The output arrives polished and confident whether or not it is true. That is why the verification step is no longer a nicety at the end; it is a gate in the middle of the workflow that every AI-generated claim must pass before it is allowed to become part of your reasoning.</p>
+  <p>Step through the flow below. Notice how stages one, two, four and five are ordinary evidence work — but the third, APPRAISE &amp; VERIFY, is drawn differently on purpose. It is the point where you stop trusting fluency and start checking primary sources: does the reference exist, is it the current guideline, is the dose right, and does it actually apply to this patient. AI is decision-support up to that gate and after it; the appraisal itself is yours.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The evidence workflow — mind the gate</span>
+      <div class="controls">
+        <button onclick="flowStep(-1)">◀ Prev</button>
+        <button onclick="flowStep(1)">Next ▶</button>
+        <button onclick="pickFlow('verify')">Jump to gate</button>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="fchain" id="fChain">
+        <div class="fnode" data-k="ask" onclick="pickFlow('ask')"><span class="fidx">1</span><h5>Ask (PICO)</h5></div>
+        <div class="flink">→</div>
+        <div class="fnode" data-k="search" onclick="pickFlow('search')"><span class="fidx">2</span><h5>Search / Generate</h5></div>
+        <div class="flink">→</div>
+        <div class="fnode gate" data-k="verify" onclick="pickFlow('verify')"><span class="fidx">3</span><h5>Appraise &amp; Verify</h5><span class="glock">◆ gate</span></div>
+        <div class="flink">→</div>
+        <div class="fnode" data-k="synth" onclick="pickFlow('synth')"><span class="fidx">4</span><h5>Synthesise</h5></div>
+        <div class="flink">→</div>
+        <div class="fnode" data-k="apply" onclick="pickFlow('apply')"><span class="fidx">5</span><h5>Apply to patient</h5></div>
+      </div>
+      <div class="fpanel" id="fPanel"></div>
+    </div>
+  </div>
+
+  <h3>Why the gate faces both ways</h3>
+  <p>The verification gate does more than catch fabrications. It also faces forward, toward the patient: even a real, correctly cited, current guideline may not apply to the person in front of you — wrong age, wrong comorbidity, wrong context, a contraindication the study excluded. So the gate asks two questions at once: is this evidence <em>true</em>, and is it true <em>for this patient</em>. AI can help you reach the gate faster and can even help you read what you find. It cannot walk through the gate for you. That step is clinical judgment, and it is the reason the profession, not the tool, remains accountable.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 03</div>
+  <h2>Ungrounded vs grounded: the same question, two answers</h2>
+  <p class="lead">The single most important habit in this lesson is learning to distrust a fluent answer. An ungrounded model will hand you a confident citation and a precise dose that were never checked against a real source — and it will look exactly as trustworthy as a verified one. Toggle between the two answers below and watch the verification checklist decide which you can actually use.</p>
+
+  <p>Both answers below respond to the same clinical question. The ungrounded one is what a general model may produce when asked directly: a real-sounding reference, a specific figure, a confident tone — none of it traced to a primary source. The grounded one is the same information after it has been through the gate: checked against a current, primary reference, with the dose confirmed and the fit to this patient considered. The words can look almost identical. The difference is entirely in whether each claim survived verification — which is why the checklist, not the fluency, is what you trust.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Ungrounded vs grounded answer</span>
+      <div class="controls" id="ggBtns">
+        <button class="active" onclick="setGG('ungrounded',this)">Ungrounded</button>
+        <button onclick="setGG('grounded',this)">Grounded &amp; verified</button>
+      </div>
+    </div>
+    <div class="gg">
+      <div class="ggcard ungrounded" id="ggCard">
+        <div class="ggtag" id="ggTag">⚠ Ungrounded · do not use</div>
+        <div class="ggquote" id="ggQuote"></div>
+        <div class="ggflag" id="ggFlag"></div>
+        <div class="ggchecklist" id="ggChecklist"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The four-line verification checklist</h3>
+  <p>Carry this checklist to every AI-generated clinical claim, and refuse to use anything that fails a line. <strong>Exists</strong>: open the actual reference — a plausible title, author and year mean nothing until the source is real. <strong>Current guideline</strong>: confirm it is the up-to-date recommendation, not a superseded one the model absorbed years ago. <strong>Correct dose / figure</strong>: check every number against the primary source, because a single wrong digit is a patient-safety event. <strong>Applies to this patient</strong>: even true, current evidence may not fit this person's age, comorbidities or context. A claim that clears all four has earned a place in your reasoning; one that fails any is discarded, no matter how confident it sounded.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 03</div>
+  <h2>Sharpen the question: the PICO builder</h2>
+  <p class="lead">A vague question gets a vague, hard-to-verify answer — the exact conditions in which AI fills the gaps with plausible invention. The oldest tool in evidence-based practice fixes this: PICO. Naming the Patient, the Intervention, the Comparison and the Outcome turns a woolly query into a precise, answerable, checkable one. Add each element below and watch a vague question sharpen into one you can actually verify.</p>
+
+  <p>PICO is not about the AI — it is about you thinking clearly before you ask. "What's the best treatment?" is unanswerable and invites a confident guess. But name the <strong>P</strong>atient (who, specifically), the <strong>I</strong>ntervention (what you are considering), the <strong>C</strong>omparison (against what alternative), and the <strong>O</strong>utcome (that actually matters to this patient), and the question becomes narrow enough that a real, verifiable answer exists — and narrow enough that you can tell whether the AI's answer is on target or drifting. A sharp question is the first line of defence against a fluent wrong one.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Build a PICO question</span>
+      <div class="controls">
+        <button onclick="picoAll()">Add all four</button>
+        <button onclick="picoNone()">↺ Reset to vague</button>
+      </div>
+    </div>
+    <div class="pico">
+      <div class="pchips">
+        <div class="pchip" data-k="P" onclick="togglePico('P')"><span class="pdot"></span>P · Patient</div>
+        <div class="pchip" data-k="I" onclick="togglePico('I')"><span class="pdot"></span>I · Intervention</div>
+        <div class="pchip" data-k="C" onclick="togglePico('C')"><span class="pdot"></span>C · Comparison</div>
+        <div class="pchip" data-k="O" onclick="togglePico('O')"><span class="pdot"></span>O · Outcome</div>
+      </div>
+      <div class="pquery">
+        <div class="pqlab">Your question, as the AI (and you) will read it</div>
+        <div class="pqtext" id="pqText"></div>
+        <div class="pmeta">
+          <div class="pscore">
+            <div class="pscorebar"><div class="pscorefill" id="pFill"></div></div>
+            <div class="pscorelab" id="pScoreLab">Specificity</div>
+          </div>
+          <div class="pverdict" id="pVerdict"></div>
+        </div>
+        <div class="pnote" id="pNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Why the sharp question is also the safe question</h3>
+  <p>A well-built PICO question does two jobs at once. It gets you a better answer — narrow enough that a real body of evidence addresses it directly. And it gets you a safer answer, because a specific question is one you can actually verify: you know what to search for, what the numbers should look like, and whether the reply fits the patient you named. Vagueness is where hallucination hides. Precision is where verification becomes possible. The sharp question and the safe workflow are, in the end, the same discipline.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Evidence work with AI is fast, and its speed is exactly why it needs a gate. Ask a sharp PICO question, let AI help you search and read — but treat every generated citation, dose and figure as unverified until you have opened the primary source, confirmed it is current, checked the number, and judged whether it fits this patient. AI is decision-support up to and after that gate. The appraisal, and the decision, are yours.</p>
+  <ul>
+    <li>The workflow has a hard gate: Ask → Search → APPRAISE &amp; VERIFY → Synthesise → Apply</li>
+    <li>A fluent, confident answer can be fully fabricated — distrust fluency, trust the checklist</li>
+    <li>Verify four things: exists · current guideline · correct dose · applies to this patient</li>
+    <li>A sharp PICO question is also the safe question — vagueness is where hallucination hides</li>
+    <li>AI is decision-support; the appraisal and the clinical decision stay with the clinician</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 02 of Week 3 · Next up: AI-Assisted Documentation &amp; the Clinical Note →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · evidence flow ===== */
+const FLOW={
+  ask:{lab:'Step 1 · Frame it',head:'Ask a focused question',
+    body:'Turn a vague clinical worry into a sharp, answerable question — ideally in PICO form (patient, intervention, comparison, outcome). AI can help you rephrase and narrow it, but the question is yours to define.',list:null,gate:false},
+  search:{lab:'Step 2 · Gather',head:'Search or generate candidates',
+    body:'Retrieve evidence — or ask an AI to surface candidate answers and sources. This is fast, but here is where the risk enters: a general model may generate plausible-looking references and figures that were never retrieved from anything real.',list:null,gate:false},
+  verify:{lab:'Step 3 · THE GATE',head:'Appraise &amp; verify — nothing passes unchecked',
+    body:'Every AI-generated claim stops here. Before it enters your reasoning, confirm each of the following against a primary source:',
+    list:['Exists — open the actual reference; it is real, not invented','Current — it is the up-to-date guideline, not a superseded one','Correct — the dose, figure and claim match the source exactly','Applies — it fits THIS patient’s age, comorbidities and context'],gate:true},
+  synth:{lab:'Step 4 · Combine',head:'Synthesise what survived',
+    body:'Bring together only the claims that cleared the gate into a coherent picture. AI can help draft a plain-language summary — but it summarises verified evidence, never unverified generation.',list:null,gate:false},
+  apply:{lab:'Step 5 · Decide',head:'Apply to THIS patient',
+    body:'Translate verified evidence into a decision for the person in front of you — weighing their values, context and the shared decision. This is clinical judgment. AI supported the path; the clinician decides and is accountable.',list:null,gate:false}
+};
+const FLOWORDER=['ask','search','verify','synth','apply'];
+let flowCur='ask';
+function pickFlow(k){
+  flowCur=k;
+  document.querySelectorAll('#fChain .fnode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=FLOW[k],p=el('fPanel');
+  let h='<div class="fplab">'+d.lab+'</div><h4>'+d.head+'</h4><p>'+d.body+'</p>';
+  if(d.list){h+='<ul>';d.list.forEach(x=>h+='<li>'+x+'</li>');h+='</ul>';}
+  p.innerHTML=h;
+  p.classList.toggle('gatepanel',!!d.gate);
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+function flowStep(dir){
+  let i=FLOWORDER.indexOf(flowCur)+dir;
+  if(i<0)i=FLOWORDER.length-1;if(i>=FLOWORDER.length)i=0;
+  pickFlow(FLOWORDER[i]);
+}
+pickFlow('ask');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickFlow('ask');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('fChain'));
+
+/* ===== Figure 2 · ungrounded vs grounded ===== */
+const GG={
+  ungrounded:{
+    tag:'⚠ Ungrounded · do not use',
+    quote:'"For this indication, the standard regimen is well established and widely recommended in the current guideline."<span class="cite">— Halloran R, et al. Journal of Clinical Practice, 2021;44(3):210–218.</span>',
+    flag:'Reads authoritative — but nothing here has been checked. The reference may not exist, the "current guideline" claim is unverified, and the confident tone is generated, not earned.',
+    checks:[
+      ['fail','✕','Exists — this reference cannot be found in any database. Likely fabricated.'],
+      ['fail','✕','Current guideline — no source confirms this is the up-to-date recommendation.'],
+      ['fail','✕','Correct dose / figure — the "standard regimen" is asserted, never specified or checked.'],
+      ['fail','✕','Applies to this patient — impossible to judge; the evidence itself is unconfirmed.']
+    ]
+  },
+  grounded:{
+    tag:'✓ Grounded &amp; verified · usable',
+    quote:'"The current national guideline (2024 update) addresses this indication directly; I opened it and confirmed the recommended approach and the specific figures against the primary source."<span class="cite">— Verified against the primary, current guideline document.</span>',
+    flag:'Same territory, but every claim has been through the gate: the source was opened and confirmed current, the figures checked against it, and the fit to this patient considered.',
+    checks:[
+      ['pass','✓','Exists — the guideline was located and opened as a primary source.'],
+      ['pass','✓','Current guideline — confirmed to be the latest update, not a superseded version.'],
+      ['pass','✓','Correct dose / figure — each number was checked directly against the source.'],
+      ['pass','✓','Applies to this patient — fit to age, comorbidities and context was considered.']
+    ]
+  }
+};
+function setGG(mode,btn){
+  document.querySelectorAll('#ggBtns button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const d=GG[mode],card=el('ggCard');
+  card.className='ggcard '+mode;
+  el('ggTag').innerHTML=d.tag;
+  el('ggQuote').innerHTML=d.quote;
+  el('ggFlag').textContent=d.flag;
+  let h='';
+  d.checks.forEach(([st,m,txt])=>{h+='<div class="ggchk"><span class="mark '+st+'">'+m+'</span><span>'+txt+'</span></div>';});
+  el('ggChecklist').innerHTML=h;
+}
+setGG('ungrounded',null);
+
+/* ===== Figure 3 · PICO builder ===== */
+const PICO={
+  P:{frag:'in adults with a newly identified, otherwise uncomplicated form of the condition',lab:'Patient'},
+  I:{frag:'does starting the first-line intervention',lab:'Intervention'},
+  C:{frag:'compared with watchful waiting',lab:'Comparison'},
+  O:{frag:'improve the outcome that matters most to the patient over the following year',lab:'Outcome'}
+};
+let picoOn={P:false,I:false,C:false,O:false};
+function renderPico(){
+  const anyOn=picoOn.P||picoOn.I||picoOn.C||picoOn.O;
+  let text;
+  if(!anyOn){
+    text='What is the best treatment?';
+  }else{
+    // Build in PICO order, wrapping added fragments
+    let parts=[];
+    parts.push('For a patient');
+    if(picoOn.P) parts.push('<span class="pfrag">'+PICO.P.frag+'</span>'); else parts.push('(patient?)');
+    if(picoOn.I) parts.push('<span class="pfrag">'+PICO.I.frag+'</span>'); else parts.push('does the treatment');
+    if(picoOn.C) parts.push('<span class="pfrag">'+PICO.C.frag+'</span>'); else parts.push('(vs what?)');
+    if(picoOn.O) parts.push('<span class="pfrag">'+PICO.O.frag+'</span>?'); else parts.push('work?');
+    text=parts.join(' ');
+  }
+  el('pqText').innerHTML=text;
+  const count=['P','I','C','O'].filter(k=>picoOn[k]).length;
+  const pct=count===0?12:count*25;
+  el('pFill').style.width=pct+'%';
+  document.querySelectorAll('.pchip').forEach(c=>c.classList.toggle('on',picoOn[c.dataset.k]));
+  let verdict,note;
+  if(count===0){verdict='Too vague — invites a guess';
+    note='"What is the best treatment?" has no answerable form. A general model will fill the gaps with a plausible, confident answer you cannot verify, because there is nothing specific to check it against.';}
+  else if(count<4){verdict=count+' / 4 · sharpening';
+    note='Better — but still missing elements. Each part you add narrows the question toward a single answerable form and gives you one more thing you can verify against a real source.';}
+  else{verdict='4 / 4 · answerable &amp; verifiable';
+    note='A complete PICO question. It is narrow enough that a real body of evidence addresses it directly — and narrow enough that you can tell whether the AI’s answer is on target or drifting. This is the safe question.';}
+  el('pVerdict').innerHTML=verdict;
+  el('pScoreLab').textContent='Specificity · '+count+' of 4 elements';
+  el('pNote').textContent=note;
+}
+function togglePico(k){picoOn[k]=!picoOn[k];renderPico();}
+function picoAll(){picoOn={P:true,I:true,C:true,O:true};renderPico();}
+function picoNone(){picoOn={P:false,I:false,C:false,O:false};renderPico();}
+renderPico();
+
+</script>
+</body>
+</html>

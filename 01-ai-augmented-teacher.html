@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The AI-Augmented Teacher · Lesson 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · workflow engine ============ */
+.engine{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.eng-chain{display:flex;align-items:center;gap:0;margin-bottom:22px}
+.enode{
+  flex:1;text-align:center;padding:15px 6px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;
+}
+.enode .eidx{display:block;font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.enode h5{font-family:'Fraunces',serif;font-size:15px;color:var(--brown-dark);line-height:1.1}
+.enode:hover{border-color:var(--orange);transform:translateY(-3px)}
+.enode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.enode.active h5{color:var(--paper)}
+.enode.active .eidx{color:var(--orange)}
+.elink{width:20px;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.elink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.epanel{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:200px}
+.epanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.ecol{border-radius:12px;padding:20px}
+.ecol.draft{background:#FDEBD7;border:1px solid #F1C99A}
+.ecol.decide{background:var(--brown-dark);color:#F3E7D5}
+.ecol .elab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ecol.draft .elab{color:var(--orange-dark)}
+.ecol.decide .elab{color:var(--yellow)}
+.ecol ul{list-style:none;display:grid;gap:8px}
+.ecol li{font-size:13.5px;line-height:1.45;padding-left:20px;position:relative}
+.ecol.draft li{color:var(--brown-dark)}
+.ecol.draft li::before{content:"✎";position:absolute;left:0;color:var(--orange)}
+.ecol.decide li{color:#F3E7D5}
+.ecol.decide li::before{content:"◆";position:absolute;left:0;color:var(--yellow);font-size:11px;top:2px}
+@media(max-width:700px){
+  .eng-chain{flex-wrap:wrap;gap:6px}
+  .enode{flex:1 1 30%}
+  .elink{display:none}
+  .epanel{grid-template-columns:1fr}
+}
+
+/* ============ Figure 2 · before / with AI week ============ */
+.week{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.wgrid{display:grid;grid-template-columns:110px 1fr;gap:10px 14px;align-items:center}
+.wday{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.wtrack{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--cream)}
+.wseg{height:100%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;color:#fff;white-space:nowrap;overflow:hidden;transition:width .5s ease;min-width:0}
+.wseg.admin{background:#8B7A6C}
+.wseg.grade{background:var(--tan)}
+.wseg.teach{background:var(--orange-dark)}
+.wseg.human{background:var(--accent)}
+.wseg.free{background:repeating-linear-gradient(45deg,#F4E9D8 0 6px,var(--cream) 6px 12px);color:var(--muted)}
+.wlegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.wlegend span{display:inline-flex;align-items:center;gap:6px}
+.wlegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.wcap{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);font-size:14.5px;color:var(--brown-dark);line-height:1.5}
+
+/* ============ Figure 3 · should AI touch this? ============ */
+.gate{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.grows{display:grid;gap:22px;margin-bottom:22px}
+.grow label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600;display:flex;justify-content:space-between;margin-bottom:8px}
+.grow label .gv{color:var(--orange-dark)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--cream);border:1px solid var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+.gverdict{border-radius:12px;padding:22px;transition:background .35s}
+.gverdict.green{background:#E6F0DC;border:1px solid #B7CFA0}
+.gverdict.amber{background:#FDEBD7;border:1px solid #F1C99A}
+.gverdict.red{background:#F7E0DA;border:1px solid #E3B3A6}
+.gverdict .gtag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.gverdict.green .gtag{color:#4B6B2E}
+.gverdict.amber .gtag{color:var(--orange-dark)}
+.gverdict.red .gtag{color:#B23A22}
+.gverdict h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:6px}
+.gverdict p{font-size:14px;color:var(--brown-dark);margin:0;max-width:none}
+
+/* ============ Figure 4 · myth cards ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hcard{height:210px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.hgrid.show .hcard{animation:hIn .5s forwards}
+.hgrid.show .hcard:nth-child(1){animation-delay:.05s}
+.hgrid.show .hcard:nth-child(2){animation-delay:.2s}
+.hgrid.show .hcard:nth-child(3){animation-delay:.35s}
+.hgrid.show .hcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.hcard.flipped .hinner{transform:rotateY(180deg)}
+.hface{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;
+}
+.hfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.hfront .hclaim{font-family:'Fraunces',serif;font-weight:800;font-size:25px;line-height:1.1;margin-bottom:8px}
+.hfront .hsub{font-size:13px;opacity:.92;max-width:260px}
+.hfront .hhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.hback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.hback .hlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.hback p{font-size:13px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){
+  .hgrid{grid-template-columns:1fr}
+  .hcard{height:200px}
+  .hfront .hclaim{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 1 · Lesson 01 · AI for Teachers</div>
+  <h1>The AI-augmented <em>teacher</em>.</h1>
+  <p class="lede">AI will not replace teachers. But a teacher who builds durable workflows around AI will out-plan, out-differentiate and out-recover the one who does everything by hand. This lesson is not about a tool. It is about a working relationship — where AI drafts at speed, and the teacher decides with judgment.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>AI drafts, the teacher decides</h2>
+  <p class="lead">Before any prompt, learn the one rule that keeps the rest of this course honest: AI is a fast, tireless drafting partner. It is not a colleague, not an authority, and never accountable. That last word matters — accountability is yours, and it cannot be delegated to a machine.</p>
+
+  <p>Think of AI the way a busy editor thinks of a junior writer who never sleeps. Ask for ten warm-up questions and you get ten in seconds. Ask for a parent email in three tones and it produces all three. This is genuinely useful: the blank page is the most expensive minute in teaching, and AI abolishes it. But the junior writer has never met your students, does not know which child had a hard week, cannot feel when an example will land or wound, and will state a wrong fact with the same confidence as a right one.</p>
+  <p>So the workflow is always two-handed. One hand generates — options, drafts, variations, first passes. The other hand decides — what fits this class, this child, this standard, this moment. The generating hand is fast and cheap. The deciding hand is slow, expert and irreplaceable. Every stage of a teacher's week runs on this split. Click through the engine below to see exactly where the line falls at each stage.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The teaching workflow engine</span>
+      <div class="controls">
+        <button onclick="engStep(-1)">◀ Prev</button>
+        <button onclick="engStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="eng-chain" id="engChain">
+      <div class="enode" data-k="plan" onclick="pickEng('plan')"><span class="eidx">1</span><h5>Plan</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="teach" onclick="pickEng('teach')"><span class="eidx">2</span><h5>Teach</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="assess" onclick="pickEng('assess')"><span class="eidx">3</span><h5>Assess</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="feedback" onclick="pickEng('feedback')"><span class="eidx">4</span><h5>Feedback</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="comm" onclick="pickEng('comm')"><span class="eidx">5</span><h5>Communicate</h5></div>
+    </div>
+    <div class="epanel" id="engPanel"></div>
+  </div>
+
+  <h3>Why the line never moves</h3>
+  <p>Notice that across all five stages, the deciding hand keeps the same jobs: judging fit, protecting a child's dignity, verifying facts, owning the grade and the message. AI's share grows as the tools improve — but that column of human decisions is the profession itself. A teacher who guards it well can adopt any tool without fear; one who surrenders it has already stopped teaching.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>A teacher's week, reclaimed</h2>
+  <p class="lead">The promise of AI in teaching is not "less teaching." It is less of the invisible, unpaid, joyless labour that surrounds teaching — so that more of the week can go to the part only a human can do: being present with students.</p>
+
+  <p>Most teachers lose hours every week to work that is necessary but not the point: reformatting a worksheet, writing the fifteenth "please see me" email, drafting a rubric from scratch, retyping notes into a newsletter. None of it requires your training; all of it steals from the part that does. AI is at its best exactly here — on the high-volume, low-stakes, template-shaped tasks that drain a week without improving a single lesson.</p>
+  <p>Toggle the switch below to compare an ordinary week before and with AI. Watch the grey admin blocks and orange grading shrink — and watch the blue "human" time, the part where you actually meet your class, expand into the space that opens up. The total hours don't vanish into thin air; they move from drudgery toward the students.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · One week, two workflows</span>
+      <div class="controls" id="weekBtns">
+        <button class="active" onclick="setWeek('before',this)">Before AI</button>
+        <button onclick="setWeek('with',this)">With AI</button>
+      </div>
+    </div>
+    <div class="week">
+      <div class="wgrid" id="wgrid"></div>
+      <div class="wlegend">
+        <span><i style="background:#8B7A6C"></i> admin &amp; formatting</span>
+        <span><i style="background:var(--tan)"></i> grading</span>
+        <span><i style="background:var(--orange-dark)"></i> lesson prep</span>
+        <span><i style="background:var(--accent)"></i> time with students</span>
+        <span><i style="background:#E8DCC8"></i> off the clock</span>
+      </div>
+      <div class="wcap" id="wcap"></div>
+    </div>
+  </div>
+
+  <h3>Reclaimed, not erased</h3>
+  <p>The honest version of this figure: AI does not give a teacher a shorter week. It gives a better-spent one. The two or three hours it saves on formatting and boilerplate are hours you choose to reinvest — in a struggling reader, a richer discussion, or simply in going home on time. The machine handles the tasks that never deserved your degree, so your degree can go where it belongs.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Should AI touch this task?</h2>
+  <p class="lead">Not every task is a safe place for AI. Before you delegate anything, run it through three questions — the stakes, the privacy, and the verifiability. This one habit prevents nearly every serious mistake teachers make with these tools.</p>
+
+  <p>The three dials work together. <strong>Stakes</strong>: how much rides on getting this exactly right — a warm-up question is low, a report-card grade or an IEP note is high. <strong>Privacy</strong>: how much identifiable student information the task requires — a generic quiz is safe, anything naming a real child and their struggles is not, unless your school has an approved, compliant tool. <strong>Verifiability</strong>: how easily you can check the output yourself — you can eyeball a vocabulary list in seconds; you cannot easily verify a "fact" about a historical event you half-remember.</p>
+  <p>Move the three dials to describe a real task and read the verdict. The pattern to internalise: AI is safest on low-stakes, low-privacy, high-verifiability work — and most dangerous when all three point the other way. When in doubt, the machine drafts and you verify; it never decides and it never sees data it shouldn't.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The delegation gate</span>
+      <div class="controls" id="gatePresets">
+        <button onclick="gatePreset(1,1,5,this)">Warm-up quiz</button>
+        <button onclick="gatePreset(5,5,2,this)">Report card comment</button>
+        <button onclick="gatePreset(3,2,4,this)">Lesson outline</button>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="grows">
+        <div class="grow">
+          <label>Stakes — how much rides on getting it right <span class="gv" id="vStake">medium</span></label>
+          <input type="range" id="slStake" min="1" max="5" step="1" value="3" oninput="calcGate()">
+        </div>
+        <div class="grow">
+          <label>Privacy — identifiable student data involved <span class="gv" id="vPriv">medium</span></label>
+          <input type="range" id="slPriv" min="1" max="5" step="1" value="3" oninput="calcGate()">
+        </div>
+        <div class="grow">
+          <label>Verifiability — how easily you can check it <span class="gv" id="vVer">medium</span></label>
+          <input type="range" id="slVer" min="1" max="5" step="1" value="3" oninput="calcGate()">
+        </div>
+      </div>
+      <div class="gverdict amber" id="gverdict">
+        <div class="gtag" id="gtag">Verdict</div>
+        <h4 id="ghead">Draft with AI, verify with care</h4>
+        <p id="gbody">Move the dials to describe your task.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The rule under the dials</h3>
+  <p>High stakes plus low verifiability plus real student data is the danger zone — and it is exactly where the confident-sounding wrong answer does the most harm. The safe move is never "don't use AI." It is: strip the private details, let AI draft the structure, and put your own verified judgment on top before anything reaches a student, a parent, or a permanent record.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Four myths, flipped</h2>
+  <p class="lead">Every staffroom conversation about AI carries some version of these four beliefs — two from the boosters, two from the sceptics. Flip each card to see the more honest version. Neither breathless hype nor flat refusal survives contact with a real classroom.</p>
+
+  <p>The goal of this lesson is not to make you enthusiastic or fearful, but accurate. AI in teaching is a powerful drafting tool with real, named limitations — hallucination, bias, and privacy risk — that you manage the same way you manage any other classroom risk: by knowing where it lives and refusing to look away from it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Flip the belief</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all realities</button>
+        <button onclick="allHype()">↺ Back to beliefs</button>
+      </div>
+    </div>
+    <div class="hgrid" id="hgrid">
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"AI will replace teachers"</div>
+            <div class="hsub">Soon a model runs the whole classroom.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI has no relationship with a child, no accountability, and no read of the room. It replaces tasks, not teachers. The teacher who uses it well simply spends less of the week on drudgery and more of it teaching.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"If it sounds sure, it's right"</div>
+            <div class="hsub">The answer reads fluent and confident.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI hallucinates — it invents facts, citations and dates in the same confident voice it uses for correct ones. Fluency is not accuracy. Anything factual that reaches a student must be verified by you first.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"It's neutral and objective"</div>
+            <div class="hsub">A machine has no opinions or bias.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI learned from human text and carries its biases — in the names it favours, the examples it reaches for, the voices it centres. Used unchecked, it can quietly narrow whose stories your class sees. You curate; it does not.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"Real teachers refuse it"</div>
+            <div class="hsub">Using AI is a shortcut, even cheating.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>Refusing a drafting tool to spend your evenings on formatting is not integrity — it is lost time. Integrity is deciding what reaches your students. Let AI draft the boilerplate; keep every judgment that matters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>The AI-augmented teacher lets the machine draft at speed on low-stakes, non-private, checkable work — and keeps every decision that touches a child's learning, dignity or record firmly in human hands.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now have the working relationship at the heart of this course. AI is a fast drafting partner with real limits; you are the accountable professional. Run every task through the delegation gate, reinvest the reclaimed hours in your students, and never let a confident sentence stand in for a verified one. The next lesson puts this relationship to work on the first real task: planning and designing instruction.</p>
+  <ul>
+    <li>AI drafts; the teacher decides — accountability never delegates</li>
+    <li>Every stage splits into "what AI drafts" and "what the teacher decides"</li>
+    <li>Reclaimed hours move from drudgery to time with students</li>
+    <li>Gate every task on stakes, privacy and verifiability</li>
+    <li>Hallucination, bias and privacy are managed risks, not reasons to refuse</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 01 of Week 1 · Next up: Planning &amp; Designing Instruction with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · workflow engine ===== */
+const ENG={
+  plan:{draft:['Ten warm-up questions on today’s objective','A first-draft lesson outline with timings','Three versions of a worksheet at different levels','A rubric skeleton from the standard you paste in'],
+        decide:['Which questions fit THIS class and objective','Whether the pacing survives a real Tuesday','Which level each specific student needs','What "proficient" actually looks like here']},
+  teach:{draft:['A quick analogy or worked example on demand','An alternative explanation when one falls flat','A hint ladder for a stuck student','On-the-fly practice items mid-lesson'],
+        decide:['Reading the room and changing course','Which child needs the hint and which the challenge','When to abandon the plan entirely','Every word spoken to a struggling learner']},
+  assess:{draft:['A quiz aligned to the objective','Distractor answers for multiple choice','A first pass at scoring open responses','A summary of where the class went wrong'],
+        decide:['The grade of record — owned and defensible','Partial credit and the benefit of the doubt','Whether the assessment was fair at all','What a low score means for THIS student']},
+  feedback:{draft:['Sentence starters for a comment bank','A first-draft comment from your bullet notes','The same feedback rephrased more kindly','Next-step suggestions tied to the error'],
+        decide:['Whether the feedback is true of this child','The tone that will help, not wound','What to say in person instead of in ink','The line between honest and discouraging']},
+  comm:{draft:['A parent email in three tones from your notes','A newsletter draft from the week’s events','A translation for a multilingual family','A calm rewrite of a message sent in frustration'],
+        decide:['Whether to send it at all, and when','What stays private and what is shared','The relationship behind every word','Accountability for what the family reads']}
+};
+const ENGORDER=['plan','teach','assess','feedback','comm'];
+let engCur='plan';
+function pickEng(k){
+  engCur=k;
+  document.querySelectorAll('#engChain .enode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=ENG[k],p=el('engPanel');
+  let h='<div class="ecol draft"><div class="elab">✎ What AI drafts</div><ul>';
+  d.draft.forEach(x=>h+='<li>'+x+'</li>');
+  h+='</ul></div><div class="ecol decide"><div class="elab">◆ What the teacher decides</div><ul>';
+  d.decide.forEach(x=>h+='<li>'+x+'</li>');
+  h+='</ul></div>';
+  p.innerHTML=h;
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+function engStep(dir){
+  let i=ENGORDER.indexOf(engCur)+dir;
+  if(i<0)i=ENGORDER.length-1;if(i>=ENGORDER.length)i=0;
+  pickEng(ENGORDER[i]);
+}
+pickEng('plan');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickEng('plan');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('engChain'));
+
+/* ===== Figure 2 · before / with AI week ===== */
+const WEEK={
+  before:{
+    days:[
+      ['Mon',[['admin',30],['grade',25],['teach',25],['human',20]]],
+      ['Tue',[['admin',30],['grade',30],['teach',20],['human',20]]],
+      ['Wed',[['admin',25],['grade',30],['teach',25],['human',20]]],
+      ['Thu',[['admin',35],['grade',25],['teach',20],['human',20]]],
+      ['Fri',[['admin',30],['grade',35],['teach',15],['human',15],['free',5]]]
+    ],
+    cap:'A typical week: admin and grading eat the middle of every day. "Time with students" — the reason you took the job — is squeezed to the edges. Roughly half the week goes to work your training never required.'
+  },
+  with:{
+    days:[
+      ['Mon',[['admin',12],['grade',15],['teach',18],['human',40],['free',15]]],
+      ['Tue',[['admin',12],['grade',15],['teach',15],['human',43],['free',15]]],
+      ['Wed',[['admin',10],['grade',18],['teach',17],['human',40],['free',15]]],
+      ['Thu',[['admin',14],['grade',14],['teach',15],['human',42],['free',15]]],
+      ['Fri',[['admin',10],['grade',18],['teach',12],['human',40],['free',20]]]
+    ],
+    cap:'With AI drafting the admin and first-pass grading, the grey and orange blocks shrink. The blue expands — more real time with students — and a genuine off-the-clock margin appears. Same hours, reinvested where they count.'
+  }
+};
+function renderWeek(mode){
+  const data=WEEK[mode],g=el('wgrid');
+  let h='';
+  data.days.forEach(([day,segs])=>{
+    h+='<div class="wday">'+day+'</div><div class="wtrack">';
+    segs.forEach(([cls,pct])=>{
+      const lbl=pct>=14?cls.replace('human','students').replace('teach','prep').replace('free','free'):'';
+      h+='<div class="wseg '+cls+'" style="width:'+pct+'%">'+lbl+'</div>';
+    });
+    h+='</div>';
+  });
+  g.innerHTML=h;
+  el('wcap').textContent=data.cap;
+}
+function setWeek(mode,btn){
+  document.querySelectorAll('#weekBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWeek(mode);
+}
+renderWeek('before');
+
+/* ===== Figure 3 · delegation gate ===== */
+const LVL=['','very low','low','medium','high','very high'];
+function gatePreset(s,p,v,btn){
+  el('slStake').value=s;el('slPriv').value=p;el('slVer').value=v;
+  document.querySelectorAll('#gatePresets button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  calcGate();
+}
+function calcGate(){
+  const s=+el('slStake').value,p=+el('slPriv').value,v=+el('slVer').value;
+  el('vStake').textContent=LVL[s];
+  el('vPriv').textContent=LVL[p];
+  el('vVer').textContent=LVL[v];
+  const risk=s+p+(6-v);
+  const box=el('gverdict');
+  box.classList.remove('green','amber','red');
+  let cls,tag,head,body;
+  if(p>=4){
+    cls='red';tag='Stop · privacy first';
+    head='Don’t paste real student data';
+    body='This task involves identifiable student information. Do not put it into a general AI tool. Strip the names and details first, or use only a school-approved, compliant system — then let AI draft the structure.';
+  }else if(risk<=7){
+    cls='green';tag='Go · safe to delegate';
+    head='Let AI draft freely';
+    body='Low stakes, little private data, easy to check. This is exactly where AI shines. Generate options at speed, skim for fit, and keep what works — the cost of a mistake here is tiny.';
+  }else if(risk<=11){
+    cls='amber';tag='Caution · draft, then verify';
+    head='AI drafts, you verify with care';
+    body='Real stakes or facts you can’t instantly check. Use AI for the first pass, but read every line, confirm anything factual, and put your own judgment on top before it goes anywhere.';
+  }else{
+    cls='red';tag='Danger zone';
+    head='Keep this one human-led';
+    body='High stakes and hard to verify. A confident wrong answer here does real harm. Let AI only assist with wording at most — the substance, the facts and the final call stay firmly with you.';
+  }
+  box.classList.add(cls);
+  el('gtag').textContent=tag;
+  el('ghead').textContent=head;
+  el('gbody').textContent=body;
+}
+calcGate();
+
+/* ===== Figure 4 · myth cards ===== */
+const hgrid=el('hgrid');
+function allReal(){document.querySelectorAll('.hcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(hgrid);
+
+</script>
+</body>
+</html>

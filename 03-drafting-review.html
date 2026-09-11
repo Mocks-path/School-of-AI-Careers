@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Drafting &amp; Document Review with AI · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#2E7D5B; --red:#C0392B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== principle cards (shared) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== Figure 1 · drafting/review loop ===== */
+.loop-wrap{display:grid;grid-template-columns:1fr;gap:20px}
+.loop-track{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.loop-node{
+  position:relative;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;
+  text-transform:uppercase;font-weight:600;background:var(--paper);border:1px solid var(--line);
+  color:var(--brown);padding:12px 14px;border-radius:10px;cursor:pointer;transition:all .22s;
+  display:flex;align-items:center;gap:8px;
+}
+.loop-node .n{font-size:9px;background:var(--cream);color:var(--muted);border-radius:4px;padding:2px 5px}
+.loop-node:hover{border-color:var(--orange);transform:translateY(-2px)}
+.loop-node.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.loop-node.active .n{background:var(--orange);color:#fff}
+.loop-arrow{align-self:center;color:var(--line);font-size:16px}
+.loop-detail{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:170px}
+.loop-detail h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:14px}
+.loop-roles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.loop-role{border-radius:10px;padding:14px 16px}
+.loop-role.ai{background:rgba(0,141,210,0.07);border:1px solid rgba(0,141,210,0.25)}
+.loop-role.human{background:rgba(213,82,34,0.07);border:1px solid rgba(213,82,34,0.25)}
+.loop-role .rtag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:inline-block;padding:3px 8px;border-radius:5px}
+.loop-role.ai .rtag{background:var(--accent);color:#fff}
+.loop-role.human .rtag{background:var(--orange-dark);color:#fff}
+.loop-role p{font-size:13px;color:var(--brown);margin:0;max-width:none}
+@media(max-width:640px){.loop-roles{grid-template-columns:1fr}}
+
+/* ===== Figure 2 · contract review stepper ===== */
+.cr-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.cr-progress{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.08em}
+.cr-progress b{color:var(--orange-dark)}
+.cr-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;transition:border-color .3s}
+.cr-flag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;display:inline-block;padding:4px 9px;border-radius:5px;margin-bottom:12px}
+.cr-flag.ai{background:rgba(0,141,210,0.12);color:var(--accent)}
+.cr-flag.miss{background:rgba(192,57,43,0.12);color:var(--red)}
+.cr-clause{font-size:14px;line-height:1.7;color:var(--brown);background:var(--cream);border-left:3px solid var(--line);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:14px;font-style:italic}
+.cr-issue{font-size:14px;color:var(--ink);margin-bottom:16px}
+.cr-issue strong{color:var(--brown-dark)}
+.cr-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.cr-actions button{font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid var(--line);background:var(--paper);color:var(--brown);padding:9px 15px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:0.07em;transition:all .2s}
+.cr-btn-confirm:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.cr-btn-override:hover{background:var(--orange-dark);color:#fff;border-color:var(--orange-dark)}
+.cr-verdict{margin-top:16px;padding:14px 16px;border-radius:10px;font-size:14px;display:none;line-height:1.6}
+.cr-verdict.show{display:block}
+.cr-verdict.good{background:rgba(46,125,91,0.09);border:1px solid rgba(46,125,91,0.3);color:var(--brown)}
+.cr-verdict.warn{background:rgba(213,82,34,0.09);border:1px solid rgba(213,82,34,0.3);color:var(--brown)}
+.cr-verdict b{color:var(--brown-dark)}
+.cr-nav{margin-top:18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cr-nav button{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--brown-dark);border:none;color:#fff;padding:9px 16px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;transition:all .2s}
+.cr-nav button:hover{background:var(--orange-dark)}
+.cr-nav button:disabled{opacity:.35;cursor:not-allowed}
+.cr-dots{display:flex;gap:6px;align-items:center}
+.cr-dot{width:9px;height:9px;border-radius:50%;background:var(--line);transition:all .2s}
+.cr-dot.done{background:var(--green)}
+.cr-dot.cur{background:var(--orange);transform:scale(1.3)}
+
+/* ===== Figure 3 · playbook redline toggle ===== */
+.pb-switch{display:flex;gap:8px;margin-bottom:18px}
+.pb-lane{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;transition:all .3s}
+.pb-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;display:inline-block;padding:4px 9px;border-radius:5px;margin-bottom:12px}
+.pb-tag.risky{background:rgba(192,57,43,0.12);color:var(--red)}
+.pb-tag.safe{background:rgba(46,125,91,0.12);color:var(--green)}
+.pb-clause{font-size:14px;line-height:1.75;color:var(--brown)}
+.rl-del{background:rgba(192,57,43,0.15);color:var(--red);text-decoration:line-through;border-radius:3px;padding:0 3px}
+.rl-add{background:rgba(46,125,91,0.15);color:var(--green);border-radius:3px;padding:0 3px;font-weight:600}
+.pb-why{margin-top:16px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;max-width:none;display:flex;gap:10px}
+.pb-why .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown-dark);font-weight:600;white-space:nowrap}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">SCHOOL OF AI CAREERS</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 2 · AI for Lawyers · Lesson 03</div>
+  <h1>The machine drafts. The lawyer <em>decides</em>.</h1>
+  <p class="lede">Drafting and reviewing documents is where most legal AI value lives — and where the most careful judgement is required. A model can produce a serviceable first draft of a clause or surface the obligations buried in a fifty-page agreement in seconds. What it cannot do is bear the duty owed to a client, or know which risk actually matters in this matter. The workflow that keeps you safe is not a tool trick; it is a durable habit: AI proposes, you verify, you decide, you sign.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The drafting &amp; review loop</h2>
+  <p class="lead">Reliable legal AI work isn't a single prompt — it's a loop with defined stations, and at every station the division of labour is the same shape: the model accelerates the mechanical part, the lawyer owns the judgement part. Learn the loop once and it transfers to any tool.</p>
+
+  <p>Click through each station below. Notice that the model's column never contains the words <em>decide</em>, <em>advise</em>, or <em>approve</em> — those live only in the lawyer's column. This is not a limitation to work around; it is the design that keeps generated text from becoming unaccountable legal advice. The loop is deliberately circular: review sends you back to redraft, and nothing leaves the loop until a human finalises it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The draft–verify–decide loop</span>
+      <div class="controls"><button onclick="loopSet(0)">↺ Start</button></div>
+    </div>
+    <div class="loop-wrap">
+      <div class="loop-track" id="loopTrack"><!-- filled by JS --></div>
+      <div class="loop-detail">
+        <h4 id="loopTitle"></h4>
+        <div class="loop-roles">
+          <div class="loop-role ai">
+            <span class="rtag">◆ AI drafts / surfaces</span>
+            <p id="loopAI"></p>
+          </div>
+          <div class="loop-role human">
+            <span class="rtag">◇ Lawyer verifies / decides</span>
+            <p id="loopHuman"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>The temptation with a fluent tool is to collapse the loop — to let a clean-looking draft skip straight from generation to filing. That collapse is exactly where malpractice lives. Fluency is not accuracy: a model will phrase a wrong governing-law clause or an invented citation as smoothly as a correct one. The loop exists to insert human verification precisely where the machine is most persuasive and least reliable.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Reviewing a contract, issue by issue</h2>
+  <p class="lead">AI-assisted contract review is genuinely useful: point a model at an agreement and it can surface obligations, dates, and risk terms far faster than a first manual pass. But "surface" is not "decide" — every flag is a candidate for a lawyer to confirm or override, and the model's silence is never proof that nothing is there.</p>
+
+  <p>Work through the review below as the reviewing lawyer. For each item the AI flagged, you confirm the flag or override it with your own judgement. The stepper is honest about the failure mode that matters most: somewhere in this contract sits a real problem the model did <em>not</em> flag at all. Watching for the machine's misses — not just checking its hits — is the reviewing lawyer's actual job.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Confirm, override — and catch the miss</span>
+      <div class="cr-dots" id="crDots"></div>
+    </div>
+    <div class="cr-top">
+      <span class="cr-progress">Reviewing item <b id="crCur">1</b> of <b id="crTot">5</b> · <span id="crName"></span></span>
+    </div>
+    <div class="cr-card" id="crCard">
+      <span class="cr-flag" id="crFlag"></span>
+      <div class="cr-clause" id="crClause"></div>
+      <div class="cr-issue" id="crIssue"></div>
+      <div class="cr-actions">
+        <button class="cr-btn-confirm" onclick="crAct('confirm')">✓ Confirm flag</button>
+        <button class="cr-btn-override" onclick="crAct('override')">⤳ Override / add my own</button>
+      </div>
+      <div class="cr-verdict" id="crVerdict"></div>
+    </div>
+    <div class="cr-nav">
+      <button id="crPrev" onclick="crNav(-1)">‹ Prev</button>
+      <button id="crNext" onclick="crNav(1)">Next ›</button>
+    </div>
+  </div>
+
+  <p>Two lessons live in this figure. First, an AI flag is a prompt for judgement, not a verdict — the model can mislabel a market-standard indemnity as high risk, and only a lawyer who knows the deal can right-size it. Second, and more dangerous, the model does not know what it did not see. An unlimited-liability exposure hidden in a defined term, an auto-renewal with a punishing notice window, a missing limitation of liability — these absences don't announce themselves. Reviewing with AI means reading <em>for the gaps</em>, because a confident summary of the wrong ninety-five percent is worse than no summary at all.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Redlining against a playbook</h2>
+  <p class="lead">A playbook encodes a firm or client's negotiated positions — the fallbacks it will accept, the terms it never will. AI can redline a counterparty's draft against that playbook in seconds, proposing compliant rewrites. But the playbook is only as good as the human who wrote it, and the rewrite is only a proposal until a lawyer adopts it.</p>
+
+  <p>Toggle between the counterparty's risky clause and the playbook-compliant rewrite. The redline shows what a well-instructed model can suggest: tightening an uncapped indemnity, restoring a mutual limitation of liability, fixing a one-sided termination right. Read the reasoning underneath each — because in a real negotiation you don't accept a rewrite for looking cleaner. You accept it because you understand <em>why</em> the playbook demands it, and you can defend that position across the table.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Playbook redline</span>
+      <div class="controls">
+        <button id="pb0" class="active" onclick="pbSet(0)">Counterparty draft</button>
+        <button id="pb1" onclick="pbSet(1)">Playbook rewrite</button>
+      </div>
+    </div>
+    <div class="pb-lane" id="pbLane">
+      <span class="pb-tag" id="pbTag"></span>
+      <div class="pb-clause" id="pbClause"></div>
+      <div class="pb-why"><span class="k" id="pbWhyK"></span><p id="pbWhy" style="margin:0;max-width:none;font-size:13px;color:var(--muted)"></p></div>
+    </div>
+  </div>
+
+  <p>Playbook redlining is where AI most convincingly impersonates a junior associate — and where you must resist trusting it like one. A model applies the playbook literally and blindly: it will happily "fix" a clause the parties deliberately negotiated as an exception, or miss that this counterparty's leverage makes a fallback position unrealistic. The rewrite is a first pass to react to, not a decision to ratify. The lawyer decides which battles this deal is worth, and owns every word that ends up in the executed agreement.</p>
+
+  <h3>How to instruct a review well</h3>
+  <p>The quality of an AI review is set almost entirely by the framing you give it. A vague "review this contract" yields a vague summary. A grounded request — role, standard, scope, output — yields flags you can actually act on. These four patterns hold regardless of which tool sits in front of you.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Set the standard</span><h4>Name the yardstick</h4><p>"Review as counsel for the buyer, against our standard playbook." Without a defined position, the model reviews against a bland average that serves no side of the deal.</p></div>
+    <div class="crit"><span class="k">Bound the scope</span><h4>Say what to find</h4><p>Ask for specific categories — obligations, dates, liability, IP, termination — not "issues." A named checklist surfaces more, and makes the model's misses easier to spot.</p></div>
+    <div class="crit"><span class="k">Demand citations</span><h4>Point to the text</h4><p>Require every flag to quote the exact clause it comes from. Un-cited flags are where hallucinated terms hide; a quote you can check is a flag you can trust.</p></div>
+    <div class="crit"><span class="k">Verify authorities</span><h4>Never file unread</h4><p>Any case, statute, or defined term the model cites gets confirmed against the source. Models invent plausible-sounding authorities; a fabricated citation is a sanctionable filing.</p></div>
+  </div>
+
+  <p>Even with a flawless instruction, the closing move never changes: you read the whole document yourself before it goes out. A model's summary is a map, not the territory. The obligations it lists are a starting point for your reading, never a substitute for it — and the signature at the bottom is yours, which means the responsibility is too.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>The honest limits</h2>
+  <p class="lead">Everything in this lesson rests on the same four guardrails. They are not friction to route around; they are what separates competent AI-assisted practice from a disciplinary complaint. None of them is optional, and each becomes more tempting to skip exactly when the tool feels most impressive.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Confidentiality</span><h4>Privilege can't leak</h4><p>Client facts pasted into a public tool may be stored or used to train. De-identify, or use a vetted, contractually-protected environment. A privilege waiver is not undoable.</p></div>
+    <div class="crit"><span class="k">Hallucination</span><h4>Invented authorities</h4><p>Models fabricate cases, statutes, and defined terms with total confidence. Every cited authority is verified against the source before it enters a draft, filing, or advice.</p></div>
+    <div class="crit"><span class="k">Bias</span><h4>Skewed defaults</h4><p>Generated clauses carry the assumptions of their training data — often favouring one side, one jurisdiction's norms, one drafting style. Read the phrasing for whose interest it quietly serves.</p></div>
+    <div class="crit"><span class="k">Ownership</span><h4>The signature is yours</h4><p>Every draft, redline, and review goes out under your name and your duty to the client. The final read, the final edit, and the final responsibility never delegate to the machine.</p></div>
+  </div>
+
+  <p>Hold these together and a clear rule emerges. The model is the fastest junior you have ever worked with, and the least accountable — tireless, fluent, and utterly unbothered by being wrong. That combination is a gift for drafting and a trap for deciding. Use it to generate, to surface, to accelerate; never to judge. <strong>AI drafts, the lawyer verifies and decides.</strong> That sentence is the whole of the workflow, and it does not bend because the output looked convincing.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Drafting and review is where AI gives lawyers the most leverage and demands the most discipline. Let the model draft clauses, surface obligations, and propose redlines — then verify every authority, read for the gaps it missed, and keep the decision, the advice, and the signature firmly human.</p>
+  <ul>
+    <li>The loop, not the prompt · define, draft, review, verify, decide, finalise</li>
+    <li>A flag is a candidate for judgement · confirm or override, never rubber-stamp</li>
+    <li>Read for the miss · the model doesn't know what it didn't see</li>
+    <li>Redline against a playbook you understand · adopt reasons, not just rewrites</li>
+    <li>AI drafts, the lawyer verifies and decides · and signs, and owns it</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Guided Path to True Learning · Lesson 03 · Week 2 — AI for Lawyers ✦</footer>
+<script>
+
+/* ============ Figure 1 · drafting/review loop ============ */
+const LOOP=[
+  {id:'Define',title:'Define the task',
+   ai:'Suggests a structure or checklist for the document type when asked, and offers clarifying questions about missing parameters.',
+   human:'Sets the actual objective, the client\'s position, the governing law, and the constraints. Decides what the document must achieve.'},
+  {id:'Inputs',title:'Gather inputs',
+   ai:'Extracts and organises facts from provided materials; summarises source documents into structured notes.',
+   human:'Chooses which facts are relevant and true, confirms nothing sensitive leaks, and supplies the strategy the model cannot infer.'},
+  {id:'Draft',title:'Generate draft',
+   ai:'Produces a first draft of clauses, letters, or memos from the framing and facts supplied — fast, fluent, and complete-looking.',
+   human:'Treats the output as a starting point only. Reads it as a skeptic, not a proofreader, knowing fluency hides error.'},
+  {id:'Review',title:'Review / redline',
+   ai:'Surfaces obligations, dates, and risk terms; proposes redlines against a playbook; flags inconsistencies it can detect.',
+   human:'Confirms or overrides each flag, and reads for the risks the model missed. Applies judgement about which risk matters here.'},
+  {id:'Verify',title:'Verify authorities',
+   ai:'Lists the cases, statutes, and defined terms it relied on — some of which may be invented or misquoted.',
+   human:'Checks every citation and defined term against the actual source. No authority enters the document unverified.'},
+  {id:'Finalise',title:'Finalise &amp; sign',
+   ai:'Formats, cleans, and assembles the final version on request. Contributes no judgement to the decision to send.',
+   human:'Reads the whole document, makes the final edits, advises the client, and signs. The responsibility is theirs alone.'}
+];
+const loopTrack=document.getElementById('loopTrack');
+(function buildLoop(){
+  LOOP.forEach((s,i)=>{
+    const node=document.createElement('div');
+    node.className='loop-node';node.id='loopN'+i;
+    node.innerHTML='<span class="n">'+(i+1)+'</span>'+s.id;
+    node.onclick=()=>loopSet(i);
+    loopTrack.appendChild(node);
+    if(i<LOOP.length-1){
+      const a=document.createElement('span');a.className='loop-arrow';a.textContent='→';
+      loopTrack.appendChild(a);
+    }
+  });
+  const back=document.createElement('span');back.className='loop-arrow';back.innerHTML='↺';
+  loopTrack.appendChild(back);
+})();
+function loopSet(i){
+  LOOP.forEach((s,j)=>document.getElementById('loopN'+j).classList.toggle('active',j===i));
+  const s=LOOP[i];
+  document.getElementById('loopTitle').textContent=(i+1)+'. '+s.title.replace('&amp;','&');
+  document.getElementById('loopAI').textContent=s.ai;
+  document.getElementById('loopHuman').textContent=s.human;
+}
+loopSet(0);
+
+/* ============ Figure 2 · contract review stepper ============ */
+const CR=[
+  {name:'Payment terms',flag:'ai',flagTxt:'◆ AI flag · Obligation / date',
+   clause:'"Payment shall be due within thirty (30) days of the date of invoice."',
+   issue:'The model flagged this as a standard <strong>net-30 payment obligation</strong> and rated it low risk.',
+   confirm:{cls:'good',html:'<b>Correctly confirmed.</b> This is a routine, market-standard payment term. The AI flag is accurate and low risk — confirming it and moving on is the right call. Not every flag needs a fight.'},
+   override:{cls:'warn',html:'<b>Over-correcting.</b> You can note a preference for net-45, but there\'s no real risk here. Reserve overrides for flags that are wrong or misjudged — treating routine terms as problems slows the review without protecting the client.'}},
+  {name:'Indemnification',flag:'ai',flagTxt:'◆ AI flag · Risk term',
+   clause:'"The Supplier shall indemnify the Client against any and all losses, without limitation, arising from this Agreement."',
+   issue:'The model flagged an <strong>uncapped, one-sided indemnity</strong> as high risk and suggested negotiating a cap.',
+   confirm:{cls:'good',html:'<b>Correctly confirmed.</b> An uncapped, one-directional indemnity is a genuine exposure. The flag is right and material — confirm it, and add it to the negotiation list with a proposed liability cap.'},
+   override:{cls:'warn',html:'<b>Risky override.</b> "Without limitation" is exactly the language that turns a routine indemnity into open-ended exposure. If you\'re acting for the Supplier, this flag deserves confirmation, not dismissal.'}},
+  {name:'Governing law',flag:'ai',flagTxt:'◆ AI flag · Risk term',
+   clause:'"This Agreement shall be governed by the laws of a jurisdiction to be mutually agreed."',
+   issue:'The model flagged the governing-law clause as <strong>"high risk — unusual foreign jurisdiction"</strong> and recommended objecting.',
+   confirm:{cls:'warn',html:'<b>Confirmed a bad flag.</b> Read the clause again — it doesn\'t name a foreign jurisdiction at all; it leaves the choice open, "to be mutually agreed." The model hallucinated a detail. An open governing-law term is a real issue, but not the one the AI described.'},
+   override:{cls:'good',html:'<b>Rightly overridden.</b> The AI misread the clause — there is no foreign jurisdiction; the choice is simply left open. You caught a hallucinated detail. The genuine issue is the unresolved choice of law, which you\'ve now framed correctly yourself.'}},
+  {name:'Auto-renewal',flag:'miss',flagTxt:'⚠ AI missed this · you must catch it',
+   clause:'"This Agreement renews automatically for successive twelve-month terms unless either party gives notice of non-renewal no later than ninety (90) days before the end of the then-current term."',
+   issue:'The AI summary listed the term length but <strong>did not flag anything here.</strong> Read it yourself. Is there a risk the model stayed silent on?',
+   confirm:{cls:'warn',html:'<b>You trusted the silence.</b> The model didn\'t flag it, so you confirmed "no issue" — but there is one: a punishing <b>90-day non-renewal notice window</b> that quietly locks the client into another full year if missed. This is the miss you were meant to catch. AI silence is never proof of absence.'},
+   override:{cls:'good',html:'<b>Caught the miss.</b> Exactly right — the AI stayed silent, but this auto-renewal has a <b>90-day non-renewal notice window</b> that can trap the client into another twelve-month term. You read for the gap the model didn\'t see. That vigilance is the reviewing lawyer\'s real job.'}},
+  {name:'Limitation of liability',flag:'ai',flagTxt:'◆ AI flag · Missing protection',
+   clause:'"[No limitation of liability clause present in the counterparty draft.]"',
+   issue:'The model flagged the <strong>absence of any limitation-of-liability clause</strong> and recommended inserting a mutual cap.',
+   confirm:{cls:'good',html:'<b>Correctly confirmed.</b> A missing liability cap leaves the client exposed to unlimited damages. Confirming this flag and adding a mutual limitation to your redline is sound — and it shows a good model can flag absences, not just present terms.'},
+   override:{cls:'warn',html:'<b>Questionable override.</b> Unlimited liability is one of the largest exposures in any commercial contract. Unless the client has a specific reason to accept it, this flag warrants confirmation and a proposed mutual cap.'}}
+];
+let crIdx=0;const crAnswered=new Array(CR.length).fill(null);
+function crRender(){
+  const c=CR[crIdx];
+  document.getElementById('crCur').textContent=crIdx+1;
+  document.getElementById('crTot').textContent=CR.length;
+  document.getElementById('crName').textContent=c.name;
+  const flag=document.getElementById('crFlag');
+  flag.className='cr-flag '+(c.flag==='miss'?'miss':'ai');
+  flag.textContent=c.flagTxt;
+  document.getElementById('crClause').textContent=c.clause;
+  document.getElementById('crIssue').innerHTML=c.issue;
+  const v=document.getElementById('crVerdict');
+  v.className='cr-verdict';v.innerHTML='';
+  document.getElementById('crCard').style.borderColor='var(--line)';
+  document.getElementById('crPrev').disabled=crIdx===0;
+  document.getElementById('crNext').disabled=crIdx===CR.length-1;
+  crDots();
+  if(crAnswered[crIdx]) crShow(crAnswered[crIdx]);
+}
+function crAct(kind){crAnswered[crIdx]=kind;crShow(kind);}
+function crShow(kind){
+  const c=CR[crIdx];const r=c[kind];
+  const v=document.getElementById('crVerdict');
+  v.className='cr-verdict show '+r.cls;
+  v.innerHTML=r.html;
+  document.getElementById('crCard').style.borderColor=r.cls==='good'?'var(--green)':'var(--orange-dark)';
+  crDots();
+}
+function crDots(){
+  const d=document.getElementById('crDots');d.innerHTML='';
+  CR.forEach((c,i)=>{
+    const dot=document.createElement('span');dot.className='cr-dot';
+    if(i===crIdx)dot.classList.add('cur');
+    else if(crAnswered[i])dot.classList.add('done');
+    d.appendChild(dot);
+  });
+}
+function crNav(dir){crIdx=Math.max(0,Math.min(CR.length-1,crIdx+dir));crRender();}
+crRender();
+
+/* ============ Figure 3 · playbook redline ============ */
+const PB=[
+  {tag:'risky',tagTxt:'◇ Counterparty draft — off playbook',
+   clause:'The Vendor\'s aggregate liability shall be <span class="rl-del">unlimited</span> for all claims. The Client <span class="rl-del">waives any and all limitations</span> and shall indemnify the Vendor against <span class="rl-del">any losses whatsoever</span>, whether or not caused by the Vendor. Either party may terminate <span class="rl-del">only with the Vendor\'s written consent</span>.',
+   whyK:'Off playbook',
+   why:'Three positions breach the playbook: liability is uncapped, the indemnity runs one way in the Vendor\'s favour, and the termination right is asymmetric. Each is a term the playbook marks as "never accept without escalation."'},
+  {tag:'safe',tagTxt:'◆ Playbook rewrite — model proposal',
+   clause:'The Vendor\'s aggregate liability shall be <span class="rl-add">capped at the total fees paid in the preceding twelve months</span> for all claims. <span class="rl-add">Each party</span> shall indemnify the other against <span class="rl-add">losses arising from its own breach or negligence</span>. <span class="rl-add">Either party</span> may terminate <span class="rl-add">for material breach on thirty (30) days\' written notice</span>.',
+   whyK:'On playbook',
+   why:'The rewrite restores the playbook\'s fallback positions: a mutual liability cap, a reciprocal indemnity limited to fault, and a balanced termination right. But it is a proposal — the lawyer decides whether this deal\'s leverage makes these positions realistic, and owns whatever is finally executed.'}
+];
+function pbSet(i){
+  const p=PB[i];
+  document.getElementById('pb0').classList.toggle('active',i===0);
+  document.getElementById('pb1').classList.toggle('active',i===1);
+  const tag=document.getElementById('pbTag');
+  tag.className='pb-tag '+p.tag;tag.textContent=p.tagTxt;
+  document.getElementById('pbClause').innerHTML=p.clause;
+  document.getElementById('pbWhyK').textContent=p.whyK;
+  document.getElementById('pbWhy').textContent=p.why;
+  document.getElementById('pbLane').style.borderColor=i===0?'rgba(192,57,43,0.35)':'rgba(46,125,91,0.35)';
+}
+pbSet(0);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The AI-Augmented Lawyer · Lesson 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · workflow engine ============ */
+.engine{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.eng-chain{display:flex;align-items:center;gap:0;margin-bottom:22px}
+.enode{
+  flex:1;text-align:center;padding:15px 6px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;
+}
+.enode .eidx{display:block;font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.enode h5{font-family:'Fraunces',serif;font-size:15px;color:var(--brown-dark);line-height:1.1}
+.enode:hover{border-color:var(--orange);transform:translateY(-3px)}
+.enode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.enode.active h5{color:var(--paper)}
+.enode.active .eidx{color:var(--orange)}
+.elink{width:20px;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.elink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.epanel{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:200px}
+.epanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.ecol{border-radius:12px;padding:20px}
+.ecol.draft{background:#FDEBD7;border:1px solid #F1C99A}
+.ecol.decide{background:var(--brown-dark);color:#F3E7D5}
+.ecol .elab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ecol.draft .elab{color:var(--orange-dark)}
+.ecol.decide .elab{color:var(--yellow)}
+.ecol ul{list-style:none;display:grid;gap:8px}
+.ecol li{font-size:13.5px;line-height:1.45;padding-left:20px;position:relative}
+.ecol.draft li{color:var(--brown-dark)}
+.ecol.draft li::before{content:"✎";position:absolute;left:0;color:var(--orange)}
+.ecol.decide li{color:#F3E7D5}
+.ecol.decide li::before{content:"◆";position:absolute;left:0;color:var(--yellow);font-size:11px;top:2px}
+@media(max-width:700px){
+  .eng-chain{flex-wrap:wrap;gap:6px}
+  .enode{flex:1 1 30%}
+  .elink{display:none}
+  .epanel{grid-template-columns:1fr}
+}
+
+/* ============ Figure 2 · before / with AI day ============ */
+.week{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.wgrid{display:grid;grid-template-columns:150px 1fr;gap:10px 14px;align-items:center}
+.wday{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.wtrack{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--cream)}
+.wseg{height:100%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;color:#fff;white-space:nowrap;overflow:hidden;transition:width .5s ease;min-width:0}
+.wseg.admin{background:#8B7A6C}
+.wseg.draft{background:var(--tan)}
+.wseg.research{background:var(--orange-dark)}
+.wseg.human{background:var(--accent)}
+.wseg.free{background:repeating-linear-gradient(45deg,#F4E9D8 0 6px,var(--cream) 6px 12px);color:var(--muted)}
+.wlegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.wlegend span{display:inline-flex;align-items:center;gap:6px}
+.wlegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.wcap{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);font-size:14.5px;color:var(--brown-dark);line-height:1.5}
+.wbill{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap}
+.wbill .wb{flex:1;min-width:150px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.wbill .wblab{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.wbill .wbval{font-family:'Fraunces',serif;font-size:30px;font-weight:800;color:var(--brown-dark);line-height:1}
+.wbill .wbval .up{color:var(--accent)}
+.wbill .wbval .dn{color:var(--orange-dark)}
+
+/* ============ Figure 3 · should AI touch this? ============ */
+.gate{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.grows{display:grid;gap:22px;margin-bottom:22px}
+.grow label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600;display:flex;justify-content:space-between;margin-bottom:8px}
+.grow label .gv{color:var(--orange-dark)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--cream);border:1px solid var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+.gverdict{border-radius:12px;padding:22px;transition:background .35s}
+.gverdict.green{background:#E6F0DC;border:1px solid #B7CFA0}
+.gverdict.amber{background:#FDEBD7;border:1px solid #F1C99A}
+.gverdict.red{background:#F7E0DA;border:1px solid #E3B3A6}
+.gverdict .gtag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.gverdict.green .gtag{color:#4B6B2E}
+.gverdict.amber .gtag{color:var(--orange-dark)}
+.gverdict.red .gtag{color:#B23A22}
+.gverdict h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:6px}
+.gverdict p{font-size:14px;color:var(--brown-dark);margin:0;max-width:none}
+.gveto{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding:12px 16px;border-radius:10px;background:var(--cream);border:1px solid var(--line)}
+.gveto input{width:18px;height:18px;accent-color:var(--orange-dark);cursor:pointer}
+.gveto label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--brown);font-weight:600;cursor:pointer}
+
+/* ============ Figure 4 · myth cards ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hcard{height:220px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.hgrid.show .hcard{animation:hIn .5s forwards}
+.hgrid.show .hcard:nth-child(1){animation-delay:.05s}
+.hgrid.show .hcard:nth-child(2){animation-delay:.2s}
+.hgrid.show .hcard:nth-child(3){animation-delay:.35s}
+.hgrid.show .hcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.hcard.flipped .hinner{transform:rotateY(180deg)}
+.hface{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;
+}
+.hfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.hfront .hclaim{font-family:'Fraunces',serif;font-weight:800;font-size:24px;line-height:1.1;margin-bottom:8px}
+.hfront .hsub{font-size:13px;opacity:.92;max-width:280px}
+.hfront .hhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.hback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.hback .hlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.hback p{font-size:13px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){
+  .hgrid{grid-template-columns:1fr}
+  .hcard{height:210px}
+  .hfront .hclaim{font-size:22px}
+  .wgrid{grid-template-columns:120px 1fr}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 2 · Lesson 01 · AI for Lawyers</div>
+  <h1>The AI-augmented <em>lawyer</em>.</h1>
+  <p class="lede">AI will not replace lawyers. But a lawyer who builds durable workflows around AI will out-research, out-draft and out-advise the one who does everything by hand. This lesson is not about a tool or a prompt. It is about a working relationship — where AI drafts at speed, and the lawyer verifies, and decides, and remains the one who is accountable to the client and the court.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>AI drafts, the lawyer verifies and decides</h2>
+  <p class="lead">Before any prompt, learn the one rule that keeps the rest of this week honest: AI is a fast, tireless drafting partner. It is not co-counsel, not an authority on the law, and never accountable. That last word carries the weight of the profession — accountability runs to the client, the court and the bar, and it cannot be delegated to a machine.</p>
+
+  <p>Think of AI the way a supervising partner thinks of a bright first-year associate who never sleeps and has never been sanctioned — because it has never been responsible for anything. Ask for a first draft of a demand letter and you get one in seconds. Ask for the elements of a claim, three arguments for a motion, or a plain-language summary of a forty-page agreement, and it produces all of them. This is genuinely useful: the blank page and the cold read are the most expensive minutes in legal work, and AI compresses both. But that associate has not read the actual file, cannot open the binding authority in your jurisdiction, will invent a case that sounds perfect and does not exist, and states a wrong proposition of law with the same fluent confidence it uses for a right one.</p>
+  <p>So the workflow is always two-handed. One hand generates — issues, drafts, arguments, first passes, summaries. The other hand verifies and decides — what the law actually says, what the file actually shows, what strategy serves this client, what is safe to put in front of a court. The generating hand is fast and cheap. The verifying-and-deciding hand is slow, expert, and the thing the client is actually paying for. Every stage of legal work runs on this split. Click through the engine below to see exactly where the line falls at each stage.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The legal workflow engine</span>
+      <div class="controls">
+        <button onclick="engStep(-1)">◀ Prev</button>
+        <button onclick="engStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="eng-chain" id="engChain">
+      <div class="enode" data-k="research" onclick="pickEng('research')"><span class="eidx">1</span><h5>Research</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="draft" onclick="pickEng('draft')"><span class="eidx">2</span><h5>Draft</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="review" onclick="pickEng('review')"><span class="eidx">3</span><h5>Review</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="advise" onclick="pickEng('advise')"><span class="eidx">4</span><h5>Advise</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="manage" onclick="pickEng('manage')"><span class="eidx">5</span><h5>Manage</h5></div>
+    </div>
+    <div class="epanel" id="engPanel"></div>
+  </div>
+
+  <h3>Why the line never moves</h3>
+  <p>Notice that across all five stages, the verifying-and-deciding hand keeps the same jobs: confirming the authority is real and still good law, judging what the file actually supports, owning the advice, and standing behind every word that reaches a client or a court. AI's share grows as the tools improve — but that column of human judgment is the practice of law itself. A lawyer who guards it well can adopt any tool without fear; one who surrenders it has, in the eyes of the client and the bar, stopped practising.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>A lawyer's day, reclaimed</h2>
+  <p class="lead">The promise of AI in legal work is not "less lawyering." It is less of the low-value, often non-billable, judgment-free labour that surrounds lawyering — so that more of the day can go to the part clients actually value and pay for: analysis, strategy and counsel.</p>
+
+  <p>Most lawyers lose hours every day to work that is necessary but not the point: reformatting a document, summarising a long email chain, assembling a first-draft chronology, retyping boilerplate clauses, drafting the routine cover letter for the twentieth time. Much of it is hard to bill and none of it requires your training; all of it steals from the part that does. AI is at its best exactly here — on the high-volume, template-shaped, first-pass tasks that drain a day without moving a single matter forward on the merits.</p>
+  <p>Toggle the switch below to compare an ordinary day before and with AI. Watch the grey admin blocks and orange first-draft grinding shrink — and watch the blue "judgment" time, the analysis and client counsel only a lawyer can provide, expand into the space that opens up. The hours do not vanish; they move from drudgery toward the high-value work, and toward a day that ends at a sane hour.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · One day, two workflows</span>
+      <div class="controls" id="weekBtns">
+        <button class="active" onclick="setWeek('before',this)">Before AI</button>
+        <button onclick="setWeek('with',this)">With AI</button>
+      </div>
+    </div>
+    <div class="week">
+      <div class="wgrid" id="wgrid"></div>
+      <div class="wlegend">
+        <span><i style="background:#8B7A6C"></i> admin &amp; formatting</span>
+        <span><i style="background:var(--tan)"></i> first-draft grind</span>
+        <span><i style="background:var(--orange-dark)"></i> research legwork</span>
+        <span><i style="background:var(--accent)"></i> analysis &amp; client counsel</span>
+        <span><i style="background:#E8DCC8"></i> off the clock</span>
+      </div>
+      <div class="wbill" id="wbill"></div>
+      <div class="wcap" id="wcap"></div>
+    </div>
+  </div>
+
+  <h3>Reclaimed, not erased</h3>
+  <p>The honest version of this figure: AI does not hand a lawyer a shorter day for free. It gives a better-spent one — and it quietly reshapes what is billable. The hours it saves on formatting and boilerplate are hours you reinvest in high-value analysis and counsel, or in going home. A caution worth naming now: efficiency changes billing, and the profession is still working out how the value of AI-assisted work is fairly charged. Reclaimed time only helps the client if you are honest about how it is captured.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Should AI touch this task?</h2>
+  <p class="lead">Not every task is a safe place for AI. Before you delegate anything, run it through the gate below — but note first that one dial is not a dial at all. Client confidentiality and privilege are a hard veto: if a task exposes protected information to a tool that is not approved and compliant, the answer is no, regardless of how low the stakes or how easy the check.</p>
+
+  <p>The confidentiality veto comes first, on purpose. Pasting privileged client material into a general, non-approved AI tool can waive privilege, breach your duty of confidentiality, and expose the data to training or disclosure. No efficiency gain survives that. Only once the veto is clear do the other dials matter. <strong>Stakes</strong>: how much rides on getting this exactly right — a first-draft internal summary is low, a filing or a client opinion is high. <strong>Verifiability</strong>: how easily you can check the output yourself — you can confirm a clause against a template in minutes; you cannot casually verify a citation without pulling the actual authority.</p>
+  <p>Set the veto and move the two dials to describe a real task, then read the verdict. The pattern to internalise: AI is safest on non-confidential, low-stakes, high-verifiability work — and categorically off-limits the moment protected client information would touch a non-compliant tool. When in doubt, the machine drafts on de-identified or public material and you verify; it never decides, and it never sees data it shouldn't.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The delegation gate</span>
+      <div class="controls" id="gatePresets">
+        <button onclick="gatePreset(false,2,5,this)">Public-law explainer</button>
+        <button onclick="gatePreset(true,5,2,this)">Privileged case memo</button>
+        <button onclick="gatePreset(false,4,3,this)">Motion first draft</button>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="gveto">
+        <input type="checkbox" id="ckConf" onchange="calcGate()">
+        <label for="ckConf">This task exposes confidential / privileged client information to a non-approved tool</label>
+      </div>
+      <div class="grows">
+        <div class="grow">
+          <label>Stakes — how much rides on getting it right <span class="gv" id="vStake">medium</span></label>
+          <input type="range" id="slStake" min="1" max="5" step="1" value="3" oninput="calcGate()">
+        </div>
+        <div class="grow">
+          <label>Verifiability — how easily you can check it <span class="gv" id="vVer">medium</span></label>
+          <input type="range" id="slVer" min="1" max="5" step="1" value="3" oninput="calcGate()">
+        </div>
+      </div>
+      <div class="gverdict amber" id="gverdict">
+        <div class="gtag" id="gtag">Verdict</div>
+        <h4 id="ghead">Draft with AI, verify with care</h4>
+        <p id="gbody">Set the veto and move the dials to describe your task.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The rule under the dials</h3>
+  <p>High stakes plus low verifiability is the danger zone for hallucinated authorities and wrong law — and confidentiality is the trapdoor beneath the whole floor. The safe move is never a flat "don't use AI." It is: clear the confidentiality veto first, then let AI draft the structure on de-identified or public material, and put your own verified judgment — real, good-law authority; a file you have actually read — on top before anything reaches a client, an opponent, or a court.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Four myths, flipped</h2>
+  <p class="lead">Every conversation about AI in the profession carries some version of these four beliefs — two from the boosters, two from the sceptics. Flip each card to see the more honest version. Neither breathless hype nor flat refusal survives contact with a real matter, a real client, or a real judge.</p>
+
+  <p>The goal of this lesson is not to make you enthusiastic or fearful, but accurate. AI in legal work is a powerful drafting tool with real, named limitations — confidentiality and privilege risk, hallucinated authorities, and embedded bias — that you manage the way you manage any professional risk: by knowing exactly where it lives and refusing to look away from it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Flip the belief</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all realities</button>
+        <button onclick="allHype()">↺ Back to beliefs</button>
+      </div>
+    </div>
+    <div class="hgrid" id="hgrid">
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"AI will replace lawyers"</div>
+            <div class="hsub">Soon a model runs the whole matter end to end.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI has no duty to a client, no standing before a court, and no accountability to the bar. It replaces tasks, not lawyers. The lawyer who uses it well spends less of the day on drudgery and more of it on judgment, strategy and counsel — the work clients actually pay for.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"If it cites a case, it's real"</div>
+            <div class="hsub">The answer reads fluent, precise and authoritative.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI hallucinates — it invents case names, citations, quotations and holdings in the same confident voice it uses for real ones. Fluency is not authority. Every citation must be pulled, read, and confirmed as real and still good law before it enters a filing. Courts have sanctioned lawyers for this.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"It's neutral and objective"</div>
+            <div class="hsub">A machine has no bias and applies the law evenly.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI learned from human text and carries its biases — in the outcomes it predicts, the arguments it favours, the parties it frames sympathetically. Used unchecked in areas like risk-scoring or drafting, it can quietly encode unfairness. You supply the judgment and the equity; it does not.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"Serious lawyers refuse it"</div>
+            <div class="hsub">Using AI is a shortcut — sloppy, even unethical.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>Refusing a drafting tool to spend billable evenings retyping boilerplate is not diligence — it is lost time the client may be paying for. Diligence is verifying every authority and owning every decision. Let AI draft the structure on safe material; keep every judgment that matters firmly in human hands.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>The AI-augmented lawyer lets the machine draft at speed on non-confidential, checkable, lower-stakes work — and keeps every decision, every verified authority, and every duty to the client and the court firmly in human hands.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now have the working relationship at the heart of this week. AI is a fast drafting partner with real limits; you are the accountable professional. Clear the confidentiality veto first, run every task through the delegation gate, verify every authority before it reaches a court, and never let a confident sentence stand in for a checked one. The next lesson puts this relationship to work on the first real task: legal research and analysis with AI.</p>
+  <ul>
+    <li>AI drafts; the lawyer verifies and decides — accountability never delegates</li>
+    <li>Every stage splits into "what AI drafts" and "what the lawyer verifies &amp; decides"</li>
+    <li>Reclaimed hours move from drudgery to high-value analysis and counsel</li>
+    <li>Confidentiality &amp; privilege are a hard veto — before any other test</li>
+    <li>Hallucinated authorities, privilege risk and bias are managed risks, not reasons to refuse</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 01 of Week 2 · Next up: Legal Research &amp; Analysis with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · workflow engine ===== */
+const ENG={
+  research:{draft:['A first map of the issues in a fact pattern','A plain-language summary of an area of law','Candidate arguments and counter-arguments','A starting list of authorities to go check'],
+        decide:['Whether each cited authority is real and good law','Which issues actually control this matter','What the binding jurisdiction actually holds','Reading the primary source, not the summary']},
+  draft:{draft:['A first draft of a letter, clause or memo','Boilerplate recitals and standard provisions','Three tones for the same demand or email','A rephrasing of a paragraph for clarity'],
+        decide:['Whether the draft is accurate for THIS file','Which clause the client actually needs','The strategy and tone that serve the matter','Every representation of fact and law made']},
+  review:{draft:['A first-pass summary of a long agreement','A flag of unusual or missing clauses','A draft chronology from the documents','A plain-language read of a dense provision'],
+        decide:['Whether a flagged risk truly is a risk','What the document actually says on close read','What was silently missed or misread','The advice built on top of the summary']},
+  advise:{draft:['A plain-language explanation of options','A first draft of a client-facing note','Anticipated questions a client may ask','A neutral summary of risks and trade-offs'],
+        decide:['The actual advice — owned and defensible','What is prudent for THIS client and goal','What must be disclosed and how it is framed','Accountability for the counsel given']},
+  manage:{draft:['A first-draft matter timeline or task list','A summary of the day’s correspondence','A routine status update from your notes','A draft agenda for a client meeting'],
+        decide:['Which deadlines are real and confirmed','What stays confidential and privileged','Whether a summary is complete and fair','The final word to the client and the court']}
+};
+const ENGORDER=['research','draft','review','advise','manage'];
+let engCur='research';
+function pickEng(k){
+  engCur=k;
+  document.querySelectorAll('#engChain .enode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=ENG[k],p=el('engPanel');
+  let h='<div class="ecol draft"><div class="elab">✎ What AI drafts</div><ul>';
+  d.draft.forEach(x=>h+='<li>'+x+'</li>');
+  h+='</ul></div><div class="ecol decide"><div class="elab">◆ What the lawyer verifies &amp; decides</div><ul>';
+  d.decide.forEach(x=>h+='<li>'+x+'</li>');
+  h+='</ul></div>';
+  p.innerHTML=h;
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+function engStep(dir){
+  let i=ENGORDER.indexOf(engCur)+dir;
+  if(i<0)i=ENGORDER.length-1;if(i>=ENGORDER.length)i=0;
+  pickEng(ENGORDER[i]);
+}
+pickEng('research');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickEng('research');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('engChain'));
+
+/* ===== Figure 2 · before / with AI day ===== */
+const WEEK={
+  before:{
+    days:[
+      ['Early morning',[['admin',30],['draft',30],['research',20],['human',20]]],
+      ['Late morning',[['admin',25],['draft',35],['research',20],['human',20]]],
+      ['Afternoon',[['admin',30],['draft',30],['research',15],['human',25]]],
+      ['Late afternoon',[['admin',35],['draft',25],['research',20],['human',20]]],
+      ['Evening',[['admin',30],['draft',35],['research',15],['human',15],['free',5]]]
+    ],
+    bill:['~35%','↓ non-billable drudgery'],
+    cap:'A typical day: admin, first-draft grinding and research legwork eat the middle of every block. High-value analysis and client counsel — the work clients actually value — is squeezed to the edges. Much of the low-value time is hard to bill at all.'
+  },
+  with:{
+    days:[
+      ['Early morning',[['admin',12],['draft',15],['research',13],['human',45],['free',15]]],
+      ['Late morning',[['admin',12],['draft',15],['research',13],['human',45],['free',15]]],
+      ['Afternoon',[['admin',10],['draft',15],['research',12],['human',48],['free',15]]],
+      ['Late afternoon',[['admin',14],['draft',13],['research',13],['human',45],['free',15]]],
+      ['Evening',[['admin',10],['draft',15],['research',10],['human',45],['free',20]]]
+    ],
+    bill:['~60%','↑ high-value counsel'],
+    cap:'With AI handling first drafts, summaries and research legwork, the grey and orange blocks shrink. The blue expands — more analysis and client counsel, the high-value work — and a real off-the-clock margin appears. Same hours, reinvested where they count. Bill honestly for the value, not the vanished time.'
+  }
+};
+function renderWeek(mode){
+  const data=WEEK[mode],g=el('wgrid');
+  let h='';
+  data.days.forEach(([day,segs])=>{
+    h+='<div class="wday">'+day+'</div><div class="wtrack">';
+    segs.forEach(([cls,pct])=>{
+      const lbl=pct>=16?cls.replace('human','counsel').replace('draft','drafting').replace('research','research').replace('free','free'):'';
+      h+='<div class="wseg '+cls+'" style="width:'+pct+'%">'+lbl+'</div>';
+    });
+    h+='</div>';
+  });
+  g.innerHTML=h;
+  el('wbill').innerHTML='<div class="wb"><div class="wblab">High-value / billable share</div><div class="wbval">'+data.bill[0]+'</div></div>'+
+    '<div class="wb"><div class="wblab">Direction of the day</div><div class="wbval" style="font-size:16px;line-height:1.3">'+data.bill[1]+'</div></div>';
+  el('wcap').textContent=data.cap;
+}
+function setWeek(mode,btn){
+  document.querySelectorAll('#weekBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWeek(mode);
+}
+renderWeek('before');
+
+/* ===== Figure 3 · delegation gate ===== */
+const LVL=['','very low','low','medium','high','very high'];
+function gatePreset(conf,s,v,btn){
+  el('ckConf').checked=conf;
+  el('slStake').value=s;el('slVer').value=v;
+  document.querySelectorAll('#gatePresets button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  calcGate();
+}
+function calcGate(){
+  const conf=el('ckConf').checked;
+  const s=+el('slStake').value,v=+el('slVer').value;
+  el('vStake').textContent=LVL[s];
+  el('vVer').textContent=LVL[v];
+  const risk=s+(6-v);
+  const box=el('gverdict');
+  box.classList.remove('green','amber','red');
+  let cls,tag,head,body;
+  if(conf){
+    cls='red';tag='Stop · confidentiality veto';
+    head='Do not expose privileged client data';
+    body='This task would put confidential or privileged client information into a non-approved tool. That can waive privilege, breach your duty of confidentiality, and expose the data. The stakes and verifiability no longer matter. De-identify the material, or use only a firm-approved, compliant system — then, and only then, let AI draft.';
+  }else if(risk<=4){
+    cls='green';tag='Go · safe to delegate';
+    head='Let AI draft freely';
+    body='No confidential data, low stakes, easy to check. This is exactly where AI shines. Generate options and first drafts at speed, skim for fit, and keep what works — the cost of a mistake here is small and instantly caught.';
+  }else if(risk<=7){
+    cls='amber';tag='Caution · draft, then verify';
+    head='AI drafts, you verify with care';
+    body='Real stakes, or law and facts you cannot instantly confirm. Use AI for the first pass, but pull and read every authority, check every representation against the file, and put your own judgment on top before it goes anywhere near a client or a court.';
+  }else{
+    cls='red';tag='Danger zone';
+    head='Keep this one lawyer-led';
+    body='High stakes and hard to verify — the natural home of the hallucinated authority and the confident wrong proposition of law. Let AI assist with structure or wording at most. The substance, the authorities and the final call stay firmly with you.';
+  }
+  box.classList.add(cls);
+  el('gtag').textContent=tag;
+  el('ghead').textContent=head;
+  el('gbody').textContent=body;
+}
+calcGate();
+
+/* ===== Figure 4 · myth cards ===== */
+const hgrid=el('hgrid');
+function allReal(){document.querySelectorAll('.hcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(hgrid);
+
+</script>
+</body>
+</html>

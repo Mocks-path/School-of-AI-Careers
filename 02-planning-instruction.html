@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Planning &amp; Designing Instruction with AI · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · backward-design flow ============ */
+.bd{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.bd-track{display:flex;align-items:stretch;gap:0;margin-bottom:22px}
+.bnode{
+  flex:1;text-align:center;padding:14px 6px 12px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;transition:all .4s;
+}
+.bnode .bmark{width:30px;height:30px;border-radius:50%;background:var(--brown-dark);color:var(--paper);font-family:'Fraunces',serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 7px;transition:background .4s}
+.bnode h5{font-family:'Fraunces',serif;font-size:13.5px;color:var(--brown-dark);line-height:1.1}
+.bnode.on{border-color:var(--orange);background:#FDEBD7;transform:translateY(-4px);box-shadow:0 8px 18px rgba(239,127,26,0.2)}
+.bnode.on .bmark{background:var(--orange)}
+.bconn{flex:0 0 22px;align-self:center;height:3px;background:var(--line);position:relative;border-radius:2px;transition:background .4s}
+.bconn.on{background:var(--orange)}
+.bconn::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:border-left-color .4s}
+.bconn.on::after{border-left-color:var(--orange)}
+.bpanel{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:22px;min-height:150px}
+.bpanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.bpanel .btag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;margin-bottom:8px}
+.bpanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:8px}
+.bpanel p{font-size:14.5px;color:var(--brown-dark);margin-bottom:12px;max-width:none}
+.bpanel .bex{background:var(--paper);border-left:3px solid var(--orange);border-radius:0 8px 8px 0;padding:12px 15px;font-size:13.5px;color:var(--brown-dark);line-height:1.5}
+.bpanel .bex strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark);display:block;margin-bottom:4px}
+.bprog{height:4px;background:var(--line);border-radius:2px;margin-bottom:20px;overflow:hidden}
+.bprog i{display:block;height:100%;background:var(--orange);width:20%;transition:width .4s ease}
+@media(max-width:700px){
+  .bd-track{flex-wrap:wrap;gap:6px}
+  .bnode{flex:1 1 40%}
+  .bconn{display:none}
+}
+
+/* ============ Figure 2 · brief builder ============ */
+.brief{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.brief-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;
+  background:var(--cream);border:1px dashed var(--line);color:var(--muted);
+  padding:7px 13px;border-radius:20px;cursor:pointer;transition:all .25s;
+  text-transform:uppercase;
+}
+.chip:hover{border-color:var(--orange);color:var(--brown-dark)}
+.chip.on{background:var(--orange);border:1px solid var(--orange);border-style:solid;color:#fff}
+.brief-io{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bio{border-radius:12px;padding:18px}
+.bio.prompt{background:var(--cream);border:1px solid var(--line)}
+.bio.output{background:var(--brown-dark)}
+.bio .biolab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+.bio.prompt .biolab{color:var(--orange-dark)}
+.bio.output .biolab{color:var(--yellow)}
+.bio .biotext{font-size:14px;line-height:1.55}
+.bio.prompt .biotext{color:var(--brown-dark)}
+.bio.prompt .biotext .add{background:#FDE3C4;color:var(--orange-dark);border-radius:3px;padding:0 3px;font-weight:600}
+.bio.output .biotext{color:#F3E7D5}
+.bmeter{margin-top:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bmeter-bar{flex:1;min-width:140px;height:8px;background:var(--cream);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.bmeter-bar i{display:block;height:100%;width:20%;background:linear-gradient(90deg,var(--orange),var(--orange-dark));transition:width .4s ease}
+.bmeter-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600}
+@media(max-width:700px){
+  .brief-io{grid-template-columns:1fr}
+}
+
+/* ============ Figure 3 · differentiation tiers ============ */
+.diff{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.diff-task{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:14px;color:var(--brown-dark)}
+.diff-task strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);display:block;margin-bottom:4px}
+.tier-switch{display:flex;gap:0;margin-bottom:20px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tier-switch button{
+  flex:1;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+  background:var(--cream);border:none;border-right:1px solid var(--line);color:var(--brown);
+  padding:12px 8px;cursor:pointer;transition:all .2s;font-weight:600;
+}
+.tier-switch button:last-child{border-right:none}
+.tier-switch button:hover{background:#FDEBD7}
+.tier-switch button.active{background:var(--brown-dark);color:#fff}
+.tier-panel{border-radius:12px;padding:22px;transition:background .35s;background:var(--cream);border:1px solid var(--line)}
+.tier-panel.swap{animation:panelIn .4s ease}
+.tier-panel .ttag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:var(--orange-dark);margin-bottom:6px}
+.tier-panel h4{font-family:'Fraunces',serif;font-size:21px;color:var(--brown-dark);margin-bottom:10px}
+.tier-panel ul{list-style:none;display:grid;gap:9px;margin-bottom:16px}
+.tier-panel li{font-size:14px;color:var(--brown-dark);padding-left:22px;position:relative;line-height:1.45}
+.tier-panel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:12px}
+.tier-panel .thuman{background:var(--paper);border-left:3px solid var(--brown);border-radius:0 8px 8px 0;padding:12px 15px;font-size:13px;color:var(--brown);line-height:1.5}
+.tier-panel .thuman strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+
+/* ============ Figure 4 · discipline cards ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hcard{height:210px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.hgrid.show .hcard{animation:hIn .5s forwards}
+.hgrid.show .hcard:nth-child(1){animation-delay:.05s}
+.hgrid.show .hcard:nth-child(2){animation-delay:.2s}
+.hgrid.show .hcard:nth-child(3){animation-delay:.35s}
+.hgrid.show .hcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.hcard.flipped .hinner{transform:rotateY(180deg)}
+.hface{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;
+}
+.hfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.hfront .hclaim{font-family:'Fraunces',serif;font-weight:800;font-size:24px;line-height:1.1;margin-bottom:8px}
+.hfront .hsub{font-size:13px;opacity:.92;max-width:260px}
+.hfront .hhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.hback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.hback .hlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.hback p{font-size:13px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){
+  .hgrid{grid-template-columns:1fr}
+  .hcard{height:205px}
+  .hfront .hclaim{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 1 · Lesson 02 · AI for Teachers</div>
+  <h1>Planning with <em>intent</em>.</h1>
+  <p class="lede">A vague request to AI produces a vague lesson. The teachers who get the most from these tools aren't better at "prompting" — they're clearer about what they're trying to achieve. This lesson pairs an old, durable planning discipline with a new, fast drafting partner: you name the destination, AI drafts the road, and you keep the wheel.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Start from the end</h2>
+  <p class="lead">Backward design is decades older than AI, and it is the single habit that makes AI planning work. Instead of starting with a fun activity, you start with what students should be able to do — and only then design backward to get them there.</p>
+
+  <p>The failure mode AI makes worse is "activity-first" planning: you ask for a fun lesson on volcanoes, get a lively worksheet, and only later notice it never actually taught the standard. AI is very good at generating engaging activities and completely indifferent to whether they teach anything. Backward design closes that gap by forcing the order: <strong>objective first, evidence second, activities last.</strong></p>
+  <p>The five stages below are the durable workflow. You define the objective and the success criteria — the destination and how you'll know you've arrived. AI then drafts activities, differentiation, and checks against that fixed target. Because the target is yours and explicit, everything AI produces can be judged against it. Step through the flow to see how each stage feeds the next, and where AI joins.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The backward-design flow</span>
+      <div class="controls">
+        <button onclick="bdStep(-1)">◀ Prev</button>
+        <button id="bdPlay" onclick="bdAuto()">▶ Step through</button>
+        <button onclick="bdStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="bd">
+      <div class="bd-track" id="bdTrack">
+        <div class="bnode" data-i="0"><div class="bmark">1</div><h5>Objective</h5></div>
+        <div class="bconn" data-c="0"></div>
+        <div class="bnode" data-i="1"><div class="bmark">2</div><h5>Success Criteria</h5></div>
+        <div class="bconn" data-c="1"></div>
+        <div class="bnode" data-i="2"><div class="bmark">3</div><h5>Activities</h5></div>
+        <div class="bconn" data-c="2"></div>
+        <div class="bnode" data-i="3"><div class="bmark">4</div><h5>Differentiation</h5></div>
+        <div class="bconn" data-c="3"></div>
+        <div class="bnode" data-i="4"><div class="bmark">5</div><h5>Check</h5></div>
+      </div>
+      <div class="bprog"><i id="bdBar"></i></div>
+      <div class="bpanel" id="bdPanel"></div>
+    </div>
+  </div>
+
+  <h3>Why the order is non-negotiable</h3>
+  <p>If you let AI pick activities before you've fixed the objective, you'll get motion without direction — busy students learning something, but not necessarily the thing you're accountable for. Naming the objective and success criteria first turns AI from a generator of nice-looking filler into a genuine design partner, because now every draft it hands you has a standard to be measured against.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The brief builder</h2>
+  <p class="lead">"Write a lesson on fractions" and "Design a 40-minute lesson for a mixed-ability Grade 4 class introducing equivalent fractions, aligned to our standard, with a quick exit check" produce wildly different results. The gap between them is not magic. It is four pieces of context you already carry in your head.</p>
+
+  <p>A good brief is not longer for its own sake — it's specified. Adding the <strong>audience</strong>, the <strong>grade</strong>, the <strong>standard</strong>, and the <strong>time</strong> removes the four things AI would otherwise guess at, usually wrongly. Each detail you add is a decision you're keeping in human hands instead of surrendering to the model's defaults.</p>
+  <p>Add the chips below one at a time and watch a vague request sharpen into a usable brief — and the output on the right sharpen with it. This is the whole skill: you're not learning secret phrasing, you're just refusing to make AI guess what you already know.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · From vague to specific</span>
+      <div class="controls">
+        <button onclick="briefAll()">Add all context</button>
+        <button onclick="briefNone()">↺ Reset to vague</button>
+      </div>
+    </div>
+    <div class="brief">
+      <div class="brief-chips">
+        <div class="chip" data-k="aud" onclick="toggleChip('aud')">+ Audience</div>
+        <div class="chip" data-k="grade" onclick="toggleChip('grade')">+ Grade level</div>
+        <div class="chip" data-k="std" onclick="toggleChip('std')">+ Standard</div>
+        <div class="chip" data-k="time" onclick="toggleChip('time')">+ Time &amp; format</div>
+      </div>
+      <div class="brief-io">
+        <div class="bio prompt">
+          <div class="biolab">Your prompt</div>
+          <div class="biotext" id="briefPrompt"></div>
+        </div>
+        <div class="bio output">
+          <div class="biolab">What AI hands back</div>
+          <div class="biotext" id="briefOut"></div>
+        </div>
+      </div>
+      <div class="bmeter">
+        <span class="bmeter-lbl">Brief quality</span>
+        <div class="bmeter-bar"><i id="briefBar"></i></div>
+        <span class="bmeter-lbl" id="briefPct">20%</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>The teacher still decides</h3>
+  <p>A tight brief gets you a strong first draft — not a finished lesson. Even at 100% specificity, AI doesn't know that two of your students read three years below grade level, that the projector is broken this week, or that this class needs movement after lunch. The brief removes the wrong guesses; your judgment supplies the right details AI could never know.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>One activity, three tiers</h2>
+  <p class="lead">Differentiation is where AI earns its keep and where it most needs supervision. Producing a support version, a core version, and an extension of the same task used to be an hour of quiet duplication. AI drafts all three in a minute — but you still decide which child lands in which tier, and that decision is the pedagogy.</p>
+
+  <p>The move is simple: fix the activity and the objective, then ask AI to draft three access points to the same learning. <strong>Support</strong> lowers the barrier without lowering the goal — scaffolds, sentence starters, worked examples. <strong>Core</strong> is the grade-level task as designed. <strong>Extension</strong> deepens rather than merely adding more — asking students to justify, compare, or apply. Crucially, all three aim at the same objective; you are varying the road, not the destination.</p>
+  <p>Switch between the tiers below for a single Grade 4 activity. Notice that AI drafts the scaffolds and prompts, but the human decisions stay fixed underneath each tab — who needs which, and how to move a child between tiers without labelling them.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Differentiate one activity</span>
+    </div>
+    <div class="diff">
+      <div class="diff-task">
+        <strong>The activity · shared objective</strong>
+        Students explain why two fractions are equivalent, using a visual model. The goal is the same for everyone; only the access changes.
+      </div>
+      <div class="tier-switch" id="tierSwitch">
+        <button data-k="support" onclick="pickTier('support',this)">Support</button>
+        <button data-k="core" class="active" onclick="pickTier('core',this)">Core</button>
+        <button data-k="ext" onclick="pickTier('ext',this)">Extension</button>
+      </div>
+      <div class="tier-panel" id="tierPanel"></div>
+    </div>
+  </div>
+
+  <h3>Same destination, different roads</h3>
+  <p>The trap AI can lead you into is "more work for the fast, less learning for the slow" — handing strong students extra questions and weak students a watered-down goal. Real differentiation keeps the objective constant. Use AI to draft the scaffolds and the stretch, then apply the judgment it can't: which student, which tier, and when to quietly move them up.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Four planning disciplines</h2>
+  <p class="lead">Before you close this lesson, four habits separate teachers who plan <em>with</em> AI from those who are merely planned <em>for</em> by it. Flip each card for the discipline underneath the temptation.</p>
+
+  <p>None of these say "plan less." They say: keep the decisions that make a lesson yours, and let AI carry the volume. A plan drafted in one minute and judged for ten beats a plan typed from scratch in an hour — but only if the ten minutes of judgment actually happen.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Flip the discipline</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all disciplines</button>
+        <button onclick="allHype()">↺ Back to temptations</button>
+      </div>
+    </div>
+    <div class="hgrid" id="hgrid">
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"Just ask for a lesson"</div>
+            <div class="hsub">One line in, a full plan out.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The discipline</div>
+            <p>Name the objective before you type a word. Backward design first, prompt second. A plan built on a vague ask is engaging filler; a plan built on a clear objective is instruction.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"The draft looks great"</div>
+            <div class="hsub">It reads polished, so it must be right.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The discipline</div>
+            <p>Read every draft against your success criteria, not your first impression. AI writes fluent lessons that quietly miss the standard. Polish is not alignment — you check the fit yourself.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"More work = harder tier"</div>
+            <div class="hsub">Extension just means extra questions.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The discipline</div>
+            <p>Differentiate the road, not the destination. Support lowers barriers; extension deepens thinking. All tiers aim at one objective. You decide who goes where — never AI, and never by label.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"Plug in real student names"</div>
+            <div class="hsub">Personalise the plan with their details.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The discipline</div>
+            <p>Plan with roles, not identities. "A student reading below grade level" is safe; a real name and diagnosis in a general tool is not. Strip the private details — the plan works just as well without them.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>Good AI planning is backward design with a fast intern: you fix the objective and success criteria, brief AI with real context, and judge every draft — including its differentiation — against the destination you set.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now have a durable planning workflow that survives any tool. Start from the objective, brief AI with audience, grade, standard and time, and let it draft activities and tiers you then judge against your success criteria. The teacher sets the destination and checks the fit; AI drafts the road. Next week, we take this discipline into the classroom itself — teaching and assessing with AI alongside you.</p>
+  <ul>
+    <li>Backward design first: objective and success criteria before activities</li>
+    <li>A good brief adds audience, grade, standard and time — no guessing</li>
+    <li>Differentiate the road, not the destination — one objective, three access points</li>
+    <li>Judge every draft against your success criteria, not its polish</li>
+    <li>Plan with roles, not real student identities</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 02 of Week 1 · Next up: Teaching &amp; Assessing with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · backward-design flow ===== */
+const BD=[
+  {tag:'Stage 1 · the human sets this',t:'Objective',
+   p:'You name what students should be able to do by the end. This is yours alone — the destination the whole lesson is built to reach. AI does not set objectives; it works toward the one you fix.',
+   ex:['You define','Students can explain why two fractions are equivalent using a visual model.']},
+  {tag:'Stage 2 · the human sets this',t:'Success Criteria',
+   p:'You describe the evidence that the objective was met — what "got it" actually looks like. This becomes the yardstick every AI draft is measured against later.',
+   ex:['You define','A student can point to two models, match the shaded areas, and say in their own words why the fractions are equal.']},
+  {tag:'Stage 3 · AI drafts, you judge',t:'Activities',
+   p:'Now AI earns its keep. Against your fixed objective and criteria, it drafts engaging activities — a fraction-wall build, a matching game, a partner explanation. You keep the ones that actually teach the criteria.',
+   ex:['AI drafts','Three activity options tied to the objective; you pick the two that fit your class and cut the pretty one that doesn’t.']},
+  {tag:'Stage 4 · AI drafts, you assign',t:'Differentiation',
+   p:'AI drafts support, core and extension versions of the chosen activity — same objective, different access. You decide which student lands in which tier; that judgment stays human.',
+   ex:['AI drafts, you assign','Scaffolds for strugglers, a stretch task for the fast finishers — you match each to the child.']},
+  {tag:'Stage 5 · AI drafts, you own',t:'Check',
+   p:'AI drafts a quick exit check aligned to the success criteria. You confirm it actually measures the objective, run it, and own what the results mean for each student.',
+   ex:['AI drafts, you own','A two-question exit ticket mirroring the criteria — you read the results and decide who needs reteaching.']}
+];
+let bdCur=0,bdTimer=null;
+function renderBD(i){
+  bdCur=i;
+  document.querySelectorAll('#bdTrack .bnode').forEach(n=>n.classList.toggle('on',+n.dataset.i<=i));
+  document.querySelectorAll('#bdTrack .bconn').forEach(c=>c.classList.toggle('on',+c.dataset.c<i));
+  el('bdBar').style.width=((i+1)/BD.length*100)+'%';
+  const d=BD[i],p=el('bdPanel');
+  p.innerHTML='<div class="btag">'+d.tag+'</div><h4>'+d.t+'</h4><p>'+d.p+'</p>'
+    +'<div class="bex"><strong>'+d.ex[0]+'</strong>'+d.ex[1]+'</div>';
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+function bdStep(dir){
+  if(bdTimer){clearInterval(bdTimer);bdTimer=null;el('bdPlay').classList.remove('active')}
+  let i=bdCur+dir;if(i<0)i=BD.length-1;if(i>=BD.length)i=0;renderBD(i);
+}
+function bdAuto(){
+  const btn=el('bdPlay');
+  if(bdTimer){clearInterval(bdTimer);bdTimer=null;btn.classList.remove('active');return}
+  btn.classList.add('active');renderBD(0);
+  bdTimer=setInterval(()=>{
+    if(bdCur>=BD.length-1){clearInterval(bdTimer);bdTimer=null;btn.classList.remove('active');return}
+    renderBD(bdCur+1);
+  },1600);
+}
+renderBD(0);
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){renderBD(0);o.unobserve(e.target)}}),{threshold:0.3}).observe(el('bdTrack'));
+
+/* ===== Figure 2 · brief builder ===== */
+const briefState={aud:false,grade:false,std:false,time:false};
+const PARTS={
+  aud:{p:' for a <span class="add">mixed-ability</span> class',},
+  grade:{p:' of <span class="add">Grade 4</span> students'},
+  std:{p:', aligned to <span class="add">the equivalent-fractions standard</span>'},
+  time:{p:', as a <span class="add">40-minute lesson with a quick exit check</span>'}
+};
+function briefText(){
+  let s='Write a lesson on equivalent fractions';
+  if(briefState.grade)s+=PARTS.grade.p;
+  if(briefState.aud)s+=PARTS.aud.p;
+  if(briefState.std)s+=PARTS.std.p;
+  if(briefState.time)s+=PARTS.time.p;
+  return s+'.';
+}
+function briefOutput(){
+  const n=Object.values(briefState).filter(Boolean).length;
+  if(n===0)return 'A generic worksheet on fractions — no clear objective, unknown grade, no time limit, and no way to check learning. You’ll rewrite most of it.';
+  if(n===1)return 'A slightly more focused draft, but still guessing at the level, the standard and the format. Better than nothing; not yet usable.';
+  if(n===2)return 'A plausible lesson at the right level, but the objective and timing are still soft. Usable after real edits.';
+  if(n===3)return 'A well-aimed lesson tied to the standard and audience. Close to classroom-ready — a light pass and it’s yours.';
+  return 'A tightly-scoped 40-minute Grade 4 lesson on equivalent fractions, standard-aligned, with an exit check. A strong first draft — now you add what only you know about this class.';
+}
+function renderBrief(){
+  el('briefPrompt').innerHTML=briefText();
+  el('briefOut').textContent=briefOutput();
+  const n=Object.values(briefState).filter(Boolean).length;
+  const pct=20+n*20;
+  el('briefBar').style.width=pct+'%';
+  el('briefPct').textContent=pct+'%';
+  Object.keys(briefState).forEach(k=>{
+    document.querySelector('.chip[data-k="'+k+'"]').classList.toggle('on',briefState[k]);
+  });
+}
+function toggleChip(k){briefState[k]=!briefState[k];renderBrief()}
+function briefAll(){Object.keys(briefState).forEach(k=>briefState[k]=true);renderBrief()}
+function briefNone(){Object.keys(briefState).forEach(k=>briefState[k]=false);renderBrief()}
+renderBrief();
+
+/* ===== Figure 3 · differentiation tiers ===== */
+const TIERS={
+  support:{tag:'Support · lower the barrier, not the goal',t:'Same objective, more scaffolding',
+    tasks:['Pre-cut fraction strips so building the model isn’t the obstacle','Sentence starter: "These fractions are equal because the shaded parts…"','One worked example on the desk to refer back to','A partner to explain to, out loud, before writing'],
+    h:'AI drafts the scaffolds; you decide which students need them — and you keep the objective identical, so support never becomes a lesser goal.'},
+  core:{tag:'Core · the grade-level task',t:'The activity as designed',
+    tasks:['Students build two equivalent fractions with the fraction wall','They shade, compare, and write why the two are equal','A visual model is required as evidence, not optional','They explain their reasoning to a partner'],
+    h:'This is the target for everyone. AI drafts the instructions; you confirm they match the success criteria before anyone starts.'},
+  ext:{tag:'Extension · deepen, don’t just add',t:'Same objective, harder thinking',
+    tasks:['Find three fractions equivalent to the same value and prove it','Explain the rule connecting the numerators and denominators','Create a fraction that looks equivalent but isn’t — and say why','Justify to a skeptic who claims 2/4 and 3/6 are different'],
+    h:'AI drafts the stretch prompts; you make sure they deepen the same objective rather than just piling on more questions for fast finishers.'}
+};
+function pickTier(k,btn){
+  document.querySelectorAll('#tierSwitch button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const d=TIERS[k],p=el('tierPanel');
+  let h='<div class="ttag">'+d.tag+'</div><h4>'+d.t+'</h4><ul>';
+  d.tasks.forEach(t=>h+='<li>'+t+'</li>');
+  h+='</ul><div class="thuman"><strong>Teacher decides</strong>'+d.h+'</div>';
+  p.innerHTML=h;
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+pickTier('core',document.querySelector('#tierSwitch button.active'));
+
+/* ===== Figure 4 · discipline cards ===== */
+const hgrid=el('hgrid');
+function allReal(){document.querySelectorAll('.hcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(hgrid);
+
+</script>
+</body>
+</html>

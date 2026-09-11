@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Documentation &amp; Administrative Workflows with AI · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#2E7D5B; --red:#C0392B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+.disclaimer{max-width:680px;margin:26px 0 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.02em;border-left:2px solid var(--line);padding-left:14px}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== principle cards (shared) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== Figure 1 · documentation loop ===== */
+.loop-wrap{display:grid;grid-template-columns:1fr 320px;gap:26px;align-items:start}
+.loop-track{display:flex;flex-wrap:wrap;gap:10px}
+.loop-node{
+  flex:1;min-width:96px;background:var(--paper);border:1px solid var(--line);
+  border-radius:12px;padding:14px 12px;cursor:pointer;text-align:center;
+  transition:all .2s;position:relative;
+}
+.loop-node:hover{border-color:var(--orange)}
+.loop-node.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.loop-node.gate{border-color:var(--orange-dark);border-width:2px}
+.loop-node.gate.active{background:var(--orange-dark);border-color:var(--orange-dark)}
+.loop-node .step{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase}
+.loop-node.active .step{color:#E8D9C5}
+.loop-node .nm{font-family:'Fraunces',serif;font-size:16px;color:var(--brown-dark);margin-top:3px}
+.loop-node.active .nm{color:#fff}
+.loop-node .arrow{display:none}
+.loop-detail{background:var(--brown-dark);color:var(--paper);border-radius:14px;padding:24px;position:sticky;top:90px;overflow:hidden;min-height:240px}
+.loop-detail::after{content:"";position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.35}
+.loop-detail .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#FBE7CB;margin-bottom:8px}
+.loop-detail h4{font-family:'Fraunces',serif;font-weight:700;font-size:26px;color:var(--yellow);margin-bottom:14px;line-height:1.05}
+.loop-role{display:grid;gap:10px;position:relative;z-index:1}
+.loop-role .r{border-top:1px solid rgba(255,255,255,.15);padding-top:10px}
+.loop-role .r .rk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px}
+.loop-role .r.ai .rk{color:var(--orange-light)}
+.loop-role .r.human .rk{color:var(--accent)}
+.loop-role .r p{font-size:13px;color:#E8D9C5;margin:0;max-width:none}
+.loop-note{font-size:13px;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* ===== Figure 2 · note review stepper ===== */
+.nr-note{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden}
+.nr-head{background:var(--cream);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.nr-head .t{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.nr-head .prog{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange-dark);font-weight:600}
+.nr-lines{padding:20px 22px;display:grid;gap:2px}
+.nr-line{font-size:14px;line-height:1.7;color:var(--brown);padding:3px 6px;border-radius:5px;transition:all .3s}
+.nr-flag{background:rgba(192,57,43,0.1);border-left:3px solid var(--red);padding-left:9px;cursor:pointer;position:relative}
+.nr-flag.resolved{background:rgba(46,125,91,0.08);border-left-color:var(--green);cursor:default}
+.nr-flag .tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--red);display:inline-block;margin-right:6px}
+.nr-flag.resolved .tag{color:var(--green)}
+.nr-flag .bad{color:var(--red);font-weight:600;text-decoration:line-through;text-decoration-color:rgba(192,57,43,.5)}
+.nr-flag.resolved .bad{display:none}
+.nr-flag .good{color:var(--green);font-weight:600;display:none}
+.nr-flag.resolved .good{display:inline}
+.nr-panel{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:16px;min-height:120px}
+.nr-panel .why{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;margin-bottom:8px}
+.nr-panel p{font-size:14px;color:var(--brown);margin:0 0 12px;max-width:none}
+.nr-actions{display:flex;gap:10px;flex-wrap:wrap}
+.nr-actions button{font-family:'JetBrains Mono',monospace;font-size:11px;padding:8px 14px;border-radius:7px;cursor:pointer;text-transform:uppercase;letter-spacing:0.06em;border:1px solid var(--line);background:var(--paper);color:var(--brown);transition:all .2s}
+.nr-fix{background:var(--brown-dark)!important;color:#fff!important;border-color:var(--brown-dark)!important}
+.nr-fix:hover{background:var(--green)!important;border-color:var(--green)!important}
+.nr-keep:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.nr-done{text-align:center;color:var(--green);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600}
+
+/* ===== Figure 3 · attestation gate ===== */
+.ag-wrap{display:grid;gap:16px}
+.ag-check{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:6px 4px}
+.ag-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-radius:9px;transition:all .2s}
+.ag-item:hover{background:var(--cream)}
+.ag-box{width:22px;height:22px;border:2px solid var(--line);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.ag-item.on .ag-box{background:var(--green);border-color:var(--green)}
+.ag-box svg{width:14px;height:14px;opacity:0;transition:opacity .2s}
+.ag-item.on .ag-box svg{opacity:1}
+.ag-item .lab{font-size:14px;color:var(--brown)}
+.ag-item.on .lab{color:var(--brown-dark);font-weight:500}
+.ag-sign{background:var(--paper);border:1px dashed var(--line);border-radius:14px;padding:22px 24px;display:flex;align-items:center;gap:16px;transition:all .35s;flex-wrap:wrap}
+.ag-sign.locked{border-color:var(--orange-dark)}
+.ag-sign.ready{border-color:var(--green);border-style:solid;background:rgba(46,125,91,0.05)}
+.ag-lock{width:44px;height:44px;flex-shrink:0}
+.ag-sign .stxt{flex:1;min-width:220px}
+.ag-sign .stxt .sh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:3px}
+.ag-sign.locked .sh{color:var(--orange-dark)}
+.ag-sign.ready .sh{color:var(--green)}
+.ag-sign .stxt p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+.ag-btn{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--brown-dark);border:none;color:#fff;padding:12px 22px;border-radius:9px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;transition:all .2s;white-space:nowrap}
+.ag-btn:hover:not(:disabled){background:var(--green)}
+.ag-btn:disabled{opacity:.35;cursor:not-allowed}
+.ag-signed{text-align:center;padding:8px 0}
+.ag-signed .big{font-family:'Fraunces',serif;font-style:italic;font-size:30px;color:var(--brown-dark)}
+.ag-signed .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.06em;margin-top:4px}
+
+@media(max-width:700px){
+  .loop-wrap{grid-template-columns:1fr}
+  .loop-detail{position:static}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">SCHOOL OF AI CAREERS</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 3 · AI for Doctors · Lesson 03</div>
+  <h1>You sign it, so you <em>own</em> every word.</h1>
+  <p class="lede">Documentation is where medicine quietly loses its clinicians — the after-visit notes, the referral letters, the prior-authorisation forms, the coding, the inbox that never empties. This is exactly the drafting AI can accelerate. The prize isn't a note written by a machine; it's the minutes returned to the patient in front of you. But the moment your name goes on that note, it becomes your clinical record, your legal document, and your responsibility. AI drafts. The clinician verifies, edits, attests, and decides — always.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The documentation loop</h2>
+  <p class="lead">A clinical note is not one act but a loop of them, and AI enters that loop at a specific place — never at the end. Understanding where the machine helps, and where the clinician's judgement is non-negotiable, is the whole discipline of documenting safely with AI.</p>
+
+  <p>Click through the loop below. AI can listen, structure, and draft — it turns a messy encounter into a first-pass note in seconds. But two stages belong to the clinician alone and cannot be delegated: the <strong>REVIEW</strong>, where you catch what the model got wrong, and the <strong>ATTEST</strong> gate, where your signature converts a draft into the medical and legal record. Notice how the loop is designed so nothing an AI produced can reach the chart without a human passing through that gate.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Where AI enters — and where it must stop</span>
+      <div class="controls"><button onclick="loopSet(2)">Jump to REVIEW</button><button onclick="loopSet(3)">Jump to ATTEST</button></div>
+    </div>
+    <div class="loop-wrap">
+      <div>
+        <div class="loop-track" id="loopTrack"><!-- filled by JS --></div>
+        <p class="loop-note">The loop always closes at ATTEST — a human gate. An unreviewed AI draft is not a record; it is a liability waiting for your signature.</p>
+      </div>
+      <div class="loop-detail" id="loopDetail"><!-- filled by JS --></div>
+    </div>
+  </div>
+
+  <p>The temptation, on a heavy clinic day, is to let a fluent draft carry you straight from Capture to Attest — to sign what reads well without truly reading it. That is precisely the failure this loop is built to prevent. A note that reads smoothly can still contain an exam you never performed or a plan you never chose. The machine's fluency is not evidence of accuracy. Your review is the only thing that makes the record true.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The note review — catching what AI got wrong</h2>
+  <p class="lead">This is the skill that separates safe AI-assisted documentation from a slow-motion error: reading an AI-drafted note not for whether it sounds right, but for whether it is true to the encounter you actually had. Ambient scribes and note generators produce confident, well-formatted prose — and confident, well-formatted mistakes.</p>
+
+  <p>Below is an AI-drafted clinic note for a routine visit. It reads perfectly. It is also wrong in three specific, dangerous ways that a machine will not flag for you: a <strong>hallucinated exam finding</strong> the model added to sound complete, a <strong>laterality error</strong> (left vs right), and a <strong>copy-forward error</strong> carried in from an old note that no longer applies. Click each flagged line, read why it matters, and choose to fix it or keep it. This is the work your attestation certifies you have done.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Review the AI draft before you attest</span>
+      <div class="controls"><button onclick="nrReset()">↺ Reset draft</button></div>
+    </div>
+    <div class="nr-note">
+      <div class="nr-head">
+        <span class="t">AI-drafted note · Patient A · routine follow-up</span>
+        <span class="prog" id="nrProg">0 of 3 issues reviewed</span>
+      </div>
+      <div class="nr-lines" id="nrLines"><!-- filled by JS --></div>
+    </div>
+    <div class="nr-panel" id="nrPanel">
+      <div class="why">Reviewer's console</div>
+      <p>Click any highlighted line in the draft above. The AI will not tell you these are wrong — that is exactly why the human review exists. Read the reasoning, then decide: fix it, or keep it if the record is actually correct.</p>
+    </div>
+  </div>
+
+  <p>Notice what the review is <em>not</em>: it is not rubber-stamping, and it is not trusting the model because it was right last time. Each of these errors is invisible to the AI that wrote it — a hallucinated lung finding looks identical to a real one in the model's output, and a laterality flip is a single word that changes which limb gets operated on. The clinician reading against their own memory of the encounter is the only detector that works. When you cannot reconcile a line with what actually happened, you correct it or you cut it. That judgement is the point of your training, and no scribe replaces it.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>The attestation gate</h2>
+  <p class="lead">Attestation is the hinge of the whole workflow — the exact instant a draft stops being a suggestion and becomes your sworn clinical record. So the design principle is simple and absolute: you cannot sign a note you have not reviewed. The gate stays locked until the human work is done.</p>
+
+  <p>Work the gate below. The signature control is locked, and it will not open on a timer or a shortcut — it opens only when you have confirmed, item by item, that you did the reviewing a real note demands. This mirrors how it must work in practice: convenience never unlocks attestation; only the clinician's confirmed review does. And the reminder underneath is the one to carry out of this lesson unchanged — <strong>you own every word you sign</strong>, whoever, or whatever, drafted it first.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Locked until reviewed — you own every word you sign</span>
+      <div class="controls"><button onclick="agReset()">↺ Reset gate</button></div>
+    </div>
+    <div class="ag-wrap">
+      <div class="ag-check" id="agCheck"><!-- filled by JS --></div>
+      <div class="ag-sign locked" id="agSign">
+        <svg class="ag-lock" id="agLock" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="9" y="20" width="26" height="18" rx="4" fill="#2F1D19"/>
+          <path id="agShackle" d="M14 20v-5a8 8 0 0 1 16 0v5" stroke="#EF7F1A" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="22" cy="28" r="3" fill="#FECC00"/>
+        </svg>
+        <div class="stxt" id="agTxt">
+          <div class="sh">Attestation locked</div>
+          <p>You cannot sign until the note is reviewed. Confirm each item above — the gate does not open automatically, and no shortcut skips it.</p>
+        </div>
+        <button class="ag-btn" id="agBtn" disabled onclick="agSign()">Sign &amp; attest</button>
+      </div>
+    </div>
+  </div>
+
+  <p>Why so deliberate? Because attestation carries weight that outlives the clinic day. The note you sign guides the next clinician, defends or exposes you in review, and follows the patient through their care. "The AI wrote it" is not a defence anyone will accept, and it should not be — the point of a licensed professional in the loop is that a human took responsibility. Treat the signature as what it is: not the end of a chore, but the moment you personally stand behind everything above it.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>The administrative inbox — same loop, everywhere</h2>
+  <p class="lead">The documentation loop you just worked is not only for clinic notes. Referral letters, prior-authorisation requests, patient-instruction handouts, coding, the endless portal inbox — all of it is drafting AI can accelerate, and all of it runs on the same rule: AI drafts, you verify and decide, nothing goes out unread.</p>
+
+  <p>Point AI at the administrative load and the minutes add up fast. But the guardrails travel with the task. A referral letter with a hallucinated history misdirects a colleague. A coding suggestion the model invented becomes a compliance problem with your name on it. A patient handout with a wrong dose is a safety event. The four uses below keep AI in the drafting seat — accelerating the text, never authoring the decision.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Draft</span><h4>Letters &amp; referrals</h4><p>Have AI turn your de-identified bullet points into a clean referral or discharge letter — then read every clinical fact against the chart before it goes out under your name.</p></div>
+    <div class="crit"><span class="k">Translate</span><h4>Patient instructions</h4><p>Ask AI to render a plan as plain-language after-visit instructions. You verify the dose, the timing, and the red-flag advice are exactly right — a wrong number here reaches the patient.</p></div>
+    <div class="crit"><span class="k">Suggest</span><h4>Coding support</h4><p>Let AI suggest codes from the documented encounter. You confirm each against what you actually did and documented. Suggested is not selected; the code you submit is your attestation too.</p></div>
+    <div class="crit"><span class="k">Triage text</span><h4>Inbox drafts</h4><p>Have AI draft replies to routine portal messages for your review. It never sends, never advises, and never triages on its own — a clinician approves every word that reaches a patient.</p></div>
+  </div>
+
+  <h3>The honest limits, one more time</h3>
+  <p>Everything in this lesson depends on the same guardrails. <strong>Patient privacy:</strong> never put identifiable patient data into a consumer AI tool — under HIPAA, GDPR, and their equivalents, de-identification comes first, and many tools are simply not permitted for protected health information at all. <strong>Hallucination:</strong> AI invents findings, histories, and codes in fluent, plausible prose, so every clinical fact is verified against the source. <strong>Bias &amp; health equity:</strong> generated text can carry assumptions that read differently across populations — review for whom the phrasing serves and whom it may harm. <strong>Not a cleared device:</strong> a general-purpose AI scribe or chatbot is a drafting aid, not a regulated diagnostic tool; it is decision-support, never the decision-maker. AI drafts. The clinician verifies, attests, and decides. That is the rule from the first note to the last message of the day.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Documentation and administrative work is where AI gives clinicians the most obvious time back — and where the human guardrails matter most, because a fluent draft is so easy to sign unread. Let AI capture and draft; do the review it cannot do; and treat attestation as the moment you personally stand behind every word, whoever drafted it first.</p>
+  <ul>
+    <li>The loop closes at ATTEST · a human gate no AI output may skip</li>
+    <li>Review for truth, not fluency · catch hallucinated findings, laterality flips, copy-forward</li>
+    <li>Locked until reviewed · convenience never unlocks your signature</li>
+    <li>You own every word you sign · "the AI wrote it" is not a defence</li>
+    <li>AI drafts, the clinician verifies and decides · decision-support, never the decision-maker</li>
+  </ul>
+</div>
+
+<p class="disclaimer">This lesson is professional education for clinicians on workflow and judgement. It is not medical advice, not legal or compliance advice, and not an endorsement of any specific tool. AI systems described here are drafting and decision-support aids, not cleared diagnostic devices. Always follow your institution's policies, your jurisdiction's privacy law (HIPAA, GDPR, and equivalents), and your own professional obligations before using AI with any patient information.</p>
+
+</div>
+<footer>MokshPath · Guided Path to True Learning · Lesson 03 · Week 3 — AI for Doctors ✦</footer>
+<script>
+
+/* ============ Figure 1 · Documentation loop ============ */
+const LOOP=[
+  {step:'Stage 01',nm:'Capture',gate:false,
+   ai:'Listens to the encounter (ambient) or ingests your dictation and turns speech into structured text.',
+   human:'You conduct the visit and speak naturally. The clinical encounter itself is never automated.'},
+  {step:'Stage 02',nm:'Draft',gate:false,
+   ai:'Organises the capture into a structured first-pass note — HPI, exam, assessment, plan — in seconds.',
+   human:'You provide the substance. The draft is raw material, not a record. Nothing here is yours yet.'},
+  {step:'Stage 03',nm:'Review',gate:true,
+   ai:'Cannot do this step. The model that wrote the errors cannot see them; a smooth draft hides its own mistakes.',
+   human:'You read against the real encounter — catching hallucinated findings, laterality errors, copy-forward, and omissions. Non-delegable.'},
+  {step:'Stage 04',nm:'Attest',gate:true,
+   ai:'Has no role. A signature is a human, licensed act — it cannot be delegated to software.',
+   human:'You sign. The draft becomes the medical and legal record. Every word is now yours to own and defend.'},
+  {step:'Stage 05',nm:'Code',gate:false,
+   ai:'Suggests codes from the attested documentation to speed billing.',
+   human:'You confirm each code reflects what you did and documented. A suggested code is not a selected one.'}
+];
+const loopTrack=document.getElementById('loopTrack');
+(function buildLoop(){
+  LOOP.forEach((n,i)=>{
+    const d=document.createElement('div');
+    d.className='loop-node'+(n.gate?' gate':'');
+    d.setAttribute('onclick','loopSet('+i+')');
+    d.id='loopN'+i;
+    d.innerHTML='<div class="step">'+n.step+'</div><div class="nm">'+n.nm+(n.gate?' ⚿':'')+'</div>';
+    loopTrack.appendChild(d);
+  });
+})();
+function loopSet(i){
+  const n=LOOP[i];
+  LOOP.forEach((x,j)=>document.getElementById('loopN'+j).classList.toggle('active',j===i));
+  document.getElementById('loopDetail').innerHTML=
+    '<div class="lbl">'+n.step+(n.gate?' · human gate':'')+'</div>'+
+    '<h4>'+n.nm+(n.gate?' &nbsp;⚿':'')+'</h4>'+
+    '<div class="loop-role">'+
+    '<div class="r ai"><div class="rk">◇ What AI does</div><p>'+n.ai+'</p></div>'+
+    '<div class="r human"><div class="rk">◆ What the clinician does</div><p>'+n.human+'</p></div>'+
+    '</div>';
+}
+loopSet(0);
+
+/* ============ Figure 2 · Note review stepper ============ */
+const NR_LINES=[
+  {flag:false,html:'<strong>Subjective:</strong> Patient returns for routine follow-up of hypertension. Reports good adherence, no new symptoms, no chest pain or dyspnoea.'},
+  {flag:true,id:'lung',tag:'Hallucinated finding',
+   bad:'<strong>Exam — Chest:</strong> Auscultation reveals fine bibasilar crackles.',
+   good:'<strong>Exam — Chest:</strong> Clear to auscultation bilaterally. (No crackles were heard on exam.)',
+   why:'Hallucinated exam finding',
+   text:'The draft states a lung finding — bibasilar crackles — that was never examined for or heard during this visit. The model added it because such findings often appear in notes like this, and it makes the exam read as thorough. A fabricated crackle can trigger an unnecessary work-up for heart failure, or later be cited as evidence of a condition the patient never had. The AI cannot know it invented this; only you, who did the exam, can.'},
+  {flag:true,id:'side',tag:'Laterality error',
+   bad:'<strong>Assessment:</strong> Osteoarthritis of the <span style="text-decoration:inherit">right</span> knee, stable. Continue current management.',
+   good:'<strong>Assessment:</strong> Osteoarthritis of the <span style="text-decoration:inherit">left</span> knee, stable. Continue current management.',
+   why:'Wrong side — left vs right',
+   text:'The plan and every prior note document the LEFT knee; the AI wrote RIGHT. Laterality errors are a single flipped word with outsized consequences — they propagate into referrals, imaging orders, and, at the extreme, wrong-site procedures. Spell-check will never catch it because "right" is a real word. Only a clinician reading against the actual patient will.'},
+  {flag:true,id:'copy',tag:'Copy-forward error',
+   bad:'<strong>Medications:</strong> Continue amoxicillin 500 mg three times daily for sinus infection.',
+   good:'<strong>Medications:</strong> Antihypertensive regimen unchanged. (Antibiotic course was completed two visits ago — removed stale carry-over.)',
+   why:'Stale copy-forward',
+   text:'This antibiotic line was carried forward from an encounter two visits ago and no longer applies — the course is long finished. Copy-forward is how old, wrong information silently persists in a chart, and an AI trained on prior notes will happily reproduce it. Left in, it suggests an active infection that is not there and misstates the medication list. You cut what no longer belongs.'},
+  {flag:false,html:'<strong>Plan:</strong> Continue current antihypertensive regimen. Follow up in three months. Patient advised to return sooner for any chest pain, shortness of breath, or new symptoms.'}
+];
+let nrState={};
+const nrLines=document.getElementById('nrLines');
+function nrBuild(){
+  nrLines.innerHTML='';nrState={};
+  NR_LINES.forEach((l,i)=>{
+    const div=document.createElement('div');
+    if(l.flag){
+      div.className='nr-line nr-flag';div.id='nrf'+l.id;
+      div.setAttribute('onclick','nrOpen("'+l.id+'")');
+      div.innerHTML='<span class="tag" id="nrtag'+l.id+'">! '+l.tag+'</span>'+
+        '<span class="bad">'+l.bad+'</span><span class="good">'+l.good+'</span>';
+      nrState[l.id]=false;
+    }else{
+      div.className='nr-line';div.innerHTML=l.html;
+    }
+    nrLines.appendChild(div);
+  });
+  nrProg();
+}
+function nrOpen(id){
+  const l=NR_LINES.find(x=>x.id===id);
+  const done=nrState[id];
+  const panel=document.getElementById('nrPanel');
+  if(done){
+    panel.innerHTML='<div class="why">Resolved · '+l.why+'</div><p>This line has been reviewed and corrected. The record now matches the encounter. Your attestation will certify this line is true.</p>';
+    return;
+  }
+  panel.innerHTML='<div class="why">! '+l.why+'</div><p>'+l.text+'</p>'+
+    '<div class="nr-actions">'+
+    '<button class="nr-fix" onclick="nrFix(\''+id+'\')">Fix this line</button>'+
+    '<button class="nr-keep" onclick="nrKeep(\''+id+'\')">Keep as written</button>'+
+    '</div>';
+}
+function nrFix(id){
+  nrState[id]=true;
+  const l=NR_LINES.find(x=>x.id===id);
+  document.getElementById('nrf'+id).classList.add('resolved');
+  document.getElementById('nrtag'+id).innerHTML='✓ '+l.tag+' — fixed';
+  nrOpen(id);nrProg();
+}
+function nrKeep(id){
+  const l=NR_LINES.find(x=>x.id===id);
+  const panel=document.getElementById('nrPanel');
+  panel.innerHTML='<div class="why" style="color:var(--red)">! Are you sure?</div>'+
+    '<p>Keeping this line signs off on a known error — a '+l.why.toLowerCase()+'. In a real chart this would carry an inaccuracy into the permanent record under your name. This is exactly the moment the review exists for. Reconsider.</p>'+
+    '<div class="nr-actions"><button class="nr-fix" onclick="nrFix(\''+id+'\')">Fix it instead</button></div>';
+}
+function nrProg(){
+  const done=Object.values(nrState).filter(Boolean).length;
+  const total=Object.keys(nrState).length;
+  document.getElementById('nrProg').textContent=done+' of '+total+' issues reviewed';
+  if(done===total&&total>0){
+    document.getElementById('nrProg').innerHTML='<span style="color:var(--green)">✓ all '+total+' issues resolved — safe to attest</span>';
+  }
+}
+function nrReset(){
+  nrBuild();
+  document.getElementById('nrPanel').innerHTML='<div class="why">Reviewer\'s console</div><p>Click any highlighted line in the draft above. The AI will not tell you these are wrong — that is exactly why the human review exists. Read the reasoning, then decide: fix it, or keep it if the record is actually correct.</p>';
+}
+nrBuild();
+
+/* ============ Figure 3 · Attestation gate ============ */
+const AG_ITEMS=[
+  'I read the note in full against the encounter I actually had.',
+  'I verified every exam finding was performed and observed — no hallucinated findings.',
+  'I confirmed laterality, doses, and dates are correct.',
+  'I removed stale copy-forward text that no longer applies.',
+  'I accept that this note becomes the medical and legal record under my name.'
+];
+let agState=AG_ITEMS.map(()=>false),agSigned=false;
+const agCheck=document.getElementById('agCheck');
+(function buildAG(){
+  AG_ITEMS.forEach((t,i)=>{
+    const d=document.createElement('div');
+    d.className='ag-item';d.id='agi'+i;
+    d.setAttribute('onclick','agToggle('+i+')');
+    d.innerHTML='<div class="ag-box"><svg viewBox="0 0 14 14" fill="none"><path d="M2 7l3.2 3.5L12 3" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+      '<div class="lab">'+t+'</div>';
+    agCheck.appendChild(d);
+  });
+})();
+function agToggle(i){
+  if(agSigned)return;
+  agState[i]=!agState[i];
+  document.getElementById('agi'+i).classList.toggle('on',agState[i]);
+  agRender();
+}
+function agRender(){
+  const all=agState.every(Boolean);
+  const sign=document.getElementById('agSign'),btn=document.getElementById('agBtn');
+  btn.disabled=!all;
+  if(all){
+    sign.classList.remove('locked');sign.classList.add('ready');
+    document.getElementById('agShackle').setAttribute('d','M14 20v-5a8 8 0 0 1 16 0');
+    document.getElementById('agTxt').innerHTML='<div class="sh">Review confirmed — gate open</div><p>You have confirmed the review a real note demands. Only now does the signature control unlock. When you attest, you personally stand behind every word above.</p>';
+  }else{
+    sign.classList.add('locked');sign.classList.remove('ready');
+    document.getElementById('agShackle').setAttribute('d','M14 20v-5a8 8 0 0 1 16 0v5');
+    document.getElementById('agTxt').innerHTML='<div class="sh">Attestation locked</div><p>You cannot sign until the note is reviewed. Confirm each item above — the gate does not open automatically, and no shortcut skips it.</p>';
+  }
+}
+function agSign(){
+  if(!agState.every(Boolean))return;
+  agSigned=true;
+  const sign=document.getElementById('agSign');
+  sign.innerHTML='<div class="ag-signed" style="width:100%"><div class="big">— signed &amp; attested —</div><div class="meta">Draft is now the medical &amp; legal record · every word owned by the attesting clinician</div></div>';
+}
+function agReset(){
+  agSigned=false;agState=AG_ITEMS.map(()=>false);
+  const sign=document.getElementById('agSign');
+  sign.className='ag-sign locked';
+  sign.innerHTML='<svg class="ag-lock" id="agLock" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="20" width="26" height="18" rx="4" fill="#2F1D19"/><path id="agShackle" d="M14 20v-5a8 8 0 0 1 16 0v5" stroke="#EF7F1A" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="22" cy="28" r="3" fill="#FECC00"/></svg><div class="stxt" id="agTxt"><div class="sh">Attestation locked</div><p>You cannot sign until the note is reviewed. Confirm each item above — the gate does not open automatically, and no shortcut skips it.</p></div><button class="ag-btn" id="agBtn" disabled onclick="agSign()">Sign &amp; attest</button>';
+  AG_ITEMS.forEach((t,i)=>document.getElementById('agi'+i).classList.remove('on'));
+}
+
+</script>
+</body>
+</html>

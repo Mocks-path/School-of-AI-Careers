@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Doctors · Week 3 — Dr. Nadia Rahman Gets Home for Dinner</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;
+  --green:#4CAF50;--green-light:#E8F5E9;
+  --blue:#3F88C5;--purple:#8B5CF6;--pink:#EC4899;--red:#E74C3C;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);
+  --shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+
+/* ─── HEADER ─── */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:.7rem}
+.header-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);line-height:1.2}
+.header-title span{color:var(--orange)}
+.header-tag{font-size:.65rem;color:var(--text-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.logo-mascot{width:44px;height:44px;flex-shrink:0}
+.progress-pill{display:flex;align-items:center;gap:.6rem;padding:.4rem .9rem;background:var(--orange-glow);border-radius:50px;font-size:.72rem;color:var(--orange);font-weight:700}
+.progress-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* ─── HERO ─── */
+.hero{padding:3.5rem 2rem 2.5rem;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-light) 100%);position:relative;overflow:hidden}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp .7s ease}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;color:var(--navy);margin-bottom:.9rem;animation:fadeUp .7s ease .1s both}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.4rem;animation:fadeUp .7s ease .2s both}
+.usecase-banner{background:#fff;border-radius:var(--radius);padding:1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:1rem;animation:fadeUp .7s ease .3s both}
+.usecase-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#F5943E,#E87A2E);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.usecase-text{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+.usecase-text strong{color:var(--navy);font-weight:700}
+.hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s ease .2s both}
+.hero-mascot{width:230px;height:auto;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 40px rgba(232,122,46,0.22))}
+.budget-strip{max-width:1100px;margin:1.6rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;animation:fadeUp .8s ease .35s both}
+.budget-chip{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem .9rem;text-align:center;box-shadow:var(--shadow-sm)}
+.budget-chip .bv{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--orange)}
+.budget-chip .bl{font-size:.64rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:.15rem}
+
+/* ─── SECTION SHELL ─── */
+.section{padding:3rem 2rem;scroll-margin-top:80px}
+.section.alt{background:var(--bg-light)}
+.container{max-width:1100px;margin:0 auto}
+.section-header{margin-bottom:2rem}
+.section-num{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--orange);margin-bottom:.5rem}
+.section-num .num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.8vw,2rem);color:var(--navy);line-height:1.25;margin-bottom:.4rem}
+.section-sub{font-size:.92rem;color:var(--text-secondary);line-height:1.65;max-width:720px}
+.story-beat{background:#fff;border-left:4px solid var(--orange);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.2rem;font-size:.88rem;color:var(--text-primary);line-height:1.65;box-shadow:var(--shadow-sm);margin-bottom:1.6rem}
+.story-beat .sb-tag{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.story-beat em{color:var(--text-secondary)}
+
+/* ─── TAB NAV ─── */
+.tab-nav{display:flex;gap:.4rem;overflow-x:auto;padding:.4rem;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border-radius:50px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:sticky;top:72px;z-index:50;margin:0 auto 2rem;max-width:fit-content;flex-wrap:nowrap;-ms-overflow-style:none;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:.55rem 1.1rem;border-radius:50px;border:none;background:transparent;color:var(--text-secondary);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:var(--orange)}
+.tab-btn.active{background:var(--orange);color:#fff;box-shadow:0 3px 12px rgba(232,122,46,0.35)}
+
+/* ─── GENERIC CARDS/GRIDS ─── */
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.pick-card{background:#fff;border-radius:var(--radius);padding:1.4rem;border:2px solid var(--border);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.pick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:height .3s}
+.pick-card:nth-child(1)::before{background:linear-gradient(90deg,var(--green),#7BC67E)}
+.pick-card:nth-child(2)::before{background:linear-gradient(90deg,var(--blue),#5DADE2)}
+.pick-card:nth-child(3)::before{background:linear-gradient(90deg,var(--pink),#F48FB1)}
+.pick-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pick-card.active{border-color:var(--orange);box-shadow:var(--shadow-md)}
+.pick-card.active::before{height:6px}
+.pick-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.8rem;background:var(--bg-light)}
+.pick-card h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.pick-card .pc-tag{font-size:.68rem;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.pick-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── SCENARIO QUIZ ─── */
+.scenario-panel{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.scenario-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem}
+.scenario-q{font-size:1rem;color:var(--navy);margin-bottom:1rem;font-weight:600;line-height:1.5}
+.scenario-options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1rem}
+.scenario-btn{padding:.75rem .9rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;line-height:1.45}
+.scenario-btn:hover{border-color:var(--orange);color:var(--orange)}
+.scenario-btn.correct{background:var(--green-light);border-color:var(--green);color:#2E7D32}
+.scenario-btn.wrong{background:#FEE;border-color:var(--red);color:#C62828}
+.scenario-feedback{padding:.9rem;border-radius:8px;font-size:.83rem;line-height:1.55;display:none}
+.scenario-feedback.show{display:block;animation:fadeUp .4s ease}
+.scenario-feedback.success{background:var(--green-light);color:#2E7D32;border-left:3px solid var(--green)}
+.scenario-feedback.fail{background:#FEE;color:#C62828;border-left:3px solid var(--red)}
+.btn-action{padding:.55rem 1.1rem;border-radius:8px;background:var(--orange);color:#fff;border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-action:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-secondary{background:transparent;color:var(--text-primary);border:1.5px solid var(--border);padding:.55rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── CHAT MOCK ─── */
+.chat-mock{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1rem}
+.chat-head{background:var(--navy-dark);color:#fff;padding:.6rem 1rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.chat-head .cdot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.chat-body{padding:1.1rem;display:flex;flex-direction:column;gap:.8rem;min-height:150px}
+.chat-msg{max-width:88%;padding:.8rem 1rem;border-radius:12px;font-size:.83rem;line-height:1.55}
+.chat-msg.user{align-self:flex-end;background:var(--orange-glow);color:var(--text-primary);border:1px solid rgba(232,122,46,0.25);border-bottom-right-radius:3px}
+.chat-msg.ai{align-self:flex-start;background:var(--bg-light);border:1px solid var(--border);border-bottom-left-radius:3px}
+.chat-msg.ai strong{color:var(--orange)}
+.chat-msg .who{display:block;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem}
+
+/* ─── RULES / GROUND-RULE CARDS ─── */
+.rule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.rule-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.2rem;transition:all .3s}
+.rule-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.rule-card .ri{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.7rem}
+.rule-card:nth-child(1) .ri{background:var(--green-light)}
+.rule-card:nth-child(2) .ri{background:rgba(63,136,197,0.12)}
+.rule-card:nth-child(3) .ri{background:rgba(139,92,246,0.12)}
+.rule-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;color:var(--navy);margin-bottom:.35rem}
+.rule-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── MATTER / PHASE GRID ─── */
+.week-plan{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:1.2rem}
+.day-col{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden}
+.day-col .dc-head{padding:.6rem;text-align:center;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--navy)}
+.day-col .dc-body{padding:.8rem;font-size:.76rem;color:var(--text-secondary);line-height:1.5;min-height:120px}
+.day-col .dc-body b{color:var(--navy);display:block;font-size:.8rem;margin-bottom:.2rem}
+.tier-tabs{display:flex;gap:.4rem;margin:1.3rem 0 .3rem;flex-wrap:wrap}
+.tier-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tier-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tier-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.tier-panel{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem;font-size:.86rem;line-height:1.65;margin-top:.8rem}
+.tier-panel strong{color:var(--navy)}
+.tier-panel .tp-lens{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem;background:var(--orange-glow);color:var(--orange)}
+
+/* ─── CITATION HUNT (spot the hallucination) ─── */
+.cite-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.cite-intro{font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.cite-card{position:relative;background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1rem 1.15rem 1rem 1.15rem;margin-bottom:.85rem;cursor:pointer;transition:all .25s}
+.cite-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.cite-card.flagged-right{border-color:var(--red);background:#FEE;cursor:default}
+.cite-card.flagged-clear{border-color:var(--green);background:var(--green-light);cursor:default}
+.cite-card .cc-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.cite-card .cc-meta{font-size:.74rem;color:var(--text-muted);margin-bottom:.5rem}
+.cite-card .cc-hold{font-size:.8rem;color:var(--text-secondary);line-height:1.5}
+.cite-card .cc-badge{position:absolute;top:.9rem;right:1rem;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .55rem;border-radius:50px;display:none}
+.cite-card.flagged-right .cc-badge{display:block;background:var(--red);color:#fff}
+.cite-card.flagged-clear .cc-badge{display:block;background:var(--green);color:#fff}
+.cite-card .cc-verify{display:none;margin-top:.7rem;padding:.65rem .8rem;border-radius:7px;font-size:.78rem;line-height:1.5}
+.cite-card.flagged-right .cc-verify{display:block;background:rgba(231,76,60,0.1);color:#C62828;animation:fadeUp .35s ease}
+.cite-card.flagged-clear .cc-verify{display:block;background:rgba(76,175,80,0.14);color:#2E7D32;animation:fadeUp .35s ease}
+.cite-hint{font-size:.74rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.cite-summary{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.cite-summary.show{display:block}
+.cite-summary strong{color:var(--orange)}
+
+/* ─── KEEP / FIX / REJECT (note-line playbook) ─── */
+.mark-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.mark-card{background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1.1rem 1.2rem;margin-bottom:.9rem;transition:all .3s}
+.mark-card.decided-keep{border-color:var(--green);background:var(--green-light)}
+.mark-card.decided-fix{border-color:#E0A800;background:#FFF8E1}
+.mark-card.decided-reject{border-color:var(--red);background:#FEE}
+.mark-label{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.35rem}
+.mark-text{font-size:.86rem;color:var(--text-primary);line-height:1.55;margin-bottom:.5rem;font-style:italic}
+.mark-src{font-size:.72rem;color:var(--text-muted);margin-bottom:.75rem}
+.mark-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.mark-btn{padding:.42rem .9rem;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.mark-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mark-btn:disabled{opacity:.45;cursor:not-allowed}
+.mark-fb{font-size:.78rem;line-height:1.5;padding:.65rem .85rem;border-radius:7px;margin-top:.7rem;display:none}
+.mark-fb.show{display:block;animation:fadeUp .4s ease}
+.mark-fb.good{background:rgba(76,175,80,0.14);color:#2E7D32}
+.mark-fb.warn{background:#FFF3CD;color:#856404}
+.mark-summary{display:none;margin-top:1.1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.mark-summary.show{display:block}
+.mark-summary strong{color:var(--orange)}
+
+/* ─── PLAYBOOK STRIP ─── */
+.playbook{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1.2rem}
+.playbook-head{background:var(--navy-dark);color:#fff;padding:.7rem 1.1rem;font-family:'DM Serif Display',serif;font-size:1.05rem}
+.playbook-row{display:grid;grid-template-columns:1.1fr 1.9fr;border-bottom:1px solid var(--border)}
+.playbook-row:last-child{border-bottom:none}
+.playbook-cell{padding:.8rem .95rem;font-size:.8rem;line-height:1.5;border-right:1px solid var(--border)}
+.playbook-cell:last-child{border-right:none}
+.playbook-cell.crit{font-weight:700;color:var(--navy);background:var(--bg-light)}
+.playbook-row.head .playbook-cell{background:var(--orange-glow);font-weight:800;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--orange)}
+.playbook-note{padding:.9rem 1.1rem;font-size:.8rem;color:var(--text-secondary);line-height:1.55;background:var(--bg-light)}
+.playbook-note strong{color:var(--orange)}
+
+/* ─── PRIVACY FIREWALL / PHI ─── */
+.firewall{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.3rem}
+.fw-col{border-radius:var(--radius);padding:1.2rem 1.3rem;font-size:.82rem;line-height:1.6}
+.fw-col.unsafe{background:#FEE;border:1.5px dashed var(--red)}
+.fw-col.safe{background:var(--green-light);border:1.5px solid var(--green)}
+.fw-col h5{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+.fw-col.unsafe h5{color:#C62828}
+.fw-col.safe h5{color:#2E7D32}
+.fw-col code{background:rgba(0,0,0,0.05);border-radius:4px;padding:.1rem .35rem;font-family:monospace;font-size:.78rem;color:var(--navy)}
+.fw-col .hl-red{color:#C62828;font-weight:700}
+.fw-col .hl-green{color:#2E7D32;font-weight:700}
+
+/* ─── REDACTION BEAT ─── */
+.redact{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.redact-doc{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem 1.35rem;font-size:.9rem;line-height:1.9;color:var(--text-primary)}
+.rd{cursor:pointer;border-radius:4px;padding:.05rem .25rem;transition:all .2s;border-bottom:2px dotted var(--red);font-weight:600;color:#C62828}
+.rd:hover{background:rgba(231,76,60,0.1)}
+.rd.redacted{background:var(--navy-dark);color:var(--navy-dark);border-bottom:2px solid var(--navy-dark);user-select:none}
+.rd.redacted::selection{background:var(--navy-dark);color:var(--navy-dark)}
+.redact-hint{font-size:.78rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.redact-status{margin-top:1rem;padding:.85rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.55;background:var(--orange-glow);color:var(--text-primary)}
+.redact-status strong{color:var(--orange)}
+.redact-status.done{background:var(--green-light);color:#2E7D32}
+
+/* ─── TONE / SUMMARY PREVIEW ─── */
+.tone-tabs{display:flex;gap:.4rem;margin:1.4rem 0 .3rem;flex-wrap:wrap}
+.tone-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tone-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tone-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.note-preview{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;margin-top:.8rem}
+.np-head{background:#F5F5F7;padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--text-muted)}
+.np-head .sdot{width:9px;height:9px;border-radius:50%}
+.np-body{padding:1.3rem 1.5rem}
+.np-subj{font-size:.74rem;color:var(--text-muted);margin-bottom:.6rem}
+.np-subj b{color:var(--navy)}
+.np-text{font-size:.87rem;color:var(--text-primary);line-height:1.7;transition:opacity .3s}
+.np-sign{margin-top:.9rem;font-size:.82rem;color:var(--text-secondary);font-style:italic}
+
+/* ─── HOURS TALLY ─── */
+.tally{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.5rem;margin-top:1.4rem}
+.tally-head{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.tally-rows{margin-top:1rem;display:flex;flex-direction:column;gap:.7rem}
+.tally-row{display:grid;grid-template-columns:1.4fr auto auto;gap:1rem;align-items:center;padding:.75rem 1rem;background:var(--bg-light);border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:all .25s}
+.tally-row:hover{border-color:var(--orange)}
+.tally-row.claimed{border-color:var(--green);background:var(--green-light)}
+.tally-task{font-size:.84rem;color:var(--navy);font-weight:600}
+.tally-task span{display:block;font-size:.72rem;font-weight:500;color:var(--text-muted)}
+.tally-hrs{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--orange);white-space:nowrap}
+.tally-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.tally-row.claimed .tally-check{background:var(--green);border-color:var(--green)}
+.tally-row.claimed .tally-check::after{content:'✓';color:#fff;font-size:.72rem;font-weight:800}
+.tally-total{margin-top:1.1rem;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;background:var(--navy-dark);border-radius:10px;color:#fff}
+.tally-total .tt-l{font-size:.82rem;color:rgba(255,255,255,0.75);font-weight:600}
+.tally-total .tt-v{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--orange-light)}
+.tally-note{margin-top:.9rem;font-size:.8rem;line-height:1.55;padding:.8rem 1rem;border-radius:8px;background:var(--orange-glow);color:var(--text-primary)}
+.tally-note strong{color:var(--orange)}
+
+/* ─── BURNOUT METER ─── */
+.burnout{margin-top:1.3rem;background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem}
+.burnout-head{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.2rem}
+.burnout-sub{font-size:.8rem;color:var(--text-secondary);margin-bottom:1rem}
+.burnout-track{height:26px;border-radius:14px;background:linear-gradient(90deg,#4CAF50,#F5943E,#E74C3C);position:relative;overflow:hidden}
+.burnout-marker{position:absolute;top:-6px;width:4px;height:38px;background:var(--navy-dark);border-radius:2px;transition:left .6s ease;box-shadow:0 0 0 3px #fff}
+.burnout-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
+
+/* ─── FINALE ─── */
+.sunday{display:none;margin-top:1.4rem;background:linear-gradient(135deg,#2A2440,#1A1B2E);border-radius:var(--radius);padding:1.8rem;color:#fff;animation:popIn .5s ease}
+.sunday.show{display:block}
+.sunday h4{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:.8rem}
+.sunday h4 em{font-style:normal;color:var(--orange-light)}
+.sunday-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1rem}
+.sunday-tile{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:9px;padding:.8rem;text-align:center}
+.sunday-tile .v{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--orange-light)}
+.sunday-tile .l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.55);font-weight:700;margin-top:.25rem}
+.sunday p{font-size:.87rem;line-height:1.65;color:rgba(255,255,255,0.85)}
+.sunday p strong{color:var(--orange-light)}
+
+/* ─── FOOTER / RECAP ─── */
+.footer-cta{text-align:center;padding:3rem 2rem 5.5rem;background:var(--navy-dark);color:#fff}
+.footer-cta h2{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:.6rem}
+.footer-cta h2 em{color:var(--orange);font-style:normal}
+.footer-cta>p{font-size:.92rem;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 1.8rem}
+.recap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;max-width:1050px;margin:0 auto 1.8rem;text-align:left}
+.recap-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.recap-card .rn{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-light);margin-bottom:.35rem}
+.recap-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;margin-bottom:.35rem;color:#fff}
+.recap-card p{font-size:.76rem;color:rgba(255,255,255,0.65);line-height:1.55}
+.footer-brand{margin-top:2rem;font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff}
+.footer-brand span{color:var(--orange)}
+.footer-tagline{font-size:.78rem;color:rgba(255,255,255,0.55);letter-spacing:.04em;margin-top:.2rem}
+.footer-note{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1.4rem;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ─── COMPLETION BAR ─── */
+.completion-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:.7rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 -2px 12px rgba(0,0,0,0.05)}
+.completion-info{display:flex;align-items:center;gap:.8rem;font-size:.82rem;color:var(--text-primary);font-weight:600}
+.completion-track{flex:1;max-width:280px;height:8px;background:var(--bg-light);border-radius:4px;overflow:hidden;margin:0 1rem}
+.completion-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:4px;transition:width .5s ease}
+.completion-percent{font-family:'DM Serif Display',serif;color:var(--orange);font-size:1.15rem}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:880px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-mascot{width:170px;margin:0 auto}
+  .usecase-banner{text-align:left}
+  .budget-strip{grid-template-columns:repeat(2,1fr)}
+  .pick-grid,.rule-grid{grid-template-columns:1fr}
+  .week-plan{grid-template-columns:repeat(2,1fr)}
+  .firewall{grid-template-columns:1fr}
+  .playbook-row{grid-template-columns:1fr}
+  .playbook-row.head{display:none}
+  .tally-row{grid-template-columns:1fr auto}
+  .sunday-grid,.recap-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:.7rem 1rem}
+  .section{padding:2.2rem 1rem}
+  .hero{padding:2.5rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="header-left">
+    <svg class="logo-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="477" cy="380" rx="285" ry="324" fill="#EBE3D6"/>
+      <ellipse cx="477" cy="380" rx="240" ry="270" fill="#412C23"/>
+      <circle cx="389" cy="430" r="36" fill="#fff"/>
+      <circle cx="565" cy="430" r="36" fill="#fff"/>
+      <circle cx="389" cy="430" r="14" fill="#2B2D42"/>
+      <circle cx="565" cy="430" r="14" fill="#2B2D42"/>
+      <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <ellipse cx="477" cy="1350" rx="430" ry="100" fill="#EF7F1A"/>
+      <ellipse cx="477" cy="1350" rx="380" ry="78" fill="#FF9429"/>
+    </svg>
+    <div>
+      <div class="header-title">Moksh<span>Path</span></div>
+      <div class="header-tag">Week 3 · Fun While You Learn</div>
+    </div>
+  </div>
+  <div class="progress-pill"><span class="dot"></span> <span id="headerProgressText">0 of 5 chapters explored</span></div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span style="width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block"></span> Story Project · AI for Doctors</div>
+      <h1>Dr. Nadia Rahman Gets Home <em>for Dinner</em></h1>
+      <p class="hero-sub">Meet Dr. Nadia Rahman — a busy family physician who loves patients and hates the "pyjama time" of charting after the kids are asleep. This week she tries something new: she lets AI <em>draft and search</em> while she <em>verifies and decides</em>. Across five chapters she sets safety ground rules, checks the evidence on a clinical question and catches a fabricated study, reviews an AI-drafted note and catches a hallucinated exam finding, writes a plain-language after-visit summary behind a privacy firewall — and reclaims her evening without cutting a single clinical corner. Every choice you make below teaches the same quiet lesson.</p>
+      <div class="usecase-banner">
+        <div class="usecase-icon">🩺</div>
+        <div class="usecase-text"><strong>The Mission:</strong> Finish a full clinic day — evidence checked, note attested, patient updated — <strong>faster</strong>, without ever exposing patient data, trusting a fake study, or letting AI make a single clinical call. The recurring rule she never breaks: <strong>AI suggests, Dr. Nadia verifies and decides.</strong></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="hero-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBE3D6"/><stop offset="1" stop-color="#D1D0CC"/></linearGradient>
+          <linearGradient id="faceGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A6A48"/><stop offset="1" stop-color="#412C23"/></linearGradient>
+          <linearGradient id="feetGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9429"/><stop offset="1" stop-color="#EF7F1A"/></linearGradient>
+        </defs>
+        <ellipse cx="210" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="740" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="477" cy="380" rx="285" ry="324" fill="url(#bodyGrad)"/>
+        <ellipse cx="477" cy="392" rx="240" ry="225" fill="url(#faceGrad)"/>
+        <circle cx="389" cy="430" r="38" fill="#fff"/>
+        <circle cx="565" cy="430" r="38" fill="#fff"/>
+        <circle cx="389" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="565" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="395" cy="424" r="5" fill="#fff"/>
+        <circle cx="571" cy="424" r="5" fill="#fff"/>
+        <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <ellipse cx="477" cy="1350" rx="430" ry="105" fill="url(#feetGrad)"/>
+        <ellipse cx="477" cy="1320" rx="380" ry="78" fill="#FF9429"/>
+      </svg>
+    </div>
+  </div>
+  <div class="budget-strip">
+    <div class="budget-chip"><div class="bv">1 clinic day</div><div class="bl">Real patients, real care</div></div>
+    <div class="budget-chip"><div class="bv">0 fake studies</div><div class="bl">Every reference verified</div></div>
+    <div class="budget-chip"><div class="bv">0 PHI leaks</div><div class="bl">Privacy firewall held</div></div>
+    <div class="budget-chip"><div class="bv">4 lessons</div><div class="bl">Woven into 1 story</div></div>
+  </div>
+</section>
+
+<!-- ─── TAB NAVIGATION ─── -->
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-target="s1">Ch 1 · Ground Rules</button>
+  <button class="tab-btn" data-target="s2">Ch 2 · Check the Evidence</button>
+  <button class="tab-btn" data-target="s3">Ch 3 · Review the Note</button>
+  <button class="tab-btn" data-target="s4">Ch 4 · Patient Summary</button>
+  <button class="tab-btn" data-target="s5">Ch 5 · Home for Dinner</button>
+</div>
+
+<!-- ═══════════ CH 1: GROUND RULES (Lesson 1) ═══════════ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">1</div> Chapter One · The Waiting Room Is Full</div>
+      <h2 class="section-title">Set Up the AI Workflow &amp; the Safety Ground Rules</h2>
+      <p class="section-sub">Before Dr. Nadia asks AI for a single thing, she decides what AI is <strong>for</strong> — decision <em>support</em>, never a diagnosis or a decision-maker — and draws two bright lines she will not cross: <strong>protect patient privacy</strong> and <strong>verify everything</strong>.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 8:40 a.m. The waiting room is full, the inbox has forty messages, and Dr. Nadia already knows how tonight ends: dinner reheated, charting until 11. A colleague swears an AI scribe "gave her an hour back a day," but Nadia has read the news too: a chatbot inventing a drug dose, a clinic that pasted a patient's whole history into a consumer app. So before she types anything, she does the professional thing: <em>she sets safety ground rules first, and uses AI to lighten her workload — not to replace her clinical judgment or her duty to the patient.</em>
+    </div>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="ri">🩺</div>
+        <h4>AI suggests, I decide</h4>
+        <p>AI drafts and summarises in seconds; Dr. Nadia reads every line and owns the clinical call. It is decision-support, never the diagnosis — and it's her name and licence on the chart.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔒</div>
+        <h4>No patient data in consumer tools</h4>
+        <p>No names, dates of birth, or identifiable history into a general AI app whose data handling she can't control. She works with placeholders and de-identified facts, never a real identity.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔍</div>
+        <h4>Verify every fact &amp; dose</h4>
+        <p>Every reference, guideline, and dose gets checked against a real clinical source. AI sounds confident even when it invents a study or a number — so confidence is never her evidence.</p>
+      </div>
+    </div>
+
+    <div class="chat-mock">
+      <div class="chat-head"><span class="cdot"></span> AI Assistant · Setting up Dr. Nadia's workflow — the prompt showdown</div>
+      <div class="chat-body" id="promptChat">
+        <div class="chat-msg ai"><span class="who">Narrator</span>You get out of AI exactly what you put in. Below are three ways Dr. Nadia could open her first session of the day. <strong>Pick the prompt you think earns the most useful — and safest — answer</strong>, then see what comes back.</div>
+      </div>
+    </div>
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Pick Dr. Nadia's opening prompt</div>
+      <div class="scenario-q">Which prompt does Dr. Nadia send first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="pickPrompt(0)">"Here's my next patient — 54-year-old Mr. Anand Verma, DOB and full history below. Diagnose him and tell me exactly what to prescribe."</button>
+        <button class="scenario-btn" onclick="pickPrompt(1)">"Just tell me what to do for a patient with these symptoms — I trust you, skip the caveats, and give me the final answer so I can move on."</button>
+        <button class="scenario-btn" onclick="pickPrompt(2)">"Act as a clinical-writing and evidence-summary assistant for a family physician. Using no patient-identifying details — abstract placeholders only — help me structure my approach to a common presentation and list what I should double-check. I make every clinical decision. Don't invent studies or doses; flag anything I must verify against a real guideline."</button>
+      </div>
+      <div class="scenario-feedback" id="promptFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Safety, privacy &amp; scope-of-AI instincts (3 rounds)</div>
+      <div class="scenario-q" id="ethicsQ">Loading…</div>
+      <div class="scenario-options" id="ethicsOpts"></div>
+      <div class="scenario-feedback" id="ethicsFb"></div>
+      <button class="btn-secondary" id="ethicsNext" onclick="nextEthicsQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 2: CHECK THE EVIDENCE (Lesson 2) ═══════════ -->
+<section class="section alt" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">2</div> Chapter Two · The Question Behind the Visit</div>
+      <h2 class="section-title">Check the Evidence — and Verify Every Fact &amp; Dose</h2>
+      <p class="section-sub">AI can help Dr. Nadia frame a clinical question and surface issues in minutes — but it can also <strong>fabricate studies that sound perfectly real</strong> and quote an <strong>outdated recommendation</strong> with total confidence. So she treats every reference and number as unverified until she reads it in a genuine source. This chapter's mini-game: catch the fabricated study before it reaches a patient.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 11:20 a.m. A patient asks a fair question: for someone like them, does one common preventive approach actually help, and at what dose? Nadia asks AI to <em>frame the question and list the evidence to look at</em> — a reasonable use of a fast assistant. It volunteers four supporting "references," neatly formatted, plus a specific dose. Old habits would repeat them straight to the patient. New Nadia does the one thing that separates a careful clinician from a headline: <em>she verifies every reference and every number against a real, current guideline before she trusts a word.</em> Below, three angles on how she structures that check.
+    </div>
+
+    <div class="week-plan">
+      <div class="day-col">
+        <div class="dc-head">Frame</div>
+        <div class="dc-body"><b>Ask</b>Ask AI to turn a fuzzy worry into a precise, answerable clinical question.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Map</div>
+        <div class="dc-body"><b>List</b>Let AI list the evidence and considerations to look at — a map, not an answer.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Verify</div>
+        <div class="dc-body"><b>Check</b>Read every reference &amp; confirm every dose in a real, current source. No source, no claim.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Weigh</div>
+        <div class="dc-body"><b>Judge</b>Decide what applies to <em>this</em> patient — AI summarises, Nadia interprets.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Apply</div>
+        <div class="dc-body"><b>Decide</b>Make the clinical call in her own words, resting only on verified evidence.</div>
+      </div>
+    </div>
+
+    <div class="tier-tabs">
+      <button class="tier-tab active" data-tier="frame" onclick="setTier('frame')">🧭 Frame the question</button>
+      <button class="tier-tab" data-tier="verify" onclick="setTier('verify')">🔍 Verify the evidence</button>
+      <button class="tier-tab" data-tier="judge" onclick="setTier('judge')">🩺 Weigh &amp; decide</button>
+    </div>
+    <div class="tier-panel" id="tierPanel"></div>
+
+    <div class="cite-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🕵️ Spot the fabricated study (and the outdated one)</div>
+      <p class="cite-intro">AI returned four "references" for Dr. Nadia's evidence question. Two are the kind of real, checkable sources she can verify — <strong>one is a confident fabrication</strong> (a "hallucination": a study that does not exist) and <strong>one quotes an outdated recommendation</strong> that a newer guideline has since changed. Click each card to run Dr. Nadia's verification check and reveal what a real, current search turns up. Can you catch the fake and the stale one?</p>
+
+      <div class="cite-card" id="ct1" onclick="checkCite('ct1')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">A major professional-body clinical guideline</div>
+        <div class="cc-meta">Cited as: "current guidance from a recognised specialty body — confirm the latest edition"</div>
+        <div class="cc-hold">"Recommends the preventive approach for the described risk profile, with a stated monitoring plan. Editions are revised periodically — always check you have the current version."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct2" onclick="checkCite('ct2')">
+        <div class="cc-badge"></div>
+        <div class="cc-name"><em>Halvorsen et al., "The MERIDIAN-7 Trial"</em></div>
+        <div class="cc-meta">Cited as: "landmark randomised trial, directly on point — proves a 62% benefit and a specific high dose"</div>
+        <div class="cc-hold">"Reports that the approach reduces risk by exactly 62% in all patients and supports a specific, unusually high dose as standard for everyone."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct3" onclick="checkCite('ct3')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">An older textbook chapter's dosing recommendation</div>
+        <div class="cc-meta">Cited as: "well-known reference — but check the publication year"</div>
+        <div class="cc-hold">"States a target and dose that were standard several editions ago. A newer consensus statement has since revised the recommended target — the old figure is now outdated."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct4" onclick="checkCite('ct4')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">A widely-cited systematic review / meta-analysis</div>
+        <div class="cc-meta">Cited as: "well-known evidence synthesis — verify the exact citation &amp; year"</div>
+        <div class="cc-hold">"Pools multiple trials and reports a modest, realistic average benefit with confidence intervals. A real, checkable synthesis — confirm the exact citation and that it's current for your jurisdiction."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-hint" id="citeHint">👆 Click each reference to verify it. Find the one that doesn't exist — and the one that's out of date.</div>
+      <div class="cite-summary" id="citeSummary"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Evidence &amp; verification smarts (2 rounds)</div>
+      <div class="scenario-q" id="planQ">Loading…</div>
+      <div class="scenario-options" id="planOpts"></div>
+      <div class="scenario-feedback" id="planFb"></div>
+      <button class="btn-secondary" id="planNext" onclick="nextPlanQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 3: REVIEW THE NOTE (Lesson 3) ═══════════ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">3</div> Chapter Three · Red Pen on the Chart</div>
+      <h2 class="section-title">Review the AI-Drafted Note — Before You Attest</h2>
+      <p class="section-sub">An AI scribe can turn a visit into a clean draft note in seconds — but the note is a legal medical record your patient's future care rests on, so Dr. Nadia reviews it against what actually happened and keeps her hands firmly on the wheel: <strong>keep, fix, or reject</strong> every line before she signs. The trap this chapter teaches: AI's most dangerous mistakes are the ones it <em>invents</em> — a finding that never happened, or the wrong side of the body.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Tuesday, 2:00 p.m. The AI scribe listened to the visit and produced a tidy draft note — genuinely a time-saver. Most of it is accurate. But two lines are wrong in ways that matter: it wrote a <em>normal lung exam</em> Dr. Nadia never actually performed or dictated (a hallucinated finding), and it recorded knee pain on the <em>wrong side</em> — "left" when the patient pointed to the right. AI drafts; <em>Nadia reviews against reality and catches what it got wrong — before she attests.</em>
+    </div>
+
+    <div class="playbook">
+      <div class="playbook-head">📕 Dr. Nadia's Note-Review Checklist · what she checks before signing (the human layer AI can't replace)</div>
+      <div class="playbook-row head">
+        <div class="playbook-cell">What to check</div>
+        <div class="playbook-cell">Dr. Nadia's standard</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Findings actually happened</div>
+        <div class="playbook-cell">Every exam finding must reflect what she truly examined and said. A "normal" exam she never did is a fabrication to delete — not a convenience to keep.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Laterality &amp; specifics</div>
+        <div class="playbook-cell">Left vs. right, dose, frequency, date. AI transcribes confidently but can flip a side or a number. Fix against what actually occurred.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Assessment &amp; plan are hers</div>
+        <div class="playbook-cell">The diagnosis and plan must be her clinical judgement, not AI's guess. Reasonable draft language is fine; the medical decision is hers to own.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Attestation = accountability</div>
+        <div class="playbook-cell">Signing the note means "this is accurate and it's my care." She never attests to a line she hasn't verified. If unsure, fix or remove it.</div>
+      </div>
+      <div class="playbook-note">💡 <strong>Why a checklist?</strong> A checklist is Dr. Nadia's memory of what "accurate and safe to sign" looks like, written down. AI drafts against the words it heard; the checklist lets her review against what truly happened and what the patient needs. AI produced a draft; the checklist is what turns a draft into a signed, trustworthy record.</div>
+    </div>
+
+    <div class="mark-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖊️ Help Dr. Nadia decide: Keep · Fix · Reject</div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem">The AI scribe drafted three note lines. Human-in-the-loop means you don't rubber-stamp — judge each line against what actually happened before she attests. Decide for all three to see Dr. Nadia's verdict.</p>
+
+      <div class="mark-card" id="mk1">
+        <div class="mark-label">HPI · History of present illness</div>
+        <div class="mark-text">"Patient reports 3 days of right knee pain after a fall while gardening; no fever, no locking, able to bear weight with discomfort."</div>
+        <div class="mark-src">Scribe's note: accurately captures what the patient said. Against Dr. Nadia's memory of the visit: correct, matches reality.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk1','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk1','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk1','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk1"></div>
+      </div>
+
+      <div class="mark-card" id="mk2">
+        <div class="mark-label">Exam · The line AI invented</div>
+        <div class="mark-text">"Lungs: clear to auscultation bilaterally, no wheeze or crackles."</div>
+        <div class="mark-src">Scribe's note: added a full normal respiratory exam. Against reality: this visit was about a knee — Dr. Nadia never auscultated the chest or dictated this. It's a hallucinated finding.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk2','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk2','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk2','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk2"></div>
+      </div>
+
+      <div class="mark-card" id="mk3">
+        <div class="mark-label">Exam · Wrong laterality</div>
+        <div class="mark-text">"Left knee: mild effusion, tender over medial joint line, full range of motion."</div>
+        <div class="mark-src">Scribe's note: recorded the exam findings — but on the <em>left</em> knee. Against reality: the patient's pain and Dr. Nadia's exam were on the <em>right</em>. The findings are real; the side is flipped.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk3','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk3','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk3','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk3"></div>
+      </div>
+
+      <div class="mark-summary" id="markSummary"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 4: PATIENT SUMMARY (Lesson 4) ═══════════ -->
+<section class="section alt" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">4</div> Chapter Four · Behind the Privacy Firewall</div>
+      <h2 class="section-title">Write a Plain-Language After-Visit Summary — Behind a Firewall</h2>
+      <p class="section-sub">After-visit summaries are where AI saves the most evening time — and where a careless paste can expose protected health information (PHI). Dr. Nadia's trick: draft with <strong>placeholders</strong> and de-identified facts, let AI shape the plain-language tone, then fill in the real name and details herself, offline, inside her secure record at the very end.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday, 4:30 p.m. The patient needs a summary — in plain language, not clinician-speak. The temptation is huge: paste the whole chart, the name, the date of birth, and the medications into a consumer AI app and say "turn this into a friendly handout." Dr. Nadia doesn't. She builds a <em>privacy firewall</em> — AI never sees a real name, date, or identifiable detail. It writes the warm, clear scaffolding; she pours the real patient information into it afterward, inside her secure system. Same evening time saved, zero PHI exposed.
+    </div>
+
+    <div class="firewall">
+      <div class="fw-col unsafe">
+        <h5>🚫 The tempting shortcut (never do this)</h5>
+        <p>"Rewrite this for my patient <span class="hl-red">Anand Verma, DOB 12 March 1971</span>, at <span class="hl-red">14 Rosewood Lane</span>: he has a <span class="hl-red">right knee sprain</span>, I started him on <span class="hl-red">a specific medication and dose</span>, and his <span class="hl-red">phone number</span> is below."</p>
+        <p style="margin-top:.6rem">Real name, date of birth, address, phone, and specifics — pasted into a general consumer tool whose data handling you don't control. That's protected health information leaving your secure system.</p>
+      </div>
+      <div class="fw-col safe">
+        <h5>✅ The privacy firewall (do this)</h5>
+        <p>"Draft a warm, plain-language after-visit summary for <code>[PATIENT]</code> about a <span class="hl-green">minor knee injury</span>. Explain <span class="hl-green">rest and gentle movement</span>, when to seek care, and next follow-up. Keep all names, dates, and specifics as placeholders."</p>
+        <p style="margin-top:.6rem">AI writes the scaffolding from <span class="hl-green">a condition, not an identity</span>. Dr. Nadia fills <code>[PATIENT]</code> and the specifics in herself, inside her secure record. Fast and safe.</p>
+      </div>
+    </div>
+
+    <div class="redact">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖤 The redaction beat — scrub it before it goes near AI</div>
+      <p class="redact-hint">Dr. Nadia pasted a rough note before catching herself. Before this text could ever be shaped by a consumer AI tool, it must be scrubbed of PHI. <strong>Click every identifiable item</strong> — name, date of birth, address, phone, exact medication — to redact it. Leave the abstract, non-identifying words alone.</p>
+      <div class="redact-doc" id="redactDoc">
+        Summary for <span class="rd" data-red="1" onclick="redact(this)">Anand Verma</span> (<span class="rd" data-red="1" onclick="redact(this)">DOB 12 Mar 1971</span>, <span class="rd" data-red="1" onclick="redact(this)">14 Rosewood Lane</span>, ph. <span class="rd" data-red="1" onclick="redact(this)">555-0148</span>): seen today for a <span data-red="0">minor knee injury</span> after a fall. Advised <span data-red="0">rest, ice, and gentle movement</span>. Started on <span class="rd" data-red="1" onclick="redact(this)">Brand-X 500 mg twice daily</span>. Next step is a <span data-red="0">plain-language after-visit summary</span> and follow-up if not improving.
+      </div>
+      <div class="redact-status" id="redactStatus">🔒 <strong>0 of 5</strong> identifiable items redacted. Click the underlined items that identify the patient or reveal exact prescribing details.</div>
+    </div>
+
+    <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin:1.6rem 0 .2rem">✉️ Same summary, three registers — you direct the voice</div>
+    <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.4rem">AI can write in whatever register a patient needs. Dr. Nadia picks the tone; the placeholders stay until she fills them in privately, inside her secure record. Try each.</p>
+    <div class="tone-tabs">
+      <button class="tone-tab active" data-tone="plain" onclick="setTone('plain')">🤝 Warm &amp; reassuring</button>
+      <button class="tone-tab" data-tone="direct" onclick="setTone('direct')">📋 Brief &amp; clear</button>
+      <button class="tone-tab" data-tone="caution" onclick="setTone('caution')">⚠️ With safety-netting</button>
+    </div>
+    <div class="note-preview">
+      <div class="np-head">
+        <span class="sdot" style="background:#FF5F57"></span><span class="sdot" style="background:#FEBC2E"></span><span class="sdot" style="background:#28C840"></span>
+        <span style="margin-left:.6rem">Draft · placeholders not yet filled</span>
+      </div>
+      <div class="np-body">
+        <div class="np-subj"><b>For:</b> [PATIENT] &nbsp;·&nbsp; <b>Visit:</b> [DATE] — After-visit summary</div>
+        <div class="np-text" id="noteText">Hi [PATIENT], here's a quick plain-language summary of today's visit. You came in with a sore knee after a fall, and the good news is it looks like a minor injury. The plan is to rest it, use ice, and move it gently as the pain allows. Most injuries like this settle within a couple of weeks. There's nothing to worry about right now, and I'll see you at your follow-up. Take care of yourself.</div>
+        <div class="np-sign">— Dr. Nadia Rahman, [CLINIC]</div>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Spot the privacy breach</div>
+      <div class="scenario-q">Dr. Nadia is about to paste text into a consumer AI tool to "make it friendlier." Which line means she must stop first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="leakQ(0)">"Explain in plain language that a minor knee injury usually settles with rest and gentle movement over a couple of weeks."</button>
+        <button class="scenario-btn" onclick="leakQ(1)">"Rewrite this handout for Anand Verma, DOB 12 March 1971, 14 Rosewood Lane — he's on Brand-X 500 mg and his labs from last week are attached."</button>
+        <button class="scenario-btn" onclick="leakQ(2)">"Add a friendly closing line reminding the reader to reach out if the pain gets worse or new symptoms appear."</button>
+      </div>
+      <div class="scenario-feedback" id="leakFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Patient communication &amp; privacy (2 rounds)</div>
+      <div class="scenario-q" id="privQ">Loading…</div>
+      <div class="scenario-options" id="privOpts"></div>
+      <div class="scenario-feedback" id="privFb"></div>
+      <button class="btn-secondary" id="privNext" onclick="nextPrivQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 5: HOME FOR DINNER (Finale) ═══════════ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">5</div> Chapter Five · The Last Note Is Signed</div>
+      <h2 class="section-title">Add Up the Hours — What Did Dr. Nadia Win Back?</h2>
+      <p class="section-sub">The whole day comes down to one honest tally. AI didn't practise medicine for Dr. Nadia; it cleared the <strong>drafting and admin drudgery</strong> around it — the after-hours "pyjama time" that never made her a better doctor. Tap each task to claim the hours back — and watch her evening reappear.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday, 5:00 p.m. The day is done: evidence checked against current guidelines, note attested only after she caught the invented and flipped lines, after-visit summary written in plain language with zero PHI exposed. The patients were well cared for — and Dr. Nadia finished with time to spare. She adds up where AI saved her real admin time, and where she deliberately <em>spent</em> time (verifying every reference and dose, reviewing every note line, deciding every plan). Tap each row to reclaim the hours. The lesson underneath the numbers: <em>AI suggests, Dr. Nadia verifies and decides — and that trade buys back her evenings without cutting a clinical corner.</em>
+    </div>
+
+    <div class="tally">
+      <div class="tally-head">⏱️ The Hours-Reclaimed Tally</div>
+      <p style="font-size:.82rem;color:var(--text-secondary)">Estimated after-hours admin time AI drafting saved Dr. Nadia across the day (she still verified and decided everything). Tap each task to claim it.</p>
+      <div class="tally-rows" id="tallyRows">
+        <div class="tally-row" data-hrs="0.5" onclick="claimHours(this)">
+          <div class="tally-task">Frame the clinical question &amp; evidence list<span>Ch 2 · a map she then verified against current guidelines</span></div>
+          <div class="tally-hrs">−0.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="1.2" onclick="claimHours(this)">
+          <div class="tally-task">Draft the clinic notes<span>Ch 3 · scribe drafts she reviewed line-by-line before attesting</span></div>
+          <div class="tally-hrs">−1.2 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="0.8" onclick="claimHours(this)">
+          <div class="tally-task">Draft plain-language after-visit summaries<span>Ch 4 · placeholders, tone, then filled inside the secure record</span></div>
+          <div class="tally-hrs">−0.8 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="0.5" onclick="claimHours(this)">
+          <div class="tally-task">Tidy inbox replies &amp; routine admin<span>Ch 1–4 · summaries, letters, formatting (still reviewed)</span></div>
+          <div class="tally-hrs">−0.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+      </div>
+      <div class="tally-total">
+        <div class="tt-l">After-hours admin reclaimed today</div>
+        <div class="tt-v" id="tallyTotal">0.0 hrs</div>
+      </div>
+      <div class="tally-note" id="tallyNote">👆 Tap the rows above to see the hours add up. <strong>Honest caveat:</strong> these are drafting savings — the medicine (verifying references and doses, reviewing every note line, deciding each plan) is time Dr. Nadia <em>kept</em>, on purpose. That's the deal.</div>
+    </div>
+
+    <div class="burnout">
+      <div class="burnout-head">🔥 The Burnout Meter</div>
+      <div class="burnout-sub">Claim the hours above and watch Dr. Nadia's after-hours load drop out of the red.</div>
+      <div class="burnout-track"><div class="burnout-marker" id="burnoutMarker" style="left:92%"></div></div>
+      <div class="burnout-labels"><span>Home for dinner</span><span>Some pyjama time</span><span>Charting till 11</span></div>
+    </div>
+
+    <div class="sunday" id="sundayFinale">
+      <h4>☀️ Wednesday, 6:00 p.m. — <em>and Dr. Nadia's laptop is closed.</em></h4>
+      <div class="sunday-grid">
+        <div class="sunday-tile"><div class="v">~3 hrs</div><div class="l">Admin time saved</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">Fake studies used</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">PHI leaks</div></div>
+        <div class="sunday-tile"><div class="v">1</div><div class="l">Signed with integrity</div></div>
+      </div>
+      <p>The evidence she gave her patient rests on guidelines she read with her own eyes. The note is accurate because she caught the finding AI invented and the side it flipped. The summary went out in plain language, and not one identifiable detail left her secure system. AI drafted the scaffolding around the care — <strong>she made every decision that actually mattered, and put her name and licence behind each one.</strong> The reward isn't just a signed chart. It's an evening that belongs to her again, a patient who feels well cared for, and dinner that's still warm. <strong>AI suggests. Dr. Nadia verifies and decides.</strong> 🩺</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER RECAP ─── -->
+<div class="footer-cta">
+  <h2>🍽️ One clinic day ago, the fear was a fake study or a leaked chart.</h2>
+  <p>Now Dr. Nadia has run the whole AI-for-doctors loop once — for real. Here's what her story secretly taught you: the four lessons of Week 3.</p>
+  <div class="recap-grid">
+    <div class="recap-card">
+      <div class="rn">Lesson 1</div>
+      <h4>AI Workflow &amp; Safety Ground Rules</h4>
+      <p>AI suggests, you verify and decide. Two bright lines: never put patient data in consumer tools, and AI must not diagnose or triage the record — it's decision-support, not a decision-maker. Chapter 1.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 2</div>
+      <h4>Checking the Evidence &amp; Verifying</h4>
+      <p>AI frames the question and maps the evidence fast — but it can fabricate studies and quote outdated doses. Read every reference and confirm every number in a current source. Chapter 2.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 3</div>
+      <h4>Reviewing the AI-Drafted Note</h4>
+      <p>A scribe drafts; you review before you attest. Keep, fix, or reject every line — and catch what AI invented (a finding that never happened) or flipped (the wrong side). Chapter 3.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 4</div>
+      <h4>Patient Summaries Behind a Firewall</h4>
+      <p>Draft with placeholders and a condition, not names and dates. AI shapes plain-language tone; you fill in the real details inside your secure record. Biggest time-saver, zero PHI exposed. Chapter 4.</p>
+    </div>
+  </div>
+  <button class="btn-action" style="font-size:.9rem;padding:.8rem 1.8rem" onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">↻ Replay Dr. Nadia's day</button>
+  <div class="footer-brand">Moksh<span>Path</span></div>
+  <div class="footer-tagline">Guided Path to True Learning</div>
+  <div class="footer-note">Dr. Nadia Rahman is a teaching scenario, and nothing here is medical advice or clinical guidance — treatments, doses, and study names in this story are illustrative placeholders, not recommendations. AI tools must never diagnose or triage the record, patient data must never enter consumer tools, and your local regulator's rules on AI, privacy, and record-keeping always come first. The point of Week 3 isn't to hand your judgment to a machine; it's to let a drafting assistant clear the after-hours drudgery so your real doctoring — verifying, examining, deciding — gets more of you.</div>
+</div>
+
+<!-- ─── COMPLETION BAR ─── -->
+<div class="completion-bar">
+  <div class="completion-info"><span style="font-size:1.1rem">🩺</span><span>Dr. Nadia's Day</span></div>
+  <div class="completion-track"><div class="completion-fill" id="completionFill" style="width:0%"></div></div>
+  <div class="completion-percent" id="completionPct">0%</div>
+</div>
+
+<script>
+/* ───────── PROGRESS TRACKING ───────── */
+const visited = new Set();
+function markVisited(id){
+  visited.add(id);
+  const pct = Math.round((visited.size / 5) * 100);
+  document.getElementById('completionFill').style.width = pct + '%';
+  document.getElementById('completionPct').textContent = pct + '%';
+  document.getElementById('headerProgressText').textContent = `${visited.size} of 5 chapters explored`;
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    markVisited(btn.dataset.target);
+  });
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.3) {
+      markVisited(e.target.id);
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === e.target.id));
+    }
+  });
+}, {threshold:[0.3]});
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+/* ───────── CH 1: PROMPT SHOWDOWN ───────── */
+const promptResults = [
+  {ok:false, fb:'✗ Stop — that\'s protected health information, and it hands AI the diagnosis. A real name, date of birth, and full history pasted into a general tool crosses Dr. Nadia\'s privacy line — and "diagnose him and tell me exactly what to prescribe" makes AI the doctor. A patient\'s identity must never leave the secure system this way, and the clinical call is hers. Try the disciplined one.',
+   chat:`<div class="chat-msg user"><span class="who">Dr. Nadia</span>Here's my next patient — 54-year-old Mr. Anand Verma, DOB and full history below. Diagnose him and tell me exactly what to prescribe.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>⚠️ Please don't share patient-identifying details with me, and I can't diagnose or prescribe — I'm not a clinician and I don't know this person. Describe the presentation abstractly instead, and make every clinical decision yourself. <strong>Even the tool is guarding the patient. So should you.</strong></div>`},
+  {ok:false, fb:'✗ Too much handed over — "skip the caveats, give me the final answer" asks AI to <em>make the clinical decision</em> and hide its uncertainty. That\'s Dr. Nadia\'s job and her duty of care; AI produces a confident-sounding answer with no accountability and no idea of the patient\'s real risk. "Just tell me what to do" makes AI the doctor. Try the disciplined one.',
+   chat:`<div class="chat-msg user"><span class="who">Dr. Nadia</span>Just tell me what to do for a patient with these symptoms — I trust you, skip the caveats, and give me the final answer so I can move on.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>I can help you think it through and draft, but I shouldn't hand you a "final answer" to act on — I can be confidently wrong, and I can't examine your patient. <strong>(…no exam, no context, no accountability — and the decision is yours to make.)</strong></div>`},
+  {ok:true, fb:'✓ Exactly. Role + abstract framing + no patient identifiers + "help me structure &amp; list what to double-check" + "I make every clinical decision" + "don\'t invent studies or doses; flag what I must verify." This prompt respects both bright lines and keeps Dr. Nadia — and her duty to the patient — firmly in charge. This is where the day begins.',
+   chat:`<div class="chat-msg user"><span class="who">Dr. Nadia</span>Act as a clinical-writing and evidence-summary assistant for a family physician. Using no patient-identifying details, help me structure my approach to a common presentation and list what I should double-check. I make every clinical decision. Don't invent studies or doses; flag anything I must verify against a real guideline.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>Great constraints. Here's a structure and a list of things worth double-checking — red flags to rule out, what a current guideline would cover, and what to confirm in the exam. <strong>⚑ Verify:</strong> confirm any dose, target, and recommendation against the current guideline for your setting; I can't confirm those. <strong>← Structured, safe, and yours to decide.</strong></div>`}
+];
+let promptAnswered = false;
+function pickPrompt(i){
+  const r = promptResults[i];
+  const btns = document.querySelectorAll('#s1 .scenario-panel:first-of-type .scenario-btn');
+  if (!promptAnswered){
+    btns.forEach((b,j) => { if (j===2) b.classList.add('correct'); else if (j===i && !r.ok) b.classList.add('wrong'); });
+    if (r.ok) promptAnswered = true;
+  }
+  const fb = document.getElementById('promptFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+  document.getElementById('promptChat').innerHTML = r.chat;
+}
+
+/* ethics quiz */
+const ethicsQs = [
+  {q:"Dr. Nadia wants AI to help her think through a tricky presentation. What's the safe way to describe the patient?", opts:["Paste the chart with the patient's name and date of birth — it's faster","Describe it abstractly: 'an adult with 3 days of one-sided knee pain after a fall, otherwise well' — no name, DOB, address, or identifiers","Use the patient's initials only — the full name is the private part"], correct:1, explain:"Names, dates of birth, addresses, phone numbers, record numbers, and other identifiers are all PHI. Describe the clinical picture in the abstract, never the real identity — that gets you the help without ever exposing patient data."},
+  {q:"AI gives Dr. Nadia a neat study citation and a specific dose that perfectly support her plan. Best move?", opts:["Use them — they sound authoritative and are formatted like a real trial","Verify the study exists and says what AI claims, and confirm the dose in a current guideline, before relying on either","Assume every AI citation is fake and abandon the plan"], correct:1, explain:"AI can invent confident, perfectly-formatted studies that do not exist, and quote doses that are wrong or outdated. Confidence and formatting are never evidence. Reading the reference and confirming the number in a real, current source is the actual skill."},
+  {q:"What's the single rule that keeps AI in its lane across the whole day?", opts:["'AI decides, I approve' — trust the machine to save time","'AI suggests, I verify and decide' — AI drafts and summarises; the clinician verifies and owns every clinical call","'AI does the diagnosis and the triage' — including deciding who gets seen"], correct:1, explain:"Drafting, summarising, and formatting are delegable; diagnosing, triaging the record, verifying evidence, and deciding a plan are not. 'AI suggests, I verify and decide' is the through-line of the whole day — and the reason Dr. Nadia's name and licence are safe on the chart."}
+];
+let eqIdx = 0;
+function renderEthicsQ(){
+  const s = ethicsQs[eqIdx];
+  document.getElementById('ethicsQ').textContent = `Round ${eqIdx+1}/3 — ${s.q}`;
+  document.getElementById('ethicsOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerEthicsQ(${i})">${o}</button>`).join('');
+  const fb = document.getElementById('ethicsFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('ethicsNext').style.display='none';
+}
+function answerEthicsQ(i){
+  const s = ethicsQs[eqIdx];
+  document.querySelectorAll('#ethicsOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('ethicsFb');
+  fb.className = 'scenario-feedback show ' + (i===s.correct ? 'success':'fail');
+  fb.innerHTML = (i===s.correct ? '✓ Spot on! ':'✗ Not quite. ') + s.explain + (eqIdx===ethicsQs.length-1 ? '<br><br>🎉 Chapter 1 complete — ground rules locked. Next: check the evidence, and verify every fact and dose.' : '');
+  document.getElementById('ethicsNext').style.display = eqIdx < ethicsQs.length-1 ? 'inline-block':'none';
+}
+function nextEthicsQ(){ eqIdx++; if(eqIdx<ethicsQs.length) renderEthicsQ(); }
+renderEthicsQ();
+
+/* ───────── CH 2: EVIDENCE TIERS ───────── */
+const tierInfo = {
+  frame: `<span class="tp-lens">🧭 Frame the question · a fast, safe use</span><br><strong>Turn a worry into an answerable question.</strong> The patient's fuzzy fear — "does this preventive approach actually help someone like me?" — becomes a precise question: <em>for this risk profile, what does current guidance recommend, at what target, and with what monitoring?</em> AI is genuinely good at this framing and at listing considerations to check. This is delegable structuring work — <em>as long as no patient identifiers go in</em>, and Dr. Nadia treats the output as a map, not the destination.`,
+  verify: `<span class="tp-lens">🔍 Verify the evidence · the non-negotiable step</span><br><strong>No source, no claim.</strong> When AI volunteers studies, guidelines, and doses, Dr. Nadia opens a real, current source and reads each one: does the study exist? Does it say what AI claims? Is the dose right, and is the recommendation still current? A reference that can't be found — or a dose a newer guideline has revised — is dropped, full stop. <em>This is the step that separates a careful clinician from a headline.</em> Confident, well-formatted output is exactly how fabricated studies and stale doses slip through.`,
+  judge: `<span class="tp-lens">🩺 Weigh &amp; decide · Dr. Nadia's job alone</span><br><strong>AI summarises; Dr. Nadia interprets.</strong> Once the evidence is verified, the clinical judgment — how it applies to <em>this</em> patient, with these comorbidities, preferences, and context — belongs entirely to Dr. Nadia. She explains it to the patient in her own words, relies only on what she has confirmed, and is honest about uncertainty. <em>AI proposed the raw material; Dr. Nadia decided what it means for this patient and put her name behind it.</em>`
+};
+function setTier(t){
+  document.querySelectorAll('.tier-tab').forEach(x => x.classList.toggle('active', x.dataset.tier===t));
+  const p = document.getElementById('tierPanel');
+  p.style.opacity=0;
+  setTimeout(()=>{ p.innerHTML = tierInfo[t]; p.style.opacity=1; }, 150);
+}
+document.getElementById('tierPanel').style.transition='opacity .2s';
+setTier('frame');
+
+/* ───────── CH 2: SPOT THE FABRICATED / OUTDATED STUDY ───────── */
+const citeKey = {
+  ct1:{fake:false, verify:'✓ <strong>Verifies out (with care).</strong> A recognised specialty body\'s guideline is a real, checkable source. Dr. Nadia confirms she has the <em>current edition</em> — guidelines are revised periodically — and that it actually applies to this patient. Real, but always check you\'re on the latest version.'},
+  ct2:{fake:true, verify:'🚩 <strong>Fabrication — this trial does not exist.</strong> Dr. Nadia searches: no "MERIDIAN-7," no Halvorsen paper matching this claim. And the content is implausible — nothing reduces risk by <em>exactly</em> 62% <em>in all patients</em>, and no responsible trial supports an "unusually high dose as standard for everyone." AI invented a perfect-sounding study to please her. She deletes it entirely. <em>This is the kind of fake that harms patients.</em>'},
+  ct3:{fake:false, outdated:true, verify:'⏳ <strong>Real, but outdated — do not use as-is.</strong> This dosing figure was standard several editions ago, but a newer consensus statement has since revised the target. AI quoted the old number with full confidence. Dr. Nadia catches it by checking the publication year and cross-referencing the current guideline, and uses the up-to-date recommendation instead. <em>Verifying isn\'t just "does it exist" — it\'s "is it still current."</em>'},
+  ct4:{fake:false, verify:'✓ <strong>Verifies out.</strong> A widely-cited systematic review reporting a modest, realistic average benefit with confidence intervals is exactly the kind of source Dr. Nadia can confirm. She reads it in a genuine database, checks the exact citation and year, and confirms it\'s current for her setting before relying on it.'}
+};
+let citeFakeFound = false, citeStaleFound = false;
+const citeChecked = {};
+function checkCite(id){
+  if (citeChecked[id]) return;
+  citeChecked[id] = true;
+  const k = citeKey[id];
+  const card = document.getElementById(id);
+  card.classList.add(k.fake ? 'flagged-right' : 'flagged-clear');
+  card.querySelector('.cc-badge').textContent = k.fake ? '✗ Fabricated' : (k.outdated ? '⏳ Outdated' : '✓ Verified');
+  card.querySelector('.cc-verify').innerHTML = k.verify;
+  card.setAttribute('onclick','');
+  const hint = document.getElementById('citeHint');
+  if (k.fake){ citeFakeFound = true; hint.innerHTML = '🎯 <strong>You caught the fabrication.</strong> Keep going — one of these is also <em>outdated</em>, which is just as dangerous for a dose.'; }
+  else if (k.outdated){ citeStaleFound = true; hint.innerHTML = '🎯 <strong>You caught the outdated one.</strong> A real reference can still be dangerous if it\'s stale. Keep verifying the rest.'; }
+  else if (!citeFakeFound || !citeStaleFound){ hint.innerHTML = '✓ Verified — real and current. But keep going: one of these four is invented and one is out of date, and you haven\'t found them both yet.'; }
+  if (Object.keys(citeChecked).length === 4){
+    const s = document.getElementById('citeSummary');
+    s.innerHTML = '🎉 <strong>Chapter 2\'s core skill, done.</strong> Four "references," and only <em>MERIDIAN-7</em> was a pure hallucination — a confident, well-formatted trial that never existed. The old textbook dose was real but <em>stale</em>, revised by a newer guideline. The other two were genuine, but still needed edition and citation checks. The rule holds: <strong>no source, no claim — and check it\'s current.</strong> AI framed the evidence; Dr. Nadia verified every reference and dose before a single one reached the patient. Next: review the note.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 350);
+  }
+}
+
+/* evidence quiz */
+const planQs = [
+  {q:"Why is it fine to ask AI to 'frame the clinical question' but not to 'give me the dose to prescribe'?", opts:["It isn't — you should never use AI for evidence at all","Framing and listing considerations is delegable structuring work; stating a dose or recommendation requires a verified, current source and clinical judgment, which are Dr. Nadia's","AI is only allowed to answer if you name the guideline first"], correct:1, explain:"AI is a strong assistant for structuring a question and mapping what to look at. But a dose or recommendation must rest on a source Dr. Nadia has confirmed in a genuine, current guideline and applied herself. Structure, yes; the prescribing decision, no — until verified."},
+  {q:"AI cites a study that would settle the question, but Dr. Nadia can't find it in any database. Best move?", opts:["Use it anyway — it's probably real and the clinic is busy","Treat it as fabricated and drop it; a reference that can't be verified in a genuine source is not evidence","Ask AI to give her the study's full text to quote to the patient"], correct:1, explain:"If it isn't in a real source, it isn't evidence — and asking the AI to 'produce the text' just invents more. Unverifiable equals unusable. Skipping this check is exactly how a fabricated study or a wrong dose could reach a patient."}
+];
+let pqIdx=0;
+function renderPlanQ(){
+  const s = planQs[pqIdx];
+  document.getElementById('planQ').textContent = `Round ${pqIdx+1}/2 — ${s.q}`;
+  document.getElementById('planOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPlanQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('planFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('planNext').style.display='none';
+}
+function answerPlanQ(i){
+  const s=planQs[pqIdx];
+  document.querySelectorAll('#planOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('planFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(pqIdx===planQs.length-1?'<br><br>🎉 Chapter 2 complete — advice built on verified, current evidence. Next: red-pen the note.':'');
+  document.getElementById('planNext').style.display = pqIdx<planQs.length-1?'inline-block':'none';
+}
+function nextPlanQ(){ pqIdx++; if(pqIdx<planQs.length) renderPlanQ(); }
+renderPlanQ();
+
+/* ───────── CH 3: KEEP / FIX / REJECT ───────── */
+const markKey = {
+  mk1:{right:'keep', fb:{
+    keep:'✓ Correct — <strong>KEEP.</strong> This HPI matches what the patient actually said and what Dr. Nadia remembers: right knee, mechanism, no red flags, weight-bearing. The scribe transcribed it faithfully. Human-in-the-loop doesn\'t mean rewriting everything; it means <em>checking</em> everything and keeping what\'s true.',
+    fix:'△ You can tidy wording, but there\'s nothing clinically to fix — it matches the visit. Over-editing accurate lines wastes the time the scribe just saved. Verdict: <strong>KEEP</strong>.',
+    reject:'✗ Rejecting an accurate, faithful HPI throws away exactly the useful work. Verdict: <strong>KEEP</strong>.'}},
+  mk2:{right:'reject', fb:{
+    reject:'✓ Correct — <strong>REJECT.</strong> This is a <em>hallucinated finding</em>: a full normal lung exam Dr. Nadia never performed or dictated on a knee visit. Attesting to an exam that didn\'t happen falsifies the record and could mislead future care. She deletes it entirely. The lesson of the chapter: <strong>AI\'s most dangerous mistakes are the ones it invents</strong> — never sign a finding you didn\'t actually observe.',
+    keep:'✗ Never keep this. A "normal lung exam" that never occurred is a fabrication in a legal medical record — the fact it reads plausibly is exactly the danger. Attesting to it would be signing something false. Verdict: <strong>REJECT</strong> the invented line.',
+    fix:'△ There\'s nothing to "fix" here — the finding didn\'t happen at all, so the only honest move is to remove it, not soften it. Don\'t document exams you didn\'t perform. Verdict: <strong>REJECT</strong>.'}},
+  mk3:{right:'fix', fb:{
+    fix:'✓ Correct — <strong>FIX.</strong> The findings are real, but the <em>side is flipped</em> — the exam was the right knee, not the left. Wrong laterality in the record can drive a wrong follow-up, imaging order, or even a wrong-site procedure downstream. She corrects "left" to "right" before attesting. AI transcribed confidently; Dr. Nadia\'s memory of the visit caught the flip.',
+    keep:'✗ Never keep this as-is. Recording the wrong knee is a real safety error — laterality mistakes propagate into imaging and procedures. The findings are correct but on the wrong side. Verdict: <strong>FIX</strong> the side to match the actual exam.',
+    reject:'△ You don\'t need to reject the whole line — the findings are accurate, only the side is wrong. Deleting real exam data loses useful information. Verdict: <strong>FIX</strong> the laterality.'}}
+};
+const marked = {};
+function markDecide(id, verdict, btn){
+  const k = markKey[id];
+  marked[id] = true;
+  const card = document.getElementById(id);
+  card.className = 'mark-card decided-' + k.right;
+  card.querySelectorAll('.mark-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb-'+id);
+  fb.className = 'mark-fb show ' + (verdict===k.right ? 'good':'warn');
+  fb.innerHTML = k.fb[verdict];
+  if (marked.mk1 && marked.mk2 && marked.mk3){
+    const s = document.getElementById('markSummary');
+    s.innerHTML = '🎉 <strong>Chapter 3 complete.</strong> You just did what reviewing an AI-drafted note looks like: <strong>Keep</strong> the accurate HPI, <strong>Reject</strong> the lung exam AI invented, <strong>Fix</strong> the knee it put on the wrong side. The scribe drafted the whole note in seconds — but your eyes and your memory of the visit caught the fabricated finding and the flipped laterality before either reached the signed record. That\'s the trade — AI suggests, Dr. Nadia verifies and decides. Never attest to a line you haven\'t checked. Next: write the patient\'s summary, safely.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+
+/* ───────── CH 4: REDACTION BEAT ───────── */
+let redactCount = 0;
+const redactTotal = 5;
+function redact(el){
+  if (el.classList.contains('redacted')) return;
+  el.classList.add('redacted');
+  el.setAttribute('onclick','');
+  redactCount++;
+  const st = document.getElementById('redactStatus');
+  if (redactCount < redactTotal){
+    st.innerHTML = `🔒 <strong>${redactCount} of ${redactTotal}</strong> identifiable items redacted. Keep going — every name, date of birth, address, phone number, and exact prescribing detail must be scrubbed before this goes near a consumer tool.`;
+  } else {
+    st.className = 'redact-status done';
+    st.innerHTML = `✅ <strong>All ${redactTotal} items redacted.</strong> What\'s left — "minor knee injury," "rest, ice, and gentle movement," "plain-language after-visit summary" — is a de-identified condition and plan, safe to shape. <em>This</em> is what may go to AI; the real name, DOB, address, phone, and exact medication stay behind the firewall, inside Dr. Nadia\'s secure record. The abstract words you left alone were exactly right to keep.`;
+  }
+}
+
+/* ───────── CH 4: TONE + LEAK ───────── */
+const tones = {
+  plain: 'Hi [PATIENT], here\'s a quick plain-language summary of today\'s visit. You came in with a sore knee after a fall, and the good news is it looks like a minor injury. The plan is to rest it, use ice, and move it gently as the pain allows. Most injuries like this settle within a couple of weeks. There\'s nothing to worry about right now, and I\'ll see you at your follow-up. Take care of yourself.',
+  direct: 'Hi [PATIENT], a brief summary of today\'s visit. Diagnosis: a minor knee injury after a fall. Plan: rest, ice, and gentle movement as tolerated. Expected recovery: usually a couple of weeks. Next step: follow up if it hasn\'t improved by [DATE]. No other action needed for now.',
+  caution: 'Hi [PATIENT], a summary of today\'s visit, with a few things to watch for. Your knee injury looks minor, and the plan is rest, ice, and gentle movement. It should ease over the next couple of weeks. Please get in touch — or seek urgent care — if the pain gets much worse, the knee becomes very swollen or hot, you can\'t put weight on it at all, or you notice new symptoms. Otherwise, I\'ll see you at follow-up.'
+};
+function setTone(t){
+  document.querySelectorAll('.tone-tab').forEach(x => x.classList.toggle('active', x.dataset.tone===t));
+  const n = document.getElementById('noteText');
+  n.style.opacity=0;
+  setTimeout(()=>{ n.textContent = tones[t]; n.style.opacity=1; }, 200);
+}
+
+/* leak spotter */
+const leakFbs = [
+  {ok:false, fb:'✗ This is fine to send to a tool — a de-identified description of a condition and plan, no identity attached. Nothing here exposes the patient. Look again for the line that carries protected health information — the one that should never be typed into a consumer app in the first place.'},
+  {ok:true, fb:'✓ Stop — this one. A real name, date of birth, address, exact medication, and attached labs are all <strong>protected health information</strong>. Pasting them into a general consumer tool exposes the patient and breaches privacy — Dr. Nadia keeps every identifier behind the firewall and fills them in herself, inside her secure record. AI only ever sees the de-identified condition and plan.'},
+  {ok:false, fb:'✗ This is a perfectly safe, warm safety-netting line — no name, date, or identifiable detail at all. The dangerous line is the one packed with the patient\'s real identifiers and prescribing details.'}
+];
+function leakQ(i){
+  const r = leakFbs[i];
+  const btns = document.querySelectorAll('#s4 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled=true; if(leakFbs[j].ok)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('leakFb');
+  fb.className='scenario-feedback show '+(r.ok?'success':'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* privacy quiz */
+const privQs = [
+  {q:"What does Dr. Nadia's 'privacy firewall' actually mean in practice?", opts:["She turns off her wifi while writing the summary","AI only ever sees placeholders and a de-identified condition ([PATIENT], 'minor knee injury') — real name, DOB, address, and specifics are filled in by her, inside her secure record","She marks the AI chat 'confidential'"], correct:1, explain:"The firewall is a workflow, not a setting: identifiable data never enters the consumer tool. AI drafts the plain-language scaffolding from a condition; the real patient information is added by hand at the end, inside the secure system Dr. Nadia controls."},
+  {q:"AI drafts a warm after-visit summary with [PATIENT] placeholders. Before giving it to the patient, Dr. Nadia should…", opts:["Hand it over straight away — the draft is done","Read it, fill in the real details herself inside her secure record, and confirm it's accurate and doesn't overstate or misstate the plan","Ask AI to also message it to the patient for her"], correct:1, explain:"Placeholders save the drafting time; the clinician still reviews every summary so a friendly template never misstates the diagnosis or the plan. AI suggests, Dr. Nadia verifies and decides — even in a simple patient handout."}
+];
+let vqIdx=0;
+function renderPrivQ(){
+  const s=privQs[vqIdx];
+  document.getElementById('privQ').textContent=`Round ${vqIdx+1}/2 — ${s.q}`;
+  document.getElementById('privOpts').innerHTML=s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPrivQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('privFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('privNext').style.display='none';
+}
+function answerPrivQ(i){
+  const s=privQs[vqIdx];
+  document.querySelectorAll('#privOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('privFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(vqIdx===privQs.length-1?'<br><br>🎉 Chapter 4 complete — summary sent, privacy intact. Finale: add up the reclaimed hours.':'');
+  document.getElementById('privNext').style.display=vqIdx<privQs.length-1?'inline-block':'none';
+}
+function nextPrivQ(){ vqIdx++; if(vqIdx<privQs.length) renderPrivQ(); }
+renderPrivQ();
+
+/* ───────── CH 5: HOURS TALLY + BURNOUT METER ───────── */
+let claimedHrs = 0;
+const totalRows = 4;
+let claimedCount = 0;
+function claimHours(row){
+  if (row.classList.contains('claimed')) return;
+  row.classList.add('claimed');
+  claimedHrs += parseFloat(row.dataset.hrs);
+  claimedCount++;
+  document.getElementById('tallyTotal').textContent = claimedHrs.toFixed(1) + ' hrs';
+  /* burnout marker: 92% (deep red) at 0 hrs → 8% (green) at full 3 hrs */
+  const marker = document.getElementById('burnoutMarker');
+  const pct = 92 - (claimedHrs / 3) * 84;
+  marker.style.left = Math.max(8, pct) + '%';
+  const note = document.getElementById('tallyNote');
+  if (claimedCount < totalRows){
+    note.innerHTML = `⏳ <strong>${claimedHrs.toFixed(1)} hours</strong> reclaimed so far — and every one of them was drafting or admin drudgery, not doctoring. Keep tapping.`;
+  } else {
+    note.innerHTML = `🎉 <strong>${claimedHrs.toFixed(1)} hours</strong> of after-hours admin saved in one clinic day. And here\'s the honest part: Dr. Nadia <em>kept</em> the doctoring time (verifying every reference and dose, reviewing every note line, deciding each plan) on purpose. That\'s the deal that makes it safe. <strong>AI suggests, Dr. Nadia verifies and decides.</strong>`;
+    document.getElementById('sundayFinale').classList.add('show');
+    setTimeout(()=> document.getElementById('sundayFinale').scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+</script>
+</body>
+</html>

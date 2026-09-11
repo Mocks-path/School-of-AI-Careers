@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Candidate Engagement &amp; Interviewing with AI · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#2E7D5B; --red:#C0392B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+.disclaimer{max-width:680px;margin:26px 0 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.02em;border-left:2px solid var(--line);padding-left:14px}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== principle cards (shared) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== Figure 1 · structured-interview builder flow ===== */
+.sb-flow{display:flex;gap:0;flex-wrap:wrap;align-items:stretch;margin-bottom:20px}
+.sb-step{flex:1;min-width:120px;position:relative;cursor:pointer;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 14px;margin:4px;transition:all .2s;text-align:center}
+.sb-step:hover{border-color:var(--orange)}
+.sb-step.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.sb-step .snum{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--orange);font-weight:600}
+.sb-step.active .snum{color:var(--yellow)}
+.sb-step .sname{font-family:'Fraunces',serif;font-size:15px;color:var(--brown-dark);margin-top:6px;line-height:1.2}
+.sb-step.active .sname{color:var(--paper)}
+.sb-detail{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;transition:border-color .3s}
+.sb-detail h4{font-family:'Fraunces',serif;font-size:20px;color:var(--brown-dark);margin-bottom:8px}
+.sb-roles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.sb-role{border-radius:10px;padding:14px 16px}
+.sb-role.ai{background:rgba(0,141,210,0.07);border:1px solid rgba(0,141,210,0.25)}
+.sb-role.rec{background:rgba(213,82,34,0.07);border:1px solid rgba(213,82,34,0.25)}
+.sb-role .rk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.sb-role.ai .rk{color:var(--accent)}
+.sb-role.rec .rk{color:var(--orange-dark)}
+.sb-role p{font-size:13px;color:var(--brown);margin:0;max-width:none}
+.sb-note{margin-top:16px;font-size:13px;color:var(--muted);border-left:2px solid var(--orange);padding-left:14px}
+@media(max-width:640px){.sb-roles{grid-template-columns:1fr}}
+
+/* ===== Figure 2 · structured vs unstructured toggle ===== */
+.iv-flex{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:start}
+.iv-panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;transition:border-color .3s;min-height:280px}
+.iv-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;display:inline-block;padding:4px 9px;border-radius:5px;margin-bottom:14px}
+.iv-tag.uns{background:rgba(192,57,43,0.12);color:var(--red)}
+.iv-tag.str{background:rgba(46,125,91,0.14);color:var(--green)}
+.iv-q{background:var(--cream);border:1px solid var(--line);border-radius:9px;padding:11px 14px;margin-bottom:9px;font-size:14px;color:var(--brown);line-height:1.5}
+.iv-q .qt{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px}
+.iv-side{background:var(--brown-dark);color:var(--paper);border-radius:14px;padding:24px;position:sticky;top:90px;overflow:hidden}
+.iv-side::after{content:"";position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.35}
+.iv-side .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#FBE7CB;margin-bottom:6px}
+.iv-mrow{margin-bottom:16px}
+.iv-mname{font-family:'JetBrains Mono',monospace;font-size:11px;color:#E8D9C5;display:flex;justify-content:space-between;margin-bottom:5px}
+.iv-mname b{color:var(--yellow)}
+.iv-meter{height:9px;background:rgba(255,255,255,.14);border-radius:5px;overflow:hidden}
+.iv-meter div{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--orange-dark));transition:width .6s ease;border-radius:5px}
+.iv-sub{font-size:13px;color:#E8D9C5;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;margin-top:4px;max-width:none}
+.iv-sub strong{color:var(--orange-light)}
+@media(max-width:700px){.iv-flex{grid-template-columns:1fr}.iv-side{position:static}}
+
+/* ===== Figure 3 · notes → evidence stepper ===== */
+.ne-wrap{display:grid;gap:0}
+.ne-lane{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:2px}
+.ne-lane .lane-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-block;padding:4px 9px;border-radius:5px}
+.lane-tag.raw{background:rgba(213,82,34,0.12);color:var(--orange-dark)}
+.lane-tag.evid{background:rgba(0,141,210,0.12);color:var(--accent)}
+.ne-text{font-size:14px;line-height:1.7;color:var(--brown)}
+.overread{background:rgba(192,57,43,0.14);color:var(--red);border-radius:3px;padding:0 3px;font-weight:600;transition:all .3s}
+.overread.flagged{background:var(--brown-dark);color:var(--yellow);text-decoration:line-through;text-decoration-color:var(--orange)}
+.ne-crit{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;background:var(--cream);border:1px solid var(--line);border-radius:9px;margin-bottom:8px}
+.ne-crit .cc{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#fff;background:var(--tan);padding:3px 7px;border-radius:4px;white-space:nowrap;margin-top:2px}
+.ne-crit p{font-size:13px;color:var(--brown);margin:0;max-width:none}
+.ne-gate{display:flex;align-items:center;gap:14px;padding:14px 20px;margin:2px 0}
+.ne-gate .gicon{width:34px;height:34px;flex-shrink:0}
+.ne-gate .gtxt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--muted)}
+.ne-gate .gtxt strong{color:var(--brown-dark);text-transform:uppercase;letter-spacing:0.1em;display:block;font-size:10px;margin-bottom:2px}
+.ne-signoff{background:var(--paper);border:1px dashed var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;transition:all .3s;flex-wrap:wrap}
+.ne-signoff.locked{border-color:var(--orange-dark)}
+.ne-signoff.approved{border-color:var(--accent);border-style:solid;background:rgba(0,141,210,0.05)}
+.ne-signoff .sbadge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;padding:5px 10px;border-radius:5px;white-space:nowrap}
+.ne-signoff.locked .sbadge{background:var(--orange-dark);color:#fff}
+.ne-signoff.approved .sbadge{background:var(--accent);color:#fff}
+.ne-signoff p{font-size:13px;color:var(--muted);margin:0;max-width:none;flex:1;min-width:220px}
+.ne-btn{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--brown-dark);border:none;color:#fff;padding:9px 16px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;transition:all .2s;margin-left:auto;white-space:nowrap}
+.ne-btn:hover{background:var(--orange-dark)}
+.ne-btn:disabled{opacity:.4;cursor:not-allowed}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">SCHOOL OF AI CAREERS</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 4 · AI for Recruiters · Lesson 03</div>
+  <h1>Interview the <em>evidence</em>, not the vibe.</h1>
+  <p class="lede">The most consequential thing a recruiter does isn't sourcing — it's judging a human being against a role, and doing it fairly. Unstructured, gut-feel interviews are where bias does its quietest work, and where two candidates get measured on different rulers. AI can help you build structure, keep questions consistent, and turn messy notes into evidence against criteria. What it cannot do is decide who is right for the job, or be trusted to read "tone" and "culture fit" as if those were facts. AI supports. The recruiter verifies, and decides.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Structure is the interview's fairness engine</h2>
+  <p class="lead">Decades of hiring research point to one unglamorous conclusion: the single biggest lever on both prediction and fairness is structure. A structured interview asks every candidate the same job-related questions, scored against the same anchors, with evidence written down. That's it. It isn't a fancy technique — it's a discipline that stops each interviewer from quietly inventing their own test.</p>
+
+  <p>A structured interview is a chain, and each link is a place AI can help — and a place the recruiter must own. Click through the five stages below. Each shows what AI can usefully draft or organise, set against what only a human recruiter can decide. Notice how the work moves from job to question to score to evidence to scorecard, and how structure — not the AI — is what keeps every candidate on the same ruler.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The structured-interview chain — AI's role vs the recruiter's</span>
+      <div class="controls"><button onclick="sbSet(0)">↺ Start</button></div>
+    </div>
+    <div class="sb-flow" id="sbFlow"><!-- filled by JS --></div>
+    <div class="sb-detail" id="sbDetail"><!-- filled by JS --></div>
+  </div>
+
+  <p>The lesson underneath the animation is blunt: structure is the biggest bias-reducer available to a recruiter, and it costs nothing but discipline. AI can accelerate every stage — drafting competency-based questions, formatting scoring anchors, organising written evidence — but it cannot supply the discipline. If you let it generate a different question set for each candidate, or skip the evidence step because the summary "sounds right," you've thrown away the very thing that makes the interview fair. AI builds the scaffold faster; you decide that the scaffold gets used the same way for everyone.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Structured vs unstructured — see the difference</h2>
+  <p class="lead">"I just get a feel for people" is the most expensive sentence in recruiting. Gut-feel interviews feel insightful and are mostly measuring whether the candidate reminds the interviewer of themselves. Structured interviews feel mechanical and predict job performance far better — while treating candidates consistently enough to defend. The gap isn't a matter of taste. It's measurable.</p>
+
+  <p>Toggle between the two interview styles below. The left panel shows the questions each style tends to produce; the meters on the right show, in illustrative terms, how the styles compare on job-relevance, consistency across candidates, and fairness. The numbers here are a teaching device, not a citation — but the direction is exactly what the evidence shows. Watch what happens to "consistency" the moment you leave structure behind.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Two ways to run the same interview</span>
+      <div class="controls">
+        <button id="ivU" onclick="ivSet('u')">Unstructured</button>
+        <button id="ivS" class="active" onclick="ivSet('s')">Structured</button>
+      </div>
+    </div>
+    <div class="iv-flex">
+      <div class="iv-panel" id="ivPanel"><!-- filled by JS --></div>
+      <div class="iv-side">
+        <div class="lbl">How this style tends to score</div>
+        <div class="iv-mrow">
+          <div class="iv-mname"><span>Job-relevance</span><b id="ivm0lab">—</b></div>
+          <div class="iv-meter"><div id="ivm0" style="width:0%"></div></div>
+        </div>
+        <div class="iv-mrow">
+          <div class="iv-mname"><span>Consistency across candidates</span><b id="ivm1lab">—</b></div>
+          <div class="iv-meter"><div id="ivm1" style="width:0%"></div></div>
+        </div>
+        <div class="iv-mrow">
+          <div class="iv-mname"><span>Fairness / defensibility</span><b id="ivm2lab">—</b></div>
+          <div class="iv-meter"><div id="ivm2" style="width:0%"></div></div>
+        </div>
+        <p class="iv-sub" id="ivSub"></p>
+      </div>
+    </div>
+  </div>
+
+  <p>Here's where AI genuinely helps: it lowers the effort cost of doing the structured thing. Drafting a job-related question bank, writing behavioural anchors for a scoring scale, keeping the same set in front of you for every candidate — that's exactly the kind of consistent, structured drafting a model is good at. The reason recruiters skip structure is usually that it's tedious to set up, not that they doubt it works. AI removes the tedium. It does not remove your responsibility to run the same fair interview for everyone and to judge the answers yourself.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>From messy notes to evidence against criteria</h2>
+  <p class="lead">Interview notes are usually a mess — half-sentences, arrows, a scribble you can't read by the afternoon. AI can tidy them into something legible in seconds, and that's a real convenience. But there's a trap hiding in the cleanup: a fluent model doesn't just organise your notes, it interprets them — and it will happily promote a vague impression like "good culture fit" into confident-sounding evidence it never had.</p>
+
+  <p>Below is a stepper. Start with the raw notes as jotted. Run the AI tidy-up and watch it produce clean prose — including some over-reading you must catch. Then map what's left to the actual job criteria, striking out anything that's an impression rather than evidence. The point isn't that AI is useless here; it's that the recruiter's job is to convert impressions into evidence-against-criteria, and to delete the model's confident guesses about tone and "fit." Candidate consent to notes and recordings, and human review of every summary, are not optional.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Turning notes into defensible evidence</span>
+      <div class="controls">
+        <button id="neS1" class="active" onclick="neStep(1)">1 · Raw notes</button>
+        <button id="neS2" onclick="neStep(2)">2 · AI tidy-up</button>
+        <button id="neS3" onclick="neStep(3)">3 · Map to criteria</button>
+      </div>
+    </div>
+    <div class="ne-wrap">
+      <div class="ne-lane">
+        <span class="lane-tag raw" id="neRawTag">◇ Step 1 · Raw interview notes</span>
+        <div class="ne-text" id="neRaw"></div>
+      </div>
+      <div class="ne-gate">
+        <svg class="gicon" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="15" width="20" height="14" rx="3" fill="#2F1D19"/>
+          <path d="M11 15v-4a6 6 0 0 1 12 0v4" stroke="#EF7F1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="17" cy="21" r="2.2" fill="#FECC00"/>
+        </svg>
+        <div class="gtxt"><strong>Human review</strong><span id="neGateMsg">The recruiter reads every AI summary and strikes any impression that isn't evidence.</span></div>
+      </div>
+      <div class="ne-lane">
+        <span class="lane-tag evid" id="neOutTag">◆ Step 3 · Evidence mapped to criteria</span>
+        <div class="ne-text" id="neOut" style="opacity:.5">Advance to Step 3 to see impressions converted into evidence against the job's criteria.</div>
+      </div>
+      <div class="ne-signoff locked" id="neSign">
+        <span class="sbadge" id="neBadge">Consent + review required</span>
+        <p id="neSignMsg">Notes and recordings need the candidate's consent, and every AI summary needs a human read before it counts. This gate does not open until the recruiter has reviewed the evidence and removed the over-reading.</p>
+        <button class="ne-btn" id="neApprove" onclick="neApproveFn()" disabled>Confirm review</button>
+      </div>
+    </div>
+  </div>
+
+  <p>The most dangerous phrase an AI will hand you is "culture fit." It sounds like a finding; it is almost always a mirror. A model asked to summarise an interview will confidently describe a candidate as "energetic," "not quite our vibe," or "a strong cultural match" — reading tone it cannot verify and importing bias it cannot see. Strike those. Keep only what maps to a job-related criterion with an example behind it: "structured her answer around a real conflict she resolved" is evidence; "seemed like one of us" is not. The recruiter's discipline is the difference between a defensible record and a documented gut reaction.</p>
+
+  <h3>How to ask AI for honest interview support</h3>
+  <p>As in every lesson this week, the quality of the help depends on the framing of the request — and on refusing to let the tool overstep. These four patterns keep AI drafting the structure while you keep the judgement. No technical skill required; just clear instructions and a firm line.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Anchor to the job</span><h4>Competency, not personality</h4><p>"Draft five behavioural questions that test project prioritisation for a delivery-lead role." Ask for job-related competencies, never for questions that screen "fit," likeability, or background. The role defines the questions.</p></div>
+    <div class="crit"><span class="k">Ask for anchors</span><h4>Make scoring consistent</h4><p>Have AI draft behavioural anchors for a 1–4 scale so every interviewer scores the same answer the same way. Consistency across candidates is the fairness you're buying — and the thing you must protect.</p></div>
+    <div class="crit"><span class="k">Summarise, don't judge</span><h4>Evidence, no verdict</h4><p>"Summarise these notes as evidence against these criteria — do not infer personality, tone, or fit." Instruct the model to stay factual. Then strike anything that slipped through anyway.</p></div>
+    <div class="crit"><span class="k">De-identify</span><h4>No candidate PII in tools</h4><p>Never paste a candidate's name, contact details, or identifying facts into a consumer AI tool — it can breach GDPR and their equivalents. Use role and placeholders; the identity stays in your sanctioned system.</p></div>
+  </div>
+
+  <p>Even with a perfect prompt, the final read never moves. You check that the questions are job-related, that the scoring stayed consistent, that no impression was smuggled in as evidence — before any of it informs a decision about a person's livelihood. AI is fluent enough to make a biased summary sound objective, which is exactly why fluency can't be trusted as fairness. The last read is where the recruiter's judgement, and accountability, re-enter. It is not optional.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Engagement without automation replacing the human</h2>
+  <p class="lead">Interviewing sits inside a wider engagement job: keeping candidates warm, answering their questions, treating them like people even when they won't get the role. AI can lift a lot of that load — but candidate experience is a relationship, and a relationship can't be fully outsourced to a template. Point AI at the drafting, keep yourself in the conversation.</p>
+
+  <p>The line is the same one running through the whole week: AI supports, the recruiter verifies and decides. Use it to draft the interview invite you'll personalise, to prepare a consistent question set you'll actually run, to structure feedback you'll deliver with care, to summarise a debrief you'll still lead. What it must never become is the thing that decides who advances, the reader of "tone" you defer to, or a reason to stop treating candidates as humans. The four uses below keep AI in the assistant's chair.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Invite</span><h4>Draft, then personalise</h4><p>Have AI draft a clear, warm interview invitation with the logistics and what to expect — then add the human touch and check every detail. A candidate can tell a template from a person, and it shapes how they see you.</p></div>
+    <div class="crit"><span class="k">Prepare</span><h4>Build the question set</h4><p>Ask AI to draft a consistent, job-related question bank with scoring anchors. Then commit to running the same set for every candidate. The preparation is where fairness is decided, long before the interview.</p></div>
+    <div class="crit"><span class="k">Debrief</span><h4>Structure, then challenge</h4><p>Use AI to organise interviewer notes into an evidence-based debrief format. Then make the panel argue from evidence, not impressions. The tidy summary is a starting frame, not a verdict on the person.</p></div>
+    <div class="crit"><span class="k">Respond</span><h4>Timely, human feedback</h4><p>Draft kind, specific feedback for candidates — including those you're rejecting — then review and send it yourself. Ghosting is a choice; so is treating a rejected candidate with respect. That choice is yours.</p></div>
+  </div>
+
+  <h3>The honest limits, one more time</h3>
+  <p>Everything in this lesson depends on the same guardrails. <strong>Candidate privacy:</strong> never put a candidate's identifiable data into a consumer AI tool — under GDPR and its equivalents, use de-identified prompts and keep identity in your sanctioned system. <strong>Bias &amp; adverse impact:</strong> unstructured judgement and AI-read "tone" both import bias; structure and evidence-against-criteria are your defence, and you must watch for disparate impact across groups. <strong>Hallucination:</strong> AI will confidently invent a candidate's qualification, promote an impression into evidence, or read a "culture fit" it never observed — verify everything against what actually happened. <strong>Not the decision-maker:</strong> AI does not choose who advances, does not score the candidate, and does not judge "fit"; it is decision-support and drafting, never the hiring decision. AI supports. The recruiter verifies and decides. That doesn't change when the task is an interview instead of a job post — it matters more, because it is a person's livelihood, directly, on the other end.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Interviewing is where fairness is won or lost, and where AI is most tempting to over-trust. Let AI build the structure — the question bank, the scoring anchors, the tidy notes — but keep the discipline yourself: same questions for everyone, evidence against criteria, no impression dressed up as a fact, and never a candidate's identity in a consumer tool. Structure is the biggest bias-reducer you have.</p>
+  <ul>
+    <li>Structure is the fairness engine · same questions, same anchors, written evidence, for everyone</li>
+    <li>Structured beats gut-feel · it predicts better and treats candidates consistently</li>
+    <li>Convert impressions to evidence · strike "culture fit" and any tone AI can't verify</li>
+    <li>Consent + human review · notes need consent, every AI summary needs a human read</li>
+    <li>AI supports, the recruiter verifies and decides · it never chooses who advances</li>
+  </ul>
+</div>
+
+<p class="disclaimer">This lesson is professional education for recruiters on workflow and judgement. It is not legal, compliance, or HR advice, and not an endorsement of any specific tool. AI systems described here are drafting and decision-support aids, not autonomous hiring decision-makers, and must never make or replace a hiring decision. Always follow your organisation's policies, your jurisdiction's employment and privacy law (including GDPR and equivalents), obtain candidate consent for notes and recordings, and apply human review before any AI output informs a decision about a candidate.</p>
+
+</div>
+<footer>MokshPath · Guided Path to True Learning · Lesson 03 · Week 4 · AI for Recruiters ✦</footer>
+<script>
+
+/* ============ Figure 1 · Structured-interview builder ============ */
+const SB_STEPS=[
+  {name:'Competencies',
+   detail:'Define what the role actually requires',
+   ai:'Drafts a candidate list of job-related competencies from the job description and suggests behavioural signals for each.',
+   rec:'Chooses which competencies matter, in what weight — and rejects anything that screens for background, personality, or "fit" instead of the job.',
+   note:'The competencies are the foundation. If they measure the wrong thing, every later step measures the wrong thing consistently.'},
+  {name:'Consistent questions',
+   detail:'One question set, asked of everyone',
+   ai:'Drafts a bank of behavioural, job-related questions mapped to each competency, phrased consistently.',
+   rec:'Approves the set and commits to asking the same questions of every candidate — the discipline the AI cannot enforce.',
+   note:'Same questions for everyone is the single biggest bias-reducer available. This is where structure lives or dies.'},
+  {name:'Scoring anchors',
+   detail:'Define what a 1, 2, 3, 4 looks like',
+   ai:'Drafts behavioural anchors describing what a strong, adequate, and weak answer looks like on each scale point.',
+   rec:'Refines the anchors to the real role and ensures every interviewer scores the same answer the same way.',
+   note:'Anchors stop each interviewer inventing their own private test. Consistency across raters is fairness you can defend.'},
+  {name:'Evidence',
+   detail:'Write down what the candidate said',
+   ai:'Tidies raw notes into legible prose — and must be watched, because it will over-read tone and invent "fit".',
+   rec:'Converts impressions into evidence against criteria, strikes anything the AI guessed, and keeps only what maps to a competency with an example.',
+   note:'Evidence is what makes a scorecard defensible instead of a documented gut reaction. The recruiter owns this conversion.'},
+  {name:'Scorecard',
+   detail:'Score against criteria — a record, not a verdict',
+   ai:'Assembles the scored evidence into a consistent scorecard format across candidates.',
+   rec:'Reviews the whole record, applies judgement, and carries the score into a debrief where a human panel decides. AI never sets the final call.',
+   note:'The scorecard supports the decision; it is not the decision. A person advances only when a human, seeing the evidence, decides so.'}
+];
+const sbFlow=document.getElementById('sbFlow');
+let sbActive=0;
+(function buildSB(){
+  SB_STEPS.forEach((s,i)=>{
+    const el=document.createElement('div');
+    el.className='sb-step'+(i===0?' active':'');
+    el.id='sbStep'+i;
+    el.onclick=()=>sbSet(i);
+    el.innerHTML='<div class="snum">'+String(i+1).padStart(2,'0')+'</div><div class="sname">'+s.name+'</div>';
+    sbFlow.appendChild(el);
+  });
+})();
+function sbSet(i){
+  sbActive=i;
+  SB_STEPS.forEach((s,j)=>document.getElementById('sbStep'+j).classList.toggle('active',j===i));
+  const s=SB_STEPS[i];
+  document.getElementById('sbDetail').innerHTML=
+    '<h4>'+String(i+1).padStart(2,'0')+' · '+s.name+'</h4>'+
+    '<p style="font-size:14px;color:var(--muted);margin:0 0 4px;max-width:none">'+s.detail+'</p>'+
+    '<div class="sb-roles">'+
+      '<div class="sb-role ai"><div class="rk">◆ What AI can do</div><p>'+s.ai+'</p></div>'+
+      '<div class="sb-role rec"><div class="rk">◇ What the recruiter decides</div><p>'+s.rec+'</p></div>'+
+    '</div>'+
+    '<div class="sb-note">'+s.note+'</div>';
+}
+sbSet(0);
+
+/* ============ Figure 2 · Structured vs unstructured ============ */
+const IV={
+  u:{tag:'<span class="iv-tag uns">◇ Unstructured · gut-feel</span>',
+     qs:[
+       ['Improvised','So, tell me a bit about yourself.'],
+       ['Improvised','Do you think you\'d fit in with the team here?'],
+       ['Improvised','What do you like to do for fun on weekends?'],
+       ['Improvised','I get a good feeling about you — why should we hire you?']
+     ],
+     m:[42,20,28],
+     lab:['Weak','Very low','Low'],
+     sub:'Different questions for each candidate, scored on a feeling. It measures how much the candidate <strong>reminds you of yourself</strong> — and that is exactly where bias and adverse impact hide.'},
+  s:{tag:'<span class="iv-tag str">◆ Structured · job-related</span>',
+     qs:[
+       ['Competency: prioritisation','Describe a time you had competing deadlines. How did you decide what came first?'],
+       ['Competency: collaboration','Tell me about a conflict on a project team and what you did.'],
+       ['Competency: ownership','Walk me through a mistake you made and how you handled it.'],
+       ['Scored on anchors','Every answer scored 1–4 against the same behavioural anchors, for every candidate.']
+     ],
+     m:[88,90,86],
+     lab:['Strong','Very high','High'],
+     sub:'Same job-related questions, same anchors, written evidence — for everyone. It predicts performance far better and is <strong>consistent enough to defend</strong>. Structure is the fairness engine.'}
+};
+function ivSet(k){
+  document.getElementById('ivU').classList.toggle('active',k==='u');
+  document.getElementById('ivS').classList.toggle('active',k==='s');
+  const d=IV[k];
+  let html=d.tag;
+  d.qs.forEach(q=>{html+='<div class="iv-q"><span class="qt">'+q[0]+'</span>'+q[1]+'</div>';});
+  document.getElementById('ivPanel').innerHTML=html;
+  document.getElementById('ivPanel').style.borderColor=k==='s'?'var(--green)':'var(--red)';
+  [0,1,2].forEach(i=>{
+    document.getElementById('ivm'+i).style.width=d.m[i]+'%';
+    document.getElementById('ivm'+i+'lab').textContent=d.lab[i];
+  });
+  document.getElementById('ivSub').innerHTML=d.sub;
+}
+ivSet('s');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){ivSet('s');o.unobserve(e.target)}}),{threshold:0.3}).observe(document.getElementById('ivPanel'));
+
+/* ============ Figure 3 · Notes → evidence stepper ============ */
+const NE_RAW='arrived on time · answered Q on prioritisation w/ real example (moved release date after stakeholder call) · <span class="overread">seemed a bit nervous / not super confident</span> · gave concrete conflict story — apologised, re-scoped · <span class="overread">honestly just felt like one of us, good culture fit</span> · <span class="overread">probably a bit young for the role?</span> · strong on ownership, owned a missed deadline w/out excuses';
+const NE_TIDY='The candidate arrived on time and answered the prioritisation question with a real example, describing how she moved a release date after a stakeholder call. <span class="overread">She came across as somewhat nervous and lacking confidence.</span> She gave a concrete conflict story in which she apologised and re-scoped the work. <span class="overread">Overall she felt like a strong cultural fit — one of us.</span> <span class="overread">She may be a little young for the seniority of the role.</span> On ownership she was strong, describing a missed deadline she owned without excuses.';
+const NE_STEPS={
+  1:{tag:'◇ Step 1 · Raw interview notes',cls:'raw',text:NE_RAW,
+     gate:'The recruiter reads every AI summary and strikes any impression that isn\'t evidence.',flag:false},
+  2:{tag:'◆ Step 2 · AI tidy-up — watch the over-reading',cls:'raw',text:NE_TIDY,
+     gate:'AI has produced fluent prose — including tone, "fit" and an age inference it never had grounds for. Flag them.',flag:true}
+};
+let neCur=1;
+function neRenderRaw(step){
+  const s=NE_STEPS[step];
+  document.getElementById('neRawTag').textContent=s.tag;
+  document.getElementById('neRawTag').className='lane-tag '+s.cls;
+  const raw=document.getElementById('neRaw');
+  raw.innerHTML=s.text;
+  if(s.flag){raw.querySelectorAll('.overread').forEach(o=>o.classList.add('flagged'));}
+  document.getElementById('neGateMsg').textContent=s.gate;
+}
+function neStep(n){
+  neCur=n;
+  [1,2,3].forEach(j=>document.getElementById('neS'+j).classList.toggle('active',j===n));
+  if(n===1||n===2){neRenderRaw(n);}
+  const out=document.getElementById('neOut');
+  if(n===3){
+    neRenderRaw(2);
+    out.style.opacity='1';
+    out.innerHTML=
+      '<div class="ne-crit"><span class="cc">Prioritisation</span><p>Moved a release date after a stakeholder call — a real, dated example of trade-off decision-making. <b>Evidence · keep.</b></p></div>'+
+      '<div class="ne-crit"><span class="cc">Collaboration</span><p>Concrete conflict story: apologised and re-scoped the work with the team. <b>Evidence · keep.</b></p></div>'+
+      '<div class="ne-crit"><span class="cc">Ownership</span><p>Owned a missed deadline without excuses. <b>Evidence · keep.</b></p></div>'+
+      '<div class="ne-crit" style="background:rgba(192,57,43,0.06);border-color:rgba(192,57,43,0.3)"><span class="cc" style="background:var(--red)">Struck</span><p>"Nervous", "cultural fit / one of us", and "a bit young" are impressions and an age inference the AI over-read from tone. Not job-related, not verifiable — <b>struck from the record.</b></p></div>';
+    document.getElementById('neApprove').disabled=false;
+    document.getElementById('neGateMsg').textContent='The recruiter has mapped evidence to criteria and struck the over-reading. Confirm the review to close the loop.';
+  }else{
+    out.style.opacity='.5';
+    out.innerHTML='Advance to Step 3 to see impressions converted into evidence against the job\'s criteria.';
+    document.getElementById('neApprove').disabled=true;
+    neApproved=false;neRenderSign();
+  }
+}
+let neApproved=false;
+function neApproveFn(){
+  if(neCur!==3)return;
+  neApproved=!neApproved;neRenderSign();
+}
+function neRenderSign(){
+  const sign=document.getElementById('neSign');
+  if(neApproved){
+    sign.classList.remove('locked');sign.classList.add('approved');
+    document.getElementById('neBadge').textContent='Reviewed · evidence only ✓';
+    document.getElementById('neSignMsg').textContent='The recruiter confirmed the candidate consented to notes, read the AI summary in full, and kept only job-related evidence. This record is defensible — the impressions and inferences the AI added are gone. The recruiter is accountable for it.';
+    document.getElementById('neApprove').textContent='Undo review';
+  }else{
+    sign.classList.add('locked');sign.classList.remove('approved');
+    document.getElementById('neBadge').textContent='Consent + review required';
+    document.getElementById('neSignMsg').textContent='Notes and recordings need the candidate\'s consent, and every AI summary needs a human read before it counts. This gate does not open until the recruiter has reviewed the evidence and removed the over-reading.';
+    document.getElementById('neApprove').textContent='Confirm review';
+  }
+}
+neStep(1);
+
+</script>
+</body>
+</html>

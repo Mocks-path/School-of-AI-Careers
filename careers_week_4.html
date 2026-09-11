@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Recruiters · Week 4 — Sam Okafor Hires Fairly & Fast</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;
+  --green:#4CAF50;--green-light:#E8F5E9;
+  --blue:#3F88C5;--purple:#8B5CF6;--pink:#EC4899;--red:#E74C3C;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);
+  --shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+
+/* ─── HEADER ─── */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:.7rem}
+.header-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);line-height:1.2}
+.header-title span{color:var(--orange)}
+.header-tag{font-size:.65rem;color:var(--text-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.logo-mascot{width:44px;height:44px;flex-shrink:0}
+.progress-pill{display:flex;align-items:center;gap:.6rem;padding:.4rem .9rem;background:var(--orange-glow);border-radius:50px;font-size:.72rem;color:var(--orange);font-weight:700}
+.progress-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* ─── HERO ─── */
+.hero{padding:3.5rem 2rem 2.5rem;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-light) 100%);position:relative;overflow:hidden}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp .7s ease}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;color:var(--navy);margin-bottom:.9rem;animation:fadeUp .7s ease .1s both}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.4rem;animation:fadeUp .7s ease .2s both}
+.usecase-banner{background:#fff;border-radius:var(--radius);padding:1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:1rem;animation:fadeUp .7s ease .3s both}
+.usecase-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#F5943E,#E87A2E);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.usecase-text{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+.usecase-text strong{color:var(--navy);font-weight:700}
+.hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s ease .2s both}
+.hero-mascot{width:230px;height:auto;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 40px rgba(232,122,46,0.22))}
+.budget-strip{max-width:1100px;margin:1.6rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;animation:fadeUp .8s ease .35s both}
+.budget-chip{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem .9rem;text-align:center;box-shadow:var(--shadow-sm)}
+.budget-chip .bv{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--orange)}
+.budget-chip .bl{font-size:.64rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:.15rem}
+
+/* ─── SECTION SHELL ─── */
+.section{padding:3rem 2rem;scroll-margin-top:80px}
+.section.alt{background:var(--bg-light)}
+.container{max-width:1100px;margin:0 auto}
+.section-header{margin-bottom:2rem}
+.section-num{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--orange);margin-bottom:.5rem}
+.section-num .num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.8vw,2rem);color:var(--navy);line-height:1.25;margin-bottom:.4rem}
+.section-sub{font-size:.92rem;color:var(--text-secondary);line-height:1.65;max-width:720px}
+.story-beat{background:#fff;border-left:4px solid var(--orange);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.2rem;font-size:.88rem;color:var(--text-primary);line-height:1.65;box-shadow:var(--shadow-sm);margin-bottom:1.6rem}
+.story-beat .sb-tag{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.story-beat em{color:var(--text-secondary)}
+
+/* ─── TAB NAV ─── */
+.tab-nav{display:flex;gap:.4rem;overflow-x:auto;padding:.4rem;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border-radius:50px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:sticky;top:72px;z-index:50;margin:0 auto 2rem;max-width:fit-content;flex-wrap:nowrap;-ms-overflow-style:none;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:.55rem 1.1rem;border-radius:50px;border:none;background:transparent;color:var(--text-secondary);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:var(--orange)}
+.tab-btn.active{background:var(--orange);color:#fff;box-shadow:0 3px 12px rgba(232,122,46,0.35)}
+
+/* ─── GENERIC CARDS/GRIDS ─── */
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.pick-card{background:#fff;border-radius:var(--radius);padding:1.4rem;border:2px solid var(--border);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.pick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:height .3s}
+.pick-card:nth-child(1)::before{background:linear-gradient(90deg,var(--green),#7BC67E)}
+.pick-card:nth-child(2)::before{background:linear-gradient(90deg,var(--blue),#5DADE2)}
+.pick-card:nth-child(3)::before{background:linear-gradient(90deg,var(--pink),#F48FB1)}
+.pick-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pick-card.active{border-color:var(--orange);box-shadow:var(--shadow-md)}
+.pick-card.active::before{height:6px}
+.pick-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.8rem;background:var(--bg-light)}
+.pick-card h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.pick-card .pc-tag{font-size:.68rem;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.pick-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── SCENARIO QUIZ ─── */
+.scenario-panel{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.scenario-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem}
+.scenario-q{font-size:1rem;color:var(--navy);margin-bottom:1rem;font-weight:600;line-height:1.5}
+.scenario-options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1rem}
+.scenario-btn{padding:.75rem .9rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;line-height:1.45}
+.scenario-btn:hover{border-color:var(--orange);color:var(--orange)}
+.scenario-btn.correct{background:var(--green-light);border-color:var(--green);color:#2E7D32}
+.scenario-btn.wrong{background:#FEE;border-color:var(--red);color:#C62828}
+.scenario-feedback{padding:.9rem;border-radius:8px;font-size:.83rem;line-height:1.55;display:none}
+.scenario-feedback.show{display:block;animation:fadeUp .4s ease}
+.scenario-feedback.success{background:var(--green-light);color:#2E7D32;border-left:3px solid var(--green)}
+.scenario-feedback.fail{background:#FEE;color:#C62828;border-left:3px solid var(--red)}
+.btn-action{padding:.55rem 1.1rem;border-radius:8px;background:var(--orange);color:#fff;border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-action:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-secondary{background:transparent;color:var(--text-primary);border:1.5px solid var(--border);padding:.55rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── CHAT MOCK ─── */
+.chat-mock{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1rem}
+.chat-head{background:var(--navy-dark);color:#fff;padding:.6rem 1rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.chat-head .cdot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.chat-body{padding:1.1rem;display:flex;flex-direction:column;gap:.8rem;min-height:150px}
+.chat-msg{max-width:88%;padding:.8rem 1rem;border-radius:12px;font-size:.83rem;line-height:1.55}
+.chat-msg.user{align-self:flex-end;background:var(--orange-glow);color:var(--text-primary);border:1px solid rgba(232,122,46,0.25);border-bottom-right-radius:3px}
+.chat-msg.ai{align-self:flex-start;background:var(--bg-light);border:1px solid var(--border);border-bottom-left-radius:3px}
+.chat-msg.ai strong{color:var(--orange)}
+.chat-msg .who{display:block;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem}
+
+/* ─── RULES / GROUND-RULE CARDS ─── */
+.rule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.rule-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.2rem;transition:all .3s}
+.rule-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.rule-card .ri{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.7rem}
+.rule-card:nth-child(1) .ri{background:var(--green-light)}
+.rule-card:nth-child(2) .ri{background:rgba(63,136,197,0.12)}
+.rule-card:nth-child(3) .ri{background:rgba(139,92,246,0.12)}
+.rule-card:nth-child(4) .ri{background:rgba(236,72,153,0.12)}
+.rule-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;color:var(--navy);margin-bottom:.35rem}
+.rule-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── MATTER / PHASE GRID ─── */
+.week-plan{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:1.2rem}
+.day-col{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden}
+.day-col .dc-head{padding:.6rem;text-align:center;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--navy)}
+.day-col .dc-body{padding:.8rem;font-size:.76rem;color:var(--text-secondary);line-height:1.5;min-height:120px}
+.day-col .dc-body b{color:var(--navy);display:block;font-size:.8rem;margin-bottom:.2rem}
+.tier-tabs{display:flex;gap:.4rem;margin:1.3rem 0 .3rem;flex-wrap:wrap}
+.tier-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tier-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tier-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.tier-panel{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem;font-size:.86rem;line-height:1.65;margin-top:.8rem}
+.tier-panel strong{color:var(--navy)}
+.tier-panel .tp-lens{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem;background:var(--orange-glow);color:var(--orange)}
+
+/* ─── CITATION HUNT (spot the bias / hallucination) ─── */
+.cite-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.cite-intro{font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.cite-card{position:relative;background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1rem 1.15rem 1rem 1.15rem;margin-bottom:.85rem;cursor:pointer;transition:all .25s}
+.cite-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.cite-card.flagged-right{border-color:var(--red);background:#FEE;cursor:default}
+.cite-card.flagged-clear{border-color:var(--green);background:var(--green-light);cursor:default}
+.cite-card .cc-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.cite-card .cc-meta{font-size:.74rem;color:var(--text-muted);margin-bottom:.5rem}
+.cite-card .cc-hold{font-size:.8rem;color:var(--text-secondary);line-height:1.5}
+.cite-card .cc-badge{position:absolute;top:.9rem;right:1rem;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .55rem;border-radius:50px;display:none}
+.cite-card.flagged-right .cc-badge{display:block;background:var(--red);color:#fff}
+.cite-card.flagged-clear .cc-badge{display:block;background:var(--green);color:#fff}
+.cite-card .cc-verify{display:none;margin-top:.7rem;padding:.65rem .8rem;border-radius:7px;font-size:.78rem;line-height:1.5}
+.cite-card.flagged-right .cc-verify{display:block;background:rgba(231,76,60,0.1);color:#C62828;animation:fadeUp .35s ease}
+.cite-card.flagged-clear .cc-verify{display:block;background:rgba(76,175,80,0.14);color:#2E7D32;animation:fadeUp .35s ease}
+.cite-hint{font-size:.74rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.cite-summary{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.cite-summary.show{display:block}
+.cite-summary strong{color:var(--orange)}
+
+/* ─── KEEP / FIX / REJECT (evidence playbook) ─── */
+.mark-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.mark-card{background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1.1rem 1.2rem;margin-bottom:.9rem;transition:all .3s}
+.mark-card.decided-keep{border-color:var(--green);background:var(--green-light)}
+.mark-card.decided-fix{border-color:#E0A800;background:#FFF8E1}
+.mark-card.decided-reject{border-color:var(--red);background:#FEE}
+.mark-label{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.35rem}
+.mark-text{font-size:.86rem;color:var(--text-primary);line-height:1.55;margin-bottom:.5rem;font-style:italic}
+.mark-src{font-size:.72rem;color:var(--text-muted);margin-bottom:.75rem}
+.mark-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.mark-btn{padding:.42rem .9rem;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.mark-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mark-btn:disabled{opacity:.45;cursor:not-allowed}
+.mark-fb{font-size:.78rem;line-height:1.5;padding:.65rem .85rem;border-radius:7px;margin-top:.7rem;display:none}
+.mark-fb.show{display:block;animation:fadeUp .4s ease}
+.mark-fb.good{background:rgba(76,175,80,0.14);color:#2E7D32}
+.mark-fb.warn{background:#FFF3CD;color:#856404}
+.mark-summary{display:none;margin-top:1.1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.mark-summary.show{display:block}
+.mark-summary strong{color:var(--orange)}
+
+/* ─── PLAYBOOK STRIP ─── */
+.playbook{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1.2rem}
+.playbook-head{background:var(--navy-dark);color:#fff;padding:.7rem 1.1rem;font-family:'DM Serif Display',serif;font-size:1.05rem}
+.playbook-row{display:grid;grid-template-columns:1.1fr 1.9fr;border-bottom:1px solid var(--border)}
+.playbook-row:last-child{border-bottom:none}
+.playbook-cell{padding:.8rem .95rem;font-size:.8rem;line-height:1.5;border-right:1px solid var(--border)}
+.playbook-cell:last-child{border-right:none}
+.playbook-cell.crit{font-weight:700;color:var(--navy);background:var(--bg-light)}
+.playbook-row.head .playbook-cell{background:var(--orange-glow);font-weight:800;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--orange)}
+.playbook-note{padding:.9rem 1.1rem;font-size:.8rem;color:var(--text-secondary);line-height:1.55;background:var(--bg-light)}
+.playbook-note strong{color:var(--orange)}
+
+/* ─── PRIVACY FIREWALL / PII ─── */
+.firewall{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.3rem}
+.fw-col{border-radius:var(--radius);padding:1.2rem 1.3rem;font-size:.82rem;line-height:1.6}
+.fw-col.unsafe{background:#FEE;border:1.5px dashed var(--red)}
+.fw-col.safe{background:var(--green-light);border:1.5px solid var(--green)}
+.fw-col h5{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+.fw-col.unsafe h5{color:#C62828}
+.fw-col.safe h5{color:#2E7D32}
+.fw-col code{background:rgba(0,0,0,0.05);border-radius:4px;padding:.1rem .35rem;font-family:monospace;font-size:.78rem;color:var(--navy)}
+.fw-col .hl-red{color:#C62828;font-weight:700}
+.fw-col .hl-green{color:#2E7D32;font-weight:700}
+
+/* ─── REDACTION BEAT ─── */
+.redact{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.redact-doc{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem 1.35rem;font-size:.9rem;line-height:1.9;color:var(--text-primary)}
+.rd{cursor:pointer;border-radius:4px;padding:.05rem .25rem;transition:all .2s;border-bottom:2px dotted var(--red);font-weight:600;color:#C62828}
+.rd:hover{background:rgba(231,76,60,0.1)}
+.rd.redacted{background:var(--navy-dark);color:var(--navy-dark);border-bottom:2px solid var(--navy-dark);user-select:none}
+.rd.redacted::selection{background:var(--navy-dark);color:var(--navy-dark)}
+.redact-hint{font-size:.78rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.redact-status{margin-top:1rem;padding:.85rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.55;background:var(--orange-glow);color:var(--text-primary)}
+.redact-status strong{color:var(--orange)}
+.redact-status.done{background:var(--green-light);color:#2E7D32}
+
+/* ─── TONE / SUMMARY PREVIEW ─── */
+.tone-tabs{display:flex;gap:.4rem;margin:1.4rem 0 .3rem;flex-wrap:wrap}
+.tone-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tone-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tone-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.note-preview{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;margin-top:.8rem}
+.np-head{background:#F5F5F7;padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--text-muted)}
+.np-head .sdot{width:9px;height:9px;border-radius:50%}
+.np-body{padding:1.3rem 1.5rem}
+.np-subj{font-size:.74rem;color:var(--text-muted);margin-bottom:.6rem}
+.np-subj b{color:var(--navy)}
+.np-text{font-size:.87rem;color:var(--text-primary);line-height:1.7;transition:opacity .3s}
+.np-sign{margin-top:.9rem;font-size:.82rem;color:var(--text-secondary);font-style:italic}
+
+/* ─── HOURS TALLY ─── */
+.tally{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.5rem;margin-top:1.4rem}
+.tally-head{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.tally-rows{margin-top:1rem;display:flex;flex-direction:column;gap:.7rem}
+.tally-row{display:grid;grid-template-columns:1.4fr auto auto;gap:1rem;align-items:center;padding:.75rem 1rem;background:var(--bg-light);border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:all .25s}
+.tally-row:hover{border-color:var(--orange)}
+.tally-row.claimed{border-color:var(--green);background:var(--green-light)}
+.tally-task{font-size:.84rem;color:var(--navy);font-weight:600}
+.tally-task span{display:block;font-size:.72rem;font-weight:500;color:var(--text-muted)}
+.tally-hrs{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--orange);white-space:nowrap}
+.tally-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.tally-row.claimed .tally-check{background:var(--green);border-color:var(--green)}
+.tally-row.claimed .tally-check::after{content:'✓';color:#fff;font-size:.72rem;font-weight:800}
+.tally-total{margin-top:1.1rem;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;background:var(--navy-dark);border-radius:10px;color:#fff}
+.tally-total .tt-l{font-size:.82rem;color:rgba(255,255,255,0.75);font-weight:600}
+.tally-total .tt-v{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--orange-light)}
+.tally-note{margin-top:.9rem;font-size:.8rem;line-height:1.55;padding:.8rem 1rem;border-radius:8px;background:var(--orange-glow);color:var(--text-primary)}
+.tally-note strong{color:var(--orange)}
+
+/* ─── BURNOUT METER ─── */
+.burnout{margin-top:1.3rem;background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem}
+.burnout-head{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.2rem}
+.burnout-sub{font-size:.8rem;color:var(--text-secondary);margin-bottom:1rem}
+.burnout-track{height:26px;border-radius:14px;background:linear-gradient(90deg,#4CAF50,#F5943E,#E74C3C);position:relative;overflow:hidden}
+.burnout-marker{position:absolute;top:-6px;width:4px;height:38px;background:var(--navy-dark);border-radius:2px;transition:left .6s ease;box-shadow:0 0 0 3px #fff}
+.burnout-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
+
+/* ─── FINALE ─── */
+.sunday{display:none;margin-top:1.4rem;background:linear-gradient(135deg,#2A2440,#1A1B2E);border-radius:var(--radius);padding:1.8rem;color:#fff;animation:popIn .5s ease}
+.sunday.show{display:block}
+.sunday h4{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:.8rem}
+.sunday h4 em{font-style:normal;color:var(--orange-light)}
+.sunday-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1rem}
+.sunday-tile{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:9px;padding:.8rem;text-align:center}
+.sunday-tile .v{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--orange-light)}
+.sunday-tile .l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.55);font-weight:700;margin-top:.25rem}
+.sunday p{font-size:.87rem;line-height:1.65;color:rgba(255,255,255,0.85)}
+.sunday p strong{color:var(--orange-light)}
+
+/* ─── FOOTER / RECAP ─── */
+.footer-cta{text-align:center;padding:3rem 2rem 5.5rem;background:var(--navy-dark);color:#fff}
+.footer-cta h2{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:.6rem}
+.footer-cta h2 em{color:var(--orange);font-style:normal}
+.footer-cta>p{font-size:.92rem;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 1.8rem}
+.recap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;max-width:1050px;margin:0 auto 1.8rem;text-align:left}
+.recap-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.recap-card .rn{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-light);margin-bottom:.35rem}
+.recap-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;margin-bottom:.35rem;color:#fff}
+.recap-card p{font-size:.76rem;color:rgba(255,255,255,0.65);line-height:1.55}
+.footer-brand{margin-top:2rem;font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff}
+.footer-brand span{color:var(--orange)}
+.footer-tagline{font-size:.78rem;color:rgba(255,255,255,0.55);letter-spacing:.04em;margin-top:.2rem}
+.footer-note{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1.4rem;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ─── COMPLETION BAR ─── */
+.completion-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:.7rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 -2px 12px rgba(0,0,0,0.05)}
+.completion-info{display:flex;align-items:center;gap:.8rem;font-size:.82rem;color:var(--text-primary);font-weight:600}
+.completion-track{flex:1;max-width:280px;height:8px;background:var(--bg-light);border-radius:4px;overflow:hidden;margin:0 1rem}
+.completion-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:4px;transition:width .5s ease}
+.completion-percent{font-family:'DM Serif Display',serif;color:var(--orange);font-size:1.15rem}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:880px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-mascot{width:170px;margin:0 auto}
+  .usecase-banner{text-align:left}
+  .budget-strip{grid-template-columns:repeat(2,1fr)}
+  .pick-grid,.rule-grid{grid-template-columns:1fr}
+  .week-plan{grid-template-columns:repeat(2,1fr)}
+  .firewall{grid-template-columns:1fr}
+  .playbook-row{grid-template-columns:1fr}
+  .playbook-row.head{display:none}
+  .tally-row{grid-template-columns:1fr auto}
+  .sunday-grid,.recap-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:.7rem 1rem}
+  .section{padding:2.2rem 1rem}
+  .hero{padding:2.5rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="header-left">
+    <svg class="logo-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="477" cy="380" rx="285" ry="324" fill="#EBE3D6"/>
+      <ellipse cx="477" cy="380" rx="240" ry="270" fill="#412C23"/>
+      <circle cx="389" cy="430" r="36" fill="#fff"/>
+      <circle cx="565" cy="430" r="36" fill="#fff"/>
+      <circle cx="389" cy="430" r="14" fill="#2B2D42"/>
+      <circle cx="565" cy="430" r="14" fill="#2B2D42"/>
+      <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <ellipse cx="477" cy="1350" rx="430" ry="100" fill="#EF7F1A"/>
+      <ellipse cx="477" cy="1350" rx="380" ry="78" fill="#FF9429"/>
+    </svg>
+    <div>
+      <div class="header-title">Moksh<span>Path</span></div>
+      <div class="header-tag">Week 4 · Fun While You Learn</div>
+    </div>
+  </div>
+  <div class="progress-pill"><span class="dot"></span> <span id="headerProgressText">0 of 5 chapters explored</span></div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span style="width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block"></span> Story Project · AI for Recruiters</div>
+      <h1>Sam Okafor Hires Fairly <em>and Fast</em></h1>
+      <p class="hero-sub">Meet Sam Okafor — an overloaded recruiter with a hot req to fill, a hiring manager breathing down their neck, and a stack of applications that keeps growing. This week Sam tries something new: they let AI <em>draft, structure, and summarise</em> while they <em>verify and decide</em>. Across five chapters Sam sets fairness ground rules, turns a fuzzy role into fair criteria and an inclusive job description (catching an AI proxy-bias trap and a hallucinated qualification), builds a structured interview scorecard and turns messy notes into evidence (catching AI over-reading "culture fit"), then runs a fair, evidence-based debrief behind a privacy firewall and sends a kind, timely, human-reviewed decision — reclaiming hours without ever auto-rejecting a person or cutting a corner. Every choice you make below teaches the same quiet lesson.</p>
+      <div class="usecase-banner">
+        <div class="usecase-icon">🧑‍💼</div>
+        <div class="usecase-text"><strong>The Mission:</strong> Fill a hot req — sourced, screened, interviewed, and decided — <strong>faster and more fairly</strong>, without ever leaking candidate data, auto-rejecting anyone, trusting a fabricated qualification, or letting AI make the hiring call. The recurring rule Sam never breaks: <strong>AI supports, Sam verifies and decides.</strong></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="hero-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBE3D6"/><stop offset="1" stop-color="#D1D0CC"/></linearGradient>
+          <linearGradient id="faceGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A6A48"/><stop offset="1" stop-color="#412C23"/></linearGradient>
+          <linearGradient id="feetGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9429"/><stop offset="1" stop-color="#EF7F1A"/></linearGradient>
+        </defs>
+        <ellipse cx="210" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="740" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="477" cy="380" rx="285" ry="324" fill="url(#bodyGrad)"/>
+        <ellipse cx="477" cy="392" rx="240" ry="225" fill="url(#faceGrad)"/>
+        <circle cx="389" cy="430" r="38" fill="#fff"/>
+        <circle cx="565" cy="430" r="38" fill="#fff"/>
+        <circle cx="389" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="565" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="395" cy="424" r="5" fill="#fff"/>
+        <circle cx="571" cy="424" r="5" fill="#fff"/>
+        <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <ellipse cx="477" cy="1350" rx="430" ry="105" fill="url(#feetGrad)"/>
+        <ellipse cx="477" cy="1320" rx="380" ry="78" fill="#FF9429"/>
+      </svg>
+    </div>
+  </div>
+  <div class="budget-strip">
+    <div class="budget-chip"><div class="bv">1 hot req</div><div class="bl">Real candidates, real stakes</div></div>
+    <div class="budget-chip"><div class="bv">0 auto-rejects</div><div class="bl">A human sees every no</div></div>
+    <div class="budget-chip"><div class="bv">0 PII leaks</div><div class="bl">Privacy firewall held</div></div>
+    <div class="budget-chip"><div class="bv">4 lessons</div><div class="bl">Woven into 1 story</div></div>
+  </div>
+</section>
+
+<!-- ─── TAB NAVIGATION ─── -->
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-target="s1">Ch 1 · Ground Rules</button>
+  <button class="tab-btn" data-target="s2">Ch 2 · Fair Criteria &amp; Screen</button>
+  <button class="tab-btn" data-target="s3">Ch 3 · Structured Interview</button>
+  <button class="tab-btn" data-target="s4">Ch 4 · Fair Debrief &amp; Decision</button>
+  <button class="tab-btn" data-target="s5">Ch 5 · Hours Reclaimed</button>
+</div>
+
+<!-- ═══════════ CH 1: GROUND RULES (Lesson 1) ═══════════ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">1</div> Chapter One · The Req That Won't Wait</div>
+      <h2 class="section-title">Set Up the AI Workflow &amp; the Fairness Ground Rules</h2>
+      <p class="section-sub">Before Sam asks AI for a single thing, they decide what AI is <strong>for</strong> — decision <em>support</em>, never the hiring decision — and draw the bright lines they will not cross: <strong>protect candidate privacy</strong>, <strong>no auto-reject</strong> (a human sees every no), and <strong>verify everything</strong> before it touches a candidate.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 8:40 a.m. The req has been open for six weeks, the hiring manager wants a shortlist "yesterday," and 180 applications are sitting in the inbox. A peer swears an AI screener "cut her sourcing time in half," but Sam has read the news too: a resume tool that quietly downranked candidates from certain schools, a chatbot that invented a certification a candidate never held, a firm that pasted whole resumes into a consumer app. So before Sam types anything, they do the professional thing: <em>they set fairness ground rules first, and use AI to lighten the workload — not to replace their judgment or their duty to treat every candidate fairly.</em>
+    </div>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="ri">⚖️</div>
+        <h4>AI supports, I decide</h4>
+        <p>AI drafts, structures, and summarises in seconds; Sam reads every line and owns the call. It is decision-support, never the hire, reject, or shortlist — Sam's name is on the outcome, and the candidate deserves a human's judgment.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔒</div>
+        <h4>No candidate PII in consumer tools</h4>
+        <p>No names, contact details, or full resumes into a general AI app whose data handling Sam can't control. They work with de-identified facts and placeholders, never a real person's identity.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🚫</div>
+        <h4>No auto-reject — a human sees every no</h4>
+        <p>AI may sort or flag, but it never sends a rejection on its own. Every adverse decision — every "not moving forward" — is reviewed and owned by a person before it reaches a candidate.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔍</div>
+        <h4>Verify &amp; watch for bias</h4>
+        <p>Every qualification, claim, and AI-suggested criterion gets checked against reality and against fairness — no proxies for protected traits, no invented credentials. AI sounds confident even when it's biased or wrong.</p>
+      </div>
+    </div>
+
+    <div class="chat-mock">
+      <div class="chat-head"><span class="cdot"></span> AI Assistant · Setting up Sam's workflow — the prompt showdown</div>
+      <div class="chat-body" id="promptChat">
+        <div class="chat-msg ai"><span class="who">Narrator</span>You get out of AI exactly what you put in. Below are three ways Sam could open the first session of the search. <strong>Pick the prompt you think earns the most useful — and fairest — answer</strong>, then see what comes back.</div>
+      </div>
+    </div>
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Pick Sam's opening prompt</div>
+      <div class="scenario-q">Which prompt does Sam send first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="pickPrompt(0)">"Here are 180 resumes with names and contact details. Rank them for me and auto-reject everyone below the top 10 — just tell me who to hire."</button>
+        <button class="scenario-btn" onclick="pickPrompt(1)">"Screen out anyone who doesn't 'fit our culture' or feel like a strong personality match — trust your gut, skip the caveats, and give me the final shortlist."</button>
+        <button class="scenario-btn" onclick="pickPrompt(2)">"Act as a recruiting-writing and structuring assistant. Using no candidate-identifying details — de-identified skills only — help me turn this role into fair, job-related criteria and draft an inclusive job description. I make every screening and hiring decision, and no candidate is auto-rejected. Don't invent qualifications, and flag any criterion that could act as a proxy for a protected trait."</button>
+      </div>
+      <div class="scenario-feedback" id="promptFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Fairness, privacy &amp; scope-of-AI instincts (3 rounds)</div>
+      <div class="scenario-q" id="ethicsQ">Loading…</div>
+      <div class="scenario-options" id="ethicsOpts"></div>
+      <div class="scenario-feedback" id="ethicsFb"></div>
+      <button class="btn-secondary" id="ethicsNext" onclick="nextEthicsQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 2: FAIR CRITERIA & SCREEN (Lesson 2) ═══════════ -->
+<section class="section alt" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">2</div> Chapter Two · From Fuzzy Role to Fair Criteria</div>
+      <h2 class="section-title">Turn the Role into Fair Criteria — and Screen Without Bias</h2>
+      <p class="section-sub">AI can help Sam turn a vague role into structured, job-related criteria and an inclusive job description in minutes — but it can also <strong>bake in a proxy for a protected trait</strong> that looks neutral, and <strong>hallucinate a qualification</strong> a candidate never actually held. So Sam treats every AI-suggested criterion as unverified until they've checked it's job-related and fair, and every candidate claim as unverified until confirmed. This chapter's mini-game: catch the proxy bias and the fabricated qualification before they reach a shortlist.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 11:20 a.m. The hiring manager's brief is a paragraph of adjectives: "a rockstar who's a great culture fit and hits the ground running." Sam asks AI to <em>turn that into concrete, job-related criteria and an inclusive job description</em> — a reasonable use of a fast assistant. It returns a tidy criteria list and a polished JD. Old habits would ship it straight to the job board. New Sam does the one thing that separates a careful recruiter from a lawsuit and a missed great hire: <em>they check every criterion for hidden bias, and verify every candidate claim against reality before trusting a word.</em> Below, three angles on how they structure that check.
+    </div>
+
+    <div class="week-plan">
+      <div class="day-col">
+        <div class="dc-head">Define</div>
+        <div class="dc-body"><b>Ask</b>Ask AI to turn fuzzy adjectives into concrete, job-related criteria you can actually measure.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Fairness</div>
+        <div class="dc-body"><b>Check</b>Screen every criterion for proxy bias — no stand-ins for age, school prestige, gaps, or names.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Describe</div>
+        <div class="dc-body"><b>Write</b>Let AI draft an inclusive JD; Sam removes exclusionary language and inflated "must-haves."</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Source</div>
+        <div class="dc-body"><b>Screen</b>Sort and summarise a candidate set against the fair criteria — a map, never an auto-reject.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Verify</div>
+        <div class="dc-body"><b>Confirm</b>Check every claimed qualification against reality. No source, no shortlist. AI can invent credentials.</div>
+      </div>
+    </div>
+
+    <div class="tier-tabs">
+      <button class="tier-tab active" data-tier="define" onclick="setTier('define')">🎯 Define fair criteria</button>
+      <button class="tier-tab" data-tier="fairness" onclick="setTier('fairness')">⚖️ Screen for bias</button>
+      <button class="tier-tab" data-tier="verify" onclick="setTier('verify')">🔍 Verify &amp; decide</button>
+    </div>
+    <div class="tier-panel" id="tierPanel"></div>
+
+    <div class="cite-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🕵️ Spot the proxy bias (and the hallucinated qualification)</div>
+      <p class="cite-intro">AI returned four items for Sam's search — two suggested screening criteria and two candidate "facts." Two are the kind of fair, job-related, verifiable things Sam can use — <strong>one is a proxy for a protected trait</strong> (a criterion that looks neutral but screens people out unfairly) and <strong>one is a hallucinated qualification</strong> (a certification AI attributed to a candidate who never held it). Click each card to run Sam's fairness-and-verification check and reveal what a real review turns up. Can you catch the proxy and the fake?</p>
+
+      <div class="cite-card" id="ct1" onclick="checkCite('ct1')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Criterion: "3+ years hands-on experience with the core tool the role uses"</div>
+        <div class="cc-meta">Suggested by AI as: "a concrete, measurable, job-related requirement"</div>
+        <div class="cc-hold">"Directly tied to what the job actually requires. Measurable, applies to everyone equally, and doesn't stand in for any protected trait. Confirm the years are genuinely needed, not inflated."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct2" onclick="checkCite('ct2')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Criterion: "graduated from a top-tier university, no employment gaps, 'digital native' energy"</div>
+        <div class="cc-meta">Suggested by AI as: "a quick way to find high-potential, high-energy candidates"</div>
+        <div class="cc-hold">"Screens on university prestige (a proxy for socioeconomic background), penalises employment gaps (which correlate with caregiving and disability), and 'digital native' is a coded proxy for age."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct3" onclick="checkCite('ct3')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Candidate fact: "Candidate C led a team of 6 and shipped the tool the role uses"</div>
+        <div class="cc-meta">AI summarised from the resume as: "directly relevant, on their CV — verify in interview"</div>
+        <div class="cc-hold">"Present on the candidate's own resume and directly checkable in a reference or interview. A real, verifiable claim — confirm it, don't assume it, but it's the candidate's own stated experience."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct4" onclick="checkCite('ct4')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Candidate fact: "Candidate C holds the 'Advanced Certified Practitioner' credential"</div>
+        <div class="cc-meta">AI stated confidently: "a strong qualification that makes them the top match"</div>
+        <div class="cc-hold">"Sounds impressive and precise — but this credential appears nowhere on the candidate's actual resume. AI added it. Attributing a qualification a person never claimed is a fabrication."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-hint" id="citeHint">👆 Click each item to check it. Find the criterion that's a hidden proxy for a protected trait — and the qualification AI invented.</div>
+      <div class="cite-summary" id="citeSummary"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Fair criteria &amp; verification smarts (2 rounds)</div>
+      <div class="scenario-q" id="planQ">Loading…</div>
+      <div class="scenario-options" id="planOpts"></div>
+      <div class="scenario-feedback" id="planFb"></div>
+      <button class="btn-secondary" id="planNext" onclick="nextPlanQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 3: STRUCTURED INTERVIEW (Lesson 3) ═══════════ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">3</div> Chapter Three · Evidence, Not Vibes</div>
+      <h2 class="section-title">Build a Structured Interview Guide — and Turn Notes into Evidence</h2>
+      <p class="section-sub">A structured interview — same job-related questions, a clear scorecard, every candidate scored the same way — is the single strongest tool a recruiter has for fair, comparable hiring. AI can draft the guide and turn Sam's messy notes into clean evidence in seconds — but Sam keeps their hands on the wheel: <strong>keep, fix, or reject</strong> every summarised note before it counts. The trap this chapter teaches: AI loves to over-read "culture fit," tone, and personality — reading bias into a candidate's demeanour instead of sticking to job-related evidence.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Tuesday, 2:00 p.m. The interviews are done. Sam asks AI to turn three pages of scribbled notes into a clean scorecard summary — genuinely a time-saver. Most of it is accurate and job-related. But two lines are wrong in ways that matter: AI wrote that a candidate "wasn't a culture fit — seemed a bit reserved and formal" (over-reading demeanour and tone, not job-related evidence), and it recorded a skill score AI simply <em>inferred</em> that Sam never actually assessed in the interview. AI drafts; <em>Sam reviews against what the candidate actually demonstrated, and catches the vibe-reading and the invented score — before it counts.</em>
+    </div>
+
+    <div class="playbook">
+      <div class="playbook-head">📕 Sam's Scorecard-Review Checklist · what they check before a note becomes evidence (the human layer AI can't replace)</div>
+      <div class="playbook-row head">
+        <div class="playbook-cell">What to check</div>
+        <div class="playbook-cell">Sam's standard</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Evidence, not vibes</div>
+        <div class="playbook-cell">Every rating must rest on something the candidate actually said or demonstrated against a job-related question — not their tone, accent, confidence, or "energy." A judgment of demeanour is bias to delete, not evidence to keep.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">"Culture fit" is a trap</div>
+        <div class="playbook-cell">"Culture fit" too often means "reminds me of me." Sam replaces it with concrete, job-related values-in-action questions everyone answers the same way. AI over-reads reserved, formal, or unfamiliar styles as red flags — Sam doesn't.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Scored, not inferred</div>
+        <div class="playbook-cell">A score exists only for a competency Sam actually asked about and observed. AI will confidently fill a gap with a guess. An un-assessed skill gets no number — it gets a follow-up, not a fabrication.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Same bar for everyone</div>
+        <div class="playbook-cell">The scorecard means the same questions, same rubric, same standard for every candidate. That's what makes it fair and comparable. Sam never lets AI's summary quietly move the bar for one person.</div>
+      </div>
+      <div class="playbook-note">💡 <strong>Why a scorecard?</strong> A structured scorecard is Sam's memory of what "fair and comparable" looks like, written down. AI drafts against the words it heard; the scorecard lets Sam review against what the candidate actually demonstrated and what the job actually needs. AI produced a summary; the scorecard is what turns messy notes into fair, defensible evidence.</div>
+    </div>
+
+    <div class="mark-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖊️ Help Sam decide: Keep · Fix · Reject</div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem">AI summarised three lines from Sam's interview notes. Human-in-the-loop means you don't rubber-stamp — judge each line against what the candidate actually demonstrated before it becomes evidence. Decide for all three to see Sam's verdict.</p>
+
+      <div class="mark-card" id="mk1">
+        <div class="mark-label">Competency · Problem-solving (job-related question)</div>
+        <div class="mark-text">"When asked to walk through a real problem they solved, gave a clear, structured answer with a measurable outcome. Strong evidence against the rubric. Score: 4/5."</div>
+        <div class="mark-src">AI's summary: accurately captures what the candidate demonstrated on a job-related question. Against Sam's memory of the interview: correct, matches reality.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk1','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk1','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk1','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk1"></div>
+      </div>
+
+      <div class="mark-card" id="mk2">
+        <div class="mark-label">The line AI read as "culture fit"</div>
+        <div class="mark-text">"Not a culture fit — came across as reserved and formal, didn't have the outgoing energy the team likes. Recommend pass."</div>
+        <div class="mark-src">AI's summary: turned the candidate's demeanour into a verdict. Against reality: "reserved and formal" is a personality style, not job-related evidence — and it can penalise neurodivergent candidates, introverts, and people from different cultural backgrounds. It's bias dressed as a finding.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk2','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk2','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk2','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk2"></div>
+      </div>
+
+      <div class="mark-card" id="mk3">
+        <div class="mark-label">The score AI inferred</div>
+        <div class="mark-text">"Data-analysis skills: 5/5 — clearly an expert."</div>
+        <div class="mark-src">AI's summary: gave a top score for a competency. Against reality: Sam ran out of time and never actually asked the data-analysis questions. The candidate may well be strong — but this score was inferred by AI, not assessed. The number is real-looking; the assessment behind it never happened.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk3','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk3','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk3','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk3"></div>
+      </div>
+
+      <div class="mark-summary" id="markSummary"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 4: FAIR DEBRIEF & DECISION (Lesson 4) ═══════════ -->
+<section class="section alt" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">4</div> Chapter Four · Behind the Privacy Firewall</div>
+      <h2 class="section-title">Run a Fair Debrief &amp; Send a Kind, Human-Reviewed Decision</h2>
+      <p class="section-sub">The debrief and the candidate communication are where AI saves the most time — and where a careless paste can expose candidate personally identifiable information (PII), and where an auto-sent rejection can hurt a real person. Sam's trick: run an evidence-based debrief off the scorecards, draft candidate messages with <strong>placeholders</strong> and de-identified facts behind a privacy firewall, then fill in the real name and details themselves, inside their secure system — and let no adverse decision go out without a human's eyes on it.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday, 4:30 p.m. Decisions need making and candidates need answers — kindly and promptly. The temptation is huge: paste the whole candidate list, names, emails, and full resumes into a consumer AI app and say "rank these and auto-send rejections to the bottom half." Sam doesn't. They run the debrief on the <em>evidence</em> — the structured scorecards — not on gut feel or the loudest voice in the room. They build a <em>privacy firewall</em>: AI never sees a real name, email, or identifiable detail. It drafts warm, clear message scaffolding; Sam pours the real candidate information in afterward, inside their secure system, and personally reviews every "no" before it sends. Same time saved, zero PII exposed, no one auto-rejected.
+    </div>
+
+    <div class="firewall">
+      <div class="fw-col unsafe">
+        <h5>🚫 The tempting shortcut (never do this)</h5>
+        <p>"Rank my candidates and write rejections for <span class="hl-red">Amara Nwosu (amara.n@email.com, +1-555-0148)</span>, <span class="hl-red">14 Rosewood Lane</span> — her resume is pasted below with her <span class="hl-red">date of birth and current employer</span> — and auto-send the 'no' emails to the bottom half."</p>
+        <p style="margin-top:.6rem">Real name, email, phone, address, date of birth, employer, and a full resume — pasted into a general consumer tool whose data handling you don't control, plus an <span class="hl-red">automated rejection with no human review</span>. That's candidate PII leaving your secure system, and an adverse decision made by a machine.</p>
+      </div>
+      <div class="fw-col safe">
+        <h5>✅ The privacy firewall (do this)</h5>
+        <p>"Draft a warm, respectful 'not moving forward this time' message for <code>[CANDIDATE]</code> who reached the <span class="hl-green">final interview stage</span>. Be kind, specific to <span class="hl-green">the stage they reached</span>, and encourage future applications. Keep all names, contact details, and specifics as placeholders."</p>
+        <p style="margin-top:.6rem">AI writes the scaffolding from <span class="hl-green">a stage, not an identity</span>. Sam fills <code>[CANDIDATE]</code> in themselves, inside the secure applicant system, and <span class="hl-green">reads every decision before it sends</span>. Fast, kind, and safe.</p>
+      </div>
+    </div>
+
+    <div class="redact">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖤 The redaction beat — scrub it before it goes near AI</div>
+      <p class="redact-hint">Sam pasted a rough debrief note before catching themselves. Before this text could ever be shaped by a consumer AI tool, it must be scrubbed of candidate PII. <strong>Click every identifiable item</strong> — name, email, phone, current employer, exact address — to redact it. Leave the de-identified, job-related words alone.</p>
+      <div class="redact-doc" id="redactDoc">
+        Debrief for <span class="rd" data-red="1" onclick="redact(this)">Amara Nwosu</span> (<span class="rd" data-red="1" onclick="redact(this)">amara.n@email.com</span>, ph. <span class="rd" data-red="1" onclick="redact(this)">+1-555-0148</span>, currently at <span class="rd" data-red="1" onclick="redact(this)">Brightwave Corp</span>, <span class="rd" data-red="1" onclick="redact(this)">14 Rosewood Lane</span>): reached the <span data-red="0">final interview stage</span>. Scored <span data-red="0">strong on problem-solving, met the bar on the core tool</span>. Decision: <span data-red="0">a close call, not selected this round</span>. Next step: a <span data-red="0">kind, timely, human-reviewed message</span> and an invitation to apply again.
+      </div>
+      <div class="redact-status" id="redactStatus">🔒 <strong>0 of 5</strong> identifiable items redacted. Click the underlined items that identify the candidate or reveal private contact/employer details.</div>
+    </div>
+
+    <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin:1.6rem 0 .2rem">✉️ Same decision, three registers — you direct the voice</div>
+    <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.4rem">AI can write in whatever register a candidate deserves. Sam picks the tone; the placeholders stay until they fill them in privately, inside the secure applicant system, and Sam reviews every message before it sends. Try each.</p>
+    <div class="tone-tabs">
+      <button class="tone-tab active" data-tone="plain" onclick="setTone('plain')">🤝 Warm &amp; encouraging</button>
+      <button class="tone-tab" data-tone="direct" onclick="setTone('direct')">📋 Brief &amp; respectful</button>
+      <button class="tone-tab" data-tone="caution" onclick="setTone('caution')">💬 With specific feedback</button>
+    </div>
+    <div class="note-preview">
+      <div class="np-head">
+        <span class="sdot" style="background:#FF5F57"></span><span class="sdot" style="background:#FEBC2E"></span><span class="sdot" style="background:#28C840"></span>
+        <span style="margin-left:.6rem">Draft · placeholders not yet filled · pending Sam's review</span>
+      </div>
+      <div class="np-body">
+        <div class="np-subj"><b>To:</b> [CANDIDATE] &nbsp;·&nbsp; <b>Re:</b> [ROLE] — application update</div>
+        <div class="np-text" id="noteText">Hi [CANDIDATE], thank you so much for the time and energy you put into interviewing for the [ROLE]. This was a genuinely close decision, and after a lot of thought we've decided to move forward with another candidate this time. That's a reflection of a strong field, not of your ability — you reached our final stage, which very few candidates do. We'd honestly welcome an application from you for a future role, and I'm happy to keep you in mind. Thank you again, and I wish you all the best.</div>
+        <div class="np-sign">— Sam Okafor, Talent Team, [COMPANY]</div>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Spot the privacy breach</div>
+      <div class="scenario-q">Sam is about to paste text into a consumer AI tool to "make it friendlier." Which line means they must stop first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="leakQ(0)">"Write a warm, respectful message telling a final-stage candidate we're moving forward with someone else, and encourage them to apply again."</button>
+        <button class="scenario-btn" onclick="leakQ(1)">"Rewrite this rejection for Amara Nwosu, amara.n@email.com, +1-555-0148, currently at Brightwave Corp — her full resume and date of birth are pasted below."</button>
+        <button class="scenario-btn" onclick="leakQ(2)">"Add a friendly closing line inviting the reader to reach out if they'd like brief feedback on their interview."</button>
+      </div>
+      <div class="scenario-feedback" id="leakFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Fair decisions, privacy &amp; candidate care (2 rounds)</div>
+      <div class="scenario-q" id="privQ">Loading…</div>
+      <div class="scenario-options" id="privOpts"></div>
+      <div class="scenario-feedback" id="privFb"></div>
+      <button class="btn-secondary" id="privNext" onclick="nextPrivQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 5: HOURS RECLAIMED (Finale) ═══════════ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">5</div> Chapter Five · The Offer Goes Out</div>
+      <h2 class="section-title">Add Up the Hours — What Did Sam Win Back?</h2>
+      <p class="section-sub">The whole search comes down to one honest tally. AI didn't do the hiring for Sam; it cleared the <strong>drafting, structuring, and summarising drudgery</strong> around it — the admin that never made anyone a better recruiter or a candidate's experience kinder. Tap each task to claim the hours back — and watch Sam's week open up.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday, 5:00 p.m. The search is done: criteria checked for fairness, the JD made inclusive, the shortlist built on verified qualifications, interviews scored the same way for everyone, the debrief run on evidence, every candidate answered kindly and promptly with zero PII exposed and not a single auto-reject. A great candidate got the offer — chosen fairly — and Sam finished with time to spare. They add up where AI saved real admin time, and where they deliberately <em>spent</em> time (checking every criterion for bias, verifying every qualification, reviewing every note, owning every decision). Tap each row to reclaim the hours. The lesson underneath the numbers: <em>AI supports, Sam verifies and decides — and that trade buys back the hours without cutting a single fairness corner.</em>
+    </div>
+
+    <div class="tally">
+      <div class="tally-head">⏱️ The Hours-Reclaimed Tally</div>
+      <p style="font-size:.82rem;color:var(--text-secondary)">Estimated admin time AI drafting and structuring saved Sam across the search (they still verified and decided everything). Tap each task to claim it.</p>
+      <div class="tally-rows" id="tallyRows">
+        <div class="tally-row" data-hrs="0.8" onclick="claimHours(this)">
+          <div class="tally-task">Turn the role into criteria &amp; an inclusive JD<span>Ch 2 · a draft Sam checked for proxy bias and inflated must-haves</span></div>
+          <div class="tally-hrs">−0.8 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="1.5" onclick="claimHours(this)">
+          <div class="tally-task">Summarise &amp; sort the candidate set<span>Ch 2 · a map Sam screened against fair criteria — never an auto-reject</span></div>
+          <div class="tally-hrs">−1.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="1.0" onclick="claimHours(this)">
+          <div class="tally-task">Draft the interview guide &amp; scorecard summaries<span>Ch 3 · summaries Sam reviewed line-by-line before they counted</span></div>
+          <div class="tally-hrs">−1.0 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="0.7" onclick="claimHours(this)">
+          <div class="tally-task">Draft kind, timely candidate messages<span>Ch 4 · placeholders, tone, then filled &amp; reviewed inside the secure system</span></div>
+          <div class="tally-hrs">−0.7 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+      </div>
+      <div class="tally-total">
+        <div class="tt-l">Recruiting admin reclaimed this search</div>
+        <div class="tt-v" id="tallyTotal">0.0 hrs</div>
+      </div>
+      <div class="tally-note" id="tallyNote">👆 Tap the rows above to see the hours add up. <strong>Honest caveat:</strong> these are drafting savings — the recruiting judgment (checking criteria for bias, verifying qualifications, reviewing every note, owning every decision, and reviewing every rejection) is time Sam <em>kept</em>, on purpose. That's the deal.</div>
+    </div>
+
+    <div class="burnout">
+      <div class="burnout-head">🔥 The Overload Meter</div>
+      <div class="burnout-sub">Claim the hours above and watch Sam's req backlog drop out of the red.</div>
+      <div class="burnout-track"><div class="burnout-marker" id="burnoutMarker" style="left:92%"></div></div>
+      <div class="burnout-labels"><span>On top of the reqs</span><span>Catching up</span><span>Drowning in the stack</span></div>
+    </div>
+
+    <div class="sunday" id="sundayFinale">
+      <h4>☀️ Wednesday, 6:00 p.m. — <em>and the offer just went out.</em></h4>
+      <div class="sunday-grid">
+        <div class="sunday-tile"><div class="v">~4 hrs</div><div class="l">Admin time saved</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">Candidates auto-rejected</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">PII leaks</div></div>
+        <div class="sunday-tile"><div class="v">1</div><div class="l">Great hire, made fairly</div></div>
+      </div>
+      <p>The shortlist rests on qualifications Sam verified with their own eyes. The scorecard is fair because Sam caught the "culture fit" bias AI read in and the score it invented. The proxy criterion never made it into the JD, and the fabricated credential never made it onto a shortlist. Every candidate got a kind, timely, human-reviewed answer, and not one identifiable detail left the secure system. AI drafted the scaffolding around the hiring — <strong>Sam made every decision that actually mattered, treated every candidate fairly, and put their name behind each call.</strong> The reward isn't just a signed offer. It's a great hire made fairly, candidates who were treated well, and hours reclaimed for the next req. <strong>AI supports. Sam verifies and decides.</strong> ⚖️</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER RECAP ─── -->
+<div class="footer-cta">
+  <h2>🧑‍💼 One search ago, the fear was a biased screen or a leaked resume.</h2>
+  <p>Now Sam has run the whole AI-for-recruiters loop once — for real. Here's what their story secretly taught you: the four lessons of Week 4.</p>
+  <div class="recap-grid">
+    <div class="recap-card">
+      <div class="rn">Lesson 1</div>
+      <h4>AI Workflow &amp; Fairness Ground Rules</h4>
+      <p>AI supports, you verify and decide. Bright lines: never put candidate PII in consumer tools, no auto-reject (a human sees every no), and AI must not make the hiring call — it's decision-support, not a decision-maker. Chapter 1.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 2</div>
+      <h4>Fair Criteria &amp; Bias-Aware Screening</h4>
+      <p>AI turns a fuzzy role into criteria and an inclusive JD fast — but it can bake in a proxy for a protected trait and invent a qualification. Screen every criterion for hidden bias; verify every claim in a real source. Chapter 2.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 3</div>
+      <h4>Structured Interviews &amp; Evidence</h4>
+      <p>A scorecard makes hiring fair and comparable; AI turns messy notes into evidence. Keep, fix, or reject every line — and catch what AI over-reads as "culture fit" or a score it invented. Chapter 3.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 4</div>
+      <h4>Fair Debriefs &amp; Kind Decisions</h4>
+      <p>Debrief on evidence, draft with placeholders and a stage, not names and resumes. AI shapes warm, timely message tone; you fill in details inside your secure system and review every no. Zero PII exposed. Chapter 4.</p>
+    </div>
+  </div>
+  <button class="btn-action" style="font-size:.9rem;padding:.8rem 1.8rem" onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">↻ Replay Sam's search</button>
+  <div class="footer-brand">Moksh<span>Path</span></div>
+  <div class="footer-tagline">Guided Path to True Learning</div>
+  <div class="footer-note">Sam Okafor is a teaching scenario, and nothing here is legal or employment-law advice — candidates, criteria, and credentials in this story are illustrative placeholders, not recommendations. AI tools must never make hiring or rejection decisions on their own, candidate data must never enter consumer tools, no adverse decision should be fully automated, you must always watch for bias and verify qualifications, and your local jurisdiction's rules on AI, privacy, employment, and anti-discrimination always come first. The point of Week 4 isn't to hand your judgment to a machine; it's to let a drafting assistant clear the admin drudgery so your real recruiting — checking fairness, verifying, interviewing, deciding — gets more of you, and every candidate gets treated well.</div>
+</div>
+
+<!-- ─── COMPLETION BAR ─── -->
+<div class="completion-bar">
+  <div class="completion-info"><span style="font-size:1.1rem">⚖️</span><span>Sam's Search</span></div>
+  <div class="completion-track"><div class="completion-fill" id="completionFill" style="width:0%"></div></div>
+  <div class="completion-percent" id="completionPct">0%</div>
+</div>
+
+<script>
+/* ───────── PROGRESS TRACKING ───────── */
+const visited = new Set();
+function markVisited(id){
+  visited.add(id);
+  const pct = Math.round((visited.size / 5) * 100);
+  document.getElementById('completionFill').style.width = pct + '%';
+  document.getElementById('completionPct').textContent = pct + '%';
+  document.getElementById('headerProgressText').textContent = `${visited.size} of 5 chapters explored`;
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    markVisited(btn.dataset.target);
+  });
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.3) {
+      markVisited(e.target.id);
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === e.target.id));
+    }
+  });
+}, {threshold:[0.3]});
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+/* ───────── CH 1: PROMPT SHOWDOWN ───────── */
+const promptResults = [
+  {ok:false, fb:'✗ Stop — that\'s candidate PII, an auto-reject, and it hands AI the hiring decision all at once. Full resumes with names and contact details pasted into a general tool crosses Sam\'s privacy line; "auto-reject everyone below the top 10" makes a machine send adverse decisions with no human review; and "tell me who to hire" makes AI the recruiter. A candidate\'s identity must never leave the secure system this way, no "no" should be automated, and the decision is Sam\'s. Try the disciplined one.',
+   chat:`<div class="chat-msg user"><span class="who">Sam</span>Here are 180 resumes with names and contact details. Rank them for me and auto-reject everyone below the top 10 — just tell me who to hire.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>⚠️ Please don't share candidate-identifying details with me, and I shouldn't auto-reject anyone or decide who to hire — I can\'t fairly judge a person, and adverse decisions need a human. Describe the role and skills abstractly instead, and make every screening and hiring call yourself. <strong>Even the tool is guarding the candidate. So should you.</strong></div>`},
+  {ok:false, fb:'✗ Too much handed over — "screen out anyone who doesn\'t fit our culture, trust your gut" asks AI to <em>make the fairness-critical decision</em> on vibes. "Culture fit" and "personality match" are exactly where bias hides, and "skip the caveats" hides the uncertainty. That\'s Sam\'s job and duty to be fair; AI produces a confident, biased-sounding shortlist with no accountability. Try the disciplined one.',
+   chat:`<div class="chat-msg user"><span class="who">Sam</span>Screen out anyone who doesn\'t "fit our culture" or feel like a strong personality match — trust your gut, skip the caveats, and give me the final shortlist.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>I can help you build <em>job-related</em> criteria, but "culture fit" and "personality match" tend to encode bias, and I shouldn\'t hand you a final shortlist to act on — I can be confidently unfair. <strong>(…no rubric, no fairness check, no accountability — and the decision is yours to make.)</strong></div>`},
+  {ok:true, fb:'✓ Exactly. Role + de-identified framing + no candidate identifiers + "help me turn this into fair, job-related criteria" + "I make every decision, no auto-reject" + "don\'t invent qualifications; flag proxy bias." This prompt respects every bright line and keeps Sam — and their duty to every candidate — firmly in charge. This is where the search begins.',
+   chat:`<div class="chat-msg user"><span class="who">Sam</span>Act as a recruiting-writing and structuring assistant. Using no candidate-identifying details, help me turn this role into fair, job-related criteria and draft an inclusive job description. I make every decision, and no candidate is auto-rejected. Don\'t invent qualifications, and flag any criterion that could be a proxy for a protected trait.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>Great constraints. Here\'s a set of concrete, job-related criteria and an inclusive JD draft — plus a note on what to double-check. <strong>⚑ Verify:</strong> confirm each criterion is genuinely job-related (I\'ve flagged one that could act as a proxy), and verify any candidate qualification in a real source; I can\'t confirm those. <strong>← Structured, fair, and yours to decide.</strong></div>`}
+];
+let promptAnswered = false;
+function pickPrompt(i){
+  const r = promptResults[i];
+  const btns = document.querySelectorAll('#s1 .scenario-panel:first-of-type .scenario-btn');
+  if (!promptAnswered){
+    btns.forEach((b,j) => { if (j===2) b.classList.add('correct'); else if (j===i && !r.ok) b.classList.add('wrong'); });
+    if (r.ok) promptAnswered = true;
+  }
+  const fb = document.getElementById('promptFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+  document.getElementById('promptChat').innerHTML = r.chat;
+}
+
+/* ethics quiz */
+const ethicsQs = [
+  {q:"Sam wants AI to help structure a tricky role. What's the safe way to describe the candidates?", opts:["Paste the resumes with names and contact details — it's faster","Describe the requirements abstractly: 'a role needing X skill and Y experience' — no names, emails, phones, addresses, or other identifiers","Use candidates' initials only — the full name is the private part"], correct:1, explain:"Names, emails, phone numbers, addresses, resumes, and other identifiers are all candidate PII. Describe the role and required skills in the abstract, never a real person's identity — that gets you the help without ever exposing candidate data."},
+  {q:"AI hands Sam a neat shortlist and offers to auto-send rejections to everyone else. Best move?", opts:["Let it send — it saves time and the decisions look reasonable","Never auto-reject: review every adverse decision as a human, and treat the AI shortlist as a suggestion to verify, not a verdict","Ask AI to also make the final hire so Sam doesn't have to"], correct:1, explain:"An adverse decision — a rejection — should never be fully automated. A person reviews and owns every 'no' before it reaches a candidate, and the AI's shortlist is a starting point Sam verifies, not a decision. Fully-automated adverse decisions are exactly the line Sam won't cross."},
+  {q:"What's the single rule that keeps AI in its lane across the whole search?", opts:["'AI decides, I approve' — trust the machine to save time","'AI supports, I verify and decide' — AI drafts, structures, and summarises; the recruiter verifies, watches for bias, and owns every call","'AI does the screening and the rejections' — including deciding who's out"], correct:1, explain:"Drafting, structuring, and summarising are delegable; screening decisions, verifying qualifications, catching bias, and deciding a hire are not. 'AI supports, I verify and decide' is the through-line of the whole search — and the reason Sam's name is safe on every outcome and every candidate is treated fairly."}
+];
+let eqIdx = 0;
+function renderEthicsQ(){
+  const s = ethicsQs[eqIdx];
+  document.getElementById('ethicsQ').textContent = `Round ${eqIdx+1}/3 — ${s.q}`;
+  document.getElementById('ethicsOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerEthicsQ(${i})">${o}</button>`).join('');
+  const fb = document.getElementById('ethicsFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('ethicsNext').style.display='none';
+}
+function answerEthicsQ(i){
+  const s = ethicsQs[eqIdx];
+  document.querySelectorAll('#ethicsOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('ethicsFb');
+  fb.className = 'scenario-feedback show ' + (i===s.correct ? 'success':'fail');
+  fb.innerHTML = (i===s.correct ? '✓ Spot on! ':'✗ Not quite. ') + s.explain + (eqIdx===ethicsQs.length-1 ? '<br><br>🎉 Chapter 1 complete — ground rules locked. Next: turn the role into fair criteria, and screen without bias.' : '');
+  document.getElementById('ethicsNext').style.display = eqIdx < ethicsQs.length-1 ? 'inline-block':'none';
+}
+function nextEthicsQ(){ eqIdx++; if(eqIdx<ethicsQs.length) renderEthicsQ(); }
+renderEthicsQ();
+
+/* ───────── CH 2: CRITERIA TIERS ───────── */
+const tierInfo = {
+  define: `<span class="tp-lens">🎯 Define fair criteria · a fast, safe use</span><br><strong>Turn adjectives into measurable, job-related criteria.</strong> The hiring manager's fuzzy brief — "a rockstar who's a great culture fit" — becomes concrete requirements: <em>which skills, which experience, which competencies does this job actually need, and how will we measure them the same way for everyone?</em> AI is genuinely good at this structuring and at drafting an inclusive job description. This is delegable work — <em>as long as no candidate identifiers go in</em>, and Sam treats the output as a draft to fairness-check, not a finished screen.`,
+  fairness: `<span class="tp-lens">⚖️ Screen for bias · the non-negotiable step</span><br><strong>No proxies for protected traits.</strong> When AI suggests criteria, Sam checks each one: is it genuinely job-related, or a stand-in for age, gender, disability, race, or class? "Digital native" proxies for age; "top-tier university" proxies for socioeconomic background; "no employment gaps" penalises caregivers and people with disabilities. A criterion that screens people out for who they are rather than what the job needs is dropped, full stop. <em>This is the step that separates fair hiring from a discrimination claim.</em> Confident, polished output is exactly how proxy bias slips through.`,
+  verify: `<span class="tp-lens">🔍 Verify &amp; decide · Sam's job alone</span><br><strong>AI summarises; Sam verifies and decides.</strong> Every candidate qualification AI surfaces is unverified until Sam confirms it against the actual resume, a reference, or the interview — AI can attribute a credential a candidate never held. Once claims are verified and criteria are fair, the screening judgment — who advances, for these job-related reasons — belongs entirely to Sam. No candidate is auto-rejected; a human owns every no. <em>AI proposed the raw material; Sam decided what it means and put their name behind it.</em>`
+};
+function setTier(t){
+  document.querySelectorAll('.tier-tab').forEach(x => x.classList.toggle('active', x.dataset.tier===t));
+  const p = document.getElementById('tierPanel');
+  p.style.opacity=0;
+  setTimeout(()=>{ p.innerHTML = tierInfo[t]; p.style.opacity=1; }, 150);
+}
+document.getElementById('tierPanel').style.transition='opacity .2s';
+setTier('define');
+
+/* ───────── CH 2: SPOT THE PROXY BIAS / HALLUCINATED QUALIFICATION ───────── */
+const citeKey = {
+  ct1:{fake:false, verify:'✓ <strong>Verifies out (with care).</strong> Experience with the core tool the job actually uses is a real, job-related, measurable requirement that applies to everyone equally. Sam confirms the years are genuinely needed and not inflated to exclude capable people. Real and fair — just sanity-check the bar.'},
+  ct2:{fake:true, proxy:true, verify:'🚩 <strong>Proxy bias — do not use.</strong> This criterion looks neutral but isn\'t: "top-tier university" proxies for socioeconomic background, "no employment gaps" penalises caregivers and people with disabilities, and "digital native" is a well-known coded proxy for <em>age</em>. None of these measure whether someone can do the job — they screen people out for who they are. Sam deletes it entirely and keeps only genuinely job-related criteria. <em>This is the kind of hidden bias that harms candidates and gets employers sued.</em>'},
+  ct3:{fake:false, verify:'✓ <strong>Verifies out.</strong> Leading a team and shipping the relevant tool is on the candidate\'s own resume and is directly checkable in a reference or the interview. A real, verifiable claim — Sam confirms it rather than assuming it, but it\'s the candidate\'s own stated, job-relevant experience.'},
+  ct4:{fake:true, verify:'🚩 <strong>Hallucinated qualification — this credential is invented.</strong> Sam checks the actual resume: there is no "Advanced Certified Practitioner" anywhere on it. AI added a qualification the candidate never claimed to make them look like the top match. Attributing a credential a person never held is a fabrication — it could unfairly advantage them <em>and</em> collapse under a reference check. Sam removes it and evaluates only what the candidate actually presented. <em>Verify every qualification against reality.</em>'}
+};
+let citeProxyFound = false, citeFakeFound = false;
+const citeChecked = {};
+function checkCite(id){
+  if (citeChecked[id]) return;
+  citeChecked[id] = true;
+  const k = citeKey[id];
+  const card = document.getElementById(id);
+  card.classList.add(k.fake ? 'flagged-right' : 'flagged-clear');
+  card.querySelector('.cc-badge').textContent = k.proxy ? '⚖️ Proxy bias' : (k.fake ? '✗ Fabricated' : '✓ Fair &amp; verified');
+  card.querySelector('.cc-verify').innerHTML = k.verify;
+  card.setAttribute('onclick','');
+  const hint = document.getElementById('citeHint');
+  if (k.proxy){ citeProxyFound = true; hint.innerHTML = '🎯 <strong>You caught the proxy bias.</strong> Keep going — one of these is also a <em>hallucinated qualification</em> AI invented, which is just as dangerous for a shortlist.'; }
+  else if (k.fake){ citeFakeFound = true; hint.innerHTML = '🎯 <strong>You caught the fabricated credential.</strong> A confident AI claim can be pure invention. Keep checking the rest.'; }
+  else if (!citeProxyFound || !citeFakeFound){ hint.innerHTML = '✓ Fair and verifiable. But keep going: one of these four is a hidden proxy for a protected trait, and one is a qualification AI invented — you haven\'t found them both yet.'; }
+  if (Object.keys(citeChecked).length === 4){
+    const s = document.getElementById('citeSummary');
+    s.innerHTML = '🎉 <strong>Chapter 2\'s core skill, done.</strong> Four items, and two were traps: the "top-tier university / no gaps / digital native" criterion was <em>proxy bias</em> — neutral-looking language that screens on age and class — and the "Advanced Certified Practitioner" credential was a pure <em>hallucination</em> AI attributed to a candidate who never claimed it. The other two were genuinely job-related and verifiable, but still needed a real check. The rule holds: <strong>no proxies, and no claim without verification.</strong> AI structured the search; Sam checked every criterion for fairness and every qualification against reality before a single one reached a shortlist. Next: the structured interview.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 350);
+  }
+}
+
+/* criteria quiz */
+const planQs = [
+  {q:"Why is it fine to ask AI to 'turn the role into criteria' but not to 'screen out anyone who isn't a culture fit'?", opts:["It isn't — you should never use AI in hiring at all","Structuring a role into job-related criteria is delegable; a screening decision on 'culture fit' encodes bias and requires fair, human judgment, which is Sam's","AI is only allowed to screen if you name the university first"], correct:1, explain:"AI is a strong assistant for structuring a role into measurable, job-related criteria. But 'culture fit' is where bias hides, and a screening decision must rest on fair criteria Sam has checked and applied — no candidate auto-rejected. Structure, yes; the biased-by-default screen, no."},
+  {q:"AI lists a qualification for a candidate that would clinch the shortlist, but Sam can't find it anywhere on the actual resume. Best move?", opts:["Use it anyway — it's probably real and the req is urgent","Treat it as fabricated and drop it; a qualification that isn't on the candidate's own resume and can't be verified is not evidence","Ask AI to write the certificate so Sam can attach it"], correct:1, explain:"If it isn't on the resume and can't be verified in a real source, it isn't a qualification — and it would unfairly advantage that candidate and collapse under a reference check. Unverifiable equals unusable. Skipping this check is exactly how a fabricated credential could decide a shortlist."}
+];
+let pqIdx=0;
+function renderPlanQ(){
+  const s = planQs[pqIdx];
+  document.getElementById('planQ').textContent = `Round ${pqIdx+1}/2 — ${s.q}`;
+  document.getElementById('planOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPlanQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('planFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('planNext').style.display='none';
+}
+function answerPlanQ(i){
+  const s=planQs[pqIdx];
+  document.querySelectorAll('#planOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('planFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(pqIdx===planQs.length-1?'<br><br>🎉 Chapter 2 complete — fair criteria set, shortlist built on verified qualifications. Next: the structured interview.':'');
+  document.getElementById('planNext').style.display = pqIdx<planQs.length-1?'inline-block':'none';
+}
+function nextPlanQ(){ pqIdx++; if(pqIdx<planQs.length) renderPlanQ(); }
+renderPlanQ();
+
+/* ───────── CH 3: KEEP / FIX / REJECT ───────── */
+const markKey = {
+  mk1:{right:'keep', fb:{
+    keep:'✓ Correct — <strong>KEEP.</strong> This rating rests on real evidence: a clear, structured answer to a job-related question with a measurable outcome, scored against the rubric. That\'s exactly what a structured scorecard is for. Human-in-the-loop doesn\'t mean rewriting everything; it means <em>checking</em> everything and keeping what\'s genuinely evidence.',
+    fix:'△ You can tidy wording, but there\'s nothing to fix — it\'s job-related evidence scored against the rubric. Over-editing sound lines wastes the time AI just saved. Verdict: <strong>KEEP</strong>.',
+    reject:'✗ Rejecting a well-evidenced, job-related rating throws away exactly the useful work. Verdict: <strong>KEEP</strong>.'}},
+  mk2:{right:'reject', fb:{
+    reject:'✓ Correct — <strong>REJECT.</strong> This is bias dressed as a finding: "reserved and formal" and "outgoing energy the team likes" judge <em>demeanour and personality</em>, not job-related evidence. It can penalise introverts, neurodivergent candidates, and people from different cultural backgrounds — the classic "culture fit" trap. Sam deletes it and, if there\'s a real values question, replaces it with the same job-related question asked of everyone. The lesson of the chapter: <strong>AI over-reads tone and "fit" as red flags</strong> — score evidence, never vibes.',
+    keep:'✗ Never keep this. "Not a culture fit — reserved and formal" isn\'t evidence; it\'s a judgment of personality that encodes bias and can unfairly sink a qualified candidate. The fact it reads plausibly is exactly the danger. Verdict: <strong>REJECT</strong> the vibe-reading line.',
+    fix:'△ You can\'t "fix" a bias into evidence — a personality judgment isn\'t job-related data. The only honest move is to remove it and, if needed, ask a real, job-related question of every candidate instead. Verdict: <strong>REJECT</strong>.'}},
+  mk3:{right:'fix', fb:{
+    fix:'✓ Correct — <strong>FIX.</strong> The problem isn\'t the candidate — it\'s that this <em>5/5 was never actually assessed</em>. Sam ran out of time and didn\'t ask the data-analysis questions, so AI filled the gap with a confident guess. Sam removes the invented number and flags it as "not assessed — follow up," so the score reflects a real assessment, not a fabrication. AI inferred a rating; Sam\'s memory of the interview caught that it never happened.',
+    keep:'✗ Never keep this as-is. A top score for a competency that was never assessed is a fabricated data point in a hiring record — it could unfairly advantage or mislead. The candidate may be excellent, but this number wasn\'t earned in the interview. Verdict: <strong>FIX</strong> — mark it "not assessed" and follow up.',
+    reject:'△ You don\'t need to reject the whole competency — the candidate may genuinely be strong; you just never measured it. Deleting the line entirely loses the reminder to follow up. Verdict: <strong>FIX</strong>: mark it un-assessed and gather real evidence.'}}
+};
+const marked = {};
+function markDecide(id, verdict, btn){
+  const k = markKey[id];
+  marked[id] = true;
+  const card = document.getElementById(id);
+  card.className = 'mark-card decided-' + k.right;
+  card.querySelectorAll('.mark-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb-'+id);
+  fb.className = 'mark-fb show ' + (verdict===k.right ? 'good':'warn');
+  fb.innerHTML = k.fb[verdict];
+  if (marked.mk1 && marked.mk2 && marked.mk3){
+    const s = document.getElementById('markSummary');
+    s.innerHTML = '🎉 <strong>Chapter 3 complete.</strong> You just did what reviewing an AI-drafted scorecard looks like: <strong>Keep</strong> the well-evidenced, job-related rating, <strong>Reject</strong> the "culture fit" line AI read into the candidate\'s tone, <strong>Fix</strong> the score AI invented for a competency that was never assessed. AI summarised the whole scorecard in seconds — but your eyes and your memory of the interview caught the bias and the fabricated data before either became evidence. That\'s the trade — AI supports, Sam verifies and decides. Never count a rating you haven\'t checked. Next: the fair debrief and the kind decision.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+
+/* ───────── CH 4: REDACTION BEAT ───────── */
+let redactCount = 0;
+const redactTotal = 5;
+function redact(el){
+  if (el.classList.contains('redacted')) return;
+  el.classList.add('redacted');
+  el.setAttribute('onclick','');
+  redactCount++;
+  const st = document.getElementById('redactStatus');
+  if (redactCount < redactTotal){
+    st.innerHTML = `🔒 <strong>${redactCount} of ${redactTotal}</strong> identifiable items redacted. Keep going — every name, email, phone number, current employer, and exact address must be scrubbed before this goes near a consumer tool.`;
+  } else {
+    st.className = 'redact-status done';
+    st.innerHTML = `✅ <strong>All ${redactTotal} items redacted.</strong> What\'s left — "final interview stage," "strong on problem-solving, met the bar on the core tool," "a close call, not selected this round" — is a de-identified, job-related summary, safe to shape. <em>This</em> is what may go to AI; the real name, email, phone, employer, and address stay behind the firewall, inside Sam\'s secure applicant system. The job-related words you left alone were exactly right to keep.`;
+  }
+}
+
+/* ───────── CH 4: TONE + LEAK ───────── */
+const tones = {
+  plain: 'Hi [CANDIDATE], thank you so much for the time and energy you put into interviewing for the [ROLE]. This was a genuinely close decision, and after a lot of thought we\'ve decided to move forward with another candidate this time. That\'s a reflection of a strong field, not of your ability — you reached our final stage, which very few candidates do. We\'d honestly welcome an application from you for a future role, and I\'m happy to keep you in mind. Thank you again, and I wish you all the best.',
+  direct: 'Hi [CANDIDATE], thank you for interviewing for the [ROLE]. After careful consideration, we\'ve decided to move forward with another candidate for this position. You reached our final stage, and we were genuinely impressed. We\'d welcome a future application, and we\'ll keep your details on file with your permission. Thank you again for your time, and all the best.',
+  caution: 'Hi [CANDIDATE], thank you for interviewing for the [ROLE]. This was a close decision, and we\'ve decided to move forward with another candidate this time. If it would help, I\'m glad to share brief, specific feedback from your interview — you were strong on problem-solving, and the final call came down to depth of experience with one core area. You reached our final stage, and we\'d genuinely welcome a future application. Thank you again, and I wish you all the best.'
+};
+function setTone(t){
+  document.querySelectorAll('.tone-tab').forEach(x => x.classList.toggle('active', x.dataset.tone===t));
+  const n = document.getElementById('noteText');
+  n.style.opacity=0;
+  setTimeout(()=>{ n.textContent = tones[t]; n.style.opacity=1; }, 200);
+}
+
+/* leak spotter */
+const leakFbs = [
+  {ok:false, fb:'✗ This is fine to send to a tool — a de-identified description of a stage and a decision, no identity attached. Nothing here exposes the candidate. Look again for the line that carries personally identifiable information — the one that should never be typed into a consumer app in the first place.'},
+  {ok:true, fb:'✓ Stop — this one. A real name, email, phone number, current employer, full resume, and date of birth are all <strong>candidate PII</strong>. Pasting them into a general consumer tool exposes the candidate and breaches privacy — Sam keeps every identifier behind the firewall and fills them in themselves, inside the secure applicant system. AI only ever sees the de-identified stage and job-related summary.'},
+  {ok:false, fb:'✗ This is a perfectly safe, warm closing line — no name, email, or identifiable detail at all. The dangerous line is the one packed with the candidate\'s real identifiers, contact details, and resume.'}
+];
+function leakQ(i){
+  const r = leakFbs[i];
+  const btns = document.querySelectorAll('#s4 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled=true; if(leakFbs[j].ok)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('leakFb');
+  fb.className='scenario-feedback show '+(r.ok?'success':'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* privacy quiz */
+const privQs = [
+  {q:"What does Sam's 'privacy firewall' actually mean in practice?", opts:["They turn off their wifi while writing the messages","AI only ever sees placeholders and a de-identified, job-related summary ([CANDIDATE], 'final interview stage') — real name, email, employer, and specifics are filled in by Sam, inside the secure applicant system","They mark the AI chat 'confidential'"], correct:1, explain:"The firewall is a workflow, not a setting: identifiable candidate data never enters the consumer tool. AI drafts the message scaffolding from a stage and a job-related summary; the real candidate information is added by hand at the end, inside the secure system Sam controls."},
+  {q:"AI drafts a warm rejection with [CANDIDATE] placeholders. Before it goes to the candidate, Sam should…", opts:["Auto-send it straight away — the draft is done","Read it, fill in the real details themselves inside the secure system, and personally review the decision so no adverse outcome is automated and the tone is kind and accurate","Ask AI to also message the candidate on Sam's behalf"], correct:1, explain:"Placeholders save the drafting time; the recruiter still reviews every message and owns every adverse decision, so a friendly template never sends an automated 'no' or misstates the outcome. AI supports, Sam verifies and decides — even in a candidate rejection, which is exactly where kindness and a human review matter most."}
+];
+let vqIdx=0;
+function renderPrivQ(){
+  const s=privQs[vqIdx];
+  document.getElementById('privQ').textContent=`Round ${vqIdx+1}/2 — ${s.q}`;
+  document.getElementById('privOpts').innerHTML=s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPrivQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('privFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('privNext').style.display='none';
+}
+function answerPrivQ(i){
+  const s=privQs[vqIdx];
+  document.querySelectorAll('#privOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('privFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(vqIdx===privQs.length-1?'<br><br>🎉 Chapter 4 complete — decisions made on evidence, candidates answered kindly, privacy intact. Finale: add up the reclaimed hours.':'');
+  document.getElementById('privNext').style.display=vqIdx<privQs.length-1?'inline-block':'none';
+}
+function nextPrivQ(){ vqIdx++; if(vqIdx<privQs.length) renderPrivQ(); }
+renderPrivQ();
+
+/* ───────── CH 5: HOURS TALLY + OVERLOAD METER ───────── */
+let claimedHrs = 0;
+const totalRows = 4;
+let claimedCount = 0;
+function claimHours(row){
+  if (row.classList.contains('claimed')) return;
+  row.classList.add('claimed');
+  claimedHrs += parseFloat(row.dataset.hrs);
+  claimedCount++;
+  document.getElementById('tallyTotal').textContent = claimedHrs.toFixed(1) + ' hrs';
+  /* marker: 92% (deep red) at 0 hrs → 8% (green) at full 4 hrs */
+  const marker = document.getElementById('burnoutMarker');
+  const pct = 92 - (claimedHrs / 4) * 84;
+  marker.style.left = Math.max(8, pct) + '%';
+  const note = document.getElementById('tallyNote');
+  if (claimedCount < totalRows){
+    note.innerHTML = `⏳ <strong>${claimedHrs.toFixed(1)} hours</strong> reclaimed so far — and every one of them was drafting or admin drudgery, not recruiting judgment. Keep tapping.`;
+  } else {
+    note.innerHTML = `🎉 <strong>${claimedHrs.toFixed(1)} hours</strong> of recruiting admin saved in one search. And here\'s the honest part: Sam <em>kept</em> the recruiting judgment (checking every criterion for bias, verifying every qualification, reviewing every note, owning every decision, reviewing every no) on purpose. That\'s the deal that makes it fair. <strong>AI supports, Sam verifies and decides.</strong>`;
+    document.getElementById('sundayFinale').classList.add('show');
+    setTimeout(()=> document.getElementById('sundayFinale').scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+</script>
+</body>
+</html>

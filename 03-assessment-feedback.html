@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Assessment &amp; Feedback with AI · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== principle cards (shared) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== Figure 1 · assessment loop ===== */
+.loop-flex{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center}
+.loop-svg{width:100%;height:auto;display:block}
+.loop-node{cursor:pointer}
+.loop-ring{fill:var(--paper);stroke:var(--line);stroke-width:2;transition:all .25s}
+.loop-node:hover .loop-ring{stroke:var(--orange)}
+.loop-node.active .loop-ring{fill:var(--brown-dark);stroke:var(--brown-dark)}
+.loop-lab{font-family:'JetBrains Mono',monospace;font-size:10px;fill:var(--brown);text-anchor:middle;letter-spacing:0.04em;font-weight:600;pointer-events:none;text-transform:uppercase}
+.loop-node.active .loop-lab{fill:#fff}
+.loop-arc{fill:none;stroke:var(--line);stroke-width:2;stroke-dasharray:3 5}
+.loop-arrow{fill:var(--orange)}
+.loop-panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;min-height:210px}
+.loop-step{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.loop-panel h4{font-family:'Fraunces',serif;font-size:26px;color:var(--brown-dark);margin-bottom:14px}
+.role-row{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;margin-bottom:12px;align-items:start}
+.role-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;padding:4px 8px;border-radius:4px;white-space:nowrap;height:fit-content}
+.role-tag.ai{background:var(--accent)}
+.role-tag.hu{background:var(--orange-dark)}
+.role-row p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+.loop-hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange-dark);letter-spacing:0.06em;margin-top:14px}
+
+/* ===== Figure 2 · human-in-the-loop stepper ===== */
+.step-track{display:flex;gap:6px;margin-bottom:22px}
+.step-pip{flex:1;height:6px;background:var(--line);border-radius:3px;transition:background .3s}
+.step-pip.on{background:var(--orange)}
+.step-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:280px;position:relative}
+.step-who{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;padding:5px 10px;border-radius:5px;margin-bottom:14px}
+.step-who.ai{background:rgba(0,141,210,0.12);color:var(--accent)}
+.step-who.hu{background:rgba(213,82,34,0.12);color:var(--orange-dark)}
+.step-card h4{font-family:'Fraunces',serif;font-size:24px;color:var(--brown-dark);margin-bottom:10px}
+.step-card>p{font-size:14px;color:var(--muted);max-width:none;margin-bottom:16px}
+.step-quote{background:var(--cream);border-left:3px solid var(--line);border-radius:0 8px 8px 0;padding:14px 18px;font-size:14px;color:var(--brown);margin-bottom:8px}
+.step-quote.ai-q{border-color:var(--accent)}
+.step-quote.hu-q{border-color:var(--orange-dark)}
+.step-quote .del{text-decoration:line-through;color:#B5453A;opacity:.7}
+.step-quote .ins{color:var(--orange-dark);font-weight:600}
+.step-quote .lbl{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.step-grade{display:flex;align-items:center;gap:16px;margin-top:12px}
+.grade-chip{font-family:'Fraunces',serif;font-weight:800;font-size:40px;color:var(--brown-dark);background:var(--cream);border:1px solid var(--line);border-radius:12px;width:78px;height:78px;display:flex;align-items:center;justify-content:center}
+.grade-chip.final{background:var(--brown-dark);color:var(--yellow);border-color:var(--brown-dark)}
+.step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.step-btn{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--brown-dark);border:none;color:#fff;padding:10px 18px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;transition:all .2s}
+.step-btn:hover{background:var(--orange-dark)}
+.step-btn:disabled{opacity:.3;cursor:not-allowed}
+.step-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.08em}
+
+/* ===== Figure 3 · authentic assessment toggle ===== */
+.auth-flex{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:start}
+.auth-task{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;transition:border-color .3s}
+.auth-task .tt{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.auth-task h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:12px;line-height:1.15}
+.auth-task p{font-size:14px;color:var(--brown);max-width:none;margin-bottom:0}
+.auth-feats{list-style:none;margin-top:14px;display:grid;gap:7px}
+.auth-feats li{font-size:13px;color:var(--muted);padding-left:20px;position:relative}
+.auth-feats li::before{content:"•";position:absolute;left:2px;color:var(--orange);font-weight:bold}
+.auth-side{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;position:sticky;top:90px}
+.vuln-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.vuln-bar{height:18px;background:var(--cream);border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:8px}
+#vulnFill{height:100%;width:90%;border-radius:9px;transition:width .6s ease,background .6s ease}
+.vuln-read{display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:16px}
+.vuln-read strong{font-family:'Fraunces',serif;font-size:32px}
+.vuln-note{font-size:13px;color:var(--muted);max-width:none;border-top:1px dashed var(--line);padding-top:14px;margin-top:4px}
+.auth-switch{display:flex;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:4px;margin-bottom:6px}
+.auth-switch button{flex:1;font-family:'JetBrains Mono',monospace;font-size:11px;background:transparent;border:none;color:var(--muted);padding:9px;border-radius:7px;cursor:pointer;text-transform:uppercase;letter-spacing:0.06em;transition:all .2s}
+.auth-switch button.active{background:var(--brown-dark);color:#fff}
+
+@media(max-width:700px){
+  .loop-flex,.auth-flex{grid-template-columns:1fr}
+  .auth-side{position:static}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">SCHOOL OF AI CAREERS</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 1 · AI for Teachers · Lesson 03</div>
+  <h1>Assessment that stays <em>human</em>.</h1>
+  <p class="lede">The point of assessment isn't to produce a number — it's to understand where a learner is and help them move. AI can draft rubrics, sift first-pass comments, and catch patterns across a class in minutes. But the judgement of what a piece of work is worth, and what a child needs to hear, is a professional act that stays with you. This lesson is about the workflow, not the tool.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The assessment loop — and where AI belongs in it</h2>
+  <p class="lead">Good assessment is a cycle, not a moment. Every stage has a mechanical half AI can accelerate and a judgement half only a teacher can hold. Knowing which is which is the whole skill.</p>
+
+  <p>Beginners reach for AI at the wrong end of the loop — they ask it to award grades. Professionals put AI where the work is repetitive and reversible: drafting items, structuring rubrics, generating first-pass comments a human then edits. Click each stage in the loop below to see the split. The rule underneath all of it: <strong>AI drafts, the teacher decides.</strong></p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The assessment loop</span>
+      <div class="controls"><span style="opacity:.6">Click any stage →</span></div>
+    </div>
+    <div class="loop-flex">
+      <svg class="loop-svg" viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" aria-label="Assessment loop diagram">
+        <g id="loopArcs"></g>
+        <g id="loopNodes"></g>
+      </svg>
+      <div class="loop-panel">
+        <div class="loop-step" id="loopStep">Stage 1 of 7</div>
+        <h4 id="loopTitle">Define</h4>
+        <div class="role-row">
+          <span class="role-tag ai">AI drafts</span>
+          <p id="loopAI">Suggests measurable learning objectives from your topic and phase.</p>
+        </div>
+        <div class="role-row">
+          <span class="role-tag hu">Teacher decides</span>
+          <p id="loopHU">Chooses what actually matters for these students, and cuts the rest.</p>
+        </div>
+        <div class="loop-hint" id="loopHint">→ AI accelerates the drafting. You own the intent.</div>
+      </div>
+    </div>
+  </div>
+
+  <p>Notice the pattern as you click around: AI is strongest at <em>producing options</em> and weakest at <em>choosing between them for a specific child</em>. It has never met your class, doesn't know that one student's grandmother died last week, and can't see the flicker of understanding in a mid-lesson answer. Keep it upstream — in the drafting — and the loop stays yours.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Human-in-the-loop marking</h2>
+  <p class="lead">"AI marking" sounds like a machine handing back grades. Done well, it's the opposite: AI produces a fast, consistent first pass, and the teacher reviews, overrides, and owns every final decision.</p>
+
+  <p>The value isn't speed for its own sake — it's that a first-pass comment gives you something to react to instead of a blank page at 10pm. But a first pass is a draft, and drafts are frequently wrong: they miss context, misread a student's voice, and cannot weigh effort or growth. Step through a single piece of work below and watch the decision travel from machine suggestion to teacher judgement to a grade a human stands behind.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · One piece of work, marked with a human in the loop</span>
+      <div class="controls">
+        <button onclick="stepReset()">↺ Restart</button>
+      </div>
+    </div>
+    <div class="step-track" id="stepTrack">
+      <div class="step-pip on"></div><div class="step-pip"></div><div class="step-pip"></div><div class="step-pip"></div>
+    </div>
+    <div class="step-card" id="stepCard"><!-- filled by JS --></div>
+    <div class="step-nav">
+      <span class="step-count" id="stepCount">Step 1 of 4</span>
+      <div style="display:flex;gap:8px">
+        <button class="step-btn" id="stepPrev" onclick="stepGo(-1)" disabled>← Back</button>
+        <button class="step-btn" id="stepNext" onclick="stepGo(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <p>The override in step three is the entire point. AI proposed a 6/10 on a strict word-count reading; the teacher — who knows this student rewrote the piece twice and finally found their argument — settles on a 7 with a comment that names the growth. No policy requires the teacher to accept a machine's number, and none ever should. <strong>The grade a student receives must be a decision a human can explain and defend.</strong></p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Designing assessments AI can't do for the student</h2>
+  <p class="lead">If a task can be completed by pasting the prompt into a chatbot, it was probably never assessing what you thought it was. The durable fix isn't detection software — it's better task design.</p>
+
+  <p>Detectors are unreliable and unfair: they flag second-language writers, they miss competent paraphrasing, and they turn the classroom into a courtroom. The stronger move is to redesign the task so that AI-generated text simply doesn't earn the marks. Toggle the task below between its <em>vulnerable</em> and <em>authentic</em> forms and watch the AI-vulnerability meter respond — then read what actually changed.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Redesigning a task to be AI-resistant</span>
+      <div class="controls">
+        <div class="auth-switch" style="margin:0">
+          <button id="authV" class="active" onclick="authSet('v')">Vulnerable</button>
+          <button id="authA" onclick="authSet('a')">Authentic</button>
+        </div>
+      </div>
+    </div>
+    <div class="auth-flex">
+      <div class="auth-task" id="authTask">
+        <div class="tt"><span id="authTag">◇ Generic essay</span></div>
+        <h4 id="authTitle">"Write 500 words on the causes of World War I."</h4>
+        <p id="authDesc">A closed, take-home prompt with a public answer. Any chatbot produces a competent, well-structured response in seconds — and there is no way to tell whose thinking it reflects.</p>
+        <ul class="auth-feats" id="authFeats"></ul>
+      </div>
+      <div class="auth-side">
+        <div class="vuln-label">AI-vulnerability meter</div>
+        <div class="vuln-bar"><div id="vulnFill"></div></div>
+        <div class="vuln-read"><span id="vulnWord">High exposure</span><strong id="vulnPct">90%</strong></div>
+        <p class="vuln-note" id="vulnNote">A chatbot can complete this task end to end. You'd be assessing the tool, not the student.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>Authentic assessment doesn't ban AI — it makes AI a starting point rather than a finish line. When the task demands the student's own voice, a specific classroom source, an in-person defence, or a visible process, a chatbot draft becomes raw material the student must still think with. The goal isn't to out-run the technology. It's to assess the things the technology can't fake: reasoning you can watch, choices a learner can justify, work that could only be theirs.</p>
+
+  <h3>Five levers that shift a task toward AI-resistant</h3>
+  <p>You don't have to redesign everything from scratch. Most tasks can be nudged along a spectrum by pulling one or two of these levers. None of them require detection software, and none of them assume students won't touch AI — they assume students <em>will</em>, and ask what remains genuinely theirs once they have.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Lever 1</span><h4>Anchor to the local</h4><p>Tie the task to something only your classroom shares — a discussion you had, a local dataset, a source you studied together. A model that never sat in the room can't ground its answer in it.</p></div>
+    <div class="crit"><span class="k">Lever 2</span><h4>Assess the process</h4><p>Grade the drafting log, the annotated plan, the version history — not just the final artefact. Thinking that happens in stages is far harder to outsource than a finished product.</p></div>
+    <div class="crit"><span class="k">Lever 3</span><h4>Demand a defence</h4><p>A short viva, a live Q&amp;A, a one-minute explanation. If a student can defend the reasoning out loud, it's theirs — whoever or whatever helped draft it.</p></div>
+    <div class="crit"><span class="k">Lever 4</span><h4>Require a personal stance</h4><p>Ask for a position the student must argue, connected to their own experience or a choice they justify. Generic prompts get generic answers; specific stances need a specific thinker.</p></div>
+    <div class="crit"><span class="k">Lever 5</span><h4>Make AI the subject</h4><p>Let students use AI openly, then critique its output — where it was wrong, biased, or shallow. This assesses judgement about the tool, which is a skill worth teaching anyway.</p></div>
+  </div>
+
+  <p>Notice that every lever assesses something more valuable than the essay it replaces: grounded reasoning, visible process, spoken understanding, a defensible position, critical judgement. Designing out AI-vulnerability, done honestly, tends to make assessment <em>better</em> — more human, more revealing — not merely harder to cheat on. That's the quiet win of the authentic approach: the defensive move and the pedagogical one turn out to be the same move.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>The honest limits</h2>
+  <p class="lead">Using AI in assessment responsibly means naming its failure modes out loud — to yourself, to colleagues, and to students — and building the workflow so those failures can't quietly become a grade.</p>
+
+  <p>None of the techniques in this lesson survive contact with a teacher who trusts the machine's output. The four cautions below aren't fine print; they're the conditions that make everything else safe. Read them as design constraints on your own practice.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Privacy</span><h4>Don't feed identifiable work</h4><p>A student's full essay, name attached, may be personal data. De-identify before pasting into any external tool, and check your school's policy before it leaves the building.</p></div>
+    <div class="crit"><span class="k">Hallucination</span><h4>It invents with confidence</h4><p>AI will assert a fact, a citation, or a rubric criterion that sounds authoritative and is simply wrong. Every generated item and comment is a draft to verify, never a truth to trust.</p></div>
+    <div class="crit"><span class="k">Bias</span><h4>It carries hidden slant</h4><p>Models can mark dialect, non-standard structure, or unfamiliar names more harshly. If AI touches a grade, a human must check that it hasn't imported an unfair pattern.</p></div>
+    <div class="crit"><span class="k">Integrity</span><h4>Detectors aren't evidence</h4><p>"AI-detection" scores are probabilistic and frequently wrong. Never accuse a student on a detector's word. Design tasks that make the question moot instead.</p></div>
+  </div>
+
+  <h3>The one rule that ties it together</h3>
+  <p>Across the loop, the marking pass, and the task redesign, the same principle keeps recurring: <strong>AI drafts, the teacher decides.</strong> It is not a slogan — it is a division of labour. The machine handles the parts that are mechanical, repeatable, and reversible. You hold the parts that require knowing a specific human, weighing effort against outcome, and being answerable for the result. Keep that line bright and AI becomes a genuine assistant. Blur it, and you've quietly outsourced the one thing a teacher can't delegate.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Assessment with AI is a workflow, not a shortcut. Let the machine draft items, structure rubrics, and produce first-pass comments — then review, override, and own every final judgement. Redesign tasks so that AI is a starting point students think with, not a finish line they hand in. And never let a machine's number, or a detector's score, become a decision you can't defend.</p>
+  <ul>
+    <li>AI drafts, the teacher decides · a division of labour, not a slogan</li>
+    <li>Keep AI upstream · in item-writing and rubrics, out of the final grade</li>
+    <li>Human-in-the-loop marking · a first pass to react to, never a verdict to accept</li>
+    <li>Design out the vulnerability · authentic tasks beat unreliable detectors</li>
+    <li>Name the limits · privacy, hallucination, bias, integrity — out loud, every time</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Guided Path to True Learning · Lesson 03 of 04 · Next up: Communication, Admin &amp; Professional Growth →</footer>
+<script>
+const NS='http://www.w3.org/2000/svg';
+
+/* ============ Figure 1 · Assessment loop ============ */
+const LOOP=[
+  {name:'Define',ai:'Suggests measurable learning objectives from your topic and phase.',hu:'Chooses what actually matters for these students, and cuts the rest.',hint:'AI accelerates the drafting. You own the intent.'},
+  {name:'Format',ai:'Proposes question types — MCQ, short answer, project — to match the objective.',hu:'Picks the format that fits your class, timetable, and access needs.',hint:'AI lists options. You choose what your learners can actually access.'},
+  {name:'Items',ai:'Drafts a bank of questions, distractors, and prompts in seconds.',hu:'Checks each for accuracy, fairness, and reading level — and rewrites.',hint:'AI is fast at drafting items and confident when it is wrong.'},
+  {name:'Rubric',ai:'Turns your criteria into a structured, level-descriptor rubric.',hu:'Adjusts language, weightings, and what "good" means in this context.',hint:'AI structures the rubric. You decide what it rewards.'},
+  {name:'Mark',ai:'Produces a consistent first-pass comment against the rubric.',hu:'Reviews, overrides, and decides the grade a human can defend.',hint:'The first pass is a draft. The grade is a professional judgement.'},
+  {name:'Feedback',ai:'Suggests specific, actionable next-step wording for each learner.',hu:'Personalises tone and picks the one thing this child needs to hear.',hint:'AI drafts feedback. You know which student is reading it.'},
+  {name:'Adjust',ai:'Summarises class-wide patterns — common errors, misconceptions.',hu:'Decides what to reteach tomorrow and how the plan should change.',hint:'AI spots the pattern. You choose the response.'}
+];
+const loopNodes=document.getElementById('loopNodes'),loopArcs=document.getElementById('loopArcs');
+const LCX=210,LCY=210,LRAD=155,NR=42;
+let loopActive=0;
+(function buildLoop(){
+  const n=LOOP.length;
+  // dashed circle guide
+  const guide=document.createElementNS(NS,'circle');
+  guide.setAttribute('cx',LCX);guide.setAttribute('cy',LCY);guide.setAttribute('r',LRAD);
+  guide.setAttribute('class','loop-arc');loopArcs.appendChild(guide);
+  LOOP.forEach((s,i)=>{
+    const a=-Math.PI/2+i*2*Math.PI/n;
+    const x=LCX+LRAD*Math.cos(a),y=LCY+LRAD*Math.sin(a);
+    // arrow toward next node
+    const a2=-Math.PI/2+((i+0.5))*2*Math.PI/n;
+    const ax=LCX+LRAD*Math.cos(a2),ay=LCY+LRAD*Math.sin(a2);
+    const arw=document.createElementNS(NS,'path');
+    const dir=a2+Math.PI/2;
+    const sz=6;
+    arw.setAttribute('d','M'+(ax+sz*Math.cos(dir))+' '+(ay+sz*Math.sin(dir))+
+      ' L'+(ax-sz*Math.cos(dir)+sz*Math.cos(dir-Math.PI/2))+' '+(ay-sz*Math.sin(dir)+sz*Math.sin(dir-Math.PI/2))+
+      ' L'+(ax-sz*Math.cos(dir)-sz*Math.cos(dir-Math.PI/2))+' '+(ay-sz*Math.sin(dir)-sz*Math.sin(dir-Math.PI/2))+'Z');
+    arw.setAttribute('class','loop-arrow');loopArcs.appendChild(arw);
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('class','loop-node');g.setAttribute('id','ln'+i);
+    g.addEventListener('click',()=>loopSet(i));
+    const c=document.createElementNS(NS,'circle');
+    c.setAttribute('class','loop-ring');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',NR);
+    g.appendChild(c);
+    const num=document.createElementNS(NS,'text');
+    num.setAttribute('class','loop-lab');num.setAttribute('x',x);num.setAttribute('y',y-6);
+    num.textContent=(i+1);g.appendChild(num);
+    const t=document.createElementNS(NS,'text');
+    t.setAttribute('class','loop-lab');t.setAttribute('x',x);t.setAttribute('y',y+11);
+    t.textContent=s.name;g.appendChild(t);
+    loopNodes.appendChild(g);
+  });
+})();
+function loopSet(i){
+  loopActive=i;const s=LOOP[i];
+  LOOP.forEach((_,j)=>document.getElementById('ln'+j).classList.toggle('active',j===i));
+  document.getElementById('loopStep').textContent='Stage '+(i+1)+' of '+LOOP.length;
+  document.getElementById('loopTitle').textContent=s.name;
+  document.getElementById('loopAI').textContent=s.ai;
+  document.getElementById('loopHU').textContent=s.hu;
+  document.getElementById('loopHint').textContent='→ '+s.hint;
+}
+loopSet(0);
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){loopSet(0);o.unobserve(e.target)}}),{threshold:0.3}).observe(loopArcs);
+
+/* ============ Figure 2 · Human-in-the-loop stepper ============ */
+const STEPS=[
+  {who:'ai',label:'Step 1 · AI first pass',title:'The machine drafts a comment',body:'AI reads the essay against the rubric and produces a fast, consistent first-pass comment. It is instant and impersonal — a draft to react to, not a decision.',render:()=>`
+    <div class="step-quote ai-q"><span class="lbl">AI-generated first pass</span>"Argument is present but underdeveloped. Below the 500-word minimum. Some evidence, weakly linked. Suggested: <strong>6 / 10</strong>."</div>`},
+  {who:'hu',label:'Step 2 · Teacher reads the work',title:'The teacher brings context the model lacks',body:'The teacher knows this student rewrote the piece twice, moved from no thesis to a real argument, and writes English as a second language. None of that is visible to the model.',render:()=>`
+    <div class="step-quote hu-q"><span class="lbl">What the teacher can see, the model can't</span>Two earlier drafts. A genuine argument that wasn't there last week. Effort and growth the word-count can't measure.</div>`},
+  {who:'hu',label:'Step 3 · Teacher reviews & overrides',title:'The teacher edits the draft and overrides the number',body:'The comment is rewritten to name the growth, and the grade is raised. The AI number was a starting point — the teacher\'s judgement is the decision.',render:()=>`
+    <div class="step-quote hu-q"><span class="lbl">Reviewed &amp; overridden</span>"You found a real argument this time — that\'s the leap. Next: tie each piece of evidence back to it. <span class="del">6 / 10</span> <span class="ins">7 / 10</span>."</div>`},
+  {who:'hu',label:'Step 4 · Final grade a human owns',title:'A grade the teacher can explain and defend',body:'The final grade is recorded by the teacher, who can account for every mark. The AI saved time on the first draft; the professional judgement — and the responsibility — stayed human.',render:()=>`
+    <div class="step-grade">
+      <div class="grade-chip">6</div>
+      <span style="font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:22px">→</span>
+      <div class="grade-chip final">7</div>
+      <p style="margin:0;font-size:13px;color:var(--muted);max-width:none">AI suggested. The teacher decided, and can defend it.</p>
+    </div>`}
+];
+let stepI=0;
+function stepRender(){
+  const s=STEPS[stepI];
+  document.getElementById('stepCard').innerHTML=
+    '<span class="step-who '+s.who+'">'+(s.who==='ai'?'◆ AI':'● Teacher')+' · '+s.label+'</span>'+
+    '<h4>'+s.title+'</h4><p>'+s.body+'</p>'+s.render();
+  document.getElementById('stepCount').textContent='Step '+(stepI+1)+' of '+STEPS.length;
+  document.getElementById('stepPrev').disabled=stepI===0;
+  document.getElementById('stepNext').disabled=stepI===STEPS.length-1;
+  Array.prototype.forEach.call(document.getElementById('stepTrack').children,(p,i)=>p.classList.toggle('on',i<=stepI));
+}
+function stepGo(d){stepI=Math.max(0,Math.min(STEPS.length-1,stepI+d));stepRender()}
+function stepReset(){stepI=0;stepRender()}
+stepRender();
+
+/* ============ Figure 3 · Authentic assessment toggle ============ */
+const AUTH={
+  v:{tag:'◇ Generic essay',title:'"Write 500 words on the causes of World War I."',
+     desc:'A closed, take-home prompt with a public answer. Any chatbot produces a competent, well-structured response in seconds — and there is no way to tell whose thinking it reflects.',
+     feats:['Answer exists in the model\'s training data','No personal voice or local context required','Product is graded, process is invisible','Nothing the student must defend in person'],
+     pct:90,word:'High exposure',color:'linear-gradient(90deg,#D55222,#B5453A)',
+     note:'A chatbot can complete this task end to end. You\'d be assessing the tool, not the student.'},
+  a:{tag:'◆ Authentic task',title:'"Argue the WWI cause you find most under-taught — using our two class sources — then defend it in a 3-minute viva."',
+     desc:'The task now demands a specific position, named classroom sources, a visible drafting log, and a live oral defence. AI can help draft, but it cannot sit the viva or fake the student\'s reasoning.',
+     feats:['Requires a personal, arguable stance','Anchored to specific in-class sources','Process is assessed via a drafting log','Defended live — the student must think on their feet'],
+     pct:22,word:'Low exposure',color:'linear-gradient(90deg,var(--orange),var(--yellow))',
+     note:'AI becomes a starting point the student must still think with. A human sign-off — the viva — gates the grade.'}
+};
+function authSet(k){
+  const a=AUTH[k];
+  document.getElementById('authV').classList.toggle('active',k==='v');
+  document.getElementById('authA').classList.toggle('active',k==='a');
+  document.getElementById('authTag').textContent=a.tag;
+  document.getElementById('authTitle').textContent=a.title;
+  document.getElementById('authDesc').textContent=a.desc;
+  document.getElementById('authFeats').innerHTML=a.feats.map(f=>'<li>'+f+'</li>').join('');
+  const fill=document.getElementById('vulnFill');
+  fill.style.width=a.pct+'%';fill.style.background=a.color;
+  document.getElementById('vulnWord').textContent=a.word;
+  document.getElementById('vulnPct').textContent=a.pct+'%';
+  document.getElementById('vulnNote').textContent=a.note;
+  document.getElementById('authTask').style.borderColor=k==='a'?'var(--orange)':'var(--line)';
+}
+authSet('v');
+
+</script>
+</body>
+</html>

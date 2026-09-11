@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Client Communication, Matter Management &amp; Professional Growth with AI · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#2E7D5B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== principle cards (shared) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== Figure 1 · hours reclaimed calculator ===== */
+.hr-flex{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:start}
+.hr-rows{display:grid;gap:16px}
+.hr-row{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.hr-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.hr-name{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark)}
+.hr-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.hr-val strong{color:var(--orange-dark);font-size:14px}
+.hr-bars{position:relative;height:26px;background:var(--cream);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.hr-before{position:absolute;left:0;top:0;height:100%;background:repeating-linear-gradient(45deg,var(--line),var(--line) 6px,#efe4d2 6px,#efe4d2 12px);border-radius:6px}
+.hr-after{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-dark));border-radius:6px;transition:width .5s ease}
+.hr-slider label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.hr-slider input[type=range]{width:100%;accent-color:var(--orange);cursor:pointer}
+.hr-side{background:var(--brown-dark);color:var(--paper);border-radius:14px;padding:24px;position:sticky;top:90px;overflow:hidden}
+.hr-side::after{content:"";position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.35}
+.hr-side .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#FBE7CB;margin-bottom:6px}
+.hr-big{font-family:'Fraunces',serif;font-weight:800;font-size:56px;line-height:1;color:var(--yellow)}
+.hr-unit{font-family:'JetBrains Mono',monospace;font-size:12px;color:#E8D9C5;margin-bottom:18px}
+.hr-sub{font-size:13px;color:#E8D9C5;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;max-width:none}
+.hr-sub strong{color:var(--orange-light)}
+
+/* ===== Figure 2 · confidentiality firewall ===== */
+.pf-wrap{display:grid;gap:0}
+.pf-lane{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.pf-lane .lane-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-block;padding:4px 9px;border-radius:5px}
+.lane-tag.raw{background:rgba(213,82,34,0.12);color:var(--orange-dark)}
+.lane-tag.clean{background:rgba(0,141,210,0.12);color:var(--accent)}
+.pf-text{font-size:14px;line-height:1.7;color:var(--brown)}
+.pii{background:rgba(213,82,34,0.16);color:var(--orange-dark);border-radius:3px;padding:0 3px;font-weight:600;transition:all .3s}
+.pii.masked{background:var(--brown-dark);color:var(--yellow);font-family:'JetBrains Mono',monospace;font-size:.85em;letter-spacing:0.02em}
+.pf-gate{display:flex;align-items:center;gap:14px;padding:14px 20px;margin:2px 0}
+.pf-gate .gicon{width:34px;height:34px;flex-shrink:0}
+.pf-gate .gtxt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--muted)}
+.pf-gate .gtxt strong{color:var(--brown-dark);text-transform:uppercase;letter-spacing:0.1em;display:block;font-size:10px;margin-bottom:2px}
+.pf-signoff{background:var(--paper);border:1px dashed var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;transition:all .3s;flex-wrap:wrap}
+.pf-signoff.locked{border-color:var(--orange-dark)}
+.pf-signoff.approved{border-color:var(--accent);border-style:solid;background:rgba(0,141,210,0.05)}
+.pf-signoff .sbadge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;padding:5px 10px;border-radius:5px;white-space:nowrap}
+.pf-signoff.locked .sbadge{background:var(--orange-dark);color:#fff}
+.pf-signoff.approved .sbadge{background:var(--accent);color:#fff}
+.pf-signoff p{font-size:13px;color:var(--muted);margin:0;max-width:none;flex:1;min-width:220px}
+.pf-btn{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--brown-dark);border:none;color:#fff;padding:9px 16px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;transition:all .2s;margin-left:auto;white-space:nowrap}
+.pf-btn:hover{background:var(--orange-dark)}
+.pf-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== Figure 3 · tone tuner ===== */
+.tone-flex{display:grid;grid-template-columns:1fr;gap:0}
+.tone-msg{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:200px;transition:border-color .3s}
+.tone-from{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.tone-from .badge{color:var(--orange-dark);font-weight:600}
+.tone-body{font-size:15px;line-height:1.7;color:var(--brown)}
+.tone-approve{margin-top:20px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tone-approve .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.tone-approve .k strong{display:block;color:var(--brown-dark);font-size:11px;letter-spacing:0.12em;margin-bottom:2px}
+.tone-approve p{font-size:13px;color:var(--muted);margin:0;max-width:none;flex:1;min-width:200px}
+
+@media(max-width:700px){
+  .hr-flex{grid-template-columns:1fr}
+  .hr-side{position:static}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">SCHOOL OF AI CAREERS</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 2 · AI for Lawyers · Lesson 04</div>
+  <h1>Reclaim the hours that <em>aren't</em> lawyering.</h1>
+  <p class="lede">A great deal of legal work is not law — it's the intake summaries, the client update letters, the chronologies, the billing narratives that eat the margins of the day. This is exactly the drafting AI accelerates. The prize isn't perfect prose from a machine; it's the hours returned to counsel, to strategy, to the client conversation that actually needs you. But every word still goes out under your duty to that client — and privilege, once waived, does not come back.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Where the non-billable hours go</h2>
+  <p class="lead">You can't reclaim time you haven't measured. Before reaching for AI, name the recurring, non-billable drafting tasks that quietly consume the week — then estimate, honestly, how much of each is first-draft work a model could accelerate under your review.</p>
+
+  <p>Drag the sliders to match your own week. The bars show <em>before</em> (your current hours, hatched) against <em>after</em> AI drafts the first version and you verify and finalise (solid orange). The point isn't the exact number — it's the shape of the week it reveals. Most lawyers are startled less by the total than by how much of it is repetitive text-shaping that never needed counsel to start from a blank page.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Non-billable hours reclaimed per week</span>
+      <div class="controls"><button onclick="hrReset()">↺ Reset</button></div>
+    </div>
+    <div class="hr-flex">
+      <div class="hr-rows" id="hrRows"><!-- filled by JS --></div>
+      <div class="hr-side">
+        <div class="lbl">Estimated time reclaimed</div>
+        <div class="hr-big"><span id="hrHours">0</span></div>
+        <div class="hr-unit">hours / week · <span id="hrYear">0</span> hrs a year</div>
+        <p class="hr-sub">That's roughly <strong id="hrDays">0</strong> working days returned to counsel, matter strategy, and client contact — <em>if</em> you spend the reclaimed time on the work only a lawyer can do. AI drafts; you verify and decide.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>Two honest caveats. First, AI drafting adds a verification step, so the "after" bars are never zero — a first draft you don't check is a liability, not a time-saver, and a billing narrative or client letter you send unread is your name on the error. Second, reclaimed time is only a gift if you protect it. If every hour AI frees up gets refilled with more matters, you've bought faster burnout, not a better practice. The tool gives you a choice; the choice is yours.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The confidentiality firewall</h2>
+  <p class="lead">The moment before you paste text into an AI tool is the most important moment in the whole workflow. Whatever crosses that line may leave your control — and for a lawyer, that line is not just privacy. It is confidentiality and privilege, duties you cannot quietly waive on a client's behalf.</p>
+
+  <p>Public AI tools are not a privileged drawer. Text you paste can be stored, processed on servers you don't control, and — depending on the service — used to improve the model. A client's name, a matter number, a settlement figure, a fact that identifies the dispute: none of it belongs in an unvetted chatbot, because disclosure to a third party can waive the privilege that protects it. The discipline is simple and non-negotiable: <strong>de-identify first, get a human sign-off, then send.</strong> Watch the firewall clean the text below, and note the gate that won't open until a human has checked it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · De-identify before it crosses the line</span>
+      <div class="controls">
+        <button id="pfToggle" onclick="pfClean()">Run the firewall</button>
+      </div>
+    </div>
+    <div class="pf-wrap">
+      <div class="pf-lane">
+        <span class="lane-tag raw">◇ Raw draft — never send this</span>
+        <div class="pf-text" id="pfText">
+          Draft a demand letter for our client <span class="pii" data-clean="[CLIENT]">Meridian Logistics Pvt Ltd</span> against <span class="pii" data-clean="[COUNTERPARTY]">Harbourline Freight Co</span> over the unpaid invoice of <span class="pii" data-clean="[AMOUNT]">₹42,80,000</span> from the <span class="pii" data-clean="[MATTER REF]">March 2026 Kandla shipment (matter 2026-0417)</span>. Our contact is <span class="pii" data-clean="[NAME]">Rohan Desai</span>, reachable at <span class="pii" data-clean="[CONTACT]">rohan@xxxx.com</span>.
+        </div>
+      </div>
+      <div class="pf-gate">
+        <svg class="gicon" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="15" width="20" height="14" rx="3" fill="#2F1D19"/>
+          <path id="pfShackle" d="M11 15v-4a6 6 0 0 1 12 0v4" stroke="#EF7F1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="17" cy="21" r="2.2" fill="#FECC00"/>
+        </svg>
+        <div class="gtxt"><strong>Firewall</strong><span id="pfGateMsg">Identifiable client details are blocked from the tool.</span></div>
+      </div>
+      <div class="pf-lane">
+        <span class="lane-tag clean">◆ Safe to send — de-identified</span>
+        <div class="pf-text" id="pfClean" style="opacity:.45">
+          Run the firewall to see the version that's safe to paste into an AI tool.
+        </div>
+      </div>
+      <div class="pf-signoff locked" id="pfSign">
+        <span class="sbadge" id="pfBadge">Sign-off required</span>
+        <p id="pfSignMsg">A human must confirm the text carries no client-identifying detail before it goes to the tool. This gate does not open automatically.</p>
+        <button class="pf-btn" id="pfApprove" onclick="pfApproveFn()" disabled>Approve &amp; send</button>
+      </div>
+    </div>
+  </div>
+
+  <p>De-identifying isn't just a compliance box — it usually makes the AI output better and safer to reuse. A prompt to "draft a firm but professional demand letter for an unpaid freight invoice, using placeholders for parties and amounts" gets you a sound, reusable structure you fill in yourself, without ever exposing the client or the matter. And the sign-off gate matters as much as the masking: automation is not permission. A person looks, a person confirms, a person is accountable. Always check your firm's data policy and your jurisdiction's confidentiality rules first — they may forbid certain tools entirely.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>The plain-language tone tuner</h2>
+  <p class="lead">The hardest client letters to write are rarely the longest — they're the ones where a dense legal draft has to become something a worried client can actually understand. AI can re-express a paragraph of legalese in plain language in seconds. What it can't do is know whether the simpler version is still legally accurate, or carry the duty for how the client relies on it.</p>
+
+  <p>Here's a genuinely dense client update: technically correct, and nearly unreadable to a non-lawyer. Instead of leaving the client to struggle, counsel asks AI to re-express it — plainer, warmer, or in the client's first language. Cycle the versions below. Each is a <em>draft option</em>, not a decision. The reminder underneath never changes: the lawyer reads it, verifies it still says exactly what the law requires, approves it, and owns it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Re-expressing a client letter</span>
+      <div class="controls">
+        <button id="tn0" class="active" onclick="toneSet(0)">Legal draft</button>
+        <button id="tn1" onclick="toneSet(1)">Plain language</button>
+        <button id="tn2" onclick="toneSet(2)">Warmer</button>
+        <button id="tn3" onclick="toneSet(3)">Translated</button>
+      </div>
+    </div>
+    <div class="tone-flex">
+      <div class="tone-msg" id="toneMsg">
+        <div class="tone-from">
+          <span>To: Client · Re: Status of your matter</span>
+          <span class="badge" id="toneBadge">◇ Dense legal draft</span>
+        </div>
+        <div class="tone-body" id="toneBody"></div>
+      </div>
+      <div class="tone-approve">
+        <span class="k"><strong>Human gate</strong>Draft ≠ sent</span>
+        <p id="toneNote">Every version above is a suggestion. Nothing reaches a client until the lawyer verifies it is still legally accurate, approves it, and presses send. The words go out under your duty to the client — so they're yours to own.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>Plain-language rewriting carries a specific danger: simplification can quietly change legal meaning. "You may be entitled to" is not "you are entitled to"; "without prejudice" is not decoration. A model chasing readability can smooth away the exact qualifier that protects the client — or you. Treat every plain-language draft as a first pass to check line-by-line against the legal substance, and treat any translation of a sensitive letter as a draft for a fluent human to verify, never a finished message. Convenience never outranks a client understanding precisely, and accurately, where their matter stands.</p>
+
+  <h3>How to ask for a good draft</h3>
+  <p>The difference between a useless AI draft and a genuinely helpful one is almost always the request. A one-line prompt gets a one-size-fits-nobody reply. A well-framed one gets a draft that's 80% there. These four patterns turn AI from a novelty into a reliable drafting partner for client communication — no technical skill required, just clear instructions.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Give it a role</span><h4>Set the voice</h4><p>"You're a solicitor writing a reassuring but precise update to a non-lawyer client." A defined role produces a defined tone — far better than a blank request that averages every letter ever written.</p></div>
+    <div class="crit"><span class="k">Set the frame</span><h4>Audience, length, purpose</h4><p>Say who reads it, how long it should be, and what it must achieve. "A short, plain-language note whose goal is to explain a delay without alarming the client" beats "write an update."</p></div>
+    <div class="crit"><span class="k">Feed the facts</span><h4>Provide the raw material</h4><p>Paste your points — de-identified — and let AI shape them. It's a rewriter, not a mind-reader. The facts, the legal position, and the advice come from you; the phrasing can come from it.</p></div>
+    <div class="crit"><span class="k">Iterate</span><h4>Refine, don't restart</h4><p>"Plainer." "Keep the qualifier in the second sentence." "Shorter." Treat the first draft as a conversation, not a verdict. Two or three nudges usually beats re-prompting from scratch.</p></div>
+  </div>
+
+  <p>Even with a perfect prompt, the last step never changes: you read the whole thing, checking it still says exactly what the law requires, before it leaves your hands. AI is fluent, which is exactly what makes it dangerous — it can phrase a subtly wrong legal statement so smoothly that you nod past the error. Fluency is not accuracy. The final read is where your professional judgement and your duty to the client re-enter, and it is not optional.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Matter management &amp; professional growth</h2>
+  <p class="lead">The same drafting power that clears your non-billable load can sharpen your practice — if you point it at organisation, reflection, and learning rather than just output. Used well, AI becomes a tireless junior and a thinking partner. Used lazily, it becomes a way to stop doing the reading, and to stop thinking.</p>
+
+  <p>The line is the same one running through this whole lesson: AI proposes, you verify and decide. Use it to build the chronology you'll then check against the record, to draft the matter summary you'll make accurate, to summarise research you'll still read in the source, to rehearse a difficult client conversation before you have it. What it must never become is the author of your legal judgement or the keeper of your obligations. The four uses below keep AI in the assistant's chair, where it belongs.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Organise</span><h4>Draft the chronology</h4><p>Have AI assemble a first chronology or matter summary from de-identified notes — then check every date and fact against the actual record. A wrong date the model invented is your error to catch.</p></div>
+    <div class="crit"><span class="k">Reflect</span><h4>Structure, then get honest</h4><p>Ask AI to scaffold a matter post-mortem or a self-review. Then rewrite it as what actually happened. The machine's tidy version is a starting frame, not the truth of the work.</p></div>
+    <div class="crit"><span class="k">Digest</span><h4>Summarise, then verify</h4><p>Have AI condense a judgment or a long policy into key points — then read the source on anything that matters. Summaries drop nuance, misstate holdings, and sometimes invent them.</p></div>
+    <div class="crit"><span class="k">Rehearse</span><h4>Role-play the hard talk</h4><p>Practise a difficult client or partner conversation with AI playing the other side. Low stakes to rehearse; the real conversation, and the advice in it, is still yours to lead and own.</p></div>
+  </div>
+
+  <h3>The honest limits, one more time</h3>
+  <p>Everything in this lesson depends on the same guardrails. <strong>Confidentiality &amp; privilege:</strong> never put client-identifying or privileged material into an unvetted tool — a waiver is not undoable. <strong>Hallucination:</strong> AI states wrong facts, dates, and authorities confidently, so verify everything against the source. <strong>Bias:</strong> generated tone and phrasing carry assumptions — read for whose interest they quietly serve. <strong>Ownership:</strong> every letter, chronology, and billing narrative goes out under your name and your duty to the client, which means the final read, the final edit, and the final responsibility are yours too. AI drafts. The lawyer verifies and decides. That doesn't change when the task is a client letter instead of a contract — it just matters even more, because the machine's convenience is at its most tempting exactly here.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Client communication and matter management is where AI gives lawyers the most obvious time back — and where the human guardrails matter most, because the machine's convenience is most tempting. Let AI draft the intake summaries, client letters, chronologies, and billing narratives; de-identify anything privileged before it crosses the line; and keep a human sign-off on everything that carries your name and your duty.</p>
+  <ul>
+    <li>Measure the hours first · reclaim time, then protect it from being refilled</li>
+    <li>De-identify before it crosses the line · a public tool is not privileged</li>
+    <li>Sign-off gate · automation is not permission; a human looks and confirms</li>
+    <li>Plain language is a draft, not a decision · verify it still says what the law requires</li>
+    <li>AI drafts, the lawyer verifies and decides · from the contract to the client letter, one rule</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Guided Path to True Learning · Lesson 04 · Week 2 complete — AI for Lawyers ✦</footer>
+<script>
+
+/* ============ Figure 1 · Hours reclaimed ============ */
+const HR_TASKS=[
+  {name:'Intake &amp; matter summaries',before:3,save:0.55,max:8},
+  {name:'Client update letters',before:4,save:0.5,max:10},
+  {name:'Chronologies & case timelines',before:3,save:0.6,max:8},
+  {name:'Billing narratives & time entries',before:3,save:0.5,max:8}
+];
+let hrState=HR_TASKS.map(t=>t.before);
+const hrRows=document.getElementById('hrRows');
+(function buildHR(){
+  HR_TASKS.forEach((t,i)=>{
+    const row=document.createElement('div');
+    row.className='hr-row';
+    row.innerHTML=
+      '<div class="hr-head"><span class="hr-name">'+t.name+'</span>'+
+      '<span class="hr-val" id="hrv'+i+'"></span></div>'+
+      '<div class="hr-bars"><div class="hr-before" id="hrb'+i+'"></div><div class="hr-after" id="hra'+i+'"></div></div>'+
+      '<div class="hr-slider"><label>Hours you spend now <span id="hrl'+i+'"></span></label>'+
+      '<input type="range" min="0" max="'+t.max+'" step="0.5" value="'+t.before+'" oninput="hrUpd('+i+',this.value)"></div>';
+    hrRows.appendChild(row);
+  });
+})();
+function hrUpd(i,v){
+  hrState[i]=parseFloat(v);
+  hrRender();
+}
+function hrRender(){
+  let saved=0;
+  HR_TASKS.forEach((t,i)=>{
+    const before=hrState[i],after=before*(1-t.save);
+    saved+=before-after;
+    const pctB=before/t.max*100,pctA=after/t.max*100;
+    document.getElementById('hrb'+i).style.width=pctB+'%';
+    document.getElementById('hra'+i).style.width=pctA+'%';
+    document.getElementById('hrv'+i).innerHTML=before.toFixed(1)+' hrs → <strong>'+after.toFixed(1)+' hrs</strong>';
+    document.getElementById('hrl'+i).textContent=before.toFixed(1)+' hrs';
+  });
+  document.getElementById('hrHours').textContent=saved.toFixed(1);
+  const yr=saved*46;
+  document.getElementById('hrYear').textContent=Math.round(yr);
+  document.getElementById('hrDays').textContent=(yr/7.5).toFixed(0);
+}
+function hrReset(){
+  hrState=HR_TASKS.map(t=>t.before);
+  HR_TASKS.forEach((t,i)=>{hrRows.querySelectorAll('input')[i].value=t.before});
+  hrRender();
+}
+hrRender();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hrRender();o.unobserve(e.target)}}),{threshold:0.3}).observe(hrRows);
+
+/* ============ Figure 2 · Confidentiality firewall ============ */
+let pfCleaned=false,pfApproved=false;
+function pfClean(){
+  pfCleaned=!pfCleaned;
+  const spans=document.querySelectorAll('#pfText .pii');
+  spans.forEach(s=>{
+    if(pfCleaned){
+      if(!s.dataset.orig)s.dataset.orig=s.textContent;
+      s.textContent=s.dataset.clean;
+      s.classList.add('masked');
+    }else{
+      s.textContent=s.dataset.orig;
+      s.classList.remove('masked');
+    }
+  });
+  const clean=document.getElementById('pfClean');
+  if(pfCleaned){
+    clean.style.opacity='1';
+    clean.innerHTML='Draft a firm but professional <strong>demand letter</strong> for an <strong>unpaid freight invoice</strong> arising from a shipment dispute. Use placeholders for the parties, the amount, the matter reference, and the contact. No client names, figures, or matter details included.';
+    document.getElementById('pfToggle').textContent='Show raw draft';
+    document.getElementById('pfGateMsg').textContent='Identifiable client details replaced. Text is now safe to check.';
+    document.getElementById('pfApprove').disabled=false;
+  }else{
+    clean.style.opacity='.45';
+    clean.innerHTML='Run the firewall to see the version that\'s safe to paste into an AI tool.';
+    document.getElementById('pfToggle').textContent='Run the firewall';
+    document.getElementById('pfGateMsg').textContent='Identifiable client details are blocked from the tool.';
+    document.getElementById('pfApprove').disabled=true;
+    pfApproved=false;pfRenderSign();
+  }
+}
+function pfApproveFn(){
+  if(!pfCleaned)return;
+  pfApproved=!pfApproved;pfRenderSign();
+}
+function pfRenderSign(){
+  const sign=document.getElementById('pfSign');
+  if(pfApproved){
+    sign.classList.remove('locked');sign.classList.add('approved');
+    document.getElementById('pfBadge').textContent='Human approved ✓';
+    document.getElementById('pfSignMsg').textContent='A person checked the de-identified text and confirmed no client detail remains. Only now does it go to the tool — and the lawyer who approved it is accountable for it.';
+    document.getElementById('pfApprove').textContent='Undo sign-off';
+  }else{
+    sign.classList.add('locked');sign.classList.remove('approved');
+    document.getElementById('pfBadge').textContent='Sign-off required';
+    document.getElementById('pfSignMsg').textContent='A human must confirm the text carries no client-identifying detail before it goes to the tool. This gate does not open automatically.';
+    document.getElementById('pfApprove').textContent='Approve & send';
+  }
+}
+
+/* ============ Figure 3 · Tone tuner ============ */
+const TONES=[
+  {badge:'◇ Dense legal draft',border:'var(--line)',
+   body:'Further to the above-referenced matter, we write to advise that the respondent has, by correspondence dated the 14th instant, purported to deny liability in toto and has intimated an intention to contest the claim. Notwithstanding the foregoing, our preliminary assessment, subject to disclosure, is that the prospects remain favourable, though we reserve our position pending receipt of further documentation.'},
+  {badge:'◆ Re-expressed: plain language',border:'var(--orange)',
+   body:'The other side has now formally denied they owe anything and says they intend to fight the claim. Even so, our early view — which may change once we see more documents — is that your case remains strong. We\'ll firm up that view as the evidence comes in.'},
+  {badge:'◆ Re-expressed: warmer',border:'var(--orange)',
+   body:'I know waiting for news like this is stressful, so I wanted to update you straight away. The other side has denied the claim and says they\'ll contest it — which is common at this stage and not a setback. Our early read is that your position is still strong, and I\'ll keep you posted as more documents arrive. Do call me any time with questions.'},
+  {badge:'◆ Re-expressed: translated (Hindi)',border:'var(--accent)',
+   body:'हम आपको बताना चाहते हैं कि दूसरे पक्ष ने अब औपचारिक रूप से देनदारी से इनकार कर दिया है और मुकदमे को लड़ने का इरादा जताया है। फिर भी, हमारा शुरुआती आकलन — जो आगे के दस्तावेज़ मिलने पर बदल सकता है — यह है कि आपका पक्ष अब भी मज़बूत है। जैसे-जैसे सबूत आएँगे, हम आपको सूचित करते रहेंगे।'}
+];
+function toneSet(i){
+  const t=TONES[i];
+  [0,1,2,3].forEach(j=>document.getElementById('tn'+j).classList.toggle('active',j===i));
+  document.getElementById('toneBadge').textContent=t.badge;
+  document.getElementById('toneBody').textContent=t.body;
+  document.getElementById('toneMsg').style.borderColor=t.border;
+  document.getElementById('toneNote').textContent=
+    i===3
+      ? 'A machine translation of a legal update can shift meaning invisibly. Treat it as a first draft for a fluent human to verify — never a finished message. You still confirm it is accurate, approve it, and own it.'
+      : i===1
+      ? 'Plain language can quietly drop a legal qualifier. Read this line-by-line against the legal draft — "our view may change" and "subject to disclosure" must survive the rewrite. You verify accuracy, approve it, and own it.'
+      : 'Every version above is a suggestion. Nothing reaches a client until the lawyer verifies it is still legally accurate, approves it, and presses send. The words go out under your duty to the client — so they\'re yours to own.';
+}
+toneSet(0);
+
+</script>
+</body>
+</html>

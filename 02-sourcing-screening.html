@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sourcing &amp; Screening with AI · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.disclaimer{
+  background:var(--cream);border:1px solid var(--line);border-left:3px solid var(--orange);
+  border-radius:10px;padding:14px 18px;margin:22px 0;max-width:680px;
+  font-size:13.5px;color:var(--muted);
+}
+.disclaimer strong{color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · sourcing/screening flow ============ */
+.flow{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.fchain{display:flex;align-items:stretch;gap:0;margin-bottom:22px}
+.fnode{
+  flex:1;text-align:center;padding:16px 8px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;position:relative;
+}
+.fnode .fidx{display:block;font-family:'Fraunces',serif;font-size:20px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.fnode h5{font-family:'Fraunces',serif;font-size:14px;color:var(--brown-dark);line-height:1.12}
+.fnode:hover{border-color:var(--orange);transform:translateY(-3px)}
+.fnode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.fnode.active h5{color:var(--paper)}
+.fnode.active .fidx{color:var(--orange)}
+.fnode.gate{border-style:dashed;border-color:var(--accent)}
+.fnode.gate .fidx{color:#9BC7DE}
+.fnode.gate.active{background:var(--accent);border-color:var(--accent)}
+.fnode.gate.active .fidx{color:#fff}
+.gatetag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.flink{width:16px;align-self:center;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.flink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.fpanel{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:22px;min-height:150px}
+.fpanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fpanel .fplab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--orange-dark);margin-bottom:8px}
+.fpanel.humangate .fplab{color:var(--accent)}
+.fpanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:8px}
+.fpanel p{font-size:14.5px;color:var(--brown-dark);max-width:none;margin:0}
+.fpanel .frole{display:flex;gap:14px;margin-top:16px;flex-wrap:wrap}
+.fpanel .frole .fr{flex:1;min-width:180px;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.45}
+.fpanel .frole .fr.ai{background:#FDEBD7;border:1px solid #F1C99A;color:var(--brown-dark)}
+.fpanel .frole .fr.hu{background:var(--brown-dark);color:#F3E7D5}
+.fpanel .frole .fr .frl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:5px;display:block}
+.fpanel .frole .fr.ai .frl{color:var(--orange-dark)}
+.fpanel .frole .fr.hu .frl{color:var(--yellow)}
+@media(max-width:700px){
+  .fchain{flex-wrap:wrap;gap:6px}
+  .fnode{flex:1 1 40%}
+  .flink{display:none}
+  .gatetag{font-size:7px}
+}
+
+/* ============ Figure 2 · inclusive JD toggle ============ */
+.jd{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.jdbox{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:22px;font-size:15px;line-height:1.7;color:var(--brown-dark);min-height:220px}
+.jdbox.swap{animation:panelIn .4s ease}
+.jdbox h4{font-family:'Fraunces',serif;font-size:19px;color:var(--brown-dark);margin-bottom:12px}
+.jdbox p{max-width:none;margin-bottom:10px;font-size:14.5px}
+.bad{background:#F7E0DA;border-bottom:2px solid #E3B3A6;border-radius:3px;padding:0 3px;color:#9E3320;font-weight:600}
+.good{background:#E6F0DC;border-bottom:2px solid #B7CFA0;border-radius:3px;padding:0 3px;color:#3E5E22;font-weight:600}
+.jdnote{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--muted);line-height:1.5}
+.jdnote strong{color:var(--brown-dark)}
+.jdkey{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+.jdkey span{display:inline-flex;align-items:center;gap:6px}
+.jdkey i{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* ============ Figure 3 · rubric vs proxy bias ============ */
+.rub{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.rtabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rcol{border-radius:12px;padding:20px}
+.rcol.ok{background:#EDF4E4;border:1px solid #C3D8AC}
+.rcol.bad{background:#F7E4DE;border:1px solid #E8BFB2}
+.rcol .rlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.rcol.ok .rlab{color:#4B6B2E}
+.rcol.bad .rlab{color:#B23A22}
+.rcol h4{font-family:'Fraunces',serif;font-size:19px;color:var(--brown-dark);margin-bottom:12px}
+.rrow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rrow .rn{flex:1;font-size:13px;color:var(--brown-dark);line-height:1.35}
+.rbar{width:80px;height:8px;border-radius:4px;background:rgba(0,0,0,0.08);overflow:hidden;flex-shrink:0}
+.rbar i{display:block;height:100%;border-radius:4px}
+.rcol.ok .rbar i{background:#6E9A3E}
+.rcol.bad .rbar i{background:#C6553B}
+.rflag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#B23A22;flex-shrink:0;font-weight:600}
+.rverd{margin-top:18px;border-radius:12px;padding:18px 20px;background:var(--brown-dark);color:#F3E7D5}
+.rverd .rvl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:6px}
+.rverd p{font-size:14px;color:#F3E7D5;max-width:none;margin:0}
+.aibox{margin-top:18px;background:var(--cream);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:16px 18px}
+.aibox .al{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:var(--accent);margin-bottom:6px}
+.aibox p{font-size:13.5px;color:var(--brown-dark);max-width:none;margin:0;line-height:1.5}
+.aibox strong{color:var(--brown-dark)}
+@media(max-width:700px){
+  .rgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 4 · Lesson 02 · AI for Recruiters</div>
+  <h1>Sourcing &amp; screening, done <em>fairly</em>.</h1>
+  <p class="lede">Sourcing and screening are where a recruiter's week disappears — and where AI's help is most tempting and most dangerous. Done well, AI widens your net, drafts warmer outreach, and organises a mountain of applications so you can spend your time on people. Done carelessly, it quietly filters candidates out on proxies for race, gender and age, and creates adverse impact no one intended. This lesson is about building a sourcing-and-screening workflow where AI is genuine support — and a human always holds the gate before anyone is shortlisted or ruled out.</p>
+  <div class="disclaimer"><strong>A note before we begin.</strong> This is professional education for recruiters about fair sourcing and screening — it is jurisdiction-neutral and is not legal advice. Nothing here recommends a specific tool. AI here is decision-support only: it never rejects a candidate on its own, and identifiable candidate personal data must never enter a consumer AI tool.</div>
+</section>
+
+<section>
+  <div class="section-num">01 / 03</div>
+  <h2>The workflow, with a human at the gate</h2>
+  <p class="lead">Sourcing and screening is not one act but a chain: define what the role really needs, write an inclusive job description, source widely, screen as support, and shortlist — with a human reviewing before anyone is advanced or ruled out. AI can lend a hand at every step. But one step is special: the human-review gate is not optional and cannot be handed to a machine.</p>
+
+  <p>The temptation with a large applicant pile is to let AI "just handle the filtering" — to hand it the pile and take back a shortlist. That is exactly the move that turns a helpful tool into a discrimination engine. The moment AI closes a door on a candidate without a human looking, you have an automated adverse decision: the place where inherited bias, proxy inference and hallucinated qualifications do their quiet damage, and where legal exposure concentrates. So we design the workflow so that AI does the heavy, tireless first-pass work — summarising, organising, drafting, matching against job-related criteria — and a human always holds the final gate before the shortlist is set or anyone is rejected.</p>
+  <p>Step through the flow below. Watch where AI supports, and watch the highlighted human-review gate stand between the screen and the shortlist. That gate is the difference between AI that speeds up a fair process and AI that quietly runs an unfair one.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The sourcing &amp; screening flow</span>
+      <div class="controls">
+        <button onclick="flowStep(-1)">◀ Prev</button>
+        <button onclick="flowStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="fchain" id="fchain">
+        <div class="fnode" data-k="define" onclick="pickFlow('define')"><span class="fidx">1</span><h5>Define criteria</h5></div>
+        <div class="flink"></div>
+        <div class="fnode" data-k="jd" onclick="pickFlow('jd')"><span class="fidx">2</span><h5>Inclusive JD</h5></div>
+        <div class="flink"></div>
+        <div class="fnode" data-k="source" onclick="pickFlow('source')"><span class="fidx">3</span><h5>Source</h5></div>
+        <div class="flink"></div>
+        <div class="fnode" data-k="screen" onclick="pickFlow('screen')"><span class="fidx">4</span><h5>Screen<br>(support)</h5></div>
+        <div class="flink"></div>
+        <div class="fnode gate" data-k="review" onclick="pickFlow('review')"><span class="gatetag">Human gate</span><span class="fidx">5</span><h5>Shortlist w/ review</h5></div>
+      </div>
+      <div class="fpanel" id="fpanel"></div>
+    </div>
+  </div>
+
+  <h3>The gate is the whole point</h3>
+  <p>Steps one through four can all be AI-supported and still be safe, because none of them close a door on their own — they draft, widen and organise. Step five is where a person's application lives or dies, and it is deliberately built as a human-review gate: a recruiter reads the AI's first-pass work, checks it against job-related criteria, watches for proxy bias, and owns the shortlist. AI never advances or rejects a candidate by itself. Build the chain this way and you get the speed without surrendering the fairness or the accountability.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 03</div>
+  <h2>The inclusive job description</h2>
+  <p class="lead">Screening fairly starts long before the applications arrive — it starts with the words in the job ad. Language quietly signals who is welcome to apply. Gendered, ageist and exclusionary phrasing shrinks and skews your pool before AI ever touches it. AI can draft a job description in seconds; the recruiter's job is to catch and rewrite the language that turns people away.</p>
+
+  <p>An AI drafting tool is genuinely useful here — it can produce a first pass fast, and it can suggest more inclusive phrasing when you ask. But it can just as easily reproduce the tired, exclusionary language it learned from a million old job ads. So the skill is not "let AI write the JD." It is: let AI draft, then read it as an inclusion editor. Toggle between the two versions below. The red highlights mark language that narrows or skews the pool — gendered words, coded "culture" signals, ageist markers, and needless barriers. The green shows the rewritten, inclusive version: the same role, described in words that invite a wider, fairer pool to apply.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Rewrite for inclusion</span>
+      <div class="controls" id="jdBtns">
+        <button class="active" onclick="setJd('bad',this)">Exclusionary draft</button>
+        <button onclick="setJd('good',this)">Inclusive rewrite</button>
+      </div>
+    </div>
+    <div class="jd">
+      <div class="jdbox" id="jdbox"></div>
+      <div class="jdkey">
+        <span><i style="background:#F0C4B6"></i> narrows or skews the pool</span>
+        <span><i style="background:#C9DDB2"></i> inclusive, job-related wording</span>
+      </div>
+      <div class="jdnote" id="jdnote"></div>
+    </div>
+  </div>
+
+  <h3>Words are a screen too</h3>
+  <p>Every exclusionary phrase in a job ad is a silent screen that filters people out before you ever see them — and unlike a rubric, it leaves no trace. "Young and energetic" tells older candidates not to bother. "He'll thrive" tells women it may not be for them. "Native English speaker" screens out fluent non-native speakers with no job-related reason. Let AI help you draft and even suggest inclusive alternatives, but the final read — checking every word for who it quietly excludes — is a human judgment you own.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 03</div>
+  <h2>Rubric vs proxy bias</h2>
+  <p class="lead">When AI helps screen, everything depends on what it is asked to weigh. A screen built on job-related criteria — the skills, experience and competencies the role actually requires — supports a fair decision. A screen that lets AI infer from names, schools, postcodes or employment gaps is a proxy-bias machine that can create adverse impact, whatever the intent. Toggle between the two below to see the difference.</p>
+
+  <p>The safe pattern is a transparent, job-related rubric: define the criteria that genuinely predict success in the role, and have AI score or organise candidates against those — as support, for a human to review. The dangerous pattern is letting AI weigh things that are not job-related but correlate with protected characteristics: a "prestigious" school, a "native-sounding" name, a career gap, a home neighbourhood. These are proxies. Even with no discriminatory intent, screening on them can produce adverse impact — a selection rate for one group that falls below the widely-cited four-fifths (80%) benchmark of another's, a classic warning sign that a process may be discriminatory and needs review. AI will never flag this on its own; you have to design it out and check for it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · What is the AI weighing?</span>
+      <div class="controls" id="rubBtns">
+        <button class="active" onclick="setRub('ok',this)">Job-related rubric</button>
+        <button onclick="setRub('bad',this)">Proxy-bias screen</button>
+      </div>
+    </div>
+    <div class="rub">
+      <div class="rgrid">
+        <div class="rcol ok" id="rcolL"></div>
+        <div class="rcol bad" id="rcolR"></div>
+      </div>
+      <div class="rverd" id="rverd"></div>
+      <div class="aibox">
+        <div class="al">The four-fifths (80%) note</div>
+        <p id="aibox-p"></p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Support, never sentence</h3>
+  <p>Even a clean, job-related rubric is decision-support, not the decision. AI can score candidates against your criteria and organise them for review, but it never sets the shortlist alone and never auto-rejects. And the moment a screen weighs anything that stands in for race, gender, age, or background, you are one careless step from adverse impact. Keep the criteria job-related, keep a human at the gate, and check your selection rates across groups — the four-fifths benchmark is a smoke alarm, not a target to game.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Sourcing and screening is where AI saves the most time and where it can do the most quiet harm. Build the chain so AI supports every step — defining criteria, drafting an inclusive JD, sourcing widely, screening as first-pass work — and a human always holds the gate before anyone is shortlisted or rejected. Read every AI-drafted job ad as an inclusion editor, keep every screen on job-related criteria, and never let AI infer from names, schools or gaps. AI is decision-support; you are the fair, accountable recruiter. The next lesson takes this into the interview and offer stage.</p>
+  <ul>
+    <li>The human-review gate is non-negotiable — AI never advances or rejects alone</li>
+    <li>Job ads are a silent screen — rewrite gendered, ageist, exclusionary language</li>
+    <li>Score on job-related criteria; never let AI infer from names, schools or gaps</li>
+    <li>Watch for adverse impact — the four-fifths (80%) rule is a warning sign to review</li>
+    <li>No candidate PII in consumer tools; AI is decision-support, never the decision</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 02 of Week 4 · Next up: Interviewing &amp; Offers with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · sourcing/screening flow ===== */
+const FLOW={
+  define:{gate:false,lab:'Step 1 · AI supports',head:'Define the criteria',
+    body:'Decide what the role genuinely requires before anyone applies. AI can draft a first list of skills, experience and competencies and suggest must-have vs nice-to-have splits — a fast first pass to react to.',
+    ai:'Drafts a criteria list; suggests must-have vs nice-to-have; proposes a competency framework.',
+    hu:'Confirms the criteria are job-related and inclusive; strips anything that is merely traditional or exclusionary; owns the brief with the hiring manager.'},
+  jd:{gate:false,lab:'Step 2 · AI supports',head:'Write an inclusive JD',
+    body:'Turn the criteria into a job description that invites a wide, fair pool. AI drafts fast and can suggest inclusive phrasing — but can also echo the exclusionary language of old ads.',
+    ai:'Drafts the job description; suggests more inclusive alternatives on request.',
+    hu:'Reads as an inclusion editor; removes gendered, ageist and coded language; keeps only job-related requirements.'},
+  source:{gate:false,lab:'Step 3 · AI supports',head:'Source widely',
+    body:'Cast a wide, fair net. AI can propose search terms and channels, draft warm outreach, and organise a longlist from public profiles — helping you reach beyond the usual sources.',
+    ai:'Suggests search terms and channels; drafts tailored outreach; organises a longlist.',
+    hu:'Checks the net is wide and not quietly excluding groups; decides who to approach; owns every message sent.'},
+  screen:{gate:false,lab:'Step 4 · AI supports (NOT decides)',head:'Screen as support',
+    body:'Work through the applicant pile. AI summarises long CVs and matches them against your job-related criteria — as a first pass only. It organises; it does not judge, and it does not reject.',
+    ai:'Summarises CVs; matches against job-related criteria; flags questions to clarify.',
+    hu:'Reads every AI summary critically; catches hallucinated or inferred details; watches for proxy bias. AI advances no one and rejects no one.'},
+  review:{gate:true,lab:'Step 5 · The human-review gate',head:'Shortlist — with human review',
+    body:'This is the gate. A recruiter reviews the AI-supported first pass against job-related criteria, checks for bias and adverse impact, and sets the shortlist. No candidate is advanced or rejected without a human owning that decision — this step can never be handed to a machine.',
+    ai:'Presents an organised, evidence-linked first pass for review only.',
+    hu:'Reviews, checks fairness across groups, decides the shortlist, and rejects with reasons — a human decision of record. This is where AI stops and accountability begins.'}
+};
+const FORDER=['define','jd','source','screen','review'];
+let flowCur='define';
+function pickFlow(k){
+  flowCur=k;
+  document.querySelectorAll('#fchain .fnode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=FLOW[k],p=el('fpanel');
+  p.className='fpanel'+(d.gate?' humangate':'');
+  let h='<div class="fplab">'+d.lab+'</div><h4>'+d.head+'</h4><p>'+d.body+'</p>';
+  h+='<div class="frole"><div class="fr ai"><span class="frl">✎ AI supports</span>'+d.ai+'</div>';
+  h+='<div class="fr hu"><span class="frl">◆ Human verifies &amp; decides</span>'+d.hu+'</div></div>';
+  p.innerHTML=h;
+  void p.offsetWidth;p.classList.add('swap');
+}
+function flowStep(dir){
+  let i=FORDER.indexOf(flowCur)+dir;
+  if(i<0)i=FORDER.length-1;if(i>=FORDER.length)i=0;
+  pickFlow(FORDER[i]);
+}
+pickFlow('define');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickFlow('define');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('fchain'));
+
+/* ===== Figure 2 · inclusive JD toggle ===== */
+const JD={
+  bad:{html:'<h4>Senior Support Engineer — Rockstar Wanted</h4>'+
+    '<p>We’re after a <span class="bad">young, energetic</span> <span class="bad">rockstar</span> who’ll <span class="bad">crush it</span> in a <span class="bad">fast-paced, work-hard-play-hard</span> team. <span class="bad">He</span> should be a <span class="bad">native English speaker</span> with a degree from a <span class="bad">top-tier university</span>.</p>'+
+    '<p>Must be a <span class="bad">culture fit</span> for our <span class="bad">young, dynamic</span> office — think late nights, ping-pong and beers. <span class="bad">Recent graduates only</span>; we want <span class="bad">digital natives</span> with <span class="bad">no career gaps</span> who can <span class="bad">hit the ground running</span>.</p>',
+    note:'<strong>What the red language does:</strong> “young / recent graduates only / digital native” signals age discrimination; “he / rockstar / work-hard-play-hard” skews male; “native English speaker” and “top-tier university” are non-job-related barriers; “no career gaps” penalises carers and people who took leave; “culture fit” is a coded gate. The pool shrinks and skews before a single application arrives.'},
+  good:{html:'<h4>Senior Support Engineer</h4>'+
+    '<p>We’re hiring an experienced support engineer to <span class="good">resolve complex customer issues</span> and <span class="good">improve our support processes</span>. You’ll bring <span class="good">strong troubleshooting skills</span> and <span class="good">clear written communication</span> in English.</p>'+
+    '<p>We welcome applicants from <span class="good">all backgrounds and career paths</span>, including those <span class="good">returning after a break</span>. We value <span class="good">collaboration and respect</span>, and we offer <span class="good">flexible working</span>. If you meet <span class="good">most of the criteria</span>, we’d love to hear from you.</p>',
+    note:'<strong>What the green rewrite does:</strong> it describes the <em>work</em> and the <em>job-related</em> skills, drops every age, gender and origin signal, replaces “culture fit” with concrete values, explicitly invites returners and “all backgrounds,” and adds the “meet most of the criteria” line that widens the pool — women in particular are more likely to self-select out otherwise. Same role, fairer, wider reach.'}
+};
+function setJd(mode,btn){
+  document.querySelectorAll('#jdBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const box=el('jdbox');
+  box.innerHTML=JD[mode].html;
+  el('jdnote').innerHTML=JD[mode].note;
+  box.classList.remove('swap');void box.offsetWidth;box.classList.add('swap');
+}
+setJd('bad',document.querySelector('#jdBtns button'));
+
+/* ===== Figure 3 · rubric vs proxy bias ===== */
+const RUB={
+  ok:{
+    left:{lab:'✓ Job-related · scored',head:'What the rubric weighs',rows:[
+      ['Relevant troubleshooting experience',90,false],
+      ['Demonstrated problem-solving',82,false],
+      ['Written communication samples',75,false],
+      ['Role-specific technical skills',88,false]]},
+    right:{lab:'✓ Deliberately ignored',head:'What it does NOT weigh',rows:[
+      ['Name / perceived ethnicity',0,false],
+      ['University prestige',0,false],
+      ['Employment gaps',0,false],
+      ['Home postcode',0,false]]},
+    verd:'A transparent, job-related rubric. AI scores candidates against skills and experience the role actually needs — and is told to ignore everything that stands in for a protected characteristic. This supports a fair human review.',
+    ai:'On this fair rubric, selection rates stay close across groups — comfortably above the <strong>four-fifths (80%)</strong> benchmark. AI still only scores and organises; a human sets the shortlist and checks the rates.'
+  },
+  bad:{
+    left:{lab:'✗ Proxy · inferred',head:'What the AI is inferring',rows:[
+      ['“Prestige” of university',85,true],
+      ['“Native-sounding” name',70,true],
+      ['No employment gaps',80,true],
+      ['“Culture fit” from hobbies',60,true]]},
+    right:{lab:'✗ Crowded out',head:'What gets ignored',rows:[
+      ['Actual troubleshooting skill',30,false],
+      ['Problem-solving evidence',25,false],
+      ['Communication samples',20,false],
+      ['Real technical ability',28,false]]},
+    verd:'A proxy-bias machine. None of these signals are job-related, yet each correlates with race, gender, class or age. Even with zero discriminatory intent, screening on them systematically disadvantages protected groups.',
+    ai:'Here the selection rate for an affected group can fall below <strong>four-fifths (80%)</strong> of the highest group’s rate — the classic adverse-impact warning sign. It signals a process that may be discriminatory and must be reviewed, redesigned, and never run automatically.'
+  }
+};
+function setRub(mode,btn){
+  document.querySelectorAll('#rubBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d=RUB[mode];
+  el('rcolL').className='rcol '+(mode==='ok'?'ok':'bad');
+  el('rcolR').className='rcol '+(mode==='ok'?'bad':'ok');
+  el('rcolL').innerHTML=renderRcol(d.left,mode==='ok');
+  el('rcolR').innerHTML=renderRcol(d.right,mode!=='ok'?false:false);
+  // right column visual tone: in 'ok' it is the "ignored" (bad-styled) list at 0; in 'bad' it is the crowded-out (ok-styled)
+  el('rcolR').className='rcol '+(mode==='ok'?'bad':'ok');
+  el('rverd').innerHTML='<div class="rvl">Verdict</div><p>'+d.verd+'</p>';
+  el('aibox-p').innerHTML=d.ai;
+}
+function renderRcol(col,okTone){
+  let h='<div class="rlab">'+col.lab+'</div><h4>'+col.head+'</h4>';
+  col.rows.forEach(([name,val,flag])=>{
+    h+='<div class="rrow"><span class="rn">'+name+'</span>';
+    if(flag){h+='<span class="rflag">proxy</span>';}
+    h+='<span class="rbar"><i style="width:'+val+'%"></i></span></div>';
+  });
+  return h;
+}
+setRub('ok',document.querySelector('#rubBtns button'));
+
+</script>
+</body>
+</html>

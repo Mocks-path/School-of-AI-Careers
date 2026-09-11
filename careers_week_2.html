@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Lawyers · Week 2 — Maya Rao Works Smarter, Not Sloppier</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;
+  --green:#4CAF50;--green-light:#E8F5E9;
+  --blue:#3F88C5;--purple:#8B5CF6;--pink:#EC4899;--red:#E74C3C;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);
+  --shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+
+/* ─── HEADER ─── */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:.7rem}
+.header-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);line-height:1.2}
+.header-title span{color:var(--orange)}
+.header-tag{font-size:.65rem;color:var(--text-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.logo-mascot{width:44px;height:44px;flex-shrink:0}
+.progress-pill{display:flex;align-items:center;gap:.6rem;padding:.4rem .9rem;background:var(--orange-glow);border-radius:50px;font-size:.72rem;color:var(--orange);font-weight:700}
+.progress-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* ─── HERO ─── */
+.hero{padding:3.5rem 2rem 2.5rem;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-light) 100%);position:relative;overflow:hidden}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp .7s ease}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;color:var(--navy);margin-bottom:.9rem;animation:fadeUp .7s ease .1s both}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.4rem;animation:fadeUp .7s ease .2s both}
+.usecase-banner{background:#fff;border-radius:var(--radius);padding:1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:1rem;animation:fadeUp .7s ease .3s both}
+.usecase-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#F5943E,#E87A2E);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.usecase-text{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+.usecase-text strong{color:var(--navy);font-weight:700}
+.hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s ease .2s both}
+.hero-mascot{width:230px;height:auto;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 40px rgba(232,122,46,0.22))}
+.budget-strip{max-width:1100px;margin:1.6rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;animation:fadeUp .8s ease .35s both}
+.budget-chip{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem .9rem;text-align:center;box-shadow:var(--shadow-sm)}
+.budget-chip .bv{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--orange)}
+.budget-chip .bl{font-size:.64rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:.15rem}
+
+/* ─── SECTION SHELL ─── */
+.section{padding:3rem 2rem;scroll-margin-top:80px}
+.section.alt{background:var(--bg-light)}
+.container{max-width:1100px;margin:0 auto}
+.section-header{margin-bottom:2rem}
+.section-num{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--orange);margin-bottom:.5rem}
+.section-num .num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.8vw,2rem);color:var(--navy);line-height:1.25;margin-bottom:.4rem}
+.section-sub{font-size:.92rem;color:var(--text-secondary);line-height:1.65;max-width:720px}
+.story-beat{background:#fff;border-left:4px solid var(--orange);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.2rem;font-size:.88rem;color:var(--text-primary);line-height:1.65;box-shadow:var(--shadow-sm);margin-bottom:1.6rem}
+.story-beat .sb-tag{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.story-beat em{color:var(--text-secondary)}
+
+/* ─── TAB NAV ─── */
+.tab-nav{display:flex;gap:.4rem;overflow-x:auto;padding:.4rem;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border-radius:50px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:sticky;top:72px;z-index:50;margin:0 auto 2rem;max-width:fit-content;flex-wrap:nowrap;-ms-overflow-style:none;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:.55rem 1.1rem;border-radius:50px;border:none;background:transparent;color:var(--text-secondary);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:var(--orange)}
+.tab-btn.active{background:var(--orange);color:#fff;box-shadow:0 3px 12px rgba(232,122,46,0.35)}
+
+/* ─── GENERIC CARDS/GRIDS ─── */
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.pick-card{background:#fff;border-radius:var(--radius);padding:1.4rem;border:2px solid var(--border);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.pick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:height .3s}
+.pick-card:nth-child(1)::before{background:linear-gradient(90deg,var(--green),#7BC67E)}
+.pick-card:nth-child(2)::before{background:linear-gradient(90deg,var(--blue),#5DADE2)}
+.pick-card:nth-child(3)::before{background:linear-gradient(90deg,var(--pink),#F48FB1)}
+.pick-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pick-card.active{border-color:var(--orange);box-shadow:var(--shadow-md)}
+.pick-card.active::before{height:6px}
+.pick-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.8rem;background:var(--bg-light)}
+.pick-card h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.pick-card .pc-tag{font-size:.68rem;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.pick-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── SCENARIO QUIZ ─── */
+.scenario-panel{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.scenario-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem}
+.scenario-q{font-size:1rem;color:var(--navy);margin-bottom:1rem;font-weight:600;line-height:1.5}
+.scenario-options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1rem}
+.scenario-btn{padding:.75rem .9rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;line-height:1.45}
+.scenario-btn:hover{border-color:var(--orange);color:var(--orange)}
+.scenario-btn.correct{background:var(--green-light);border-color:var(--green);color:#2E7D32}
+.scenario-btn.wrong{background:#FEE;border-color:var(--red);color:#C62828}
+.scenario-feedback{padding:.9rem;border-radius:8px;font-size:.83rem;line-height:1.55;display:none}
+.scenario-feedback.show{display:block;animation:fadeUp .4s ease}
+.scenario-feedback.success{background:var(--green-light);color:#2E7D32;border-left:3px solid var(--green)}
+.scenario-feedback.fail{background:#FEE;color:#C62828;border-left:3px solid var(--red)}
+.btn-action{padding:.55rem 1.1rem;border-radius:8px;background:var(--orange);color:#fff;border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-action:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-secondary{background:transparent;color:var(--text-primary);border:1.5px solid var(--border);padding:.55rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── CHAT MOCK ─── */
+.chat-mock{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1rem}
+.chat-head{background:var(--navy-dark);color:#fff;padding:.6rem 1rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.chat-head .cdot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.chat-body{padding:1.1rem;display:flex;flex-direction:column;gap:.8rem;min-height:150px}
+.chat-msg{max-width:88%;padding:.8rem 1rem;border-radius:12px;font-size:.83rem;line-height:1.55}
+.chat-msg.user{align-self:flex-end;background:var(--orange-glow);color:var(--text-primary);border:1px solid rgba(232,122,46,0.25);border-bottom-right-radius:3px}
+.chat-msg.ai{align-self:flex-start;background:var(--bg-light);border:1px solid var(--border);border-bottom-left-radius:3px}
+.chat-msg.ai strong{color:var(--orange)}
+.chat-msg .who{display:block;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem}
+
+/* ─── RULES / GROUND-RULE CARDS ─── */
+.rule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.rule-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.2rem;transition:all .3s}
+.rule-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.rule-card .ri{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.7rem}
+.rule-card:nth-child(1) .ri{background:var(--green-light)}
+.rule-card:nth-child(2) .ri{background:rgba(63,136,197,0.12)}
+.rule-card:nth-child(3) .ri{background:rgba(139,92,246,0.12)}
+.rule-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;color:var(--navy);margin-bottom:.35rem}
+.rule-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── MATTER / PHASE GRID ─── */
+.week-plan{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:1.2rem}
+.day-col{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden}
+.day-col .dc-head{padding:.6rem;text-align:center;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--navy)}
+.day-col .dc-body{padding:.8rem;font-size:.76rem;color:var(--text-secondary);line-height:1.5;min-height:120px}
+.day-col .dc-body b{color:var(--navy);display:block;font-size:.8rem;margin-bottom:.2rem}
+.tier-tabs{display:flex;gap:.4rem;margin:1.3rem 0 .3rem;flex-wrap:wrap}
+.tier-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tier-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tier-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.tier-panel{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem;font-size:.86rem;line-height:1.65;margin-top:.8rem}
+.tier-panel strong{color:var(--navy)}
+.tier-panel .tp-lens{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem;background:var(--orange-glow);color:var(--orange)}
+
+/* ─── CITATION HUNT (spot the hallucination) ─── */
+.cite-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.cite-intro{font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.cite-card{position:relative;background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1rem 1.15rem 1rem 1.15rem;margin-bottom:.85rem;cursor:pointer;transition:all .25s}
+.cite-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.cite-card.flagged-right{border-color:var(--red);background:#FEE;cursor:default}
+.cite-card.flagged-clear{border-color:var(--green);background:var(--green-light);cursor:default}
+.cite-card .cc-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.cite-card .cc-meta{font-size:.74rem;color:var(--text-muted);margin-bottom:.5rem}
+.cite-card .cc-hold{font-size:.8rem;color:var(--text-secondary);line-height:1.5}
+.cite-card .cc-badge{position:absolute;top:.9rem;right:1rem;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .55rem;border-radius:50px;display:none}
+.cite-card.flagged-right .cc-badge{display:block;background:var(--red);color:#fff}
+.cite-card.flagged-clear .cc-badge{display:block;background:var(--green);color:#fff}
+.cite-card .cc-verify{display:none;margin-top:.7rem;padding:.65rem .8rem;border-radius:7px;font-size:.78rem;line-height:1.5}
+.cite-card.flagged-right .cc-verify{display:block;background:rgba(231,76,60,0.1);color:#C62828;animation:fadeUp .35s ease}
+.cite-card.flagged-clear .cc-verify{display:block;background:rgba(76,175,80,0.14);color:#2E7D32;animation:fadeUp .35s ease}
+.cite-hint{font-size:.74rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.cite-summary{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.cite-summary.show{display:block}
+.cite-summary strong{color:var(--orange)}
+
+/* ─── KEEP / FIX / REJECT (clause playbook) ─── */
+.mark-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.mark-card{background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1.1rem 1.2rem;margin-bottom:.9rem;transition:all .3s}
+.mark-card.decided-keep{border-color:var(--green);background:var(--green-light)}
+.mark-card.decided-fix{border-color:#E0A800;background:#FFF8E1}
+.mark-card.decided-reject{border-color:var(--red);background:#FEE}
+.mark-label{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.35rem}
+.mark-text{font-size:.86rem;color:var(--text-primary);line-height:1.55;margin-bottom:.5rem;font-style:italic}
+.mark-src{font-size:.72rem;color:var(--text-muted);margin-bottom:.75rem}
+.mark-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.mark-btn{padding:.42rem .9rem;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.mark-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mark-btn:disabled{opacity:.45;cursor:not-allowed}
+.mark-fb{font-size:.78rem;line-height:1.5;padding:.65rem .85rem;border-radius:7px;margin-top:.7rem;display:none}
+.mark-fb.show{display:block;animation:fadeUp .4s ease}
+.mark-fb.good{background:rgba(76,175,80,0.14);color:#2E7D32}
+.mark-fb.warn{background:#FFF3CD;color:#856404}
+.mark-summary{display:none;margin-top:1.1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.mark-summary.show{display:block}
+.mark-summary strong{color:var(--orange)}
+
+/* ─── PLAYBOOK STRIP ─── */
+.playbook{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1.2rem}
+.playbook-head{background:var(--navy-dark);color:#fff;padding:.7rem 1.1rem;font-family:'DM Serif Display',serif;font-size:1.05rem}
+.playbook-row{display:grid;grid-template-columns:1.1fr 1.9fr;border-bottom:1px solid var(--border)}
+.playbook-row:last-child{border-bottom:none}
+.playbook-cell{padding:.8rem .95rem;font-size:.8rem;line-height:1.5;border-right:1px solid var(--border)}
+.playbook-cell:last-child{border-right:none}
+.playbook-cell.crit{font-weight:700;color:var(--navy);background:var(--bg-light)}
+.playbook-row.head .playbook-cell{background:var(--orange-glow);font-weight:800;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--orange)}
+.playbook-note{padding:.9rem 1.1rem;font-size:.8rem;color:var(--text-secondary);line-height:1.55;background:var(--bg-light)}
+.playbook-note strong{color:var(--orange)}
+
+/* ─── CONFIDENTIALITY FIREWALL / CLIENT NOTE ─── */
+.firewall{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.3rem}
+.fw-col{border-radius:var(--radius);padding:1.2rem 1.3rem;font-size:.82rem;line-height:1.6}
+.fw-col.unsafe{background:#FEE;border:1.5px dashed var(--red)}
+.fw-col.safe{background:var(--green-light);border:1.5px solid var(--green)}
+.fw-col h5{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+.fw-col.unsafe h5{color:#C62828}
+.fw-col.safe h5{color:#2E7D32}
+.fw-col code{background:rgba(0,0,0,0.05);border-radius:4px;padding:.1rem .35rem;font-family:monospace;font-size:.78rem;color:var(--navy)}
+.fw-col .hl-red{color:#C62828;font-weight:700}
+.fw-col .hl-green{color:#2E7D32;font-weight:700}
+
+/* ─── REDACTION BEAT ─── */
+.redact{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.redact-doc{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem 1.35rem;font-size:.9rem;line-height:1.9;color:var(--text-primary)}
+.rd{cursor:pointer;border-radius:4px;padding:.05rem .25rem;transition:all .2s;border-bottom:2px dotted var(--red);font-weight:600;color:#C62828}
+.rd:hover{background:rgba(231,76,60,0.1)}
+.rd.redacted{background:var(--navy-dark);color:var(--navy-dark);border-bottom:2px solid var(--navy-dark);user-select:none}
+.rd.redacted::selection{background:var(--navy-dark);color:var(--navy-dark)}
+.redact-hint{font-size:.78rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.redact-status{margin-top:1rem;padding:.85rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.55;background:var(--orange-glow);color:var(--text-primary)}
+.redact-status strong{color:var(--orange)}
+.redact-status.done{background:var(--green-light);color:#2E7D32}
+
+/* ─── TONE / CLIENT-UPDATE PREVIEW ─── */
+.tone-tabs{display:flex;gap:.4rem;margin:1.4rem 0 .3rem;flex-wrap:wrap}
+.tone-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tone-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tone-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.note-preview{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;margin-top:.8rem}
+.np-head{background:#F5F5F7;padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--text-muted)}
+.np-head .sdot{width:9px;height:9px;border-radius:50%}
+.np-body{padding:1.3rem 1.5rem}
+.np-subj{font-size:.74rem;color:var(--text-muted);margin-bottom:.6rem}
+.np-subj b{color:var(--navy)}
+.np-text{font-size:.87rem;color:var(--text-primary);line-height:1.7;transition:opacity .3s}
+.np-sign{margin-top:.9rem;font-size:.82rem;color:var(--text-secondary);font-style:italic}
+
+/* ─── HOURS TALLY ─── */
+.tally{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.5rem;margin-top:1.4rem}
+.tally-head{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.tally-rows{margin-top:1rem;display:flex;flex-direction:column;gap:.7rem}
+.tally-row{display:grid;grid-template-columns:1.4fr auto auto;gap:1rem;align-items:center;padding:.75rem 1rem;background:var(--bg-light);border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:all .25s}
+.tally-row:hover{border-color:var(--orange)}
+.tally-row.claimed{border-color:var(--green);background:var(--green-light)}
+.tally-task{font-size:.84rem;color:var(--navy);font-weight:600}
+.tally-task span{display:block;font-size:.72rem;font-weight:500;color:var(--text-muted)}
+.tally-hrs{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--orange);white-space:nowrap}
+.tally-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.tally-row.claimed .tally-check{background:var(--green);border-color:var(--green)}
+.tally-row.claimed .tally-check::after{content:'✓';color:#fff;font-size:.72rem;font-weight:800}
+.tally-total{margin-top:1.1rem;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;background:var(--navy-dark);border-radius:10px;color:#fff}
+.tally-total .tt-l{font-size:.82rem;color:rgba(255,255,255,0.75);font-weight:600}
+.tally-total .tt-v{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--orange-light)}
+.tally-note{margin-top:.9rem;font-size:.8rem;line-height:1.55;padding:.8rem 1rem;border-radius:8px;background:var(--orange-glow);color:var(--text-primary)}
+.tally-note strong{color:var(--orange)}
+
+/* ─── FINALE ─── */
+.sunday{display:none;margin-top:1.4rem;background:linear-gradient(135deg,#2A2440,#1A1B2E);border-radius:var(--radius);padding:1.8rem;color:#fff;animation:popIn .5s ease}
+.sunday.show{display:block}
+.sunday h4{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:.8rem}
+.sunday h4 em{font-style:normal;color:var(--orange-light)}
+.sunday-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1rem}
+.sunday-tile{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:9px;padding:.8rem;text-align:center}
+.sunday-tile .v{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--orange-light)}
+.sunday-tile .l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.55);font-weight:700;margin-top:.25rem}
+.sunday p{font-size:.87rem;line-height:1.65;color:rgba(255,255,255,0.85)}
+.sunday p strong{color:var(--orange-light)}
+
+/* ─── FOOTER / RECAP ─── */
+.footer-cta{text-align:center;padding:3rem 2rem 5.5rem;background:var(--navy-dark);color:#fff}
+.footer-cta h2{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:.6rem}
+.footer-cta h2 em{color:var(--orange);font-style:normal}
+.footer-cta>p{font-size:.92rem;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 1.8rem}
+.recap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;max-width:1050px;margin:0 auto 1.8rem;text-align:left}
+.recap-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.recap-card .rn{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-light);margin-bottom:.35rem}
+.recap-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;margin-bottom:.35rem;color:#fff}
+.recap-card p{font-size:.76rem;color:rgba(255,255,255,0.65);line-height:1.55}
+.footer-brand{margin-top:2rem;font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff}
+.footer-brand span{color:var(--orange)}
+.footer-tagline{font-size:.78rem;color:rgba(255,255,255,0.55);letter-spacing:.04em;margin-top:.2rem}
+.footer-note{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1.4rem;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ─── COMPLETION BAR ─── */
+.completion-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:.7rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 -2px 12px rgba(0,0,0,0.05)}
+.completion-info{display:flex;align-items:center;gap:.8rem;font-size:.82rem;color:var(--text-primary);font-weight:600}
+.completion-track{flex:1;max-width:280px;height:8px;background:var(--bg-light);border-radius:4px;overflow:hidden;margin:0 1rem}
+.completion-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:4px;transition:width .5s ease}
+.completion-percent{font-family:'DM Serif Display',serif;color:var(--orange);font-size:1.15rem}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:880px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-mascot{width:170px;margin:0 auto}
+  .usecase-banner{text-align:left}
+  .budget-strip{grid-template-columns:repeat(2,1fr)}
+  .pick-grid,.rule-grid{grid-template-columns:1fr}
+  .week-plan{grid-template-columns:repeat(2,1fr)}
+  .firewall{grid-template-columns:1fr}
+  .playbook-row{grid-template-columns:1fr}
+  .playbook-row.head{display:none}
+  .tally-row{grid-template-columns:1fr auto}
+  .sunday-grid,.recap-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:.7rem 1rem}
+  .section{padding:2.2rem 1rem}
+  .hero{padding:2.5rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="header-left">
+    <svg class="logo-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="477" cy="380" rx="285" ry="324" fill="#EBE3D6"/>
+      <ellipse cx="477" cy="380" rx="240" ry="270" fill="#412C23"/>
+      <circle cx="389" cy="430" r="36" fill="#fff"/>
+      <circle cx="565" cy="430" r="36" fill="#fff"/>
+      <circle cx="389" cy="430" r="14" fill="#2B2D42"/>
+      <circle cx="565" cy="430" r="14" fill="#2B2D42"/>
+      <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <ellipse cx="477" cy="1350" rx="430" ry="100" fill="#EF7F1A"/>
+      <ellipse cx="477" cy="1350" rx="380" ry="78" fill="#FF9429"/>
+    </svg>
+    <div>
+      <div class="header-title">Moksh<span>Path</span></div>
+      <div class="header-tag">Week 2 · Fun While You Learn</div>
+    </div>
+  </div>
+  <div class="progress-pill"><span class="dot"></span> <span id="headerProgressText">0 of 5 chapters explored</span></div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span style="width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block"></span> Story Project · AI for Lawyers</div>
+      <h1>Maya Rao Works Smarter, <em>Not Sloppier</em></h1>
+      <p class="hero-sub">Meet Maya Rao — a solo lawyer with a new client, a small commercial matter, and the same 24 hours as everyone else. This week she tries something new: she lets AI <em>draft</em> while she <em>verifies and decides</em>. Across five chapters she sets confidentiality ground rules, researches a legal question and catches a hallucinated case, drafts and reviews an NDA against a playbook, and sends a plain-language client update from behind a confidentiality firewall — reclaiming non-billable hours without ever cutting a corner. Every choice you make below teaches the same quiet lesson.</p>
+      <div class="usecase-banner">
+        <div class="usecase-icon">⚖️</div>
+        <div class="usecase-text"><strong>The Mission:</strong> Close a small commercial matter — research done, contract reviewed, client updated — <strong>faster</strong>, without breaching a confidence, citing a fake authority, or letting AI make a single legal call. The recurring rule she never breaks: <strong>AI drafts, Maya verifies and decides.</strong></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="hero-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBE3D6"/><stop offset="1" stop-color="#D1D0CC"/></linearGradient>
+          <linearGradient id="faceGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A6A48"/><stop offset="1" stop-color="#412C23"/></linearGradient>
+          <linearGradient id="feetGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9429"/><stop offset="1" stop-color="#EF7F1A"/></linearGradient>
+        </defs>
+        <ellipse cx="210" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="740" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="477" cy="380" rx="285" ry="324" fill="url(#bodyGrad)"/>
+        <ellipse cx="477" cy="392" rx="240" ry="225" fill="url(#faceGrad)"/>
+        <circle cx="389" cy="430" r="38" fill="#fff"/>
+        <circle cx="565" cy="430" r="38" fill="#fff"/>
+        <circle cx="389" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="565" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="395" cy="424" r="5" fill="#fff"/>
+        <circle cx="571" cy="424" r="5" fill="#fff"/>
+        <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <ellipse cx="477" cy="1350" rx="430" ry="105" fill="url(#feetGrad)"/>
+        <ellipse cx="477" cy="1320" rx="380" ry="78" fill="#FF9429"/>
+      </svg>
+    </div>
+  </div>
+  <div class="budget-strip">
+    <div class="budget-chip"><div class="bv">1 matter</div><div class="bl">Small &amp; commercial</div></div>
+    <div class="budget-chip"><div class="bv">0 fake cites</div><div class="bl">Every authority verified</div></div>
+    <div class="budget-chip"><div class="bv">0 code</div><div class="bl">Required to learn</div></div>
+    <div class="budget-chip"><div class="bv">4 lessons</div><div class="bl">Woven into 1 story</div></div>
+  </div>
+</section>
+
+<!-- ─── TAB NAVIGATION ─── -->
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-target="s1">Ch 1 · Ground Rules</button>
+  <button class="tab-btn" data-target="s2">Ch 2 · Research &amp; Verify</button>
+  <button class="tab-btn" data-target="s3">Ch 3 · Review the NDA</button>
+  <button class="tab-btn" data-target="s4">Ch 4 · Client Update</button>
+  <button class="tab-btn" data-target="s5">Ch 5 · Matter Closed</button>
+</div>
+
+<!-- ═══════════ CH 1: GROUND RULES (Lesson 1) ═══════════ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">1</div> Chapter One · The Engagement Letter Is Signed</div>
+      <h2 class="section-title">Set Up the AI Workflow &amp; the Ground Rules</h2>
+      <p class="section-sub">Before Maya asks AI for a single thing, she decides what AI is <strong>for</strong> — a drafting assistant, never a decision-maker or a source of law — and draws two bright lines she will not cross: <strong>protect confidentiality &amp; privilege</strong> and <strong>verify every authority and fact</strong>.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 9:05 a.m. A new client — a small supplier entering a distribution deal — has just signed Maya's engagement letter. The clock is running and the budget is tight. A friend at a bigger firm swears AI "does half her drafting now," but Maya has read the news too: a lawyer sanctioned for filing fake AI-invented cases, a firm scolded for pasting client secrets into a public chatbot. So before she types anything, she does the professional thing: <em>she sets ground rules first, and uses AI to structure her work, not to replace her judgment or her duty to the client.</em>
+    </div>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="ri">⚖️</div>
+        <h4>AI drafts, I decide</h4>
+        <p>AI produces a first draft in seconds; Maya reads every line and owns the legal advice. The lawyer's judgment is the point, not the bottleneck — and it's her name on the file.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔒</div>
+        <h4>No client confidences in public tools</h4>
+        <p>No names, deal terms, or privileged facts into a general AI tool whose data handling she can't control. She works with placeholders and abstractions, never real identities.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔍</div>
+        <h4>Verify every authority</h4>
+        <p>Every case, statute, quote, and date gets checked against a real legal source. AI is confident even when it invents authorities — so confidence is never her evidence.</p>
+      </div>
+    </div>
+
+    <div class="chat-mock">
+      <div class="chat-head"><span class="cdot"></span> AI Assistant · Setting up Maya's workflow — the prompt showdown</div>
+      <div class="chat-body" id="promptChat">
+        <div class="chat-msg ai"><span class="who">Narrator</span>You get out of AI exactly what you put in. Below are three ways Maya could open her first session on the matter. <strong>Pick the prompt you think earns the most useful — and safest — answer</strong>, then see what comes back.</div>
+      </div>
+    </div>
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Pick Maya's opening prompt</div>
+      <div class="scenario-q">Which prompt does Maya send first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="pickPrompt(0)">"Draft the whole distribution agreement and give me the legal advice — just tell me if this deal is safe to sign."</button>
+        <button class="scenario-btn" onclick="pickPrompt(1)">"Here's my client Acme Supplies Ltd's full deal file — the price, the parties, and their trade secrets. Review it and tell me what to do."</button>
+        <button class="scenario-btn" onclick="pickPrompt(2)">"Act as a drafting assistant for a commercial lawyer. Using no confidential details — just abstract placeholders — outline the key issues to check in a standard supplier–distributor NDA and confidentiality clause. Give me options and a checklist I can adapt. I'll make every legal call. Don't invent cases or law; flag anything I must verify."</button>
+      </div>
+      <div class="scenario-feedback" id="promptFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Ethics, confidentiality &amp; privilege instincts (3 rounds)</div>
+      <div class="scenario-q" id="ethicsQ">Loading…</div>
+      <div class="scenario-options" id="ethicsOpts"></div>
+      <div class="scenario-feedback" id="ethicsFb"></div>
+      <button class="btn-secondary" id="ethicsNext" onclick="nextEthicsQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 2: RESEARCH & VERIFY (Lesson 2) ═══════════ -->
+<section class="section alt" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">2</div> Chapter Two · The Question Behind the Deal</div>
+      <h2 class="section-title">Research a Legal Question — and Verify Every Authority</h2>
+      <p class="section-sub">AI can point Maya toward issues and frame a research question in minutes — but it can also <strong>fabricate cases that sound perfectly real</strong>. So she treats every citation as unverified until she reads it in a genuine source. This chapter's mini-game: catch the hallucinated authority before it reaches a client.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 11:20 a.m. The client's worry: if the distributor leaks their supplier list, can they actually enforce the confidentiality clause and claim damages? Maya asks AI to <em>frame the research question and list the issues</em> — reasonable use of a fast assistant. Then it volunteers four supporting "authorities," neatly formatted. Old habits would copy them straight into a memo. New Maya does the one thing that separates a professional from a headline: <em>she verifies every single one against a real database before she trusts a word.</em> Below, three angles on how she structures that research.
+    </div>
+
+    <div class="week-plan">
+      <div class="day-col">
+        <div class="dc-head">Frame</div>
+        <div class="dc-body"><b>Issue</b>Ask AI to turn a fuzzy worry into a precise, researchable question.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Draft</div>
+        <div class="dc-body"><b>Map</b>Let AI list the elements and sub-issues to check — a research map, not an answer.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Verify</div>
+        <div class="dc-body"><b>Check</b>Read every cited case &amp; statute in a real source. No source, no cite.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Weigh</div>
+        <div class="dc-body"><b>Judge</b>Decide what the law actually says — AI summarises, Maya interprets.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Record</div>
+        <div class="dc-body"><b>Note</b>Write the memo in her own words, citing only verified authority.</div>
+      </div>
+    </div>
+
+    <div class="tier-tabs">
+      <button class="tier-tab active" data-tier="frame" onclick="setTier('frame')">🧭 Frame the question</button>
+      <button class="tier-tab" data-tier="verify" onclick="setTier('verify')">🔍 Verify the authorities</button>
+      <button class="tier-tab" data-tier="judge" onclick="setTier('judge')">⚖️ Weigh &amp; decide</button>
+    </div>
+    <div class="tier-panel" id="tierPanel"></div>
+
+    <div class="cite-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🕵️ Spot the hallucinated citation</div>
+      <p class="cite-intro">AI returned four "authorities" for Maya's confidentiality question. Three are the kind of real, plausible sources she can verify — <strong>one is a confident fabrication</strong> (a "hallucination"): a case that does not exist. Click each card to run Maya's verification check and reveal what a real search turns up. Can you catch the fake?</p>
+
+      <div class="cite-card" id="ct1" onclick="checkCite('ct1')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">A general breach-of-confidence principle</div>
+        <div class="cc-meta">Cited as: "established doctrine, most standard textbooks"</div>
+        <div class="cc-hold">"Information shared in confidence, with the necessary quality of confidence, can be protected against unauthorised use."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct2" onclick="checkCite('ct2')">
+        <div class="cc-badge"></div>
+        <div class="cc-name"><em>Meridian Freight Ltd v. Novacorp Holdings</em></div>
+        <div class="cc-meta">Cited as: "[2021] — landmark ruling, directly on point, awarding full damages for a leaked supplier list"</div>
+        <div class="cc-hold">"Held that a distributor's disclosure of a confidential supplier list is automatically actionable and always entitles the supplier to punitive damages."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct3" onclick="checkCite('ct3')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">The jurisdiction's confidentiality / trade-secrets statute</div>
+        <div class="cc-meta">Cited as: "the governing statute in this jurisdiction — check the exact section number"</div>
+        <div class="cc-hold">"A statutory route may protect trade secrets where reasonable steps were taken to keep them secret. Exact wording and remedies vary by jurisdiction."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct4" onclick="checkCite('ct4')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">A leading appellate confidentiality decision</div>
+        <div class="cc-meta">Cited as: "well-known higher-court authority — verify the reporter citation &amp; year"</div>
+        <div class="cc-hold">"Sets out the standard test for what makes information confidential and when a duty of confidence arises. Widely taught; confirm the exact name and citation for your jurisdiction."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-hint" id="citeHint">👆 Click each authority to verify it. Find the one that doesn't exist.</div>
+      <div class="cite-summary" id="citeSummary"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Research &amp; verification smarts (2 rounds)</div>
+      <div class="scenario-q" id="planQ">Loading…</div>
+      <div class="scenario-options" id="planOpts"></div>
+      <div class="scenario-feedback" id="planFb"></div>
+      <button class="btn-secondary" id="planNext" onclick="nextPlanQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 3: REVIEW THE NDA (Lesson 3) ═══════════ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">3</div> Chapter Three · Red Pen on the Contract</div>
+      <h2 class="section-title">Draft &amp; Review the NDA with a Playbook</h2>
+      <p class="section-sub">AI can draft a clean NDA and even flag risky clauses — but a contract term is a commitment your client lives with, so Maya reviews it against a <strong>playbook</strong> (her standard positions) and keeps her hands firmly on the wheel: <strong>keep, fix, or reject</strong> every AI suggestion. The trap this chapter teaches: AI's most dangerous mistakes are the ones it <em>misses</em>.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Tuesday, 2:00 p.m. The distributor's lawyers send over their NDA draft. Maya asks AI to summarise it and flag anything unusual — a genuinely useful first pass. AI catches an over-broad non-compete and a missing return-of-materials clause. Good. But it stays silent on a <em>perpetual, worldwide</em> confidentiality obligation buried in clause 7 — a term that would bind her client forever. AI drafts and flags; <em>Maya reviews against her playbook and catches what it missed.</em>
+    </div>
+
+    <div class="playbook">
+      <div class="playbook-head">📕 Maya's NDA Playbook · her standard positions (the human layer AI can't replace)</div>
+      <div class="playbook-row head">
+        <div class="playbook-cell">Clause</div>
+        <div class="playbook-cell">Maya's standard position</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Confidentiality term</div>
+        <div class="playbook-cell">Time-limited (e.g. 3–5 years post-termination), not perpetual. Perpetual + worldwide is a red flag to fix.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Definition of "Confidential Information"</div>
+        <div class="playbook-cell">Specific, with standard carve-outs (public domain, independently developed, lawfully received). Reject "everything, forever."</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Remedies &amp; damages</div>
+        <div class="playbook-cell">Reasonable and mutual. Be wary of one-sided liquidated-damages or "automatic punitive" language.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Return / destruction of materials</div>
+        <div class="playbook-cell">Must be present. If missing, add it — AI often forgets this one.</div>
+      </div>
+      <div class="playbook-note">💡 <strong>Why a playbook?</strong> A playbook is Maya's memory of what "acceptable" looks like, written down. AI reviews against the words on the page; the playbook lets Maya review against her client's interests. AI drafted a summary; the playbook is what turns a summary into a decision.</div>
+    </div>
+
+    <div class="mark-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖊️ Help Maya decide: Keep · Fix · Reject</div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem">AI reviewed three clauses (and Maya spotted a fourth thing it missed). Human-in-the-loop means you don't rubber-stamp — judge each clause against the playbook. Decide for all three to see Maya's verdict.</p>
+
+      <div class="mark-card" id="mk1">
+        <div class="mark-label">Clause 4 · Definition of Confidential Information</div>
+        <div class="mark-text">"'Confidential Information' means all information disclosed by either party, excluding information that is public, independently developed, or lawfully received from a third party."</div>
+        <div class="mark-src">AI's note: "Standard mutual definition with the usual carve-outs. Looks fine." Against the playbook: specific, with proper exceptions.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk1','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk1','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk1','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk1"></div>
+      </div>
+
+      <div class="mark-card" id="mk2">
+        <div class="mark-label">Clause 7 · Duration (the one AI stayed silent on)</div>
+        <div class="mark-text">"The obligations of confidentiality shall continue in perpetuity and apply worldwide, without limitation of time."</div>
+        <div class="mark-src">AI's note: (none — AI did not flag this). Against the playbook: perpetual + worldwide is exactly the red flag. Maya caught it, not AI.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk2','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk2','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk2','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk2"></div>
+      </div>
+
+      <div class="mark-card" id="mk3">
+        <div class="mark-label">Clause 11 · Remedies</div>
+        <div class="mark-text">"Any breach, however minor, shall automatically entitle the Disclosing Party to punitive damages of a fixed sum, payable on demand, regardless of actual loss."</div>
+        <div class="mark-src">AI's note: "Flagged — remedies clause is one-sided and unusually harsh." Against the playbook: reject "automatic punitive, regardless of loss" language.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk3','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk3','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk3','reject',this)">Reject</button>
+        </div>
+        <div class="mark-fb" id="fb-mk3"></div>
+      </div>
+
+      <div class="mark-summary" id="markSummary"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 4: CLIENT UPDATE (Lesson 4) ═══════════ -->
+<section class="section alt" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">4</div> Chapter Four · Behind the Confidentiality Firewall</div>
+      <h2 class="section-title">Write a Plain-Language Client Update — Behind a Firewall</h2>
+      <p class="section-sub">Client updates are where AI saves the most non-billable time — and where a careless paste can breach confidentiality or waive privilege. Maya's trick: draft with <strong>placeholders</strong>, let AI shape the plain-language tone, then fill in real names and deal terms herself, offline, at the very end.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday, 4:30 p.m. The client needs an update — in plain English, not legalese. The temptation is huge: paste the full memo, the client's name, and the deal figures into AI and say "turn this into a friendly email." Maya doesn't. She builds a <em>confidentiality firewall</em> — AI never sees a real name, number, or privileged fact. It writes the warm, clear scaffolding; she pours the real matter into it afterward. Same non-billable time saved, zero confidence breached.
+    </div>
+
+    <div class="firewall">
+      <div class="fw-col unsafe">
+        <h5>🚫 The tempting shortcut (never do this)</h5>
+        <p>"Rewrite this for my client <span class="hl-red">Acme Supplies Ltd</span>: their distributor <span class="hl-red">Novacorp</span> wants a <span class="hl-red">perpetual NDA</span> on the <span class="hl-red">₹4.2 crore</span> supply deal, and our privileged advice is to <span class="hl-red">walk away</span>."</p>
+        <p style="margin-top:.6rem">Real party names, deal value, and privileged strategy — pasted into a general tool whose data handling you don't control. That's a client confidence (and possibly privilege) leaving the building.</p>
+      </div>
+      <div class="fw-col safe">
+        <h5>✅ The confidentiality firewall (do this)</h5>
+        <p>"Draft a warm, plain-language client update for <code>[CLIENT]</code>. Explain that the other side's <span class="hl-green">confidentiality term is too broad</span> and we've <span class="hl-green">proposed a time limit</span>. Keep names, figures, and strategy as placeholders."</p>
+        <p style="margin-top:.6rem">AI writes the scaffolding from <span class="hl-green">issues, not identities</span>. Maya fills <code>[CLIENT]</code> and the specifics in herself, offline. Fast and safe.</p>
+      </div>
+    </div>
+
+    <div class="redact">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖤 The redaction beat — scrub it before it goes near AI</div>
+      <p class="redact-hint">Maya pasted a rough note before catching herself. Before this text could ever be shaped by a public AI tool, it must be scrubbed. <strong>Click every confidential item</strong> — real names, figures, and privileged strategy — to redact it. Leave the abstract, non-identifying words alone.</p>
+      <div class="redact-doc" id="redactDoc">
+        Update for <span class="rd" data-red="1" onclick="redact(this)">Acme Supplies Ltd</span>: their counterparty <span class="rd" data-red="1" onclick="redact(this)">Novacorp Holdings</span> is pushing a <span data-red="0">confidentiality clause</span> we consider <span data-red="0">too broad</span>. Deal value is <span class="rd" data-red="1" onclick="redact(this)">₹4.2 crore</span>. Our <span class="rd" data-red="1" onclick="redact(this)">privileged recommendation is to renegotiate the term or walk away</span>. Next step is a <span data-red="0">plain-language update to the client</span>.
+      </div>
+      <div class="redact-status" id="redactStatus">🔒 <strong>0 of 4</strong> confidential items redacted. Click the underlined items that identify the client or reveal privileged strategy.</div>
+    </div>
+
+    <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin:1.6rem 0 .2rem">✉️ Same update, three registers — you direct the voice</div>
+    <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.4rem">AI can write in whatever register a client needs. Maya picks the tone; the placeholders stay until she fills them in privately, offline. Try each.</p>
+    <div class="tone-tabs">
+      <button class="tone-tab active" data-tone="plain" onclick="setTone('plain')">🤝 Plain &amp; reassuring</button>
+      <button class="tone-tab" data-tone="direct" onclick="setTone('direct')">📋 Brief &amp; direct</button>
+      <button class="tone-tab" data-tone="caution" onclick="setTone('caution')">⚠️ Cautious &amp; flagging risk</button>
+    </div>
+    <div class="note-preview">
+      <div class="np-head">
+        <span class="sdot" style="background:#FF5F57"></span><span class="sdot" style="background:#FEBC2E"></span><span class="sdot" style="background:#28C840"></span>
+        <span style="margin-left:.6rem">Draft · placeholders not yet filled</span>
+      </div>
+      <div class="np-body">
+        <div class="np-subj"><b>To:</b> [CLIENT] &nbsp;·&nbsp; <b>Subject:</b> Update on your [MATTER] — where things stand</div>
+        <div class="np-text" id="noteText">Dear [CLIENT], a quick plain-English update. We've reviewed the other side's draft and it's mostly workable — but one confidentiality term is broader than we'd advise, so we've proposed a sensible time limit instead of it lasting forever. Nothing to worry about; this is a normal point to negotiate. I'll come back to you once they respond, and I'm happy to talk it through any time.</div>
+        <div class="np-sign">— Maya Rao, for [FIRM]</div>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Spot the confidentiality breach</div>
+      <div class="scenario-q">Maya is about to hit send on an AI-drafted client update. Which line means she must stop and edit first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="leakQ(0)">"We've proposed a time limit on the confidentiality clause instead of a perpetual one."</button>
+        <button class="scenario-btn" onclick="leakQ(1)">"As we discussed, our privileged view is that the counterparty is likely bluffing about litigation, so we'll call their hand — please don't forward this."</button>
+        <button class="scenario-btn" onclick="leakQ(2)">"I'll update you as soon as the other side responds — feel free to reach out any time."</button>
+      </div>
+      <div class="scenario-feedback" id="leakFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Client communication &amp; privilege (2 rounds)</div>
+      <div class="scenario-q" id="privQ">Loading…</div>
+      <div class="scenario-options" id="privOpts"></div>
+      <div class="scenario-feedback" id="privFb"></div>
+      <button class="btn-secondary" id="privNext" onclick="nextPrivQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 5: MATTER CLOSED (Finale) ═══════════ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">5</div> Chapter Five · The Matter Is Closed</div>
+      <h2 class="section-title">Add Up the Hours — What Did Maya Win Back?</h2>
+      <p class="section-sub">The whole matter comes down to one honest tally. AI didn't practise law for Maya; it cleared the <strong>drafting and admin drudgery</strong> around it — the non-billable hours that never made her better at lawyering. Tap each task to claim the hours back — and watch her evening reappear.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Friday, 5:00 p.m. The matter is closed: research memo written on verified authority, NDA fixed to protect the client, update sent in plain English. The client is happy — and Maya finished with time to spare. She adds up where the drafting assistant saved her real time, and where she deliberately <em>spent</em> time (verifying every case, reviewing every clause, choosing every word of advice). Tap each row to reclaim the hours. The lesson underneath the numbers: <em>AI drafts, Maya verifies and decides — and that trade buys back her evenings without cutting a corner.</em>
+    </div>
+
+    <div class="tally">
+      <div class="tally-head">⏱️ The Hours-Reclaimed Tally</div>
+      <p style="font-size:.82rem;color:var(--text-secondary)">Estimated non-billable time AI drafting saved Maya on this matter (she still verified and decided everything). Tap each task to claim it.</p>
+      <div class="tally-rows" id="tallyRows">
+        <div class="tally-row" data-hrs="1.5" onclick="claimHours(this)">
+          <div class="tally-task">Frame the research question &amp; issue list<span>Ch 2 · a research map she then verified</span></div>
+          <div class="tally-hrs">−1.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="2" onclick="claimHours(this)">
+          <div class="tally-task">First-pass summary of the NDA<span>Ch 3 · flagged issues she checked against her playbook</span></div>
+          <div class="tally-hrs">−2 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="2.5" onclick="claimHours(this)">
+          <div class="tally-task">Draft plain-language client update<span>Ch 4 · placeholders, tone, then filled offline</span></div>
+          <div class="tally-hrs">−2.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="1.5" onclick="claimHours(this)">
+          <div class="tally-task">Tidy internal notes &amp; matter admin<span>Ch 1–4 · summaries, checklists, formatting</span></div>
+          <div class="tally-hrs">−1.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+      </div>
+      <div class="tally-total">
+        <div class="tt-l">Non-billable hours reclaimed</div>
+        <div class="tt-v" id="tallyTotal">0.0 hrs</div>
+      </div>
+      <div class="tally-note" id="tallyNote">👆 Tap the rows above to see the hours add up. <strong>Honest caveat:</strong> these are drafting savings — the lawyering (verifying authorities, reviewing clauses, deciding the advice) is time Maya <em>kept</em>, on purpose. That's the deal.</div>
+    </div>
+
+    <div class="sunday" id="sundayFinale">
+      <h4>☀️ Friday, 6:00 p.m. — <em>and Maya's laptop is closed.</em></h4>
+      <div class="sunday-grid">
+        <div class="sunday-tile"><div class="v">~7.5 hrs</div><div class="l">Drafting time saved</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">Fake cites filed</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">Confidences breached</div></div>
+        <div class="sunday-tile"><div class="v">1</div><div class="l">Happy client</div></div>
+      </div>
+      <p>The research memo rests on authorities Maya read with her own eyes. The NDA protects her client because she caught the clause AI missed. The update went out in plain English, and not one confidence left the building. AI drafted the scaffolding around the matter — <strong>she made every decision that actually mattered, and put her name behind each one.</strong> The reward isn't just a closed file. It's an evening that belongs to her again, and a client who trusts her more. <strong>AI drafts. Maya verifies and decides.</strong> ⚖️</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER RECAP ─── -->
+<div class="footer-cta">
+  <h2>⚖️ One matter ago, the fear was a fake case or a leaked confidence.</h2>
+  <p>Now Maya has run the whole AI-for-lawyers loop once — for real. Here's what her story secretly taught you: the four lessons of Week 2.</p>
+  <div class="recap-grid">
+    <div class="recap-card">
+      <div class="rn">Lesson 1</div>
+      <h4>AI Workflow &amp; Ground Rules</h4>
+      <p>AI drafts, you verify and decide. Two bright lines: never put client confidences or privileged facts into public tools, and verify every authority — confidence isn't evidence. Chapter 1.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 2</div>
+      <h4>Legal Research &amp; Verifying Authorities</h4>
+      <p>AI frames the question and maps the issues fast — but it can fabricate cases that look real. Read every citation in a genuine source before you trust it. Chapter 2.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 3</div>
+      <h4>Contract Review with a Playbook</h4>
+      <p>A playbook is your standard positions, written down. AI summarises and flags; you keep, fix, or reject each clause — and catch the dangerous term AI missed. Chapter 3.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 4</div>
+      <h4>Client Updates Behind a Firewall</h4>
+      <p>Draft with placeholders and issues, not names and figures. AI shapes plain-language tone; you fill in the real matter offline. Biggest time-saver, zero breaches. Chapter 4.</p>
+    </div>
+  </div>
+  <button class="btn-action" style="font-size:.9rem;padding:.8rem 1.8rem" onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">↻ Replay Maya's matter</button>
+  <div class="footer-brand">Moksh<span>Path</span></div>
+  <div class="footer-tagline">Guided Path to True Learning</div>
+  <div class="footer-note">Maya Rao is a teaching scenario, and nothing here is legal advice. Time savings vary by tool, matter, and jurisdiction — and your bar/regulator's rules on AI, confidentiality, and privilege always come first. The point of Week 2 isn't to hand your judgment to a machine; it's to let a drafting assistant clear the non-billable drudgery so your real lawyering — verifying, advising, deciding — gets more of you.</div>
+</div>
+
+<!-- ─── COMPLETION BAR ─── -->
+<div class="completion-bar">
+  <div class="completion-info"><span style="font-size:1.1rem">⚖️</span><span>Maya's Matter</span></div>
+  <div class="completion-track"><div class="completion-fill" id="completionFill" style="width:0%"></div></div>
+  <div class="completion-percent" id="completionPct">0%</div>
+</div>
+
+<script>
+/* ───────── PROGRESS TRACKING ───────── */
+const visited = new Set();
+function markVisited(id){
+  visited.add(id);
+  const pct = Math.round((visited.size / 5) * 100);
+  document.getElementById('completionFill').style.width = pct + '%';
+  document.getElementById('completionPct').textContent = pct + '%';
+  document.getElementById('headerProgressText').textContent = `${visited.size} of 5 chapters explored`;
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    markVisited(btn.dataset.target);
+  });
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.3) {
+      markVisited(e.target.id);
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === e.target.id));
+    }
+  });
+}, {threshold:[0.3]});
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+/* ───────── CH 1: PROMPT SHOWDOWN ───────── */
+const promptResults = [
+  {ok:false, fb:'✗ Too much handed over — this asks AI to <em>give the legal advice</em> and judge whether the deal is safe. That\'s Maya\'s job and her professional duty; AI produces a confident-sounding answer with no accountability and no idea of the client\'s real risk. "Just tell me if it\'s safe" makes AI the lawyer. Try the disciplined one.',
+   chat:`<div class="chat-msg user"><span class="who">Maya</span>Draft the whole distribution agreement and give me the legal advice — just tell me if this deal is safe to sign.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>Sure! Here's a generic agreement and my view that it "looks safe"… <strong>(…a template with no idea of your jurisdiction, your client's risk appetite, or the actual facts — and legal advice is your call, not mine.)</strong></div>`},
+  {ok:false, fb:'✗ Stop — those are client confidences. Party names, price, and trade secrets pasted into a general AI tool is exactly the confidentiality/privilege line Maya drew in her ground rules. A client\'s secrets must never leave the building this way. Work from abstract issues, not real facts.',
+   chat:`<div class="chat-msg user"><span class="who">Maya</span>Here's my client Acme Supplies Ltd's full deal file — the price, the parties, and their trade secrets. Review it and tell me what to do.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>⚠️ I can help with drafting and issue-spotting, but please don't share client names, deal terms, or trade secrets with me. Describe the issue abstractly instead — e.g. "a standard supplier–distributor confidentiality clause." <strong>Even the tool is guarding the confidence. So should you.</strong></div>`},
+  {ok:true, fb:'✓ Exactly. Role + abstract framing + no confidential details + "give me options and a checklist to adapt" + "I make every legal call" + "don\'t invent cases; flag what I must verify." This prompt respects both bright lines and keeps Maya — and her duty to the client — firmly in charge. This is where the matter begins.',
+   chat:`<div class="chat-msg user"><span class="who">Maya</span>Act as a drafting assistant for a commercial lawyer. Using no confidential details, outline the key issues in a standard supplier–distributor NDA and give me a checklist to adapt. I'll make every legal call. Don't invent cases or law; flag anything I must verify.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>Great constraints. Here's an issue checklist — definition of confidential information, duration, carve-outs, remedies, return of materials. <strong>⚑ Verify:</strong> confirm the governing law and any statute against your jurisdiction; I can't confirm your local rules. <strong>← Structured, safe, and yours to decide.</strong></div>`}
+];
+let promptAnswered = false;
+function pickPrompt(i){
+  const r = promptResults[i];
+  const btns = document.querySelectorAll('#s1 .scenario-panel:first-of-type .scenario-btn');
+  if (!promptAnswered){
+    btns.forEach((b,j) => { if (j===2) b.classList.add('correct'); else if (j===i && !r.ok) b.classList.add('wrong'); });
+    if (r.ok) promptAnswered = true;
+  }
+  const fb = document.getElementById('promptFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+  document.getElementById('promptChat').innerHTML = r.chat;
+}
+
+/* ethics quiz */
+const ethicsQs = [
+  {q:"Maya wants AI to help her think through a tricky clause. What's the safe way to describe the matter?", opts:["Paste the signed contract and the client's name — it's faster","Describe the issue abstractly: 'a supplier–distributor NDA with a very long confidentiality term' — no names, figures, or privileged facts","Use the client's initials only — the full name is the private part"], correct:1, explain:"Party names, deal figures, trade secrets, and privileged strategy are all confidential. Describe the legal issue in the abstract, never the real facts — that gets you the help without breaching a confidence or risking privilege."},
+  {q:"AI gives Maya a neat case citation that perfectly supports her client's position. Best move?", opts:["Use it — it sounds authoritative and is formatted like a real case","Verify the case exists and says what AI claims, in a genuine legal database, before relying on it","Assume every AI citation is fake and abandon the argument"], correct:1, explain:"AI can invent confident, perfectly-formatted cases that do not exist ('hallucinations') — lawyers have been sanctioned for filing them. Confidence and formatting are never evidence. Reading the authority in a real source is the actual skill."},
+  {q:"What's the single rule that keeps AI in its lane across the whole matter?", opts:["'AI decides, I approve' — trust the machine to save time","'AI drafts, I verify and decide' — AI produces first drafts; the lawyer verifies and owns every legal call","'AI does the research and the advice' — including telling the client what to do"], correct:1, explain:"Drafting and issue-spotting are delegable; verifying authority and advising a client are not. 'AI drafts, I verify and decide' is the through-line of the whole matter — and the reason Maya's name is safe on the file."}
+];
+let eqIdx = 0;
+function renderEthicsQ(){
+  const s = ethicsQs[eqIdx];
+  document.getElementById('ethicsQ').textContent = `Round ${eqIdx+1}/3 — ${s.q}`;
+  document.getElementById('ethicsOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerEthicsQ(${i})">${o}</button>`).join('');
+  const fb = document.getElementById('ethicsFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('ethicsNext').style.display='none';
+}
+function answerEthicsQ(i){
+  const s = ethicsQs[eqIdx];
+  document.querySelectorAll('#ethicsOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('ethicsFb');
+  fb.className = 'scenario-feedback show ' + (i===s.correct ? 'success':'fail');
+  fb.innerHTML = (i===s.correct ? '✓ Spot on! ':'✗ Not quite. ') + s.explain + (eqIdx===ethicsQs.length-1 ? '<br><br>🎉 Chapter 1 complete — ground rules locked. Next: research the question, and verify every authority.' : '');
+  document.getElementById('ethicsNext').style.display = eqIdx < ethicsQs.length-1 ? 'inline-block':'none';
+}
+function nextEthicsQ(){ eqIdx++; if(eqIdx<ethicsQs.length) renderEthicsQ(); }
+renderEthicsQ();
+
+/* ───────── CH 2: RESEARCH TIERS ───────── */
+const tierInfo = {
+  frame: `<span class="tp-lens">🧭 Frame the question · a fast, safe use</span><br><strong>Turn a worry into a researchable question.</strong> The client's fuzzy fear — "can we stop them leaking our supplier list?" — becomes a precise question: <em>what must be shown for confidential information to be protected, and what remedies follow a breach?</em> AI is genuinely good at this framing and at listing sub-issues to check. This is delegable structuring work — <em>as long as no confidential facts go in</em>, and Maya treats the output as a map, not the destination.`,
+  verify: `<span class="tp-lens">🔍 Verify the authorities · the non-negotiable step</span><br><strong>No source, no cite.</strong> When AI volunteers cases and statutes, Maya opens a real legal database and reads each one: does the case exist? Does it say what AI claims? Is the citation real and current? A citation that can't be found in a genuine source is treated as fabricated and dropped — full stop. <em>This is the step that separates a professional from a headline.</em> Lawyers have been sanctioned for skipping exactly this.`,
+  judge: `<span class="tp-lens">⚖️ Weigh &amp; decide · Maya's job alone</span><br><strong>AI summarises; Maya interprets.</strong> Once the authorities are verified, the legal judgment — how they apply to <em>this</em> client, in <em>this</em> jurisdiction, with these facts — belongs entirely to Maya. She writes the memo in her own words, cites only what she has read, and flags what remains uncertain. <em>AI proposed the raw material; Maya decided what the law actually means for the client and put her name to it.</em>`
+};
+function setTier(t){
+  document.querySelectorAll('.tier-tab').forEach(x => x.classList.toggle('active', x.dataset.tier===t));
+  const p = document.getElementById('tierPanel');
+  p.style.opacity=0;
+  setTimeout(()=>{ p.innerHTML = tierInfo[t]; p.style.opacity=1; }, 150);
+}
+document.getElementById('tierPanel').style.transition='opacity .2s';
+setTier('frame');
+
+/* ───────── CH 2: SPOT THE HALLUCINATED CITATION ───────── */
+const citeKey = {
+  ct1:{fake:false, verify:'✓ <strong>Verifies out.</strong> This is a general, well-established legal principle you can confirm in standard texts. It\'s not a specific citation to check case-by-case, but it\'s a real doctrine — safe to rely on once Maya confirms how her jurisdiction frames it.'},
+  ct2:{fake:true, verify:'🚩 <strong>Hallucination — this case does not exist.</strong> Maya searches every database: no <em>Meridian Freight v. Novacorp</em>, no such citation, no such ruling. And the "held" is legally implausible — nothing is <em>automatically</em> actionable or <em>always</em> punitive. AI invented a perfect-sounding authority to please her. She deletes it entirely. <em>This is the one that gets lawyers sanctioned.</em>'},
+  ct3:{fake:false, verify:'✓ <strong>Verifies out (with care).</strong> A statutory route for trade secrets genuinely exists in many jurisdictions. AI was honest that the exact section and remedies vary — so Maya confirms the precise provision in her own jurisdiction before citing it. Real, but jurisdiction-dependent.'},
+  ct4:{fake:false, verify:'✓ <strong>Verifies out.</strong> A leading appellate decision setting the test for confidentiality is a real, checkable kind of authority. AI flagged that the exact name and citation must be confirmed — Maya reads it in a genuine reporter, confirms the citation and year, and only then relies on it.'}
+};
+let citeFound = false;
+const citeChecked = {};
+function checkCite(id){
+  if (citeChecked[id]) return;
+  citeChecked[id] = true;
+  const k = citeKey[id];
+  const card = document.getElementById(id);
+  card.classList.add(k.fake ? 'flagged-right' : 'flagged-clear');
+  card.querySelector('.cc-badge').textContent = k.fake ? '✗ Fabricated' : '✓ Verified';
+  card.querySelector('.cc-verify').innerHTML = k.verify;
+  card.setAttribute('onclick','');
+  const hint = document.getElementById('citeHint');
+  if (k.fake){
+    citeFound = true;
+    hint.innerHTML = '🎯 <strong>You caught the fake.</strong> Keep verifying the rest — a professional confirms every authority, not just the suspicious one.';
+  } else if (!citeFound){
+    hint.innerHTML = '✓ Verified — real and checkable. But keep going: one of these four is invented, and you haven\'t found it yet.';
+  }
+  if (Object.keys(citeChecked).length === 4){
+    const s = document.getElementById('citeSummary');
+    s.innerHTML = '🎉 <strong>Chapter 2\'s core skill, done.</strong> Four "authorities," and only <em>Meridian Freight v. Novacorp</em> was a hallucination — a confident, well-formatted case that never existed. The other three were real, but two still needed jurisdiction and citation checks before use. The rule holds: <strong>no source, no cite.</strong> AI framed the research; Maya verified every word before a single one reached the client. Next: review the contract.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 350);
+  }
+}
+
+/* research quiz */
+const planQs = [
+  {q:"Why is it fine to ask AI to 'frame the research question' but not to 'give me the law'?", opts:["It isn't — you should never use AI for research at all","Framing and listing issues is delegable structuring work; stating and applying the law requires verified authority and legal judgment, which are Maya's","AI is only allowed to answer if you name the statute first"], correct:1, explain:"AI is a strong assistant for structuring a question and mapping issues. But 'the law' must rest on authorities Maya has read in a genuine source and interpreted herself. Structure, yes; the legal conclusion, no — until verified."},
+  {q:"AI cites a case that would win the argument, but Maya can't find it in any database. Best move?", opts:["Cite it anyway — it's probably real and time is short","Treat it as fabricated and drop it; a citation that can't be verified in a genuine source is not authority","Ask AI to give her the case's full text to copy in"], correct:1, explain:"If it isn't in a real source, it isn't authority — and asking the AI to 'produce the text' just invents more. Unverifiable equals unusable. Skipping this check is exactly how lawyers have ended up sanctioned for filing fake cases."}
+];
+let pqIdx=0;
+function renderPlanQ(){
+  const s = planQs[pqIdx];
+  document.getElementById('planQ').textContent = `Round ${pqIdx+1}/2 — ${s.q}`;
+  document.getElementById('planOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPlanQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('planFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('planNext').style.display='none';
+}
+function answerPlanQ(i){
+  const s=planQs[pqIdx];
+  document.querySelectorAll('#planOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('planFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(pqIdx===planQs.length-1?'<br><br>🎉 Chapter 2 complete — a memo built on verified authority. Next: red-pen the contract.':'');
+  document.getElementById('planNext').style.display = pqIdx<planQs.length-1?'inline-block':'none';
+}
+function nextPlanQ(){ pqIdx++; if(pqIdx<planQs.length) renderPlanQ(); }
+renderPlanQ();
+
+/* ───────── CH 3: KEEP / FIX / REJECT ───────── */
+const markKey = {
+  mk1:{right:'keep', fb:{
+    keep:'✓ Correct — <strong>KEEP.</strong> A specific, mutual definition with the standard carve-outs (public domain, independently developed, lawfully received) matches Maya\'s playbook exactly. AI\'s summary was right, and reading it against her standard positions confirms it. Human-in-the-loop doesn\'t mean rewriting everything; it means <em>checking</em> everything.',
+    fix:'△ You can tinker, but there\'s little to fix — it\'s specific and has the proper exceptions. Over-editing sound clauses wastes the time AI just saved. Verdict: <strong>KEEP</strong>.',
+    reject:'✗ Rejecting a well-drafted, playbook-compliant definition throws away exactly the useful work. Verdict: <strong>KEEP</strong>.'}},
+  mk2:{right:'fix', fb:{
+    fix:'✓ Correct — <strong>FIX.</strong> This is the one AI stayed silent on — a <em>perpetual, worldwide</em> confidentiality obligation would bind Maya\'s client forever. Her playbook says: time-limit it. She rewrites it to a reasonable post-termination term. The lesson of the chapter: <strong>AI\'s most dangerous mistakes are the ones it misses</strong> — the playbook, and Maya\'s eyes, caught this one.',
+    keep:'✗ Never keep this as-is. "In perpetuity, worldwide, without limitation of time" is precisely the red flag in Maya\'s playbook — and AI didn\'t even flag it. Binding the client forever is a real harm. Verdict: <strong>FIX</strong> to a sensible time limit.',
+    reject:'△ You could reject the whole clause, but confidentiality obligations belong in an NDA — the <em>duration</em> is the problem, not the concept. Fix the term rather than deleting protection entirely. Verdict: <strong>FIX</strong>.'}},
+  mk3:{right:'reject', fb:{
+    reject:'✓ Correct — <strong>REJECT.</strong> "Any breach, automatic punitive damages, regardless of actual loss" is one-sided and unenforceable in spirit — AI flagged it, and Maya agrees it has to go. She replaces it with reasonable, mutual remedies tied to actual loss. AI\'s flag was right; her judgment made the call.',
+    keep:'✗ Never keep this. Automatic punitive damages "regardless of actual loss" is exactly the harsh, one-sided language Maya\'s playbook rejects. Keeping it would expose her client. Verdict: <strong>REJECT</strong> and replace with fair remedies.',
+    fix:'△ You could try to soften it, but the whole premise ("automatic punitive, regardless of loss") is wrong from the ground up — cleaner to reject and replace with a standard, mutual remedies clause. Verdict: <strong>REJECT</strong>.'}}
+};
+const marked = {};
+function markDecide(id, verdict, btn){
+  const k = markKey[id];
+  marked[id] = true;
+  const card = document.getElementById(id);
+  card.className = 'mark-card decided-' + k.right;
+  card.querySelectorAll('.mark-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb-'+id);
+  fb.className = 'mark-fb show ' + (verdict===k.right ? 'good':'warn');
+  fb.innerHTML = k.fb[verdict];
+  if (marked.mk1 && marked.mk2 && marked.mk3){
+    const s = document.getElementById('markSummary');
+    s.innerHTML = '🎉 <strong>Chapter 3 complete.</strong> You just did what contract review with a playbook looks like: <strong>Keep</strong> the sound definition, <strong>Fix</strong> the perpetual term AI missed, <strong>Reject</strong> the punitive-damages trap. AI summarised the NDA in seconds and flagged two of three — but your playbook and your eyes caught the dangerous clause it stayed silent on. That\'s the trade — AI drafts, Maya verifies and decides. Next: update the client, safely.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+
+/* ───────── CH 4: REDACTION BEAT ───────── */
+let redactCount = 0;
+const redactTotal = 4;
+function redact(el){
+  if (el.classList.contains('redacted')) return;
+  el.classList.add('redacted');
+  el.setAttribute('onclick','');
+  redactCount++;
+  const st = document.getElementById('redactStatus');
+  if (redactCount < redactTotal){
+    st.innerHTML = `🔒 <strong>${redactCount} of ${redactTotal}</strong> confidential items redacted. Keep going — every real name, figure, and privileged strategy must be scrubbed before this goes near a public tool.`;
+  } else {
+    st.className = 'redact-status done';
+    st.innerHTML = `✅ <strong>All ${redactTotal} confidential items redacted.</strong> What\'s left — "confidentiality clause," "too broad," "plain-language update to the client" — is abstract and safe. <em>This</em> is what may go to AI; the real names, figures, and strategy stay behind the firewall, with Maya. The abstract words you left alone were exactly right to keep.`;
+  }
+}
+
+/* ───────── CH 4: TONE + LEAK ───────── */
+const tones = {
+  plain: 'Dear [CLIENT], a quick plain-English update. We\'ve reviewed the other side\'s draft and it\'s mostly workable — but one confidentiality term is broader than we\'d advise, so we\'ve proposed a sensible time limit instead of it lasting forever. Nothing to worry about; this is a normal point to negotiate. I\'ll come back to you once they respond, and I\'m happy to talk it through any time.',
+  direct: 'Dear [CLIENT], a brief update on your [MATTER]. We\'ve reviewed the counterparty\'s draft. One issue: their confidentiality term is open-ended. Our position: a fixed, reasonable time limit. We\'ve sent that back and expect a response by [DATE]. No action needed from you yet. I\'ll confirm once they reply.',
+  caution: 'Dear [CLIENT], an update, with one point to flag. Overall the draft is workable, but their confidentiality term as written would bind you well beyond what we\'d recommend. We\'ve pushed for a fixed time limit; if they resist, there may be a decision for you to make about how far to negotiate. Nothing is urgent today — I just want you aware of it early. Can we find a short time to talk this week?'
+};
+function setTone(t){
+  document.querySelectorAll('.tone-tab').forEach(x => x.classList.toggle('active', x.dataset.tone===t));
+  const n = document.getElementById('noteText');
+  n.style.opacity=0;
+  setTimeout(()=>{ n.textContent = tones[t]; n.style.opacity=1; }, 200);
+}
+
+/* leak spotter */
+const leakFbs = [
+  {ok:false, fb:'✗ This is fine to send — a plain-language description of a negotiation position, with a placeholder. Nothing confidential or privileged is exposed here. Look again for the line that reveals privileged strategy — and that should never have been drafted with a public tool in the first place.'},
+  {ok:true, fb:'✓ Stop — this one. "Our privileged view is the counterparty is bluffing… we\'ll call their hand" is <strong>privileged legal strategy</strong>. Even to the client it should be handled carefully (and marked privileged) — and it must <em>never</em> be typed into a general AI tool, where it could leak or waive privilege. Maya keeps strategy behind the firewall and out of AI entirely.'},
+  {ok:false, fb:'✗ This is a perfectly safe, warm sign-off — no confidence or strategy at all. The dangerous line is the one that spells out privileged negotiating strategy.'}
+];
+function leakQ(i){
+  const r = leakFbs[i];
+  const btns = document.querySelectorAll('#s4 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled=true; if(leakFbs[j].ok)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('leakFb');
+  fb.className='scenario-feedback show '+(r.ok?'success':'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* privacy quiz */
+const privQs = [
+  {q:"What does Maya's 'confidentiality firewall' actually mean in practice?", opts:["She turns off her wifi while writing the update","AI only ever sees placeholders and abstract issues ([CLIENT], 'confidentiality term too broad') — real names, figures, and privileged strategy are filled in by her, offline","She marks the AI chat 'privileged'"], correct:1, explain:"The firewall is a workflow, not a setting: identifying and privileged data never enters the tool. AI drafts the plain-language scaffolding from issues; the real matter is added by hand at the end, where Maya controls it."},
+  {q:"AI drafts a warm client update with [CLIENT] placeholders. Before sending, Maya should…", opts:["Send it straight out — the draft is done","Read it, fill in the real client and details herself, and confirm nothing overstates the position or reveals privileged strategy","Ask AI to also send it to the client for her"], correct:1, explain:"Placeholders save the drafting time; the lawyer still reviews every update so a friendly template never misstates the legal position or leaks strategy. AI drafts, Maya verifies and decides — even in a simple email."}
+];
+let vqIdx=0;
+function renderPrivQ(){
+  const s=privQs[vqIdx];
+  document.getElementById('privQ').textContent=`Round ${vqIdx+1}/2 — ${s.q}`;
+  document.getElementById('privOpts').innerHTML=s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPrivQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('privFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('privNext').style.display='none';
+}
+function answerPrivQ(i){
+  const s=privQs[vqIdx];
+  document.querySelectorAll('#privOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('privFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(vqIdx===privQs.length-1?'<br><br>🎉 Chapter 4 complete — update sent, confidences safe. Finale: add up the reclaimed hours.':'');
+  document.getElementById('privNext').style.display=vqIdx<privQs.length-1?'inline-block':'none';
+}
+function nextPrivQ(){ vqIdx++; if(vqIdx<privQs.length) renderPrivQ(); }
+renderPrivQ();
+
+/* ───────── CH 5: HOURS TALLY ───────── */
+let claimedHrs = 0;
+const totalRows = 4;
+let claimedCount = 0;
+function claimHours(row){
+  if (row.classList.contains('claimed')) return;
+  row.classList.add('claimed');
+  claimedHrs += parseFloat(row.dataset.hrs);
+  claimedCount++;
+  document.getElementById('tallyTotal').textContent = claimedHrs.toFixed(1) + ' hrs';
+  const note = document.getElementById('tallyNote');
+  if (claimedCount < totalRows){
+    note.innerHTML = `⏳ <strong>${claimedHrs.toFixed(1)} hours</strong> reclaimed so far — and every one of them was drafting or admin drudgery, not lawyering. Keep tapping.`;
+  } else {
+    note.innerHTML = `🎉 <strong>${claimedHrs.toFixed(1)} hours</strong> of non-billable drafting saved on one small matter. And here\'s the honest part: Maya <em>kept</em> the lawyering time (verifying every authority, reviewing every clause, choosing every word of advice) on purpose. That\'s the deal that makes it safe. <strong>AI drafts, Maya verifies and decides.</strong>`;
+    document.getElementById('sundayFinale').classList.add('show');
+    setTimeout(()=> document.getElementById('sundayFinale').scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+</script>
+</body>
+</html>

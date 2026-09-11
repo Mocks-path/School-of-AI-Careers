@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Accountants · Week 5 — Priya Menon Closes the Books Clean</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;
+  --green:#4CAF50;--green-light:#E8F5E9;
+  --blue:#3F88C5;--purple:#8B5CF6;--pink:#EC4899;--red:#E74C3C;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);
+  --shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+
+/* ─── HEADER ─── */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:.7rem}
+.header-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);line-height:1.2}
+.header-title span{color:var(--orange)}
+.header-tag{font-size:.65rem;color:var(--text-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.logo-mascot{width:44px;height:44px;flex-shrink:0}
+.progress-pill{display:flex;align-items:center;gap:.6rem;padding:.4rem .9rem;background:var(--orange-glow);border-radius:50px;font-size:.72rem;color:var(--orange);font-weight:700}
+.progress-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* ─── HERO ─── */
+.hero{padding:3.5rem 2rem 2.5rem;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-light) 100%);position:relative;overflow:hidden}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp .7s ease}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;color:var(--navy);margin-bottom:.9rem;animation:fadeUp .7s ease .1s both}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.4rem;animation:fadeUp .7s ease .2s both}
+.usecase-banner{background:#fff;border-radius:var(--radius);padding:1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:1rem;animation:fadeUp .7s ease .3s both}
+.usecase-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#F5943E,#E87A2E);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.usecase-text{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+.usecase-text strong{color:var(--navy);font-weight:700}
+.hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s ease .2s both}
+.hero-mascot{width:230px;height:auto;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 40px rgba(232,122,46,0.22))}
+.budget-strip{max-width:1100px;margin:1.6rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;animation:fadeUp .8s ease .35s both}
+.budget-chip{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem .9rem;text-align:center;box-shadow:var(--shadow-sm)}
+.budget-chip .bv{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--orange)}
+.budget-chip .bl{font-size:.64rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:.15rem}
+
+/* ─── SECTION SHELL ─── */
+.section{padding:3rem 2rem;scroll-margin-top:80px}
+.section.alt{background:var(--bg-light)}
+.container{max-width:1100px;margin:0 auto}
+.section-header{margin-bottom:2rem}
+.section-num{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--orange);margin-bottom:.5rem}
+.section-num .num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.8vw,2rem);color:var(--navy);line-height:1.25;margin-bottom:.4rem}
+.section-sub{font-size:.92rem;color:var(--text-secondary);line-height:1.65;max-width:720px}
+.story-beat{background:#fff;border-left:4px solid var(--orange);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.2rem;font-size:.88rem;color:var(--text-primary);line-height:1.65;box-shadow:var(--shadow-sm);margin-bottom:1.6rem}
+.story-beat .sb-tag{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.story-beat em{color:var(--text-secondary)}
+
+/* ─── TAB NAV ─── */
+.tab-nav{display:flex;gap:.4rem;overflow-x:auto;padding:.4rem;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border-radius:50px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:sticky;top:72px;z-index:50;margin:0 auto 2rem;max-width:fit-content;flex-wrap:nowrap;-ms-overflow-style:none;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:.55rem 1.1rem;border-radius:50px;border:none;background:transparent;color:var(--text-secondary);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:var(--orange)}
+.tab-btn.active{background:var(--orange);color:#fff;box-shadow:0 3px 12px rgba(232,122,46,0.35)}
+
+/* ─── GENERIC CARDS/GRIDS ─── */
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.pick-card{background:#fff;border-radius:var(--radius);padding:1.4rem;border:2px solid var(--border);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.pick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:height .3s}
+.pick-card:nth-child(1)::before{background:linear-gradient(90deg,var(--green),#7BC67E)}
+.pick-card:nth-child(2)::before{background:linear-gradient(90deg,var(--blue),#5DADE2)}
+.pick-card:nth-child(3)::before{background:linear-gradient(90deg,var(--pink),#F48FB1)}
+.pick-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pick-card.active{border-color:var(--orange);box-shadow:var(--shadow-md)}
+.pick-card.active::before{height:6px}
+.pick-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.8rem;background:var(--bg-light)}
+.pick-card h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.pick-card .pc-tag{font-size:.68rem;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.pick-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── SCENARIO QUIZ ─── */
+.scenario-panel{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.scenario-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem}
+.scenario-q{font-size:1rem;color:var(--navy);margin-bottom:1rem;font-weight:600;line-height:1.5}
+.scenario-options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1rem}
+.scenario-btn{padding:.75rem .9rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;line-height:1.45}
+.scenario-btn:hover{border-color:var(--orange);color:var(--orange)}
+.scenario-btn.correct{background:var(--green-light);border-color:var(--green);color:#2E7D32}
+.scenario-btn.wrong{background:#FEE;border-color:var(--red);color:#C62828}
+.scenario-feedback{padding:.9rem;border-radius:8px;font-size:.83rem;line-height:1.55;display:none}
+.scenario-feedback.show{display:block;animation:fadeUp .4s ease}
+.scenario-feedback.success{background:var(--green-light);color:#2E7D32;border-left:3px solid var(--green)}
+.scenario-feedback.fail{background:#FEE;color:#C62828;border-left:3px solid var(--red)}
+.btn-action{padding:.55rem 1.1rem;border-radius:8px;background:var(--orange);color:#fff;border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-action:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-secondary{background:transparent;color:var(--text-primary);border:1.5px solid var(--border);padding:.55rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── CHAT MOCK ─── */
+.chat-mock{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1rem}
+.chat-head{background:var(--navy-dark);color:#fff;padding:.6rem 1rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.chat-head .cdot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.chat-body{padding:1.1rem;display:flex;flex-direction:column;gap:.8rem;min-height:150px}
+.chat-msg{max-width:88%;padding:.8rem 1rem;border-radius:12px;font-size:.83rem;line-height:1.55}
+.chat-msg.user{align-self:flex-end;background:var(--orange-glow);color:var(--text-primary);border:1px solid rgba(232,122,46,0.25);border-bottom-right-radius:3px}
+.chat-msg.ai{align-self:flex-start;background:var(--bg-light);border:1px solid var(--border);border-bottom-left-radius:3px}
+.chat-msg.ai strong{color:var(--orange)}
+.chat-msg .who{display:block;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem}
+
+/* ─── RULES / GROUND-RULE CARDS ─── */
+.rule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.rule-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.2rem;transition:all .3s}
+.rule-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.rule-card .ri{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.7rem}
+.rule-card:nth-child(1) .ri{background:var(--green-light)}
+.rule-card:nth-child(2) .ri{background:rgba(63,136,197,0.12)}
+.rule-card:nth-child(3) .ri{background:rgba(139,92,246,0.12)}
+.rule-card:nth-child(4) .ri{background:rgba(236,72,153,0.12)}
+.rule-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;color:var(--navy);margin-bottom:.35rem}
+.rule-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── MATTER / PHASE GRID ─── */
+.week-plan{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:1.2rem}
+.day-col{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden}
+.day-col .dc-head{padding:.6rem;text-align:center;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--navy)}
+.day-col .dc-body{padding:.8rem;font-size:.76rem;color:var(--text-secondary);line-height:1.5;min-height:120px}
+.day-col .dc-body b{color:var(--navy);display:block;font-size:.8rem;margin-bottom:.2rem}
+.tier-tabs{display:flex;gap:.4rem;margin:1.3rem 0 .3rem;flex-wrap:wrap}
+.tier-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tier-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tier-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.tier-panel{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem;font-size:.86rem;line-height:1.65;margin-top:.8rem}
+.tier-panel strong{color:var(--navy)}
+.tier-panel .tp-lens{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem;background:var(--orange-glow);color:var(--orange)}
+
+/* ─── CITATION HUNT (spot the hallucination) ─── */
+.cite-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.cite-intro{font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.cite-card{position:relative;background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1rem 1.15rem 1rem 1.15rem;margin-bottom:.85rem;cursor:pointer;transition:all .25s}
+.cite-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.cite-card.flagged-right{border-color:var(--red);background:#FEE;cursor:default}
+.cite-card.flagged-clear{border-color:var(--green);background:var(--green-light);cursor:default}
+.cite-card .cc-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.cite-card .cc-meta{font-size:.74rem;color:var(--text-muted);margin-bottom:.5rem}
+.cite-card .cc-hold{font-size:.8rem;color:var(--text-secondary);line-height:1.5}
+.cite-card .cc-badge{position:absolute;top:.9rem;right:1rem;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .55rem;border-radius:50px;display:none}
+.cite-card.flagged-right .cc-badge{display:block;background:var(--red);color:#fff}
+.cite-card.flagged-clear .cc-badge{display:block;background:var(--green);color:#fff}
+.cite-card .cc-verify{display:none;margin-top:.7rem;padding:.65rem .8rem;border-radius:7px;font-size:.78rem;line-height:1.5}
+.cite-card.flagged-right .cc-verify{display:block;background:rgba(231,76,60,0.1);color:#C62828;animation:fadeUp .35s ease}
+.cite-card.flagged-clear .cc-verify{display:block;background:rgba(76,175,80,0.14);color:#2E7D32;animation:fadeUp .35s ease}
+.cite-hint{font-size:.74rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.cite-summary{display:none;margin-top:1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.cite-summary.show{display:block}
+.cite-summary strong{color:var(--orange)}
+
+/* ─── ACCEPT / FIX / INVESTIGATE ─── */
+.mark-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.mark-card{background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1.1rem 1.2rem;margin-bottom:.9rem;transition:all .3s}
+.mark-card.decided-keep{border-color:var(--green);background:var(--green-light)}
+.mark-card.decided-fix{border-color:#E0A800;background:#FFF8E1}
+.mark-card.decided-reject{border-color:var(--red);background:#FEE}
+.mark-label{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.35rem}
+.mark-text{font-size:.86rem;color:var(--text-primary);line-height:1.55;margin-bottom:.5rem;font-style:italic}
+.mark-src{font-size:.72rem;color:var(--text-muted);margin-bottom:.75rem}
+.mark-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.mark-btn{padding:.42rem .9rem;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.mark-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mark-btn:disabled{opacity:.45;cursor:not-allowed}
+.mark-fb{font-size:.78rem;line-height:1.5;padding:.65rem .85rem;border-radius:7px;margin-top:.7rem;display:none}
+.mark-fb.show{display:block;animation:fadeUp .4s ease}
+.mark-fb.good{background:rgba(76,175,80,0.14);color:#2E7D32}
+.mark-fb.warn{background:#FFF3CD;color:#856404}
+.mark-summary{display:none;margin-top:1.1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.mark-summary.show{display:block}
+.mark-summary strong{color:var(--orange)}
+
+/* ─── PLAYBOOK STRIP ─── */
+.playbook{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1.2rem}
+.playbook-head{background:var(--navy-dark);color:#fff;padding:.7rem 1.1rem;font-family:'DM Serif Display',serif;font-size:1.05rem}
+.playbook-row{display:grid;grid-template-columns:1.1fr 1.9fr;border-bottom:1px solid var(--border)}
+.playbook-row:last-child{border-bottom:none}
+.playbook-cell{padding:.8rem .95rem;font-size:.8rem;line-height:1.5;border-right:1px solid var(--border)}
+.playbook-cell:last-child{border-right:none}
+.playbook-cell.crit{font-weight:700;color:var(--navy);background:var(--bg-light)}
+.playbook-row.head .playbook-cell{background:var(--orange-glow);font-weight:800;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--orange)}
+.playbook-note{padding:.9rem 1.1rem;font-size:.8rem;color:var(--text-secondary);line-height:1.55;background:var(--bg-light)}
+.playbook-note strong{color:var(--orange)}
+
+/* ─── CONFIDENTIALITY FIREWALL / PII ─── */
+.firewall{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.3rem}
+.fw-col{border-radius:var(--radius);padding:1.2rem 1.3rem;font-size:.82rem;line-height:1.6}
+.fw-col.unsafe{background:#FEE;border:1.5px dashed var(--red)}
+.fw-col.safe{background:var(--green-light);border:1.5px solid var(--green)}
+.fw-col h5{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+.fw-col.unsafe h5{color:#C62828}
+.fw-col.safe h5{color:#2E7D32}
+.fw-col code{background:rgba(0,0,0,0.05);border-radius:4px;padding:.1rem .35rem;font-family:monospace;font-size:.78rem;color:var(--navy)}
+.fw-col .hl-red{color:#C62828;font-weight:700}
+.fw-col .hl-green{color:#2E7D32;font-weight:700}
+
+/* ─── REDACTION BEAT ─── */
+.redact{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.redact-doc{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem 1.35rem;font-size:.9rem;line-height:1.9;color:var(--text-primary)}
+.rd{cursor:pointer;border-radius:4px;padding:.05rem .25rem;transition:all .2s;border-bottom:2px dotted var(--red);font-weight:600;color:#C62828}
+.rd:hover{background:rgba(231,76,60,0.1)}
+.rd.redacted{background:var(--navy-dark);color:var(--navy-dark);border-bottom:2px solid var(--navy-dark);user-select:none}
+.rd.redacted::selection{background:var(--navy-dark);color:var(--navy-dark)}
+.redact-hint{font-size:.78rem;color:var(--text-secondary);margin:.2rem 0 1rem;line-height:1.55}
+.redact-status{margin-top:1rem;padding:.85rem 1rem;border-radius:8px;font-size:.83rem;line-height:1.55;background:var(--orange-glow);color:var(--text-primary)}
+.redact-status strong{color:var(--orange)}
+.redact-status.done{background:var(--green-light);color:#2E7D32}
+
+/* ─── TONE / SUMMARY PREVIEW ─── */
+.tone-tabs{display:flex;gap:.4rem;margin:1.4rem 0 .3rem;flex-wrap:wrap}
+.tone-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tone-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tone-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.note-preview{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;margin-top:.8rem}
+.np-head{background:#F5F5F7;padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--text-muted)}
+.np-head .sdot{width:9px;height:9px;border-radius:50%}
+.np-body{padding:1.3rem 1.5rem}
+.np-subj{font-size:.74rem;color:var(--text-muted);margin-bottom:.6rem}
+.np-subj b{color:var(--navy)}
+.np-text{font-size:.87rem;color:var(--text-primary);line-height:1.7;transition:opacity .3s}
+.np-sign{margin-top:.9rem;font-size:.82rem;color:var(--text-secondary);font-style:italic}
+
+/* ─── HOURS TALLY ─── */
+.tally{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.5rem;margin-top:1.4rem}
+.tally-head{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.tally-rows{margin-top:1rem;display:flex;flex-direction:column;gap:.7rem}
+.tally-row{display:grid;grid-template-columns:1.4fr auto auto;gap:1rem;align-items:center;padding:.75rem 1rem;background:var(--bg-light);border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:all .25s}
+.tally-row:hover{border-color:var(--orange)}
+.tally-row.claimed{border-color:var(--green);background:var(--green-light)}
+.tally-task{font-size:.84rem;color:var(--navy);font-weight:600}
+.tally-task span{display:block;font-size:.72rem;font-weight:500;color:var(--text-muted)}
+.tally-hrs{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--orange);white-space:nowrap}
+.tally-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.tally-row.claimed .tally-check{background:var(--green);border-color:var(--green)}
+.tally-row.claimed .tally-check::after{content:'✓';color:#fff;font-size:.72rem;font-weight:800}
+.tally-total{margin-top:1.1rem;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;background:var(--navy-dark);border-radius:10px;color:#fff}
+.tally-total .tt-l{font-size:.82rem;color:rgba(255,255,255,0.75);font-weight:600}
+.tally-total .tt-v{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--orange-light)}
+.tally-note{margin-top:.9rem;font-size:.8rem;line-height:1.55;padding:.8rem 1rem;border-radius:8px;background:var(--orange-glow);color:var(--text-primary)}
+.tally-note strong{color:var(--orange)}
+
+/* ─── BURNOUT METER ─── */
+.burnout{margin-top:1.3rem;background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem}
+.burnout-head{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.2rem}
+.burnout-sub{font-size:.8rem;color:var(--text-secondary);margin-bottom:1rem}
+.burnout-track{height:26px;border-radius:14px;background:linear-gradient(90deg,#4CAF50,#F5943E,#E74C3C);position:relative;overflow:hidden}
+.burnout-marker{position:absolute;top:-6px;width:4px;height:38px;background:var(--navy-dark);border-radius:2px;transition:left .6s ease;box-shadow:0 0 0 3px #fff}
+.burnout-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
+
+/* ─── FINALE ─── */
+.sunday{display:none;margin-top:1.4rem;background:linear-gradient(135deg,#2A2440,#1A1B2E);border-radius:var(--radius);padding:1.8rem;color:#fff;animation:popIn .5s ease}
+.sunday.show{display:block}
+.sunday h4{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:.8rem}
+.sunday h4 em{font-style:normal;color:var(--orange-light)}
+.sunday-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1rem}
+.sunday-tile{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:9px;padding:.8rem;text-align:center}
+.sunday-tile .v{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--orange-light)}
+.sunday-tile .l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.55);font-weight:700;margin-top:.25rem}
+.sunday p{font-size:.87rem;line-height:1.65;color:rgba(255,255,255,0.85)}
+.sunday p strong{color:var(--orange-light)}
+
+/* ─── COURSE FINALE (whole-course celebration) ─── */
+.grad{margin-top:1.6rem;background:linear-gradient(135deg,#3A2A1C,#1A1B2E);border-radius:var(--radius);padding:2rem 1.8rem;color:#fff;border:1px solid rgba(245,148,62,0.25);position:relative;overflow:hidden}
+.grad::after{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(245,148,62,0.28),transparent 70%);pointer-events:none}
+.grad .grad-eyebrow{font-size:.66rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-light);margin-bottom:.5rem}
+.grad h3{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:.7rem;line-height:1.2}
+.grad h3 em{font-style:normal;color:var(--orange-light)}
+.grad>p{font-size:.9rem;line-height:1.7;color:rgba(255,255,255,0.85);max-width:760px}
+.grad>p strong{color:var(--orange-light)}
+.cohort-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin:1.4rem 0}
+.cohort-tile{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:11px;padding:1rem .8rem;text-align:center;transition:all .3s;cursor:default}
+.cohort-tile:hover{transform:translateY(-4px);border-color:rgba(245,148,62,0.5);background:rgba(245,148,62,0.08)}
+.cohort-tile .ct-ic{font-size:1.6rem;margin-bottom:.4rem}
+.cohort-tile .ct-name{font-family:'DM Serif Display',serif;font-size:.95rem;color:#fff;margin-bottom:.15rem}
+.cohort-tile .ct-role{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.5);font-weight:700}
+.cohort-tile .ct-wk{display:block;font-size:.6rem;color:var(--orange-light);font-weight:700;margin-top:.35rem}
+.metaskill{margin-top:1.3rem;background:rgba(245,148,62,0.1);border:1px solid rgba(245,148,62,0.3);border-radius:var(--radius);padding:1.2rem 1.4rem}
+.metaskill h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--orange-light);margin-bottom:.7rem}
+.metaskill ol{margin:0;padding-left:1.2rem;display:grid;gap:.4rem}
+.metaskill li{font-size:.85rem;line-height:1.55;color:rgba(255,255,255,0.88)}
+.metaskill li strong{color:#fff}
+
+/* ─── FOOTER / RECAP ─── */
+.footer-cta{text-align:center;padding:3rem 2rem 5.5rem;background:var(--navy-dark);color:#fff}
+.footer-cta h2{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:.6rem}
+.footer-cta h2 em{color:var(--orange);font-style:normal}
+.footer-cta>p{font-size:.92rem;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 1.8rem}
+.recap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;max-width:1050px;margin:0 auto 1.8rem;text-align:left}
+.recap-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.recap-card .rn{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-light);margin-bottom:.35rem}
+.recap-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;margin-bottom:.35rem;color:#fff}
+.recap-card p{font-size:.76rem;color:rgba(255,255,255,0.65);line-height:1.55}
+.footer-brand{margin-top:2rem;font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff}
+.footer-brand span{color:var(--orange)}
+.footer-tagline{font-size:.78rem;color:rgba(255,255,255,0.55);letter-spacing:.04em;margin-top:.2rem}
+.footer-note{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1.4rem;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ─── COMPLETION BAR ─── */
+.completion-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:.7rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 -2px 12px rgba(0,0,0,0.05)}
+.completion-info{display:flex;align-items:center;gap:.8rem;font-size:.82rem;color:var(--text-primary);font-weight:600}
+.completion-track{flex:1;max-width:280px;height:8px;background:var(--bg-light);border-radius:4px;overflow:hidden;margin:0 1rem}
+.completion-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:4px;transition:width .5s ease}
+.completion-percent{font-family:'DM Serif Display',serif;color:var(--orange);font-size:1.15rem}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:880px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-mascot{width:170px;margin:0 auto}
+  .usecase-banner{text-align:left}
+  .budget-strip{grid-template-columns:repeat(2,1fr)}
+  .pick-grid,.rule-grid{grid-template-columns:1fr}
+  .week-plan{grid-template-columns:repeat(2,1fr)}
+  .firewall{grid-template-columns:1fr}
+  .playbook-row{grid-template-columns:1fr}
+  .playbook-row.head{display:none}
+  .tally-row{grid-template-columns:1fr auto}
+  .sunday-grid,.recap-grid{grid-template-columns:repeat(2,1fr)}
+  .cohort-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:.7rem 1rem}
+  .section{padding:2.2rem 1rem}
+  .hero{padding:2.5rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="header-left">
+    <svg class="logo-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="477" cy="380" rx="285" ry="324" fill="#EBE3D6"/>
+      <ellipse cx="477" cy="380" rx="240" ry="270" fill="#412C23"/>
+      <circle cx="389" cy="430" r="36" fill="#fff"/>
+      <circle cx="565" cy="430" r="36" fill="#fff"/>
+      <circle cx="389" cy="430" r="14" fill="#2B2D42"/>
+      <circle cx="565" cy="430" r="14" fill="#2B2D42"/>
+      <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <ellipse cx="477" cy="1350" rx="430" ry="100" fill="#EF7F1A"/>
+      <ellipse cx="477" cy="1350" rx="380" ry="78" fill="#FF9429"/>
+    </svg>
+    <div>
+      <div class="header-title">Moksh<span>Path</span></div>
+      <div class="header-tag">Week 5 · Fun While You Learn</div>
+    </div>
+  </div>
+  <div class="progress-pill"><span class="dot"></span> <span id="headerProgressText">0 of 5 chapters explored</span></div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span style="width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block"></span> Final Week · AI for Accountants</div>
+      <h1>Priya Menon Closes the Books <em>Clean and On Time</em></h1>
+      <p class="hero-sub">Meet Priya Menon — an accountant in the thick of month-end, deep into busy season, staring down a transaction batch, a variance report the board wants "yesterday," and a compliance question she can't get wrong. This week Priya tries something new: she lets AI <em>extract, categorise, draft, and research</em> while she <em>verifies and signs</em>. Across five chapters she sets confidentiality and verification ground rules, has AI categorise a transaction batch and catches a hallucinated total, a mis-read amount, and a wrong tax code, drafts board commentary and catches a fabricated growth %, a wrong subtotal, and an unsupported causal claim, then researches a compliance rule against the primary source (catching a fabricated provision), redacts client financials behind a confidentiality firewall, and sends a clear client update — reclaiming busy-season hours without a single wrong number. Every choice you make below teaches the same quiet lesson.</p>
+      <div class="usecase-banner">
+        <div class="usecase-icon">📊</div>
+        <div class="usecase-text"><strong>The Mission:</strong> Close the books — extracted, categorised, reconciled, reported, and filed — <strong>faster and with every figure right</strong>, without ever putting client financials in a consumer tool, trusting AI arithmetic, filing a hallucinated number, or letting AI become the source of record. The recurring rule Priya never breaks: <strong>AI supports and calculates, Priya verifies and signs.</strong></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="hero-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBE3D6"/><stop offset="1" stop-color="#D1D0CC"/></linearGradient>
+          <linearGradient id="faceGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A6A48"/><stop offset="1" stop-color="#412C23"/></linearGradient>
+          <linearGradient id="feetGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9429"/><stop offset="1" stop-color="#EF7F1A"/></linearGradient>
+        </defs>
+        <ellipse cx="210" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="740" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="477" cy="380" rx="285" ry="324" fill="url(#bodyGrad)"/>
+        <ellipse cx="477" cy="392" rx="240" ry="225" fill="url(#faceGrad)"/>
+        <circle cx="389" cy="430" r="38" fill="#fff"/>
+        <circle cx="565" cy="430" r="38" fill="#fff"/>
+        <circle cx="389" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="565" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="395" cy="424" r="5" fill="#fff"/>
+        <circle cx="571" cy="424" r="5" fill="#fff"/>
+        <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <ellipse cx="477" cy="1350" rx="430" ry="105" fill="url(#feetGrad)"/>
+        <ellipse cx="477" cy="1320" rx="380" ry="78" fill="#FF9429"/>
+      </svg>
+    </div>
+  </div>
+  <div class="budget-strip">
+    <div class="budget-chip"><div class="bv">1 month-end</div><div class="bl">Real books, real stakes</div></div>
+    <div class="budget-chip"><div class="bv">0 wrong numbers</div><div class="bl">Every figure verified to source</div></div>
+    <div class="budget-chip"><div class="bv">0 data leaks</div><div class="bl">Confidentiality firewall held</div></div>
+    <div class="budget-chip"><div class="bv">4 lessons</div><div class="bl">Woven into 1 story</div></div>
+  </div>
+</section>
+
+<!-- ─── TAB NAVIGATION ─── -->
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-target="s1">Ch 1 · Ground Rules</button>
+  <button class="tab-btn" data-target="s2">Ch 2 · Extract &amp; Reconcile</button>
+  <button class="tab-btn" data-target="s3">Ch 3 · Variance &amp; Board Report</button>
+  <button class="tab-btn" data-target="s4">Ch 4 · Compliance &amp; Client Update</button>
+  <button class="tab-btn" data-target="s5">Ch 5 · Hours Reclaimed</button>
+</div>
+
+<!-- ═══════════ CH 1: GROUND RULES (Lesson 1) ═══════════ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">1</div> Chapter One · The Close That Won't Wait</div>
+      <h2 class="section-title">Set Up the AI Workflow &amp; the Ground Rules</h2>
+      <p class="section-sub">Before Priya asks AI for a single figure, she decides what AI is <strong>for</strong> — decision <em>support</em> and drafting, never the source of record — and draws the bright lines she will not cross: <strong>protect client confidentiality</strong>, <strong>never trust AI arithmetic</strong>, and <strong>verify every figure to its source</strong> before it touches the ledger.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 8:40 a.m. of close week. The books have to be shut by Friday, the board wants variance commentary by Thursday, and a batch of transactions is sitting un-categorised. A peer swears an AI tool "closed her month in half the time," but Priya has read the news too: a chatbot that confidently added a column wrong, a model that invented a tax provision that doesn't exist, a firm that pasted a whole client trial balance into a consumer app. So before Priya types anything, she does the professional thing: <em>she sets confidentiality and verification ground rules first, and uses AI to lighten the workload — never to replace the figures she signs or her duty to keep client data safe.</em>
+    </div>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="ri">🖊️</div>
+        <h4>AI supports, I verify &amp; sign</h4>
+        <p>AI extracts, categorises, drafts, and calculates in seconds; Priya reconciles every figure to source and owns the numbers. It is decision-support, never the source of record — her signature is on the close, and the books have to be right.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔒</div>
+        <h4>No client financials in consumer tools</h4>
+        <p>No client names, account numbers, or identifiable financial data into a general AI app whose data handling she can't control. She works with de-identified figures and placeholders, never a client's confidential books.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🧮</div>
+        <h4>Never trust AI arithmetic</h4>
+        <p>AI is a language model, not a calculator — it can state a total that looks right and is simply wrong. Every sum, subtotal, and percentage is recomputed and tied back to the underlying detail before it counts.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔍</div>
+        <h4>Verify every figure &amp; rule to source</h4>
+        <p>Every amount, tax code, and cited regulation gets checked against the actual document, ledger, or primary source. AI sounds confident even when it's inventing a number or a provision that doesn't exist.</p>
+      </div>
+    </div>
+
+    <div class="chat-mock">
+      <div class="chat-head"><span class="cdot"></span> AI Assistant · Setting up Priya's close — the prompt showdown</div>
+      <div class="chat-body" id="promptChat">
+        <div class="chat-msg ai"><span class="who">Narrator</span>You get out of AI exactly what you put in. Below are three ways Priya could open the first session of the close. <strong>Pick the prompt you think earns the most useful — and safest — answer</strong>, then see what comes back.</div>
+      </div>
+    </div>
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Pick Priya's opening prompt</div>
+      <div class="scenario-q">Which prompt does Priya send first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="pickPrompt(0)">"Here's my client's full trial balance with account numbers and their name. Add it all up, do the reconciliation, and just tell me the final numbers to file — I'll trust your maths."</button>
+        <button class="scenario-btn" onclick="pickPrompt(1)">"Estimate what this client's profit probably was and what tax they likely owe — don't worry about the exact figures or checking anything, just give me confident numbers I can send."</button>
+        <button class="scenario-btn" onclick="pickPrompt(2)">"Act as a bookkeeping and drafting assistant. Using no client-identifying details — de-identified figures only — help me structure a transaction batch into categories and draft variance commentary. I recompute and verify every figure to source and sign the close myself. Don't state totals as fact, and flag any number or rule I need to check."</button>
+      </div>
+      <div class="scenario-feedback" id="promptFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Confidentiality, arithmetic &amp; scope-of-AI instincts (3 rounds)</div>
+      <div class="scenario-q" id="ethicsQ">Loading…</div>
+      <div class="scenario-options" id="ethicsOpts"></div>
+      <div class="scenario-feedback" id="ethicsFb"></div>
+      <button class="btn-secondary" id="ethicsNext" onclick="nextEthicsQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 2: EXTRACT & RECONCILE (Lesson 2) ═══════════ -->
+<section class="section alt" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">2</div> Chapter Two · From Batch to Balanced</div>
+      <h2 class="section-title">Extract &amp; Categorise the Batch — then Reconcile to Source</h2>
+      <p class="section-sub">AI can help Priya extract and categorise a messy transaction batch in minutes — but it can also <strong>state a total that's simply wrong</strong>, <strong>mis-read an amount</strong> off a document, and <strong>apply the wrong tax code</strong>. So Priya treats every AI figure as unverified until she has recomputed it and tied it back to source. This chapter's mini-game: catch the hallucinated total, the mis-read amount, and the wrong tax code before they reach the ledger.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 11:20 a.m. The batch is a pile of receipts, invoices, and bank lines. Priya asks AI to <em>extract each transaction, categorise it, and total the batch</em> — a reasonable use of a fast assistant. It returns a tidy, categorised table with a confident grand total at the bottom. Old habits would post it straight to the ledger. New Priya does the one thing that separates a careful accountant from a restatement: <em>she recomputes every total herself and ties every amount and tax code back to the source document before trusting a single figure.</em> Below, three angles on how she structures that check.
+    </div>
+
+    <div class="week-plan">
+      <div class="day-col">
+        <div class="dc-head">Extract</div>
+        <div class="dc-body"><b>Read</b>Ask AI to pull each transaction — date, payee, amount — from the messy batch into a clean table.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Categorise</div>
+        <div class="dc-body"><b>Sort</b>Let AI propose an account and tax treatment for each line — a draft to check, never a posting.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Recompute</div>
+        <div class="dc-body"><b>Total</b>Re-add every subtotal and total in a real calculator or spreadsheet. Never trust the model's sum.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Tie out</div>
+        <div class="dc-body"><b>Match</b>Reconcile the batch to the bank and the source documents. Every amount must trace to evidence.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Verify code</div>
+        <div class="dc-body"><b>Confirm</b>Check every tax code and treatment against the rule, not AI's guess. Wrong codes compound.</div>
+      </div>
+    </div>
+
+    <div class="tier-tabs">
+      <button class="tier-tab active" data-tier="extract" onclick="setTier('extract')">🎯 Extract &amp; categorise</button>
+      <button class="tier-tab" data-tier="recompute" onclick="setTier('recompute')">🧮 Recompute totals</button>
+      <button class="tier-tab" data-tier="verify" onclick="setTier('verify')">🔍 Tie out &amp; sign</button>
+    </div>
+    <div class="tier-panel" id="tierPanel"></div>
+
+    <div class="cite-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🕵️ Spot the hallucinated total, the mis-read amount &amp; the wrong tax code</div>
+      <p class="cite-intro">AI returned four items from Priya's categorised batch — a total, two transaction amounts, and a tax code. One is clean and ties out — but <strong>one is a hallucinated total</strong> (a sum AI stated that the lines don't actually add up to), <strong>one is a mis-read amount</strong> (AI read the wrong figure off the invoice), and <strong>one is a wrong tax code</strong> (the treatment doesn't match the rule). Click each card to run Priya's recompute-and-tie-out check and reveal what a real reconciliation turns up. Can you catch all three?</p>
+
+      <div class="cite-card" id="ct1" onclick="checkCite('ct1')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Line: "Office supplies — $412.00, matches the supplier invoice"</div>
+        <div class="cc-meta">AI extracted and categorised as: "Office expenses, standard-rated"</div>
+        <div class="cc-hold">"Amount matches the invoice to the cent, the category fits, and the tax treatment is the ordinary one for this expense. Reconcile to the bank line to confirm — but this one looks clean."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct2" onclick="checkCite('ct2')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Batch total: "Grand total of the 40 lines: $58,910.00"</div>
+        <div class="cc-meta">AI stated confidently at the bottom of the table</div>
+        <div class="cc-hold">"A precise, confident total — but when Priya re-adds the 40 lines in a spreadsheet, they sum to $57,410.00. AI stated a total the underlying lines don't support. It's a hallucinated sum."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct3" onclick="checkCite('ct3')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Line: "Consulting fee — $1,290.00"</div>
+        <div class="cc-meta">AI extracted from the invoice image as: "the amount on the document"</div>
+        <div class="cc-hold">"The invoice actually reads $1,920.00 — AI transposed the digits. A mis-read amount off a source document, off by $630. Small transposition, real impact on the close."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="ct4" onclick="checkCite('ct4')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">Line: "Client entertainment meal — coded as fully deductible, standard tax treatment"</div>
+        <div class="cc-meta">AI categorised as: "a normal deductible business expense"</div>
+        <div class="cc-hold">"The tax treatment AI applied doesn't match the rule for this category of expense — entertainment often carries a different, restricted treatment. AI guessed a code instead of checking the rule."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-hint" id="citeHint">👆 Click each item to check it. Find the total AI hallucinated, the amount it mis-read off the document, and the tax code that doesn't match the rule.</div>
+      <div class="cite-summary" id="citeSummary"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Reconciliation &amp; verification smarts (2 rounds)</div>
+      <div class="scenario-q" id="planQ">Loading…</div>
+      <div class="scenario-options" id="planOpts"></div>
+      <div class="scenario-feedback" id="planFb"></div>
+      <button class="btn-secondary" id="planNext" onclick="nextPlanQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 3: VARIANCE & BOARD REPORT (Lesson 3) ═══════════ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">3</div> Chapter Three · Numbers That Tell a Story</div>
+      <h2 class="section-title">Draft Variance Commentary &amp; the Board Report — then Verify Every Claim</h2>
+      <p class="section-sub">Variance commentary — explaining why each line moved against budget and last period — is where a good accountant turns numbers into insight. AI can draft the narrative and the board summary in seconds — but Priya keeps her hands on the wheel: <strong>accept, fix, or investigate</strong> every line before it goes to the board. The traps this chapter teaches: AI will confidently state a <strong>growth % it never calculated</strong>, carry a <strong>wrong subtotal</strong>, and assert an <strong>unsupported causal claim</strong> about <em>why</em> a number moved.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Tuesday, 2:00 p.m. The books are closed and reconciled. Priya asks AI to turn the numbers into variance commentary and a board-ready summary — genuinely a time-saver. Most of it is accurate and well-phrased. But three lines are wrong in ways that matter: AI wrote that "revenue grew 27% year-on-year" (a percentage that doesn't match the actual figures), carried a "total operating expenses" subtotal that's off, and asserted that "the marketing campaign drove the sales increase" — a causal claim the data never supports. AI drafts; <em>Priya checks every figure against the reconciled ledger and every claim against the evidence, and catches the fabricated growth %, the wrong subtotal, and the unsupported causal story — before it reaches the board.</em>
+    </div>
+
+    <div class="playbook">
+      <div class="playbook-head">📕 Priya's Report-Review Checklist · what she checks before a line goes to the board (the human layer AI can't replace)</div>
+      <div class="playbook-row head">
+        <div class="playbook-cell">What to check</div>
+        <div class="playbook-cell">Priya's standard</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Every % recomputed</div>
+        <div class="playbook-cell">Every growth rate, margin, and variance percentage is recalculated from the reconciled figures — never taken from AI's prose. A model will state a clean-looking "+27%" that the actual numbers don't produce. If it isn't recomputed, it doesn't ship.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Every subtotal ties out</div>
+        <div class="playbook-cell">Each subtotal and total in the narrative must equal the sum of its parts in the reconciled ledger. AI can carry a total forward that no longer adds up. A subtotal that doesn't tie is a number to fix, not a sentence to keep.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Correlation ≠ causation</div>
+        <div class="playbook-cell">"X drove Y" is a claim about <em>why</em>, and the ledger only shows <em>what</em>. AI loves a tidy causal story the data can't support. Priya softens it to what's evidenced ("revenue rose; marketing spend also rose") or investigates before asserting cause.</div>
+      </div>
+      <div class="playbook-row">
+        <div class="playbook-cell crit">Same source, every time</div>
+        <div class="playbook-cell">Every figure in the report traces to the one reconciled, signed set of books — the source of record. AI's draft is a retelling; the ledger is the truth. Priya never lets a polished sentence quietly replace the reconciled number.</div>
+      </div>
+      <div class="playbook-note">💡 <strong>Why review the narrative?</strong> A board report is Priya's professional word on what the numbers mean. AI drafts against the words it was given; the reconciled ledger is what Priya checks against. AI produced a summary; her review is what turns a fluent draft into a report she can put her name behind — with every figure right and every claim supported.</div>
+    </div>
+
+    <div class="mark-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖊️ Help Priya decide: Accept · Fix · Investigate</div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem">AI drafted three lines of board commentary. Human-in-the-loop means you don't rubber-stamp — judge each line against the reconciled ledger before it goes to the board. Decide for all three to see Priya's verdict.</p>
+
+      <div class="mark-card" id="mk1">
+        <div class="mark-label">Line · Cash position (checked against the reconciled ledger)</div>
+        <div class="mark-text">"Closing cash of $284,000 is up $31,000 on the prior month, driven by the receipt of a large customer payment recorded on the 22nd. Ties to the reconciled bank balance."</div>
+        <div class="mark-src">AI's draft: the figures match the reconciled ledger, the movement ties to a real, documented transaction, and the cause is one Priya can point to in the records. Against the books: correct and supported.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk1','keep',this)">Accept</button>
+          <button class="mark-btn" onclick="markDecide('mk1','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk1','reject',this)">Investigate</button>
+        </div>
+        <div class="mark-fb" id="fb-mk1"></div>
+      </div>
+
+      <div class="mark-card" id="mk2">
+        <div class="mark-label">The growth % AI stated</div>
+        <div class="mark-text">"Revenue grew 27% year-on-year, a standout result for the period."</div>
+        <div class="mark-src">AI's draft: a clean, confident percentage. Against the reconciled figures: revenue went from $1,000,000 to $1,120,000 — that's 12%, not 27%. AI stated a growth rate the actual numbers don't produce. The figure is fabricated; recompute and correct it.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk2','keep',this)">Accept</button>
+          <button class="mark-btn" onclick="markDecide('mk2','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk2','reject',this)">Investigate</button>
+        </div>
+        <div class="mark-fb" id="fb-mk2"></div>
+      </div>
+
+      <div class="mark-card" id="mk3">
+        <div class="mark-label">The causal claim AI asserted</div>
+        <div class="mark-text">"The Q3 marketing campaign drove the increase in sales this period."</div>
+        <div class="mark-src">AI's draft: a confident cause-and-effect story. Against the evidence: the ledger shows sales rose and marketing spend rose — it does not show one caused the other. Several things changed at once. This is a claim to investigate or soften to what's supported, not a fact to assert to the board.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk3','keep',this)">Accept</button>
+          <button class="mark-btn" onclick="markDecide('mk3','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk3','reject',this)">Investigate</button>
+        </div>
+        <div class="mark-fb" id="fb-mk3"></div>
+      </div>
+
+      <div class="mark-summary" id="markSummary"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 4: COMPLIANCE & CLIENT UPDATE (Lesson 4) ═══════════ -->
+<section class="section alt" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">4</div> Chapter Four · Behind the Confidentiality Firewall</div>
+      <h2 class="section-title">Research the Rule to Source, Redact the Client Data &amp; Send a Clear Update</h2>
+      <p class="section-sub">Compliance research and the client communication are where AI saves the most time — and where a fabricated regulation can end up in a filing, and a careless paste can expose confidential client financials. Priya's trick: research the rule with AI but <strong>verify it against the primary source</strong> (catching a fabricated provision), draft the client update with <strong>placeholders</strong> and de-identified figures behind a confidentiality firewall, then fill in the real client and numbers herself, inside her secure system.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday, 4:30 p.m. A compliance question came up during the close, and the client needs a clear update — accurately and promptly. Priya asks AI to explain the relevant rule. It answers fluently and cites a specific provision by number. The temptation is huge: quote it straight into the file, then paste the whole client trial balance into a consumer AI app and say "summarise this for the client." Priya doesn't. She <em>verifies the cited rule against the primary source</em> — and finds AI invented a provision that doesn't exist. She builds a <em>confidentiality firewall</em>: AI never sees a real client name, account number, or confidential figure. It drafts a clear update scaffold; Priya pours the real client information in afterward, inside her secure system, and checks every number before it sends. Same time saved, zero client data exposed, no fabricated rule filed.
+    </div>
+
+    <div class="cite-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🕵️ Verify the rule to source — spot the fabricated provision</div>
+      <p class="cite-intro">AI cited three things when Priya asked about the compliance rule. Two are real and check out against the primary source — <strong>one is a fabricated provision</strong> (a confident, precise-sounding regulation reference that doesn't actually exist). Click each to run Priya's primary-source check and reveal what a real verification turns up. Can you catch the fabrication?</p>
+
+      <div class="cite-card" id="cr1" onclick="checkRule('cr1')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">"The filing deadline for this return falls after the period end — confirm the exact date on the official tax authority site."</div>
+        <div class="cc-meta">AI stated as: "a general timing point to verify"</div>
+        <div class="cc-hold">"A general, checkable statement that points Priya back to the primary source rather than asserting a specific number. She confirms the exact date on the official site — but this is the right kind of answer: it sends her to verify."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="cr2" onclick="checkRule('cr2')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">"Under 'Provision 47-B(3), Sub-clause iv', this specific expense is exempt from the standard treatment."</div>
+        <div class="cc-meta">AI cited confidently, with an official-sounding reference number</div>
+        <div class="cc-hold">"Precise, numbered, and authoritative-sounding — but when Priya looks it up in the actual regulation, there is no 'Provision 47-B(3), Sub-clause iv.' AI invented a citation. A fabricated provision is the most dangerous kind of confident wrong."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-card" id="cr3" onclick="checkRule('cr3')">
+        <div class="cc-badge"></div>
+        <div class="cc-name">"This is a complex area — you should confirm the treatment with the primary regulation and consider a specialist before advising the client."</div>
+        <div class="cc-meta">AI added as: "a caveat about the limits of its answer"</div>
+        <div class="cc-hold">"An honest limit-of-knowledge flag — it doesn't assert a false fact; it tells Priya where the answer is uncertain and to verify with the primary source. Exactly the kind of caveat a careful professional keeps."</div>
+        <div class="cc-verify"></div>
+      </div>
+
+      <div class="cite-hint" id="ruleHint">👆 Click each item to check it against the primary source. Two are honest and verifiable — find the provision AI invented.</div>
+      <div class="cite-summary" id="ruleSummary"></div>
+    </div>
+
+    <div class="firewall">
+      <div class="fw-col unsafe">
+        <h5>🚫 The tempting shortcut (never do this)</h5>
+        <p>"Summarise this for the client — here's the full trial balance for <span class="hl-red">Nadia Rahman t/a Rosewood Bakery (client acct 44192, TIN 88-2210)</span>, with <span class="hl-red">every account balance, the owner's drawings, and the bank details</span> pasted below — and just tell them what they owe."</p>
+        <p style="margin-top:.6rem">Real client name, account number, tax ID, full confidential financials, and bank details — pasted into a general consumer tool whose data handling you don't control, plus a <span class="hl-red">tax figure taken on trust with no verification</span>. That's confidential client data leaving your secure system, and a number sent without being checked.</p>
+      </div>
+      <div class="fw-col safe">
+        <h5>✅ The confidentiality firewall (do this)</h5>
+        <p>"Draft a clear, friendly month-end update for <code>[CLIENT]</code> explaining that their <span class="hl-green">books are closed and reconciled</span>, one figure moved notably versus budget, and a filing is due soon. Keep all names, account numbers, and specific amounts as <span class="hl-green">placeholders</span>."</p>
+        <p style="margin-top:.6rem">AI writes the scaffolding from <span class="hl-green">a status, not an identity</span>. Priya fills <code>[CLIENT]</code> and the verified figures in herself, inside the secure system, and <span class="hl-green">checks every number before it sends</span>. Fast, clear, and confidential.</p>
+      </div>
+    </div>
+
+    <div class="redact">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖤 The redaction beat — scrub it before it goes near AI</div>
+      <p class="redact-hint">Priya pasted a rough working note before catching herself. Before this text could ever be shaped by a consumer AI tool, it must be scrubbed of confidential client data. <strong>Click every identifiable item</strong> — client name, account number, tax ID, exact confidential balance, and bank detail — to redact it. Leave the de-identified, status words alone.</p>
+      <div class="redact-doc" id="redactDoc">
+        Update for <span class="rd" data-red="1" onclick="redact(this)">Nadia Rahman t/a Rosewood Bakery</span> (<span class="rd" data-red="1" onclick="redact(this)">acct 44192</span>, <span class="rd" data-red="1" onclick="redact(this)">TIN 88-2210</span>, closing cash <span class="rd" data-red="1" onclick="redact(this)">$284,000</span>, bank <span class="rd" data-red="1" onclick="redact(this)">acct ****7781</span>): the <span data-red="0">books are closed and fully reconciled</span>. <span data-red="0">One expense line moved notably versus budget</span>. A <span data-red="0">filing is due shortly</span>. Next step: a <span data-red="0">clear, verified client update</span>, with every figure filled in inside the secure system.
+      </div>
+      <div class="redact-status" id="redactStatus">🔒 <strong>0 of 5</strong> confidential items redacted. Click the underlined items that identify the client or reveal confidential account/balance details.</div>
+    </div>
+
+    <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin:1.6rem 0 .2rem">✉️ Same update, three registers — you direct the voice</div>
+    <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.4rem">AI can write the update in whatever register the client needs. Priya picks the tone; the placeholders stay until she fills them in privately, inside the secure system, and she checks every figure before it sends. Try each.</p>
+    <div class="tone-tabs">
+      <button class="tone-tab active" data-tone="plain" onclick="setTone('plain')">🤝 Warm &amp; reassuring</button>
+      <button class="tone-tab" data-tone="direct" onclick="setTone('direct')">📋 Brief &amp; factual</button>
+      <button class="tone-tab" data-tone="caution" onclick="setTone('caution')">💬 With next steps</button>
+    </div>
+    <div class="note-preview">
+      <div class="np-head">
+        <span class="sdot" style="background:#FF5F57"></span><span class="sdot" style="background:#FEBC2E"></span><span class="sdot" style="background:#28C840"></span>
+        <span style="margin-left:.6rem">Draft · placeholders not yet filled · pending Priya's figure check</span>
+      </div>
+      <div class="np-body">
+        <div class="np-subj"><b>To:</b> [CLIENT] &nbsp;·&nbsp; <b>Re:</b> [PERIOD] month-end — your books are closed</div>
+        <div class="np-text" id="noteText">Hi [CLIENT], good news — your books for [PERIOD] are closed and fully reconciled. Everything ties out, and there were no surprises in the numbers. One area to flag: [EXPENSE LINE] came in [AMOUNT] versus budget, which I'll walk you through whenever suits. There's also a filing due on [DATE], and I've got that in hand. I'll send the final figures once I've completed my last checks. Thank you, as always, for keeping your records so tidy — it makes this a pleasure.</div>
+        <div class="np-sign">— Priya Menon, [FIRM], every figure verified before it reaches you</div>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Spot the confidentiality breach</div>
+      <div class="scenario-q">Priya is about to paste text into a consumer AI tool to "make it clearer." Which line means she must stop first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="leakQ(0)">"Write a warm, clear update telling a client their month-end books are closed and reconciled, flag that one line moved versus budget, and mention a filing is due soon."</button>
+        <button class="scenario-btn" onclick="leakQ(1)">"Summarise this for Nadia Rahman t/a Rosewood Bakery, client acct 44192, TIN 88-2210 — her full trial balance, every balance, and bank details are pasted below — and tell her what she owes."</button>
+        <button class="scenario-btn" onclick="leakQ(2)">"Add a friendly closing line inviting the reader to reach out with any questions about their month-end summary."</button>
+      </div>
+      <div class="scenario-feedback" id="leakFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Compliance sourcing, confidentiality &amp; client care (2 rounds)</div>
+      <div class="scenario-q" id="privQ">Loading…</div>
+      <div class="scenario-options" id="privOpts"></div>
+      <div class="scenario-feedback" id="privFb"></div>
+      <button class="btn-secondary" id="privNext" onclick="nextPrivQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 5: HOURS RECLAIMED (Finale) ═══════════ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">5</div> Chapter Five · The Books Are Closed</div>
+      <h2 class="section-title">Add Up the Hours — What Did Priya Win Back?</h2>
+      <p class="section-sub">The whole close comes down to one honest tally. AI didn't do the accounting for Priya; it cleared the <strong>extraction, drafting, and formatting drudgery</strong> around it — the admin that never made anyone a better accountant or a client's books more accurate. Tap each task to claim the hours back — and watch Priya's busy-season week open up.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday, 5:00 p.m. The close is done: the batch extracted and every figure reconciled to source, the hallucinated total and mis-read amount caught, the wrong tax code fixed, the board commentary corrected for a fabricated growth % and an unsupported causal claim, the compliance rule verified against the primary source with a fabricated provision caught, the client update sent clearly with zero confidential data exposed. The books are closed clean and on time, every number verified and signed. Priya adds up where AI saved real admin time, and where she deliberately <em>spent</em> time (recomputing every total, tying every amount to source, verifying every rule, owning every figure). Tap each row to reclaim the hours. The lesson underneath the numbers: <em>AI supports and calculates, Priya verifies and signs — and that trade buys back the hours without a single wrong number.</em>
+    </div>
+
+    <div class="tally">
+      <div class="tally-head">⏱️ The Hours-Reclaimed Tally</div>
+      <p style="font-size:.82rem;color:var(--text-secondary)">Estimated admin time AI extraction and drafting saved Priya across the close (she still recomputed and verified everything). Tap each task to claim it.</p>
+      <div class="tally-rows" id="tallyRows">
+        <div class="tally-row" data-hrs="1.5" onclick="claimHours(this)">
+          <div class="tally-task">Extract &amp; categorise the transaction batch<span>Ch 2 · a draft Priya recomputed and tied out to source</span></div>
+          <div class="tally-hrs">−1.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="1.2" onclick="claimHours(this)">
+          <div class="tally-task">Draft the variance commentary &amp; board summary<span>Ch 3 · a narrative Priya checked line-by-line against the ledger</span></div>
+          <div class="tally-hrs">−1.2 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="0.8" onclick="claimHours(this)">
+          <div class="tally-task">Research &amp; explain the compliance rule<span>Ch 4 · a starting point Priya verified against the primary source</span></div>
+          <div class="tally-hrs">−0.8 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="0.7" onclick="claimHours(this)">
+          <div class="tally-task">Draft the clear client update<span>Ch 4 · placeholders, tone, then filled &amp; figure-checked inside the secure system</span></div>
+          <div class="tally-hrs">−0.7 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+      </div>
+      <div class="tally-total">
+        <div class="tt-l">Close-week admin reclaimed this month</div>
+        <div class="tt-v" id="tallyTotal">0.0 hrs</div>
+      </div>
+      <div class="tally-note" id="tallyNote">👆 Tap the rows above to see the hours add up. <strong>Honest caveat:</strong> these are drafting savings — the accounting judgment (recomputing every total, tying every amount to source, verifying every rule, owning every figure, signing the close) is time Priya <em>kept</em>, on purpose. That's the deal.</div>
+    </div>
+
+    <div class="burnout">
+      <div class="burnout-head">🔥 The Busy-Season Meter</div>
+      <div class="burnout-sub">Claim the hours above and watch Priya's close-week backlog drop out of the red.</div>
+      <div class="burnout-track"><div class="burnout-marker" id="burnoutMarker" style="left:92%"></div></div>
+      <div class="burnout-labels"><span>Ahead of the close</span><span>Catching up</span><span>Drowning in the batch</span></div>
+    </div>
+
+    <div class="sunday" id="sundayFinale">
+      <h4>☀️ Wednesday, 6:00 p.m. — <em>and the books just closed clean.</em></h4>
+      <div class="sunday-grid">
+        <div class="sunday-tile"><div class="v">~4 hrs</div><div class="l">Admin time saved</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">Wrong numbers filed</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">Client data leaks</div></div>
+        <div class="sunday-tile"><div class="v">100%</div><div class="l">Figures verified &amp; signed</div></div>
+      </div>
+      <p>Every figure in the ledger rests on a source Priya reconciled with her own eyes. The board report is right because she caught the hallucinated total, the mis-read amount, the wrong tax code, the fabricated growth %, the wrong subtotal, and the causal claim the data never supported. The invented compliance provision never made it into a file, and not one confidential client figure left the secure system. AI drafted, extracted, and calculated the scaffolding around the close — <strong>Priya verified every number, protected every client, and put her signature behind the books.</strong> The reward isn't just a clean close. It's books that are right, a client whose data stayed safe, and hours reclaimed in the thick of busy season. <strong>AI supports and calculates. Priya verifies and signs.</strong> 📊</p>
+    </div>
+
+    <!-- ─── COURSE FINALE: whole-course celebration ─── -->
+    <div class="grad">
+      <div class="grad-eyebrow">🎓 And with that — you've finished the whole course</div>
+      <h3>Five weeks. Five professionals. <em>One durable skill.</em></h3>
+      <p>Priya's clean close is also your finish line. Across five weeks you followed five people through the same kind of week — an overloaded professional who let AI <strong>draft, structure, and calculate</strong> while they kept the judgment, the verification, and the duty of care that no model can hold. Different jobs, identical spine.</p>
+      <div class="cohort-grid">
+        <div class="cohort-tile">
+          <div class="ct-ic">🍎</div>
+          <div class="ct-name">The Teacher</div>
+          <div class="ct-role">Plans &amp; feedback</div>
+          <span class="ct-wk">Week 1</span>
+        </div>
+        <div class="cohort-tile">
+          <div class="ct-ic">⚖️</div>
+          <div class="ct-name">The Lawyer</div>
+          <div class="ct-role">Drafts &amp; citations</div>
+          <span class="ct-wk">Week 2</span>
+        </div>
+        <div class="cohort-tile">
+          <div class="ct-ic">🩺</div>
+          <div class="ct-name">The Doctor</div>
+          <div class="ct-role">Notes &amp; safety</div>
+          <span class="ct-wk">Week 3</span>
+        </div>
+        <div class="cohort-tile">
+          <div class="ct-ic">🧑‍💼</div>
+          <div class="ct-name">The Recruiter</div>
+          <div class="ct-role">Fairness &amp; hiring</div>
+          <span class="ct-wk">Week 4</span>
+        </div>
+        <div class="cohort-tile">
+          <div class="ct-ic">📊</div>
+          <div class="ct-name">The Accountant</div>
+          <div class="ct-role">Figures &amp; the close</div>
+          <span class="ct-wk">Week 5 · You are here</span>
+        </div>
+      </div>
+      <div class="metaskill">
+        <h4>The meta-skill you actually learned</h4>
+        <ol>
+          <li><strong>Direct AI</strong> — give it a clear role and constraints; delegate the drafting, structuring, and calculating drudgery.</li>
+          <li><strong>Verify everything</strong> — every fact, figure, citation, and rule checked against the real source. AI is confident even when it's wrong.</li>
+          <li><strong>Apply judgment</strong> — the fairness call, the clinical call, the professional call stays yours. AI proposes; you decide.</li>
+          <li><strong>Protect people</strong> — student, client, patient, candidate, or account: their confidential data never enters a consumer tool.</li>
+          <li><strong>Own the decision</strong> — your name is on the outcome. AI supports; you sign.</li>
+        </ol>
+      </div>
+      <p style="margin-top:1.3rem">Teachers, lawyers, doctors, recruiters, accountants — the tools differ, the traps rhyme, and the answer is always the same: <strong>let AI carry the drudgery so more of you goes into the work that needs a human.</strong> That's not a trick for one job. It's a way of working you can take into any of them. Congratulations — you've completed <strong>School of AI Careers.</strong> 🎉</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER RECAP ─── -->
+<div class="footer-cta">
+  <h2>🧾 One close ago, the fear was a wrong number or a leaked ledger.</h2>
+  <p>Now Priya has run the whole AI-for-accountants loop once — for real — and you've reached the end of the course. Here's what her story secretly taught you: the four lessons of Week 5.</p>
+  <div class="recap-grid">
+    <div class="recap-card">
+      <div class="rn">Lesson 1</div>
+      <h4>AI Workflow &amp; Ground Rules</h4>
+      <p>AI supports and calculates, you verify and sign. Bright lines: never put client financials in consumer tools, never trust AI arithmetic, and AI is decision-support — never the source of record. Chapter 1.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 2</div>
+      <h4>Extraction &amp; Reconciliation</h4>
+      <p>AI extracts and categorises a batch fast — but it can hallucinate a total, mis-read an amount, and apply the wrong tax code. Recompute every sum, tie every amount to source, verify every code. Chapter 2.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 3</div>
+      <h4>Variance &amp; Board Reporting</h4>
+      <p>AI drafts fluent commentary; you catch what it invents. Accept, fix, or investigate every line — recompute every %, tie every subtotal, and never let a tidy causal story outrun the evidence. Chapter 3.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 4</div>
+      <h4>Compliance Sourcing &amp; Client Care</h4>
+      <p>Verify every cited rule against the primary source — AI fabricates provisions. Draft client updates with placeholders and a status, not names and balances; fill figures in and check them inside your secure system. Chapter 4.</p>
+    </div>
+  </div>
+  <button class="btn-action" style="font-size:.9rem;padding:.8rem 1.8rem" onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">↻ Replay Priya's close</button>
+  <div class="footer-brand">Moksh<span>Path</span></div>
+  <div class="footer-tagline">Guided Path to True Learning</div>
+  <div class="footer-note">Priya Menon is a teaching scenario, and nothing here is accounting, tax, audit, or financial advice — the figures, tax codes, provisions, and clients in this story are illustrative placeholders, not recommendations. AI tools must never be the source of record for the books, client financial data must never enter consumer tools, you must never trust AI arithmetic, you must verify every figure and every cited rule against its primary source, and your local jurisdiction's rules on AI, data protection, accounting, tax, and professional conduct always come first. The point of Week 5 — and of this whole course — isn't to hand your judgment to a machine; it's to let a drafting-and-calculating assistant clear the admin drudgery so your real work — verifying, judging, protecting people, and owning the decision — gets more of you. That's the durable skill you carry out of every week. Congratulations on finishing.</div>
+</div>
+
+<!-- ─── COMPLETION BAR ─── -->
+<div class="completion-bar">
+  <div class="completion-info"><span style="font-size:1.1rem">📊</span><span>Priya's Close</span></div>
+  <div class="completion-track"><div class="completion-fill" id="completionFill" style="width:0%"></div></div>
+  <div class="completion-percent" id="completionPct">0%</div>
+</div>
+
+<script>
+/* ───────── PROGRESS TRACKING ───────── */
+const visited = new Set();
+function markVisited(id){
+  visited.add(id);
+  const pct = Math.round((visited.size / 5) * 100);
+  document.getElementById('completionFill').style.width = pct + '%';
+  document.getElementById('completionPct').textContent = pct + '%';
+  document.getElementById('headerProgressText').textContent = `${visited.size} of 5 chapters explored`;
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    markVisited(btn.dataset.target);
+  });
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.3) {
+      markVisited(e.target.id);
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === e.target.id));
+    }
+  });
+}, {threshold:[0.3]});
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+/* ───────── CH 1: PROMPT SHOWDOWN ───────── */
+const promptResults = [
+  {ok:false, fb:'✗ Stop — that\'s confidential client data, blind trust in AI maths, and it makes AI the source of record all at once. A full trial balance with the client name and account numbers pasted into a general tool crosses Priya\'s confidentiality line; "I\'ll trust your maths" hands the arithmetic to a model that can\'t be trusted to add; and "just tell me the final numbers to file" makes AI the books. Client data must never leave the secure system this way, no total is trusted un-recomputed, and the close is Priya\'s to sign. Try the disciplined one.',
+   chat:`<div class="chat-msg user"><span class="who">Priya</span>Here\'s my client\'s full trial balance with account numbers and their name. Add it all up, do the reconciliation, and just tell me the final numbers to file — I\'ll trust your maths.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>⚠️ Please don\'t share confidential client financials with me, and don\'t rely on me for the arithmetic — I\'m a language model, not a calculator, and I can state a total that\'s simply wrong. Work with de-identified figures, recompute every sum in a real spreadsheet, and reconcile to source yourself. <strong>Even the tool is guarding the client. So should you.</strong></div>`},
+  {ok:false, fb:'✗ Too much handed over — "estimate the profit and tax, don\'t check anything, give me confident numbers" asks AI to <em>invent</em> figures and skip every verification. "Confident numbers I can send" with no source, no recompute, and no reconciliation is exactly how a wrong number reaches a filing. Those figures are Priya\'s to derive from the real books; AI produces a plausible-sounding fabrication with no accountability. Try the disciplined one.',
+   chat:`<div class="chat-msg user"><span class="who">Priya</span>Estimate what this client\'s profit probably was and what tax they likely owe — don\'t worry about the exact figures or checking anything, just give me confident numbers I can send.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>I can help you structure the working, but I shouldn\'t estimate profit or tax to send — those must come from the reconciled books, not a guess, and I can be confidently wrong. <strong>(…no source, no recompute, no reconciliation — and the figures you file are yours to verify and sign.)</strong></div>`},
+  {ok:true, fb:'✓ Exactly. Assistant role + de-identified framing + no client identifiers + "help me structure and draft" + "I recompute and verify every figure to source and sign" + "don\'t state totals as fact; flag what to check." This prompt respects every bright line and keeps Priya — and her duty to the client and the books — firmly in charge. This is where the close begins.',
+   chat:`<div class="chat-msg user"><span class="who">Priya</span>Act as a bookkeeping and drafting assistant. Using no client-identifying details, help me structure a transaction batch into categories and draft variance commentary. I recompute and verify every figure to source and sign the close myself. Don\'t state totals as fact, and flag any number or rule I need to check.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>Great constraints. Here\'s a categorised structure and a commentary draft — plus a note on what to double-check. <strong>⚑ Verify:</strong> recompute every total in a real calculator (don\'t trust mine), tie each amount to source, and confirm every tax code and cited rule against the primary source; I can be confidently wrong on all of these. <strong>← Structured, drafted, and yours to sign.</strong></div>`}
+];
+let promptAnswered = false;
+function pickPrompt(i){
+  const r = promptResults[i];
+  const btns = document.querySelectorAll('#s1 .scenario-panel:first-of-type .scenario-btn');
+  if (!promptAnswered){
+    btns.forEach((b,j) => { if (j===2) b.classList.add('correct'); else if (j===i && !r.ok) b.classList.add('wrong'); });
+    if (r.ok) promptAnswered = true;
+  }
+  const fb = document.getElementById('promptFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+  document.getElementById('promptChat').innerHTML = r.chat;
+}
+
+/* ethics quiz */
+const ethicsQs = [
+  {q:"Priya wants AI to help structure a batch. What's the safe way to describe the client's numbers?", opts:["Paste the trial balance with the client name and account numbers — it's faster","Describe the figures abstractly: 'a batch of ~40 expense lines to categorise' — no client name, account numbers, TIN, or identifiable balances","Use the client's initials only — the full name is the private part"], correct:1, explain:"Client names, account numbers, tax IDs, and identifiable balances are all confidential client data. Describe the work and the figures in the abstract, never a real client's books — that gets you the help without ever exposing confidential data."},
+  {q:"AI hands Priya a clean-looking grand total for the batch. Best move?", opts:["Post it — it looks right and it saves time re-adding 40 lines","Never trust AI arithmetic: recompute the total in a real spreadsheet or calculator and tie it to source before it counts","Ask AI to double-check its own maths and trust the second answer"], correct:1, explain:"An AI is a language model, not a calculator — it can state a precise total the underlying lines don't actually add up to, and asking it to re-check just produces another confident guess. Every sum, subtotal, and percentage is recomputed in a real tool and reconciled to source. Blindly-trusted AI arithmetic is exactly the line Priya won't cross."},
+  {q:"What's the single rule that keeps AI in its lane across the whole close?", opts:["'AI calculates, I approve' — trust the machine to save time","'AI supports and calculates, I verify and sign' — AI extracts, drafts, and computes; the accountant recomputes, verifies to source, and owns every figure","'AI does the reconciliation and the filing' — including deciding the final numbers"], correct:1, explain:"Extracting, drafting, and formatting are delegable; recomputing totals, verifying figures and rules to source, and signing the close are not. 'AI supports and calculates, I verify and sign' is the through-line of the whole close — and the reason Priya's name is safe on every number and no wrong figure reaches a filing."}
+];
+let eqIdx = 0;
+function renderEthicsQ(){
+  const s = ethicsQs[eqIdx];
+  document.getElementById('ethicsQ').textContent = `Round ${eqIdx+1}/3 — ${s.q}`;
+  document.getElementById('ethicsOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerEthicsQ(${i})">${o}</button>`).join('');
+  const fb = document.getElementById('ethicsFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('ethicsNext').style.display='none';
+}
+function answerEthicsQ(i){
+  const s = ethicsQs[eqIdx];
+  document.querySelectorAll('#ethicsOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('ethicsFb');
+  fb.className = 'scenario-feedback show ' + (i===s.correct ? 'success':'fail');
+  fb.innerHTML = (i===s.correct ? '✓ Spot on! ':'✗ Not quite. ') + s.explain + (eqIdx===ethicsQs.length-1 ? '<br><br>🎉 Chapter 1 complete — ground rules locked. Next: extract and categorise the batch, then reconcile every figure to source.' : '');
+  document.getElementById('ethicsNext').style.display = eqIdx < ethicsQs.length-1 ? 'inline-block':'none';
+}
+function nextEthicsQ(){ eqIdx++; if(eqIdx<ethicsQs.length) renderEthicsQ(); }
+renderEthicsQ();
+
+/* ───────── CH 2: RECONCILE TIERS ───────── */
+const tierInfo = {
+  extract: `<span class="tp-lens">🎯 Extract &amp; categorise · a fast, safe use</span><br><strong>Turn a messy batch into a clean, categorised table.</strong> The pile of receipts, invoices, and bank lines becomes structured rows — <em>date, payee, amount, a proposed account, a proposed tax treatment</em>. AI is genuinely good at this extraction and first-pass sorting. This is delegable work — <em>as long as no client identifiers go in</em>, and Priya treats every extracted amount and proposed code as a draft to verify, not a posting.`,
+  recompute: `<span class="tp-lens">🧮 Recompute totals · the non-negotiable step</span><br><strong>Never trust the model's arithmetic.</strong> An AI is a language model, not a calculator: it will state a precise, confident grand total that the underlying lines simply don't add up to. Priya re-adds every subtotal and total in a real spreadsheet or calculator, and every percentage is recomputed from the figures — never lifted from AI's prose. A number the model produced is unverified until Priya has computed it herself. <em>This is the step that separates a clean close from a restatement.</em> Confident, precise output is exactly how a hallucinated total slips through.`,
+  verify: `<span class="tp-lens">🔍 Tie out &amp; sign · Priya's job alone</span><br><strong>AI categorises; Priya verifies to source and signs.</strong> Every extracted amount is unverified until Priya matches it to the actual invoice or bank line — AI can mis-read a figure or transpose digits. Every tax code is unverified until she checks it against the rule, not AI's guess. Once amounts tie to source and codes match the rule, the reconciled ledger — the source of record — belongs entirely to Priya. <em>AI proposed the raw material; Priya confirmed every figure and put her signature behind the books.</em>`
+};
+function setTier(t){
+  document.querySelectorAll('.tier-tab').forEach(x => x.classList.toggle('active', x.dataset.tier===t));
+  const p = document.getElementById('tierPanel');
+  p.style.opacity=0;
+  setTimeout(()=>{ p.innerHTML = tierInfo[t]; p.style.opacity=1; }, 150);
+}
+document.getElementById('tierPanel').style.transition='opacity .2s';
+setTier('extract');
+
+/* ───────── CH 2: SPOT THE HALLUCINATED TOTAL / MIS-READ / WRONG CODE ───────── */
+const citeKey = {
+  ct1:{bad:false, verify:'✓ <strong>Ties out.</strong> The $412.00 matches the supplier invoice to the cent, the category fits, and the tax treatment is the ordinary one for this expense. Priya still reconciles it to the bank line to confirm — but this one is genuinely clean. Real and verifiable.'},
+  ct2:{bad:true, kind:'total', verify:'🚩 <strong>Hallucinated total — do not post.</strong> When Priya re-adds the 40 lines in a spreadsheet, they sum to <strong>$57,410.00</strong>, not the $58,910.00 AI stated — a $1,500 overstatement the model produced out of thin air. An AI is not a calculator; it can state a precise total the lines don\'t support. Priya recomputes it, posts the real figure, and never trusts a model\'s sum again. <em>This is exactly why every total is re-added in a real tool.</em>'},
+  ct3:{bad:true, kind:'misread', verify:'🚩 <strong>Mis-read amount — off by $630.</strong> The invoice actually reads <strong>$1,920.00</strong>; AI transposed the digits to $1,290.00. A small OCR/extraction slip with a real impact on the close. Priya catches it by tying the amount back to the source document rather than trusting the extracted figure. <em>Verify every amount against the actual invoice — the model can read the wrong number.</em>'},
+  ct4:{bad:true, kind:'code', verify:'🚩 <strong>Wrong tax code — check the rule.</strong> AI coded this entertainment expense with the ordinary deductible treatment, but that category often carries a different, restricted treatment under the actual rule. AI guessed a plausible code instead of checking. Priya confirms the correct treatment against the primary source and re-codes it. <em>A wrong tax code compounds — verify every code against the rule, not AI\'s guess.</em>'}
+};
+let citeChecked = {};
+function checkCite(id){
+  if (citeChecked[id]) return;
+  citeChecked[id] = true;
+  const k = citeKey[id];
+  const card = document.getElementById(id);
+  card.classList.add(k.bad ? 'flagged-right' : 'flagged-clear');
+  const badge = k.bad ? (k.kind==='total' ? '🧮 Hallucinated total' : k.kind==='misread' ? '👀 Mis-read amount' : '⚖️ Wrong tax code') : '✓ Ties out';
+  card.querySelector('.cc-badge').innerHTML = badge;
+  card.querySelector('.cc-verify').innerHTML = k.verify;
+  card.setAttribute('onclick','');
+  const hint = document.getElementById('citeHint');
+  const found = Object.keys(citeChecked).filter(x=>citeKey[x].bad).length;
+  if (k.bad){ hint.innerHTML = `🎯 <strong>Caught one.</strong> You\'ve found ${found} of the 3 traps — keep going: a hallucinated total, a mis-read amount, and a wrong tax code are all hiding here.`; }
+  else { hint.innerHTML = '✓ This one ties out. But keep going: one of these is a total AI hallucinated, one is an amount it mis-read off the document, and one is a tax code that doesn\'t match the rule.'; }
+  if (Object.keys(citeChecked).length === 4){
+    const s = document.getElementById('citeSummary');
+    s.innerHTML = '🎉 <strong>Chapter 2\'s core skill, done.</strong> Four items, and three were traps: the $58,910 grand total was a <em>hallucinated sum</em> (the lines add to $57,410), the $1,290 consulting fee was a <em>mis-read amount</em> (the invoice says $1,920), and the entertainment meal carried the <em>wrong tax code</em>. Only the $412 office-supplies line ties out clean. The rule holds: <strong>recompute every total, tie every amount to source, verify every code against the rule.</strong> AI extracted and categorised the batch in minutes; Priya reconciled every figure before a single one reached the ledger. Next: turn the numbers into a board report.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 350);
+  }
+}
+
+/* reconciliation quiz */
+const planQs = [
+  {q:"Why is it fine to ask AI to 'categorise the batch' but not to 'total it and give me the final figure to post'?", opts:["It isn't — you should never use AI in bookkeeping at all","First-pass categorisation is a delegable draft to verify; the total is arithmetic AI can't be trusted to do, and posting it makes AI the source of record — which is Priya's to recompute and sign","AI is only allowed to total the batch if you name the client first"], correct:1, explain:"AI is a strong assistant for extracting and sorting a messy batch. But a model isn't a calculator — it can state a total the lines don't support — and the posted figure is the source of record. Sort with AI, yes; trust its arithmetic or let it become the books, no."},
+  {q:"AI extracts an amount that would balance the batch neatly, but Priya can't match it to any source document. Best move?", opts:["Use it anyway — it balances and the deadline is close","Treat it as unverified and trace it: an amount that doesn't tie to an actual invoice or bank line isn't reconciled, and a figure that only 'balances' on AI's say-so is not evidence","Ask AI to generate a matching invoice so it ties out"], correct:1, explain:"If it doesn't tie to a real source document, it isn't reconciled — and a figure that only balances because AI produced it can be a mis-read or a fabrication. Unverifiable equals un-postable. Skipping this trace is exactly how a mis-read amount ends up in a filed close."}
+];
+let pqIdx=0;
+function renderPlanQ(){
+  const s = planQs[pqIdx];
+  document.getElementById('planQ').textContent = `Round ${pqIdx+1}/2 — ${s.q}`;
+  document.getElementById('planOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPlanQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('planFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('planNext').style.display='none';
+}
+function answerPlanQ(i){
+  const s=planQs[pqIdx];
+  document.querySelectorAll('#planOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('planFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(pqIdx===planQs.length-1?'<br><br>🎉 Chapter 2 complete — batch reconciled, every figure tied to source. Next: the variance commentary and board report.':'');
+  document.getElementById('planNext').style.display = pqIdx<planQs.length-1?'inline-block':'none';
+}
+function nextPlanQ(){ pqIdx++; if(pqIdx<planQs.length) renderPlanQ(); }
+renderPlanQ();
+
+/* ───────── CH 3: ACCEPT / FIX / INVESTIGATE ───────── */
+const markKey = {
+  mk1:{right:'keep', fb:{
+    keep:'✓ Correct — <strong>ACCEPT.</strong> The figures match the reconciled ledger, the $31,000 movement ties to a real, documented customer payment, and the cause is one Priya can point to in the records. That\'s a supported line backed by source. Human-in-the-loop doesn\'t mean rewriting everything; it means <em>checking</em> everything and accepting what genuinely ties out.',
+    fix:'△ You can tidy wording, but there\'s nothing to fix — the figures tie to the reconciled ledger and the cause is documented. Over-editing sound lines wastes the time AI just saved. Verdict: <strong>ACCEPT</strong>.',
+    reject:'✗ Nothing to investigate here — the numbers tie to the ledger and the cause is documented in the records. Investigating a fully-supported line throws away the useful work. Verdict: <strong>ACCEPT</strong>.'}},
+  mk2:{right:'fix', fb:{
+    fix:'✓ Correct — <strong>FIX.</strong> The problem is the arithmetic: revenue went from $1,000,000 to $1,120,000, which is <em>12%</em>, not the 27% AI stated. A model isn\'t a calculator — it produced a clean-looking percentage the actual figures don\'t support. Priya recomputes it and replaces 27% with the real 12% before the board ever sees it. The lesson of the chapter: <strong>recompute every % from the reconciled figures</strong> — never take a rate from AI\'s prose.',
+    keep:'✗ Never accept this. "Grew 27%" is a fabricated figure — the real numbers ($1.0m → $1.12m) give 12%. Sending it to the board would put a wrong number in front of decision-makers. The fact it reads confidently is exactly the danger. Verdict: <strong>FIX</strong> — recompute and correct the %.',
+    reject:'△ There\'s nothing to investigate — the figures are already reconciled; AI just did the percentage wrong. This isn\'t a mystery in the data, it\'s bad arithmetic to correct. Verdict: <strong>FIX</strong>: recompute from the real figures (12%).'}},
+  mk3:{right:'reject', fb:{
+    reject:'✓ Correct — <strong>INVESTIGATE.</strong> "The campaign drove the sales increase" is a claim about <em>why</em>, and the ledger only shows <em>what</em>: sales rose and marketing spend rose. Correlation isn\'t causation — several things changed at once. AI loves a tidy causal story the data can\'t support. Priya either investigates whether the campaign truly drove it, or softens the line to what\'s evidenced ("revenue rose; marketing spend also rose") before it goes to the board. The lesson: <strong>the ledger shows what moved, not why</strong> — don\'t let AI assert a cause the evidence doesn\'t back.',
+    keep:'✗ Never accept this as fact. The ledger shows sales rose and marketing rose — not that one caused the other. Asserting causation the data can\'t support misleads the board. Verdict: <strong>INVESTIGATE</strong> the real driver, or soften to what\'s evidenced.',
+    fix:'△ You can\'t simply "fix" the wording and keep the causal claim — the issue is that the evidence doesn\'t support cause at all. The honest move is to investigate whether the campaign drove it, or restate it as correlation. Verdict: <strong>INVESTIGATE</strong>.'}}
+};
+const marked = {};
+function markDecide(id, verdict, btn){
+  const k = markKey[id];
+  marked[id] = true;
+  const card = document.getElementById(id);
+  card.className = 'mark-card decided-' + k.right;
+  card.querySelectorAll('.mark-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb-'+id);
+  fb.className = 'mark-fb show ' + (verdict===k.right ? 'good':'warn');
+  fb.innerHTML = k.fb[verdict];
+  if (marked.mk1 && marked.mk2 && marked.mk3){
+    const s = document.getElementById('markSummary');
+    s.innerHTML = '🎉 <strong>Chapter 3 complete.</strong> You just did what reviewing an AI-drafted board report looks like: <strong>Accept</strong> the cash line that ties to the reconciled ledger, <strong>Fix</strong> the "27% growth" AI stated (the real figures give 12%), <strong>Investigate</strong> the "campaign drove sales" causal claim the data never supports. AI drafted fluent commentary in seconds — but your recompute and your read of the evidence caught the fabricated percentage and the unsupported cause before either reached the board. That\'s the trade — AI supports and calculates, Priya verifies and signs. Never send a figure you haven\'t recomputed or a cause you can\'t evidence. Next: the compliance rule and the client update.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+
+/* ───────── CH 4: VERIFY THE RULE TO SOURCE ───────── */
+const ruleKey = {
+  cr1:{bad:false, verify:'✓ <strong>Verifies out.</strong> A general, checkable statement that sends Priya back to the official source rather than asserting a specific number. She confirms the exact filing date on the tax authority\'s own site — but this is the right kind of AI answer: it points to the primary source instead of inventing a figure.'},
+  cr2:{bad:true, verify:'🚩 <strong>Fabricated provision — this citation is invented.</strong> Priya looks up the actual regulation: there is no "Provision 47-B(3), Sub-clause iv." AI generated an authoritative-sounding, precisely-numbered reference that simply doesn\'t exist. A fabricated provision is the most dangerous confident-wrong of all — quote it and you\'ve put an invented rule into a client file or a filing. Priya discards it and relies only on what the primary source actually says. <em>Verify every cited rule against the regulation itself.</em>'},
+  cr3:{bad:false, verify:'✓ <strong>Verifies out.</strong> An honest limit-of-knowledge caveat — it doesn\'t assert a false fact; it tells Priya the area is complex and to confirm with the primary regulation and a specialist. Exactly the kind of flag a careful professional keeps and acts on.'}
+};
+let ruleChecked = {};
+function checkRule(id){
+  if (ruleChecked[id]) return;
+  ruleChecked[id] = true;
+  const k = ruleKey[id];
+  const card = document.getElementById(id);
+  card.classList.add(k.bad ? 'flagged-right' : 'flagged-clear');
+  card.querySelector('.cc-badge').innerHTML = k.bad ? '✗ Fabricated provision' : '✓ Verifies out';
+  card.querySelector('.cc-verify').innerHTML = k.verify;
+  card.setAttribute('onclick','');
+  const hint = document.getElementById('ruleHint');
+  if (k.bad){ hint.innerHTML = '🎯 <strong>You caught the fabricated provision.</strong> A confident, precisely-numbered citation can be pure invention. Always check the rule against the primary source.'; }
+  else { hint.innerHTML = '✓ Honest and verifiable. But keep going: one of these three is a provision AI invented, and it\'s the one you must never file.'; }
+  if (Object.keys(ruleChecked).length === 3){
+    const s = document.getElementById('ruleSummary');
+    s.innerHTML = '🎉 <strong>Compliance check, done.</strong> Three items, and one was a trap: "Provision 47-B(3), Sub-clause iv" was a <em>pure fabrication</em> — a precise, official-sounding citation that doesn\'t exist in the actual regulation. The other two were honest: one pointed Priya to the primary source, one flagged its own uncertainty. The rule holds: <strong>never quote a cited provision you haven\'t verified against the primary source.</strong> AI can research fast and be confidently, specifically wrong — Priya checks every rule before a word of it reaches a file. Now: the confidentiality firewall and the client update.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 350);
+  }
+}
+
+/* ───────── CH 4: REDACTION BEAT ───────── */
+let redactCount = 0;
+const redactTotal = 5;
+function redact(el){
+  if (el.classList.contains('redacted')) return;
+  el.classList.add('redacted');
+  el.setAttribute('onclick','');
+  redactCount++;
+  const st = document.getElementById('redactStatus');
+  if (redactCount < redactTotal){
+    st.innerHTML = `🔒 <strong>${redactCount} of ${redactTotal}</strong> confidential items redacted. Keep going — every client name, account number, tax ID, confidential balance, and bank detail must be scrubbed before this goes near a consumer tool.`;
+  } else {
+    st.className = 'redact-status done';
+    st.innerHTML = `✅ <strong>All ${redactTotal} items redacted.</strong> What\'s left — "books are closed and fully reconciled," "one expense line moved notably versus budget," "a filing is due shortly" — is a de-identified, status-level summary, safe to shape. <em>This</em> is what may go to AI; the real client name, account number, tax ID, exact balance, and bank detail stay behind the firewall, inside Priya\'s secure system. The status words you left alone were exactly right to keep.`;
+  }
+}
+
+/* ───────── CH 4: TONE + LEAK ───────── */
+const tones = {
+  plain: 'Hi [CLIENT], good news — your books for [PERIOD] are closed and fully reconciled. Everything ties out, and there were no surprises in the numbers. One area to flag: [EXPENSE LINE] came in [AMOUNT] versus budget, which I\'ll walk you through whenever suits. There\'s also a filing due on [DATE], and I\'ve got that in hand. I\'ll send the final figures once I\'ve completed my last checks. Thank you, as always, for keeping your records so tidy — it makes this a pleasure.',
+  direct: 'Hi [CLIENT], your [PERIOD] books are closed and reconciled. Summary: results are in line with expectations, with one variance to note — [EXPENSE LINE], [AMOUNT] versus budget. A filing is due on [DATE], which I am handling. I will send the final, verified figures shortly. Please let me know if you have any questions.',
+  caution: 'Hi [CLIENT], your [PERIOD] books are closed and reconciled — every figure has been checked to source. One item to walk through: [EXPENSE LINE] moved [AMOUNT] versus budget, and I\'d like to talk through what drove it before we draw any conclusions. Next steps: (1) I\'ll send the final figures once my last checks are done, (2) there\'s a filing due on [DATE] that I\'m preparing, and (3) I\'ll book a short call if that\'s helpful. Thank you — happy to answer anything in the meantime.'
+};
+function setTone(t){
+  document.querySelectorAll('.tone-tab').forEach(x => x.classList.toggle('active', x.dataset.tone===t));
+  const n = document.getElementById('noteText');
+  n.style.opacity=0;
+  setTimeout(()=>{ n.textContent = tones[t]; n.style.opacity=1; }, 200);
+}
+
+/* leak spotter */
+const leakFbs = [
+  {ok:false, fb:'✗ This is fine to send to a tool — a de-identified description of a status and a decision, no client identity or confidential figures attached. Nothing here exposes the client. Look again for the line that carries confidential client data — the one that should never be typed into a consumer app in the first place.'},
+  {ok:true, fb:'✓ Stop — this one. A real client name, account number, tax ID, full trial balance, every balance, and bank details are all <strong>confidential client data</strong>. Pasting them into a general consumer tool exposes the client and breaches confidentiality — Priya keeps every identifier and figure behind the firewall and fills them in herself, inside the secure system. AI only ever sees the de-identified status and job-related summary.'},
+  {ok:false, fb:'✗ This is a perfectly safe, friendly closing line — no client name, account number, or confidential figure at all. The dangerous line is the one packed with the client\'s real identity, account numbers, balances, and bank details.'}
+];
+function leakQ(i){
+  const r = leakFbs[i];
+  const btns = document.querySelectorAll('#s4 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled=true; if(leakFbs[j].ok)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('leakFb');
+  fb.className='scenario-feedback show '+(r.ok?'success':'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* privacy quiz */
+const privQs = [
+  {q:"What does Priya's 'confidentiality firewall' actually mean in practice?", opts:["She turns off her wifi while writing the update","AI only ever sees placeholders and a de-identified status ([CLIENT], 'books closed and reconciled', [AMOUNT]) — the real client name, account number, balances, and figures are filled in by Priya, inside the secure system","She marks the AI chat 'confidential'"], correct:1, explain:"The firewall is a workflow, not a setting: confidential client data never enters the consumer tool. AI drafts the update scaffolding from a status and placeholders; the real client information and verified figures are added by hand at the end, inside the secure system Priya controls."},
+  {q:"AI cites a specific tax provision by number that would settle the client's question. Before Priya relies on it, she should…", opts:["Quote it straight into the file — it sounds authoritative and precise","Verify the cited provision against the primary regulation itself; AI fabricates official-sounding references, so an unverified citation is not a rule","Ask AI to confirm the provision is real and trust its answer"], correct:1, explain:"A precise, numbered citation is exactly what AI hallucinates most convincingly — and asking it to self-confirm just yields another confident guess. Every cited rule is checked against the actual regulation before it reaches a file or a client. AI supports and researches, Priya verifies to source and signs — and a fabricated provision must never make it into a filing."}
+];
+let vqIdx=0;
+function renderPrivQ(){
+  const s=privQs[vqIdx];
+  document.getElementById('privQ').textContent=`Round ${vqIdx+1}/2 — ${s.q}`;
+  document.getElementById('privOpts').innerHTML=s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPrivQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('privFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('privNext').style.display='none';
+}
+function answerPrivQ(i){
+  const s=privQs[vqIdx];
+  document.querySelectorAll('#privOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('privFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(vqIdx===privQs.length-1?'<br><br>🎉 Chapter 4 complete — rule verified to source, client data protected, update sent clearly. Finale: add up the reclaimed hours.':'');
+  document.getElementById('privNext').style.display=vqIdx<privQs.length-1?'inline-block':'none';
+}
+function nextPrivQ(){ vqIdx++; if(vqIdx<privQs.length) renderPrivQ(); }
+renderPrivQ();
+
+/* ───────── CH 5: HOURS TALLY + BUSY-SEASON METER ───────── */
+let claimedHrs = 0;
+const totalRows = 4;
+let claimedCount = 0;
+function claimHours(row){
+  if (row.classList.contains('claimed')) return;
+  row.classList.add('claimed');
+  claimedHrs += parseFloat(row.dataset.hrs);
+  claimedCount++;
+  document.getElementById('tallyTotal').textContent = claimedHrs.toFixed(1) + ' hrs';
+  /* marker: 92% (deep red) at 0 hrs → 8% (green) at full 4.2 hrs */
+  const marker = document.getElementById('burnoutMarker');
+  const pct = 92 - (claimedHrs / 4.2) * 84;
+  marker.style.left = Math.max(8, pct) + '%';
+  const note = document.getElementById('tallyNote');
+  if (claimedCount < totalRows){
+    note.innerHTML = `⏳ <strong>${claimedHrs.toFixed(1)} hours</strong> reclaimed so far — and every one of them was drafting, extraction, or admin drudgery, not accounting judgment. Keep tapping.`;
+  } else {
+    note.innerHTML = `🎉 <strong>${claimedHrs.toFixed(1)} hours</strong> of close-week admin saved this month. And here\'s the honest part: Priya <em>kept</em> the accounting judgment (recomputing every total, tying every amount to source, verifying every rule, owning every figure, signing the close) on purpose. That\'s the deal that keeps the books right. <strong>AI supports and calculates, Priya verifies and signs.</strong>`;
+    document.getElementById('sundayFinale').classList.add('show');
+    setTimeout(()=> document.getElementById('sundayFinale').scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+</script>
+</body>
+</html>

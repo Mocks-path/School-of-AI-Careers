@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The AI-Augmented Clinician · Lesson 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.disclaimer{
+  background:var(--cream);border:1px solid var(--line);border-left:3px solid var(--orange);
+  border-radius:10px;padding:14px 18px;margin:22px 0;max-width:680px;
+  font-size:13.5px;color:var(--muted);
+}
+.disclaimer strong{color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · workflow engine ============ */
+.engine{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.eng-chain{display:flex;align-items:center;gap:0;margin-bottom:22px}
+.enode{
+  flex:1;text-align:center;padding:15px 6px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;
+}
+.enode .eidx{display:block;font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.enode h5{font-family:'Fraunces',serif;font-size:15px;color:var(--brown-dark);line-height:1.1}
+.enode:hover{border-color:var(--orange);transform:translateY(-3px)}
+.enode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.enode.active h5{color:var(--paper)}
+.enode.active .eidx{color:var(--orange)}
+.elink{width:20px;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.elink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.epanel{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:200px}
+.epanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.ecol{border-radius:12px;padding:20px}
+.ecol.draft{background:#FDEBD7;border:1px solid #F1C99A}
+.ecol.decide{background:var(--brown-dark);color:#F3E7D5}
+.ecol .elab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ecol.draft .elab{color:var(--orange-dark)}
+.ecol.decide .elab{color:var(--yellow)}
+.ecol ul{list-style:none;display:grid;gap:8px}
+.ecol li{font-size:13.5px;line-height:1.45;padding-left:20px;position:relative}
+.ecol.draft li{color:var(--brown-dark)}
+.ecol.draft li::before{content:"✎";position:absolute;left:0;color:var(--orange)}
+.ecol.decide li{color:#F3E7D5}
+.ecol.decide li::before{content:"◆";position:absolute;left:0;color:var(--yellow);font-size:11px;top:2px}
+@media(max-width:700px){
+  .eng-chain{flex-wrap:wrap;gap:6px}
+  .enode{flex:1 1 30%}
+  .elink{display:none}
+  .epanel{grid-template-columns:1fr}
+}
+
+/* ============ Figure 2 · before / with AI day ============ */
+.week{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.wgrid{display:grid;grid-template-columns:150px 1fr;gap:10px 14px;align-items:center}
+.wday{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.wtrack{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--cream)}
+.wseg{height:100%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;color:#fff;white-space:nowrap;overflow:hidden;transition:width .5s ease;min-width:0}
+.wseg.admin{background:#8B7A6C}
+.wseg.draft{background:var(--tan)}
+.wseg.research{background:var(--orange-dark)}
+.wseg.human{background:var(--accent)}
+.wseg.free{background:repeating-linear-gradient(45deg,#F4E9D8 0 6px,var(--cream) 6px 12px);color:var(--muted)}
+.wlegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.wlegend span{display:inline-flex;align-items:center;gap:6px}
+.wlegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.wcap{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);font-size:14.5px;color:var(--brown-dark);line-height:1.5}
+.wbill{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap}
+.wbill .wb{flex:1;min-width:150px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.wbill .wblab{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.wbill .wbval{font-family:'Fraunces',serif;font-size:30px;font-weight:800;color:var(--brown-dark);line-height:1}
+.wbill .wbval .up{color:var(--accent)}
+.wbill .wbval .dn{color:var(--orange-dark)}
+
+/* ============ Figure 3 · should AI touch this? ============ */
+.gate{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.grows{display:grid;gap:22px;margin-bottom:22px}
+.grow label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600;display:flex;justify-content:space-between;margin-bottom:8px}
+.grow label .gv{color:var(--orange-dark)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--cream);border:1px solid var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+.gverdict{border-radius:12px;padding:22px;transition:background .35s}
+.gverdict.green{background:#E6F0DC;border:1px solid #B7CFA0}
+.gverdict.amber{background:#FDEBD7;border:1px solid #F1C99A}
+.gverdict.red{background:#F7E0DA;border:1px solid #E3B3A6}
+.gverdict .gtag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.gverdict.green .gtag{color:#4B6B2E}
+.gverdict.amber .gtag{color:var(--orange-dark)}
+.gverdict.red .gtag{color:#B23A22}
+.gverdict h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:6px}
+.gverdict p{font-size:14px;color:var(--brown-dark);margin:0;max-width:none}
+.gveto{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:12px 16px;border-radius:10px;background:var(--cream);border:1px solid var(--line)}
+.gveto input{width:18px;height:18px;accent-color:var(--orange-dark);cursor:pointer;flex-shrink:0}
+.gveto label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--brown);font-weight:600;cursor:pointer}
+
+/* ============ Figure 4 · myth cards ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hcard{height:230px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.hgrid.show .hcard{animation:hIn .5s forwards}
+.hgrid.show .hcard:nth-child(1){animation-delay:.05s}
+.hgrid.show .hcard:nth-child(2){animation-delay:.2s}
+.hgrid.show .hcard:nth-child(3){animation-delay:.35s}
+.hgrid.show .hcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.hcard.flipped .hinner{transform:rotateY(180deg)}
+.hface{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;
+}
+.hfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.hfront .hclaim{font-family:'Fraunces',serif;font-weight:800;font-size:23px;line-height:1.1;margin-bottom:8px}
+.hfront .hsub{font-size:13px;opacity:.92;max-width:280px}
+.hfront .hhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.hback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.hback .hlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.hback p{font-size:12.5px;line-height:1.5;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){
+  .hgrid{grid-template-columns:1fr}
+  .hcard{height:220px}
+  .hfront .hclaim{font-size:21px}
+  .wgrid{grid-template-columns:110px 1fr}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 3 · Lesson 01 · AI for Doctors</div>
+  <h1>The AI-augmented <em>clinician</em>.</h1>
+  <p class="lede">AI will not replace clinicians. But a clinician who builds durable workflows around AI will spend less of the day fighting the keyboard and more of it with patients. This lesson is not about a tool or a prompt. It is about a working relationship — where AI drafts and surfaces at speed, and the clinician verifies, decides, and remains the one accountable to the patient. One rule holds it together: AI suggests; the clinician verifies and decides.</p>
+  <div class="disclaimer"><strong>A note before we begin.</strong> This is professional education for clinicians about clinical workflows — it is not medical advice, and it does not tell you how to treat any patient. Nothing here recommends a specific tool. Many AI tools are not cleared or approved medical devices, and none should ever receive identifiable patient data through consumer channels.</div>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>AI suggests, the clinician verifies and decides</h2>
+  <p class="lead">Before any tool, learn the one rule that keeps the rest of this week honest: AI is a fast, tireless drafting and pattern-surfacing partner. It is not a colleague, not an authority on medicine, and it is never the diagnostician or decision-maker of record. That last phrase carries the weight of the profession — accountability runs to the patient, and it cannot be delegated to a machine.</p>
+
+  <p>Think of general-purpose AI the way an attending thinks of a very well-read student who has memorised a library but has never examined this patient, cannot be licensed, and has never been responsible for an outcome. Ask for a plain-language draft of after-visit instructions and you get one in seconds. Ask it to reword a dense note, to list questions a worried patient might ask, or to summarise a long message thread, and it produces all of them. This is genuinely useful: the documentation and the inbox are the most draining, least human parts of the clinical day, and AI compresses both. But that student has not laid hands on the patient, cannot see what is not in the text in front of it, will invent a reference or a lab value that sounds perfect and does not exist, and states a wrong clinical claim with the same fluent confidence it uses for a right one.</p>
+  <p>So the workflow is always two-handed. One hand suggests — drafts, summaries, first passes, rewordings, differentials to consider. The other hand verifies and decides — what the patient's story and exam actually show, what the evidence really says, what is safe and appropriate for this person, and what enters the record under the clinician's name. The suggesting hand is fast and cheap. The verifying-and-deciding hand is slow, examined, licensed, and the thing the patient is actually relying on. Every stage of clinical work runs on this split. Click through the engine below to see exactly where the line falls at each stage.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The clinical workflow engine</span>
+      <div class="controls">
+        <button onclick="engStep(-1)">◀ Prev</button>
+        <button onclick="engStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="eng-chain" id="engChain">
+      <div class="enode" data-k="gather" onclick="pickEng('gather')"><span class="eidx">1</span><h5>Gather</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="reason" onclick="pickEng('reason')"><span class="eidx">2</span><h5>Reason</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="decide" onclick="pickEng('decide')"><span class="eidx">3</span><h5>Decide</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="document" onclick="pickEng('document')"><span class="eidx">4</span><h5>Document</h5></div>
+      <div class="elink"></div>
+      <div class="enode" data-k="communicate" onclick="pickEng('communicate')"><span class="eidx">5</span><h5>Communicate</h5></div>
+    </div>
+    <div class="epanel" id="engPanel"></div>
+  </div>
+
+  <h3>Why the line never moves — and why Decide is different</h3>
+  <p>Notice that across all five stages, the verifying-and-deciding hand keeps the same jobs: confirming what is actually true of this patient, judging what the evidence supports, owning the plan, and standing behind every word that enters the record. But look at stage three. In Gather, Reason, Document and Communicate, AI may draft and suggest. In <strong>Decide</strong>, its column is nearly empty — because the diagnosis and the plan are the practice of medicine itself. AI can lay out options to consider; it must never be the diagnostician or decision-maker of record. A clinician who guards that stage can adopt any tool without fear; one who surrenders it has stopped practising medicine.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>A clinician's day, reclaimed</h2>
+  <p class="lead">The promise of AI in clinical work is not "less medicine." It is less of the low-value, keyboard-bound labour that surrounds medicine — the documentation and inbox burden widely blamed for burnout — so that more of the day can go to the part patients actually come for: attention, examination, reasoning and human presence.</p>
+
+  <p>Most clinicians lose hours every day to work that is necessary but not the point: typing up the visit note, reformatting a referral, drafting the routine message reply, restructuring a long handoff, retyping the same patient-education paragraph for the twentieth time. The documentation and message inbox in particular have become a defining source of clinician burnout — hours of after-hours "pyjama time" spent facing a screen instead of a patient. AI is at its best exactly here: on the high-volume, template-shaped, first-pass tasks that drain a day without adding a single element of clinical judgment.</p>
+  <p>Toggle the switch below to compare an ordinary day before and with AI. Watch the grey admin blocks and the tan documentation grind shrink — and watch the blue "clinical presence" time, the examination, reasoning and conversation only a clinician can provide, expand into the space that opens up. The hours do not vanish; they move from the keyboard toward the patient, and toward a day that ends at a sane hour. A caution named up front: every AI-drafted note and message must still be read and corrected by the clinician before it is signed — the time saved is real, but it is never unsupervised.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · One day, two workflows</span>
+      <div class="controls" id="weekBtns">
+        <button class="active" onclick="setWeek('before',this)">Before AI</button>
+        <button onclick="setWeek('with',this)">With AI</button>
+      </div>
+    </div>
+    <div class="week">
+      <div class="wgrid" id="wgrid"></div>
+      <div class="wlegend">
+        <span><i style="background:#8B7A6C"></i> admin &amp; inbox</span>
+        <span><i style="background:var(--tan)"></i> documentation grind</span>
+        <span><i style="background:var(--orange-dark)"></i> chart &amp; evidence review</span>
+        <span><i style="background:var(--accent)"></i> patient presence &amp; reasoning</span>
+        <span><i style="background:#E8DCC8"></i> off the clock</span>
+      </div>
+      <div class="wbill" id="wbill"></div>
+      <div class="wcap" id="wcap"></div>
+    </div>
+  </div>
+
+  <h3>Reclaimed, not erased</h3>
+  <p>The honest version of this figure: AI does not hand a clinician a shorter day for free. It gives a better-spent one. The minutes it saves on note-writing and routine replies are minutes you reinvest in listening, examining and reasoning — or in going home before dark. But an AI scribe that mishears, a summary that quietly drops a critical detail, or a drafted reply sent without a careful read can do real harm. Reclaimed time only helps the patient if every draft still passes under the clinician's eyes before it becomes part of care.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Should AI touch this task?</h2>
+  <p class="lead">Not every task is a safe place for AI. Before you delegate anything, run it through the gate below — but note first that two dials are not dials at all. They are hard vetoes. Patient privacy is one: identifiable patient information must never enter a consumer AI tool. Autonomous clinical decision-making is the other: AI must never be the diagnosis or the decision of record. Either veto, on its own, ends the conversation.</p>
+
+  <p>The privacy veto comes first, on purpose. Pasting an identifiable patient's history, images or results into a general, non-approved consumer tool can breach HIPAA, GDPR and equivalent duties, and expose that data to storage, training or disclosure. No efficiency gain survives that. The second veto is just as hard: if the task <em>is</em> the diagnosis, the prescription, or the disposition — the decision of record — AI cannot make it, however capable it seems. Only once both vetoes are clear do the softer dials matter. <strong>Safety / stakes</strong>: how much rides on getting this exactly right — a plain-language reword is low, a discharge plan is high. <strong>Verifiability</strong>: how easily you can check the output yourself — you can confirm a rewritten instruction in seconds; you cannot casually trust a cited dose or reference without checking the source. And note the fourth input: <strong>regulatory status</strong> — many tools are not cleared or approved medical devices, and using an uncleared tool for a task that looks like a medical-device function is its own risk.</p>
+  <p>Set the two vetoes and move the dials to describe a real task, then read the verdict. The pattern to internalise: AI is safest on de-identified, low-stakes, high-verifiability, non-decisional work — and categorically off-limits the moment identifiable patient data would touch a consumer tool, or the moment the task becomes the decision itself. When in doubt, the machine drafts on de-identified or general material and you verify; it never decides, and it never sees data it shouldn't.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The delegation gate</span>
+      <div class="controls" id="gatePresets">
+        <button onclick="gatePreset(false,false,2,5,this)">Reword patient handout</button>
+        <button onclick="gatePreset(true,false,4,3,this)">Paste chart into chatbot</button>
+        <button onclick="gatePreset(false,true,5,2,this)">Let AI set the diagnosis</button>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="gveto">
+        <input type="checkbox" id="ckPHI" onchange="calcGate()">
+        <label for="ckPHI">This task would put identifiable patient information into a consumer / non-approved AI tool</label>
+      </div>
+      <div class="gveto">
+        <input type="checkbox" id="ckDx" onchange="calcGate()">
+        <label for="ckDx">This task IS the clinical decision of record — the diagnosis, prescription or disposition</label>
+      </div>
+      <div class="grows">
+        <div class="grow">
+          <label>Safety / stakes — how much rides on getting it right <span class="gv" id="vStake">medium</span></label>
+          <input type="range" id="slStake" min="1" max="5" step="1" value="3" oninput="calcGate()">
+        </div>
+        <div class="grow">
+          <label>Verifiability — how easily you can check it <span class="gv" id="vVer">medium</span></label>
+          <input type="range" id="slVer" min="1" max="5" step="1" value="3" oninput="calcGate()">
+        </div>
+      </div>
+      <div class="gverdict amber" id="gverdict">
+        <div class="gtag" id="gtag">Verdict</div>
+        <h4 id="ghead">Draft with AI, verify with care</h4>
+        <p id="gbody">Set the vetoes and move the dials to describe your task.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The rule under the dials</h3>
+  <p>High stakes plus low verifiability is the danger zone for hallucinated findings, invented references and wrong doses — and privacy and autonomous decision-making are the two trapdoors beneath the whole floor. The safe move is never a flat "don't use AI." It is: clear both vetoes first, remember that many tools are not cleared medical devices, then let AI draft the structure on de-identified or general material — and put your own verified, examined judgment on top before anything reaches the patient or the record.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Four myths, flipped</h2>
+  <p class="lead">Every conversation about AI in medicine carries some version of these four beliefs — two from the enthusiasts, two from the sceptics. Flip each card to see the more honest version. Neither breathless hype nor flat refusal survives contact with a real patient, a real chart, or a real outcome.</p>
+
+  <p>The goal of this lesson is not to make you enthusiastic or fearful, but accurate. AI in clinical work is a powerful drafting and surfacing tool with real, named limitations — patient-privacy risk, hallucinated references and findings, embedded bias and health-inequity, and the fact that many tools are not cleared medical devices — that you manage the way you manage any clinical risk: by knowing exactly where it lives and refusing to look away from it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Flip the belief</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all realities</button>
+        <button onclick="allHype()">↺ Back to beliefs</button>
+      </div>
+    </div>
+    <div class="hgrid" id="hgrid">
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"AI will replace doctors"</div>
+            <div class="hsub">Soon a model diagnoses and treats end to end.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI cannot examine a patient, cannot be licensed, carries no duty of care, and answers to no one for an outcome. It replaces tasks — drafting, summarising, surfacing — not clinicians. The clinician who uses it well spends less of the day on the keyboard and more of it on examination, reasoning and presence: the care patients actually come for.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"If it cites a study, it's real"</div>
+            <div class="hsub">The answer reads fluent, precise and evidence-based.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI hallucinates — it invents references, guideline numbers, doses and lab values in the same confident voice it uses for real ones. Fluency is not evidence. Every clinical claim, citation and dose must be checked against a primary, current source before it touches a patient or a note. A confident sentence is not a verified one.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"It's objective and fair"</div>
+            <div class="hsub">A machine has no bias and treats all patients alike.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>AI learned from historical medical data that already encodes inequity — in who was studied, who was believed, whose pain was recorded. Used unchecked, it can quietly widen gaps in care across race, sex and background. Health equity is a judgment only the clinician supplies; the model will not flag the bias it inherited.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"Serious clinicians refuse it"</div>
+            <div class="hsub">Using AI is a shortcut — unsafe, even unprofessional.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">More honestly</div>
+            <p>Refusing a drafting tool to spend evenings retyping notes is not rigour — it is documentation burden that pulls attention away from patients. Rigour is verifying every claim, protecting every patient's data, and owning every decision. Let AI draft on de-identified material; keep every diagnosis, plan and signature firmly in human hands.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>The AI-augmented clinician lets the machine draft and surface at speed on de-identified, checkable, lower-stakes work — and keeps every diagnosis, every plan, every verified fact, and every duty to the patient firmly in human hands.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now have the working relationship at the heart of this week. AI is a fast drafting and surfacing partner with real limits; you are the accountable clinician. Clear the privacy and no-autonomous-decision vetoes first, run every task through the delegation gate, verify every finding and reference before it reaches a patient or the record, and never let a confident sentence stand in for a checked one. The next lesson puts this relationship to work on the first real task: finding, appraising and applying clinical evidence with AI.</p>
+  <ul>
+    <li>AI suggests; the clinician verifies and decides — accountability never delegates</li>
+    <li>Decide is different: AI is never the diagnostician or decision-maker of record</li>
+    <li>Reclaimed hours move from the keyboard toward the patient</li>
+    <li>Patient privacy and autonomous diagnosis are two hard vetoes — before any other test</li>
+    <li>Hallucinated findings, bias and uncleared tools are managed risks, not reasons to refuse</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 01 of Week 3 · Next up: Clinical Information &amp; Evidence with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · workflow engine ===== */
+const ENG={
+  gather:{draft:['A structured first draft of the history from notes','A plain-language summary of a long chart','A tidy list of the medication and problem lists','A recap of a long patient message thread'],
+        decide:['What the patient actually says and shows on exam','Whether the summary dropped anything critical','What is truly relevant to this presentation','The findings that only a hands-on exam reveals']},
+  reason:{draft:['A broad list of conditions to consider','Questions worth asking the patient next','A neutral summary of relevant evidence to check','Points for and against a line of thinking'],
+        decide:['Which possibilities genuinely fit this patient','Whether the evidence actually applies here','What the exam and story rule in or out','The clinical reasoning — owned, not outsourced']},
+  decide:{draft:['(AI may lay out options to consider only)','A plain summary of trade-offs to weigh','Prompts for a shared decision conversation','Nothing that fixes the diagnosis or plan'],
+        decide:['The diagnosis of record — the clinician’s','The treatment or prescription decision','The disposition: admit, discharge, refer, watch','Full accountability for the clinical decision']},
+  document:{draft:['A first-draft visit note from the encounter','A structured referral or handoff draft','A reworded, clearer version of a dense entry','A draft after-visit summary for the patient'],
+        decide:['Whether every line is accurate for THIS visit','What the scribe misheard or invented','What must be added, corrected or removed','The signature — the note becomes the record']},
+  communicate:{draft:['A plain-language draft reply to a message','A first draft of patient-education material','Anticipated questions a patient may ask','A gentler rewording of difficult information'],
+        decide:['Whether the message is safe and correct to send','What is appropriate for THIS patient to hear','What must be escalated rather than answered','The final word that reaches the patient']}
+};
+const ENGORDER=['gather','reason','decide','document','communicate'];
+let engCur='gather';
+function pickEng(k){
+  engCur=k;
+  document.querySelectorAll('#engChain .enode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=ENG[k],p=el('engPanel');
+  const declab = k==='decide' ? '◆ What the clinician decides — AI must not' : '◆ What the clinician verifies &amp; decides';
+  let h='<div class="ecol draft"><div class="elab">✎ What AI suggests</div><ul>';
+  d.draft.forEach(x=>h+='<li>'+x+'</li>');
+  h+='</ul></div><div class="ecol decide"><div class="elab">'+declab+'</div><ul>';
+  d.decide.forEach(x=>h+='<li>'+x+'</li>');
+  h+='</ul></div>';
+  p.innerHTML=h;
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+function engStep(dir){
+  let i=ENGORDER.indexOf(engCur)+dir;
+  if(i<0)i=ENGORDER.length-1;if(i>=ENGORDER.length)i=0;
+  pickEng(ENGORDER[i]);
+}
+pickEng('gather');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickEng('gather');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('engChain'));
+
+/* ===== Figure 2 · before / with AI day ===== */
+const WEEK={
+  before:{
+    days:[
+      ['Early clinic',[['admin',28],['draft',32],['research',18],['human',22]]],
+      ['Late morning',[['admin',24],['draft',36],['research',18],['human',22]]],
+      ['Afternoon',[['admin',28],['draft',32],['research',15],['human',25]]],
+      ['Late afternoon',[['admin',32],['draft',28],['research',18],['human',22]]],
+      ['After hours',[['admin',34],['draft',36],['research',14],['human',12],['free',4]]]
+    ],
+    bill:['~22%','↓ keyboard &amp; inbox burden'],
+    cap:'A typical day: charting, inbox messages and documentation eat the middle of every block. Direct patient presence and reasoning — the care patients come for — is squeezed to the edges, and the day spills into after-hours "pyjama time" at the keyboard.'
+  },
+  with:{
+    days:[
+      ['Early clinic',[['admin',12],['draft',15],['research',13],['human',48],['free',12]]],
+      ['Late morning',[['admin',12],['draft',14],['research',12],['human',50],['free',12]]],
+      ['Afternoon',[['admin',10],['draft',15],['research',12],['human',51],['free',12]]],
+      ['Late afternoon',[['admin',13],['draft',13],['research',13],['human',49],['free',12]]],
+      ['After hours',[['admin',10],['draft',12],['research',10],['human',43],['free',25]]]
+    ],
+    bill:['~50%','↑ patient presence'],
+    cap:'With AI drafting notes, summaries and routine replies — each read and corrected before signing — the grey and tan blocks shrink. The blue expands: more examination, reasoning and conversation. A real off-the-clock margin appears, and the after-hours keyboard shift shrinks. Same hours, spent on care instead of the screen.'
+  }
+};
+function renderWeek(mode){
+  const data=WEEK[mode],g=el('wgrid');
+  let h='';
+  data.days.forEach(([day,segs])=>{
+    h+='<div class="wday">'+day+'</div><div class="wtrack">';
+    segs.forEach(([cls,pct])=>{
+      let lbl='';
+      if(pct>=16){
+        lbl={admin:'inbox',draft:'charting',research:'review',human:'patients',free:'free'}[cls]||'';
+      }
+      h+='<div class="wseg '+cls+'" style="width:'+pct+'%">'+lbl+'</div>';
+    });
+    h+='</div>';
+  });
+  g.innerHTML=h;
+  el('wbill').innerHTML='<div class="wb"><div class="wblab">Direct patient-time share</div><div class="wbval">'+data.bill[0]+'</div></div>'+
+    '<div class="wb"><div class="wblab">Direction of the day</div><div class="wbval" style="font-size:15px;line-height:1.3">'+data.bill[1]+'</div></div>';
+  el('wcap').innerHTML=data.cap;
+}
+function setWeek(mode,btn){
+  document.querySelectorAll('#weekBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWeek(mode);
+}
+renderWeek('before');
+
+/* ===== Figure 3 · delegation gate ===== */
+const LVL=['','very low','low','medium','high','very high'];
+function gatePreset(phi,dx,s,v,btn){
+  el('ckPHI').checked=phi;
+  el('ckDx').checked=dx;
+  el('slStake').value=s;el('slVer').value=v;
+  document.querySelectorAll('#gatePresets button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  calcGate();
+}
+function calcGate(){
+  const phi=el('ckPHI').checked;
+  const dx=el('ckDx').checked;
+  const s=+el('slStake').value,v=+el('slVer').value;
+  el('vStake').textContent=LVL[s];
+  el('vVer').textContent=LVL[v];
+  const risk=s+(6-v);
+  const box=el('gverdict');
+  box.classList.remove('green','amber','red');
+  let cls,tag,head,body;
+  if(dx){
+    cls='red';tag='Stop · no autonomous decision';
+    head='AI is not the decision-maker of record';
+    body='This task IS the clinical decision — the diagnosis, the prescription, or the disposition. That is the practice of medicine, and it cannot be delegated to a tool, however capable it seems. AI may lay out options to consider, but the decision, the record and the accountability stay with the clinician. Safety and verifiability no longer matter here.';
+  }else if(phi){
+    cls='red';tag='Stop · patient-privacy veto';
+    head='Do not expose identifiable patient data';
+    body='This task would put identifiable patient information into a consumer or non-approved tool. That can breach HIPAA, GDPR and equivalent duties, and expose the data to storage, training or disclosure. The stakes and verifiability no longer matter. De-identify the material completely, or use only an approved, compliant system — then, and only then, let AI draft.';
+  }else if(risk<=4){
+    cls='green';tag='Go · safe to delegate';
+    head='Let AI draft freely';
+    body='No identifiable patient data, not the decision of record, low stakes and easy to check. This is exactly where AI shines — rewording a handout, drafting a routine reply, summarising general material. Generate at speed, read for fit, and keep what works. The cost of a mistake here is small and instantly caught. (Even so, many tools are not cleared devices — keep it to non-clinical-device tasks.)';
+  }else if(risk<=7){
+    cls='amber';tag='Caution · draft, then verify';
+    head='AI drafts, you verify with care';
+    body='Real stakes, or clinical content you cannot instantly confirm. Use AI for the first pass on de-identified material, but check every claim, dose and reference against a current primary source, correct every drafted note before signing, and put your own examined judgment on top before anything reaches a patient or the record.';
+  }else{
+    cls='red';tag='Danger zone';
+    head='Keep this one clinician-led';
+    body='High stakes and hard to verify — the natural home of the hallucinated finding, the invented reference and the confident wrong dose. Let AI assist with structure or wording at most, on de-identified material only. The clinical substance, the facts and the final call stay firmly with you.';
+  }
+  box.classList.add(cls);
+  el('gtag').innerHTML=tag;
+  el('ghead').textContent=head;
+  el('gbody').textContent=body;
+}
+calcGate();
+
+/* ===== Figure 4 · myth cards ===== */
+const hgrid=el('hgrid');
+function allReal(){document.querySelectorAll('.hcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(hgrid);
+
+</script>
+</body>
+</html>

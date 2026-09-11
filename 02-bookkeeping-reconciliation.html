@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bookkeeping, Reconciliation &amp; Data with AI · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.disclaimer{
+  background:var(--cream);border:1px solid var(--line);border-left:3px solid var(--orange);
+  border-radius:10px;padding:14px 18px;margin:22px 0;max-width:680px;
+  font-size:13.5px;color:var(--muted);
+}
+.disclaimer strong{color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · bookkeeping flow ============ */
+.flow{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.eng-chain{display:flex;align-items:center;gap:0;margin-bottom:22px}
+.enode{
+  flex:1;text-align:center;padding:15px 6px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;position:relative;
+}
+.enode .eidx{display:block;font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.enode h5{font-family:'Fraunces',serif;font-size:14px;color:var(--brown-dark);line-height:1.1}
+.enode:hover{border-color:var(--orange);transform:translateY(-3px)}
+.enode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.enode.active h5{color:var(--paper)}
+.enode.active .eidx{color:var(--orange)}
+.enode.gate{border-color:var(--orange-dark);border-width:3px}
+.enode.gate .eidx{color:var(--orange-dark)}
+.enode.gate.active{background:var(--orange-dark);border-color:var(--orange-dark)}
+.enode.gate.active h5,.enode.gate.active .eidx{color:#fff}
+.enode .gflag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;background:var(--orange-dark);color:#fff;padding:2px 6px;border-radius:5px;white-space:nowrap}
+.elink{width:18px;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.elink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.fpanel{border-radius:12px;padding:22px;min-height:150px;background:var(--cream);border:1px solid var(--line);animation:panelIn .4s ease}
+.fpanel.gate{background:#FDEBD7;border:1px solid #F1C99A}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fpanel .flab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:10px;color:var(--muted)}
+.fpanel.gate .flab{color:var(--orange-dark)}
+.fpanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:8px}
+.fpanel p{font-size:14.5px;color:var(--brown-dark);max-width:none;margin:0}
+.fpanel .fai{margin-top:12px;font-size:13px;color:var(--muted)}
+.fpanel .fai b{color:var(--brown-dark)}
+@media(max-width:700px){
+  .eng-chain{flex-wrap:wrap;gap:6px}
+  .enode{flex:1 1 30%}
+  .elink{display:none}
+}
+
+/* ============ Figure 2 · extraction review ============ */
+.rev{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.revcol{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px}
+.revcol.src{background:#F3F8FC;border:1px solid #C5DEEC}
+.revcol .rhead{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.revcol.src .rhead{color:var(--accent)}
+.revcol.ai .rhead{color:var(--orange-dark)}
+.rrow{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.rrow:last-child{border-bottom:none}
+.rrow .rk{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em}
+.rrow .rval{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--brown-dark);text-align:right}
+.rrow.err .rval{cursor:pointer;border-radius:5px;padding:1px 6px;transition:all .2s}
+.rrow.err .rval{background:#FDEBD7;color:var(--orange-dark);border:1px dashed #E3A67C}
+.rrow.err.caught .rval{background:#E6F0DC;color:#4B6B2E;border:1px solid #B7CFA0}
+.rrow.err .rval::after{content:" ⚠";font-size:10px}
+.rrow.err.caught .rval::after{content:" ✓";font-size:11px}
+.rrow.total{border-top:2px solid var(--line);margin-top:4px;padding-top:12px;border-bottom:none;font-size:15px}
+.revscore{margin-top:18px;background:var(--brown-dark);color:#F3E7D5;border-radius:12px;padding:18px 20px}
+.revscore .rslab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--yellow);margin-bottom:6px}
+.revscore h4{font-family:'Fraunces',serif;font-size:20px;color:var(--paper);margin-bottom:6px}
+.revscore p{font-size:13.5px;color:#E8D9C5;max-width:none;margin:0}
+.revhint{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);text-align:center}
+@media(max-width:700px){.rev{grid-template-columns:1fr}}
+
+/* ============ Figure 3 · reconcile to source ============ */
+.rec{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.rectbl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.rectbl .rc{border-radius:12px;padding:18px}
+.rc.ledger{background:#FDEBD7;border:1px solid #F1C99A}
+.rc.bank{background:#F3F8FC;border:1px solid #C5DEEC}
+.rc .rchead{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:12px}
+.rc.ledger .rchead{color:var(--orange-dark)}
+.rc.bank .rchead{color:var(--accent)}
+.rcline{display:flex;justify-content:space-between;gap:8px;padding:7px 0;font-size:13px;font-family:'JetBrains Mono',monospace;border-bottom:1px dashed rgba(65,44,35,0.18)}
+.rcline:last-of-type{border-bottom:none}
+.rcline .rd{color:var(--brown)}
+.rcline .rn{font-weight:600;color:var(--brown-dark)}
+.rcline.pick{cursor:pointer;border-radius:5px;transition:background .18s;padding-left:6px;padding-right:6px}
+.rcline.pick:hover{background:rgba(213,82,34,0.12)}
+.rcline.flagged{background:rgba(213,82,34,0.18);outline:2px solid var(--orange-dark)}
+.rctot{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:2px solid rgba(65,44,35,0.25);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:14px;color:var(--brown-dark)}
+.recask{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.recask .qlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;margin-bottom:6px}
+.recask p{font-size:14.5px;color:var(--brown-dark);max-width:none;margin:0}
+.recverdict{border-radius:12px;padding:20px;transition:all .3s;background:var(--cream);border:1px solid var(--line)}
+.recverdict.wrong{background:#F7E0DA;border:1px solid #E3B3A6}
+.recverdict.right{background:#E6F0DC;border:1px solid #B7CFA0}
+.recverdict .rvtag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:6px;color:var(--muted)}
+.recverdict.wrong .rvtag{color:#B23A22}
+.recverdict.right .rvtag{color:#4B6B2E}
+.recverdict h4{font-family:'Fraunces',serif;font-size:20px;color:var(--brown-dark);margin-bottom:6px}
+.recverdict p{font-size:14px;color:var(--brown-dark);max-width:none;margin:0}
+.recbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px 16px;border-radius:10px;background:var(--brown-dark)}
+.recbar .rblab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--yellow)}
+.recbar .rbval{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:#fff}
+.recbar .rbval.bad{color:#FF9E86}
+@media(max-width:700px){.rectbl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 5 · Lesson 02 · AI for Accountants</div>
+  <h1>Bookkeeping, reconciliation &amp; data, <em>verified</em>.</h1>
+  <p class="lede">This is where AI earns its keep — and where it is most dangerous. Capture, extraction and categorisation are the grind of every close, and AI can compress them dramatically. But AI misreads amounts, invents totals, and applies the wrong code in the same confident voice it uses when it is right. So the whole workflow hinges on one gate that never moves: reconcile to source. Nothing AI produces is real until a human has traced it back to the document it came from and recomputed what matters. AI extracts and proposes; the accountant reconciles, verifies and signs.</p>
+  <div class="disclaimer"><strong>A note before we begin.</strong> This is professional education about bookkeeping and reconciliation workflows — it is jurisdiction-neutral and is not accounting, tax or audit advice, and it does not tell you how to treat any transaction. Nothing here recommends a specific tool. Never place identifiable client financial data into a consumer AI tool, and never let an AI-extracted figure enter the ledger, a return or a report without reconciling it to its source document.</div>
+</section>
+
+<section>
+  <div class="section-num">01 / 03</div>
+  <h2>The workflow, and the gate that never moves</h2>
+  <p class="lead">Bookkeeping with AI is a short pipeline: capture the document, extract the fields, categorise the transaction, reconcile to source, then verify or flag. Four of those steps are places AI can genuinely help. One of them — reconcile to source — is a hard human gate that every figure must pass through before it counts. Step through the flow below and watch that gate light up.</p>
+
+  <p>It is tempting to treat AI extraction as "done" the moment the fields appear on screen. They look complete, they look precise, and they arrive in seconds. But an AI reading of an invoice is a <em>proposal</em>, not a fact — a fast, plausible first draft that may contain a misread amount, a wrong tax code, or a total it computed unreliably. The reconcile-to-source gate is what turns a proposal into a booked entry. It is the single most important habit in this lesson: before any AI-extracted figure enters the ledger, it is traced back to the source document, and any figure the arithmetic depends on is recomputed — never trusted from the model. Click each stage to see what AI does, and where the human gate stands.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The bookkeeping flow</span>
+      <div class="controls">
+        <button onclick="flowStep(-1)">◀ Prev</button>
+        <button onclick="flowStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="flow">
+      <div class="eng-chain" id="flowChain">
+        <div class="enode" data-k="capture" onclick="pickFlow('capture')"><span class="eidx">1</span><h5>Capture</h5></div>
+        <div class="elink"></div>
+        <div class="enode" data-k="extract" onclick="pickFlow('extract')"><span class="eidx">2</span><h5>Extract</h5></div>
+        <div class="elink"></div>
+        <div class="enode" data-k="categorize" onclick="pickFlow('categorize')"><span class="eidx">3</span><h5>Categorize</h5></div>
+        <div class="elink"></div>
+        <div class="enode gate" data-k="reconcile" onclick="pickFlow('reconcile')"><span class="gflag">Human gate</span><span class="eidx">4</span><h5>Reconcile to source</h5></div>
+        <div class="elink"></div>
+        <div class="enode" data-k="verify" onclick="pickFlow('verify')"><span class="eidx">5</span><h5>Verify / flag</h5></div>
+      </div>
+      <div class="fpanel" id="flowPanel"></div>
+    </div>
+  </div>
+
+  <h3>Why the gate is non-negotiable</h3>
+  <p>Capture, Extract and Categorize are speed steps — AI is good at them, and getting better. Verify/flag is where you record the outcome and raise anything unresolved with the client. But <strong>Reconcile to source</strong> is the load-bearing wall of the whole workflow, and it is human by definition. It is the moment the profession's oldest discipline — tie every entry back to evidence — meets the AI era's newest risk: fluent, confident, wrong numbers. Skip the gate and the errors in the next figure flow straight into the books. Guard it, and AI becomes a genuine accelerator you can trust.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 03</div>
+  <h2>Reviewing an AI extraction</h2>
+  <p class="lead">Here is an AI-parsed invoice next to the source document it was read from. The AI output looks clean and confident — but it contains three planted errors: a mis-read amount, a wrong tax code, and a hallucinated total that does not add up. Click each AI figure that is wrong to catch it. This is the review muscle every accountant now needs.</p>
+
+  <p>Notice how the errors hide. The mis-read amount is off by a digit that is easy to skim past. The tax code is plausible but wrong for this line. And the total is simply invented — it does not equal the sum of the lines, because the model predicted a likely-looking number rather than actually adding. None of these announce themselves; all three read as confidently as the correct fields. That is the point: AI extraction is a starting draft to be reviewed against the source, never a finished record. Catch all three, then read the verdict.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · AI extraction vs source document</span>
+      <div class="controls">
+        <button onclick="revReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="rev">
+      <div class="revcol src">
+        <div class="rhead">◆ Source document (the truth)</div>
+        <div class="rrow"><span class="rk">Vendor</span><span class="rval">Northwind Supplies</span></div>
+        <div class="rrow"><span class="rk">Invoice #</span><span class="rval">INV-4021</span></div>
+        <div class="rrow"><span class="rk">Line 1 · goods</span><span class="rval">1,240.00</span></div>
+        <div class="rrow"><span class="rk">Line 2 · freight</span><span class="rval">85.00</span></div>
+        <div class="rrow"><span class="rk">Tax code</span><span class="rval">STD (standard)</span></div>
+        <div class="rrow"><span class="rk">Tax amount</span><span class="rval">265.00</span></div>
+        <div class="rrow total"><span class="rk">Total due</span><span class="rval">1,590.00</span></div>
+      </div>
+      <div class="revcol ai">
+        <div class="rhead">∑ AI extraction (a proposal)</div>
+        <div class="rrow"><span class="rk">Vendor</span><span class="rval">Northwind Supplies</span></div>
+        <div class="rrow"><span class="rk">Invoice #</span><span class="rval">INV-4021</span></div>
+        <div class="rrow err" data-e="amount" onclick="catchErr(this)"><span class="rk">Line 1 · goods</span><span class="rval">1,290.00</span></div>
+        <div class="rrow"><span class="rk">Line 2 · freight</span><span class="rval">85.00</span></div>
+        <div class="rrow err" data-e="code" onclick="catchErr(this)"><span class="rk">Tax code</span><span class="rval">ZERO (zero-rated)</span></div>
+        <div class="rrow"><span class="rk">Tax amount</span><span class="rval">265.00</span></div>
+        <div class="rrow total err" data-e="total" onclick="catchErr(this)"><span class="rk">Total due</span><span class="rval">1,675.00</span></div>
+      </div>
+    </div>
+    <div class="revhint" id="revHint">Click each AI figure you believe is wrong · 0 / 3 caught</div>
+    <div class="revscore" id="revScore" style="display:none">
+      <div class="rslab">Review complete</div>
+      <h4 id="revHead"></h4>
+      <p id="revBody"></p>
+    </div>
+  </div>
+
+  <h3>What the review taught</h3>
+  <p>Three errors, three failure modes. The mis-read amount is an OCR-style slip — a 4 seen as a 9 — the kind that survives a casual glance. The wrong tax code is a categorisation error with real consequences for a return. And the hallucinated total is the signature AI failure: a fluent number that was never actually computed. The discipline that catches all three is the same one: compare every AI figure against the source, and recompute anything the total depends on. AI extraction saves you the typing; it never saves you the checking.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 03</div>
+  <h2>Reconcile to source — never trust AI arithmetic</h2>
+  <p class="lead">The ledger and the bank statement should agree. AI has offered a tidy reconciliation and even a helpful "balanced ✓" — but there is a discrepancy hiding in the figures, and the AI's own running total is wrong because it was predicted, not added. Click the ledger line that does not tie back to the bank, then recompute the true difference yourself.</p>
+
+  <p>This is the everyday heart of bookkeeping: two sources that must reconcile, and a difference you must find and explain. AI can lay the two sides side by side and flag obvious mismatches — genuinely useful. But it will also confidently assert a total that is wrong, and declare a set of numbers "balanced" when they are not, because it approximated the arithmetic instead of performing it. The rule is absolute: never trust AI arithmetic on a figure that matters. Recompute it yourself or in a checked tool, and reconcile every line to its source. Find the offending line below and see what the honest total actually is.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Ledger vs bank — catch the discrepancy</span>
+      <div class="controls">
+        <button onclick="recReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="rec">
+      <div class="recbar">
+        <span class="rblab">AI says:</span>
+        <span class="rbval bad">"Reconciliation balanced ✓ — running total 3,180.00"</span>
+      </div>
+      <div class="rectbl">
+        <div class="rc ledger">
+          <div class="rchead">∑ Ledger (as booked)</div>
+          <div class="rcline pick" data-id="l1" onclick="pickLine(this)"><span class="rd">03 Apr · Rent</span><span class="rn">1,200.00</span></div>
+          <div class="rcline pick" data-id="l2" onclick="pickLine(this)"><span class="rd">09 Apr · Utilities</span><span class="rn">340.00</span></div>
+          <div class="rcline pick" data-id="l3" onclick="pickLine(this)"><span class="rd">15 Apr · Supplies</span><span class="rn">960.00</span></div>
+          <div class="rcline pick" data-id="l4" onclick="pickLine(this)"><span class="rd">22 Apr · Software</span><span class="rn">480.00</span></div>
+          <div class="rctot"><span>Ledger total</span><span>2,980.00</span></div>
+        </div>
+        <div class="rc bank">
+          <div class="rchead">◆ Bank statement (source)</div>
+          <div class="rcline"><span class="rd">03 Apr · Rent</span><span class="rn">1,200.00</span></div>
+          <div class="rcline"><span class="rd">09 Apr · Utilities</span><span class="rn">340.00</span></div>
+          <div class="rcline"><span class="rd">15 Apr · Supplies</span><span class="rn">690.00</span></div>
+          <div class="rcline"><span class="rd">22 Apr · Software</span><span class="rn">480.00</span></div>
+          <div class="rctot"><span>Bank total</span><span>2,710.00</span></div>
+        </div>
+      </div>
+      <div class="recask">
+        <div class="qlab">Your job</div>
+        <p>Click the ledger line that does not tie back to the bank statement. Then ignore the AI's "balanced" claim and recompute the real difference.</p>
+      </div>
+      <div class="recverdict" id="recVerdict">
+        <div class="rvtag">Awaiting your check</div>
+        <h4>Which line breaks the reconciliation?</h4>
+        <p>The AI declared this balanced and gave a running total of 3,180.00 — but neither side actually totals that. Find the mismatch by tracing each ledger line to the bank source.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The habit that never retires</h3>
+  <p>The Supplies line was booked at 960.00 but the bank shows 690.00 — a 270.00 discrepancy that must be chased to its source and explained, not smoothed over. And the AI's "balanced ✓, total 3,180.00" was doubly false: the sides do not agree, and neither even sums to 3,180. This is exactly why AI is never the source of record. It is a fast pair of eyes for laying the two sides side by side — and a liability the moment you trust its arithmetic or its verdict. You reconcile to source, you recompute the numbers that matter, and you decide when the books are right.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Bookkeeping and reconciliation are where AI saves the most time and hides the most risk. Let it capture, extract and categorise at speed — then send every figure through the gate that never moves: reconcile to source. Review each AI extraction against the document it came from, catch the misread amounts, wrong codes and hallucinated totals, and never trust AI arithmetic on a figure that matters — recompute it. Keep identifiable client financial data out of consumer tools. AI extracts and proposes; you reconcile, verify and sign. The next lesson builds on this: turning verified data into analysis and reporting a client can rely on.</p>
+  <ul>
+    <li>Reconcile to source is the one gate every figure must pass through</li>
+    <li>AI extraction is a proposal to review, never a finished record</li>
+    <li>Watch for the three failure modes: misread amount, wrong code, hallucinated total</li>
+    <li>Never trust AI arithmetic on a figure that matters — recompute it</li>
+    <li>No identifiable client financial data in consumer AI tools — ever</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 02 of Week 5 · Next up: Analysis &amp; Reporting with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · bookkeeping flow ===== */
+const FLOW={
+  capture:{gate:false,lab:'Step 1 · AI capture',h:'Capture the document',
+    p:'AI reads the receipt, invoice or bank export — from a photo, PDF or feed — and pulls it into a structured, machine-readable form. Fast, tireless, and blind to whether the underlying document is complete or legible.',
+    ai:'<b>AI does:</b> ingest and pre-read documents at volume. <b>You do:</b> confirm the right documents are present and legible for the period.'},
+  extract:{gate:false,lab:'Step 2 · AI extract',h:'Extract the fields',
+    p:'AI proposes values for each field — vendor, dates, line amounts, tax, total. This is a plausible first draft. It can misread a digit, transpose figures, or invent a total it never actually summed.',
+    ai:'<b>AI does:</b> populate fields in seconds. <b>You do:</b> treat every value as unverified until reconciled to the source.'},
+  categorize:{gate:false,lab:'Step 3 · AI categorize',h:'Categorize the transaction',
+    p:'AI suggests an account and a tax code from patterns it has seen. Often right, sometimes confidently wrong — a plausible-looking code that does not fit this line or this jurisdiction.',
+    ai:'<b>AI does:</b> propose a categorisation. <b>You do:</b> judge whether the account and code are actually correct here.'},
+  reconcile:{gate:true,lab:'Step 4 · Human gate — non-negotiable',h:'Reconcile to source',
+    p:'The load-bearing wall. Every AI-proposed figure is traced back to the source document, and anything the arithmetic depends on is recomputed — never trusted from the model. Nothing enters the ledger until it ties to evidence. This step is human by definition: AI is never the source of record.',
+    ai:'<b>AI does:</b> lay the sides side by side; flag obvious mismatches. <b>You do:</b> tie every figure to source, recompute what matters, and own the result.'},
+  verify:{gate:false,lab:'Step 5 · Human verify / flag',h:'Verify or flag',
+    p:'Record the reconciled outcome, and raise anything unresolved — a missing document, an unexplained difference, an odd code — with the client. Nothing ambiguous is quietly booked.',
+    ai:'<b>AI does:</b> draft a summary of what reconciled and what did not. <b>You do:</b> decide what is booked, and what gets escalated.'}
+};
+const FLOWORDER=['capture','extract','categorize','reconcile','verify'];
+let flowCur='capture';
+function pickFlow(k){
+  flowCur=k;
+  document.querySelectorAll('#flowChain .enode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=FLOW[k],p=el('flowPanel');
+  p.className='fpanel'+(d.gate?' gate':'');
+  p.innerHTML='<div class="flab">'+d.lab+'</div><h4>'+d.h+'</h4><p>'+d.p+'</p><div class="fai">'+d.ai+'</div>';
+  void p.offsetWidth;
+}
+function flowStep(dir){
+  let i=FLOWORDER.indexOf(flowCur)+dir;
+  if(i<0)i=FLOWORDER.length-1;if(i>=FLOWORDER.length)i=0;
+  pickFlow(FLOWORDER[i]);
+}
+pickFlow('capture');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickFlow('capture');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('flowChain'));
+
+/* ===== Figure 2 · extraction review ===== */
+const ERRINFO={
+  amount:'the mis-read amount (source shows 1,240.00, AI read 1,290.00)',
+  code:'the wrong tax code (source is STD standard, AI applied ZERO zero-rated)',
+  total:'the hallucinated total (the lines sum to 1,590.00, AI invented 1,675.00)'
+};
+let caught=new Set();
+function catchErr(row){
+  const e=row.dataset.e;
+  if(row.classList.contains('caught'))return;
+  row.classList.add('caught');
+  caught.add(e);
+  updateRev();
+}
+function updateRev(){
+  el('revHint').textContent='Click each AI figure you believe is wrong · '+caught.size+' / 3 caught';
+  if(caught.size===3){
+    el('revHint').style.display='none';
+    const sc=el('revScore');sc.style.display='block';
+    el('revHead').textContent='All three caught — this is the review muscle.';
+    el('revBody').textContent='You caught '+ERRINFO.amount+'; '+ERRINFO.code+'; and '+ERRINFO.total+'. Every one read as confidently as the correct fields. AI extraction is a proposal to be reconciled to the source — never a finished record. This is exactly the discipline that keeps a wrong figure out of the books, a return and a report.';
+  }
+}
+function revReset(){
+  caught=new Set();
+  document.querySelectorAll('.rrow.err').forEach(r=>r.classList.remove('caught'));
+  el('revScore').style.display='none';
+  el('revHint').style.display='block';
+  updateRev();
+}
+
+/* ===== Figure 3 · reconcile to source ===== */
+let recDone=false;
+function pickLine(line){
+  if(recDone)return;
+  const id=line.dataset.id;
+  document.querySelectorAll('.rcline.pick').forEach(l=>l.classList.remove('flagged'));
+  line.classList.add('flagged');
+  const box=el('recVerdict');
+  box.classList.remove('wrong','right');
+  if(id==='l3'){
+    recDone=true;
+    box.classList.add('right');
+    box.querySelector('.rvtag').textContent='Correct — reconciled to source';
+    box.querySelector('h4').textContent='The Supplies line breaks the tie.';
+    box.querySelector('p').innerHTML='Ledger booked Supplies at 960.00; the bank source shows 690.00 — a <b>270.00</b> discrepancy that must be chased to its source and explained. And ignore the AI entirely: it declared this "balanced ✓" with a running total of 3,180.00, but the ledger sums to 2,980.00, the bank to 2,710.00, and neither equals 3,180. Never trust AI arithmetic or its verdict — recompute, and reconcile every line to source.';
+  }else{
+    box.classList.add('wrong');
+    box.querySelector('.rvtag').textContent='Not the mismatch — keep tracing';
+    box.querySelector('h4').textContent='This line ties to the bank.';
+    box.querySelector('p').textContent='This ledger line matches the bank statement figure exactly. Keep going: compare each ledger amount against its bank-source counterpart until you find the one that does not tie. (And do not let the AI’s "balanced" claim stop your search — its total is wrong too.)';
+  }
+}
+function recReset(){
+  recDone=false;
+  document.querySelectorAll('.rcline.pick').forEach(l=>l.classList.remove('flagged'));
+  const box=el('recVerdict');
+  box.classList.remove('wrong','right');
+  box.querySelector('.rvtag').textContent='Awaiting your check';
+  box.querySelector('h4').textContent='Which line breaks the reconciliation?';
+  box.querySelector('p').textContent='The AI declared this balanced and gave a running total of 3,180.00 — but neither side actually totals that. Find the mismatch by tracing each ledger line to the bank source.';
+}
+
+</script>
+</body>
+</html>

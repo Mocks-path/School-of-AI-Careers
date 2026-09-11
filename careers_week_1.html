@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Teachers · Week 1 — Ms. Anaya Reclaims Her Sunday</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;
+  --green:#4CAF50;--green-light:#E8F5E9;
+  --blue:#3F88C5;--purple:#8B5CF6;--pink:#EC4899;--red:#E74C3C;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);
+  --shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+
+/* ─── HEADER ─── */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:.7rem}
+.header-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);line-height:1.2}
+.header-title span{color:var(--orange)}
+.header-tag{font-size:.65rem;color:var(--text-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.logo-mascot{width:44px;height:44px;flex-shrink:0}
+.progress-pill{display:flex;align-items:center;gap:.6rem;padding:.4rem .9rem;background:var(--orange-glow);border-radius:50px;font-size:.72rem;color:var(--orange);font-weight:700}
+.progress-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* ─── HERO ─── */
+.hero{padding:3.5rem 2rem 2.5rem;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-light) 100%);position:relative;overflow:hidden}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp .7s ease}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;color:var(--navy);margin-bottom:.9rem;animation:fadeUp .7s ease .1s both}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.4rem;animation:fadeUp .7s ease .2s both}
+.usecase-banner{background:#fff;border-radius:var(--radius);padding:1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:1rem;animation:fadeUp .7s ease .3s both}
+.usecase-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#F5943E,#E87A2E);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.usecase-text{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+.usecase-text strong{color:var(--navy);font-weight:700}
+.hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s ease .2s both}
+.hero-mascot{width:230px;height:auto;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 40px rgba(232,122,46,0.22))}
+.budget-strip{max-width:1100px;margin:1.6rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;animation:fadeUp .8s ease .35s both}
+.budget-chip{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem .9rem;text-align:center;box-shadow:var(--shadow-sm)}
+.budget-chip .bv{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--orange)}
+.budget-chip .bl{font-size:.64rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:.15rem}
+
+/* ─── SECTION SHELL ─── */
+.section{padding:3rem 2rem;scroll-margin-top:80px}
+.section.alt{background:var(--bg-light)}
+.container{max-width:1100px;margin:0 auto}
+.section-header{margin-bottom:2rem}
+.section-num{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--orange);margin-bottom:.5rem}
+.section-num .num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.8vw,2rem);color:var(--navy);line-height:1.25;margin-bottom:.4rem}
+.section-sub{font-size:.92rem;color:var(--text-secondary);line-height:1.65;max-width:720px}
+.story-beat{background:#fff;border-left:4px solid var(--orange);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.2rem;font-size:.88rem;color:var(--text-primary);line-height:1.65;box-shadow:var(--shadow-sm);margin-bottom:1.6rem}
+.story-beat .sb-tag{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.story-beat em{color:var(--text-secondary)}
+
+/* ─── TAB NAV ─── */
+.tab-nav{display:flex;gap:.4rem;overflow-x:auto;padding:.4rem;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border-radius:50px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:sticky;top:72px;z-index:50;margin:0 auto 2rem;max-width:fit-content;flex-wrap:nowrap;-ms-overflow-style:none;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:.55rem 1.1rem;border-radius:50px;border:none;background:transparent;color:var(--text-secondary);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:var(--orange)}
+.tab-btn.active{background:var(--orange);color:#fff;box-shadow:0 3px 12px rgba(232,122,46,0.35)}
+
+/* ─── GENERIC CARDS/GRIDS ─── */
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.pick-card{background:#fff;border-radius:var(--radius);padding:1.4rem;border:2px solid var(--border);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.pick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:height .3s}
+.pick-card:nth-child(1)::before{background:linear-gradient(90deg,var(--green),#7BC67E)}
+.pick-card:nth-child(2)::before{background:linear-gradient(90deg,var(--blue),#5DADE2)}
+.pick-card:nth-child(3)::before{background:linear-gradient(90deg,var(--pink),#F48FB1)}
+.pick-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pick-card.active{border-color:var(--orange);box-shadow:var(--shadow-md)}
+.pick-card.active::before{height:6px}
+.pick-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.8rem;background:var(--bg-light)}
+.pick-card h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.pick-card .pc-tag{font-size:.68rem;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.pick-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+.pick-detail{background:#fff;border-radius:var(--radius);padding:1.3rem 1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);font-size:.86rem;line-height:1.65;display:none}
+.pick-detail.show{display:block;animation:fadeUp .4s ease}
+.pick-detail strong{color:var(--navy)}
+.pick-detail .verdict-pill{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem}
+.vp-good{background:var(--green-light);color:#2E7D32}
+.vp-mid{background:#FFF3CD;color:#856404}
+.vp-bad{background:#FEE;color:#C62828}
+
+/* ─── SCENARIO QUIZ ─── */
+.scenario-panel{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.scenario-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem}
+.scenario-q{font-size:1rem;color:var(--navy);margin-bottom:1rem;font-weight:600;line-height:1.5}
+.scenario-options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1rem}
+.scenario-btn{padding:.75rem .9rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;line-height:1.45}
+.scenario-btn:hover{border-color:var(--orange);color:var(--orange)}
+.scenario-btn.correct{background:var(--green-light);border-color:var(--green);color:#2E7D32}
+.scenario-btn.wrong{background:#FEE;border-color:var(--red);color:#C62828}
+.scenario-feedback{padding:.9rem;border-radius:8px;font-size:.83rem;line-height:1.55;display:none}
+.scenario-feedback.show{display:block;animation:fadeUp .4s ease}
+.scenario-feedback.success{background:var(--green-light);color:#2E7D32;border-left:3px solid var(--green)}
+.scenario-feedback.fail{background:#FEE;color:#C62828;border-left:3px solid var(--red)}
+.btn-action{padding:.55rem 1.1rem;border-radius:8px;background:var(--orange);color:#fff;border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-action:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-secondary{background:transparent;color:var(--text-primary);border:1.5px solid var(--border);padding:.55rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── CHAT MOCK ─── */
+.chat-mock{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1rem}
+.chat-head{background:var(--navy-dark);color:#fff;padding:.6rem 1rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.chat-head .cdot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.chat-body{padding:1.1rem;display:flex;flex-direction:column;gap:.8rem;min-height:150px}
+.chat-msg{max-width:88%;padding:.8rem 1rem;border-radius:12px;font-size:.83rem;line-height:1.55}
+.chat-msg.user{align-self:flex-end;background:var(--orange-glow);color:var(--text-primary);border:1px solid rgba(232,122,46,0.25);border-bottom-right-radius:3px}
+.chat-msg.ai{align-self:flex-start;background:var(--bg-light);border:1px solid var(--border);border-bottom-left-radius:3px}
+.chat-msg.ai strong{color:var(--orange)}
+.chat-msg .who{display:block;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem}
+
+/* ─── RULES / GROUND-RULE CARDS ─── */
+.rule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.rule-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.2rem;transition:all .3s}
+.rule-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.rule-card .ri{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.7rem}
+.rule-card:nth-child(1) .ri{background:var(--green-light)}
+.rule-card:nth-child(2) .ri{background:rgba(63,136,197,0.12)}
+.rule-card:nth-child(3) .ri{background:rgba(139,92,246,0.12)}
+.rule-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;color:var(--navy);margin-bottom:.35rem}
+.rule-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ─── PLAN / WEEK GRID ─── */
+.week-plan{display:grid;grid-template-columns:repeat(5,1fr);gap:.7rem;margin-top:1.2rem}
+.day-col{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden}
+.day-col .dc-head{padding:.6rem;text-align:center;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#fff;background:var(--navy)}
+.day-col .dc-body{padding:.8rem;font-size:.76rem;color:var(--text-secondary);line-height:1.5;min-height:120px}
+.day-col .dc-body b{color:var(--navy);display:block;font-size:.8rem;margin-bottom:.2rem}
+.tier-tabs{display:flex;gap:.4rem;margin:1.3rem 0 .3rem;flex-wrap:wrap}
+.tier-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tier-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tier-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.tier-panel{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.3rem 1.5rem;font-size:.86rem;line-height:1.65;margin-top:.8rem}
+.tier-panel strong{color:var(--navy)}
+.tier-panel .tp-lens{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem;background:var(--orange-glow);color:var(--orange)}
+
+/* ─── RUBRIC BUILDER ─── */
+.rubric{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1.2rem}
+.rubric-head{background:var(--navy-dark);color:#fff;padding:.7rem 1.1rem;font-family:'DM Serif Display',serif;font-size:1.05rem}
+.rubric-row{display:grid;grid-template-columns:1.1fr repeat(3,1fr);border-bottom:1px solid var(--border)}
+.rubric-row:last-child{border-bottom:none}
+.rubric-cell{padding:.75rem .85rem;font-size:.78rem;line-height:1.45;border-right:1px solid var(--border)}
+.rubric-cell:last-child{border-right:none}
+.rubric-cell.crit{font-weight:700;color:var(--navy);background:var(--bg-light)}
+.rubric-row.head .rubric-cell{background:var(--orange-glow);font-weight:800;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--orange);text-align:center}
+.rubric-note{padding:.9rem 1.1rem;font-size:.8rem;color:var(--text-secondary);line-height:1.55;background:var(--bg-light)}
+.rubric-note strong{color:var(--orange)}
+
+/* ─── KEEP / FIX / DISCARD ─── */
+.mark-deck{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.4rem;margin-top:1.4rem}
+.mark-card{background:var(--bg-light);border-radius:var(--radius-sm);border:1.5px solid var(--border);padding:1.1rem 1.2rem;margin-bottom:.9rem;transition:all .3s}
+.mark-card.decided-keep{border-color:var(--green);background:var(--green-light)}
+.mark-card.decided-fix{border-color:#E0A800;background:#FFF8E1}
+.mark-card.decided-discard{border-color:var(--red);background:#FEE}
+.mark-label{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.35rem}
+.mark-text{font-size:.86rem;color:var(--text-primary);line-height:1.55;margin-bottom:.5rem;font-style:italic}
+.mark-src{font-size:.72rem;color:var(--text-muted);margin-bottom:.75rem}
+.mark-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.mark-btn{padding:.42rem .9rem;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.mark-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mark-btn:disabled{opacity:.45;cursor:not-allowed}
+.mark-fb{font-size:.78rem;line-height:1.5;padding:.65rem .85rem;border-radius:7px;margin-top:.7rem;display:none}
+.mark-fb.show{display:block;animation:fadeUp .4s ease}
+.mark-fb.good{background:rgba(76,175,80,0.14);color:#2E7D32}
+.mark-fb.warn{background:#FFF3CD;color:#856404}
+.mark-summary{display:none;margin-top:1.1rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);background:var(--orange-glow);font-size:.84rem;line-height:1.6;color:var(--text-primary);animation:popIn .5s ease}
+.mark-summary.show{display:block}
+.mark-summary strong{color:var(--orange)}
+
+/* ─── PRIVACY FIREWALL / PARENT NOTE ─── */
+.firewall{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.3rem}
+.fw-col{border-radius:var(--radius);padding:1.2rem 1.3rem;font-size:.82rem;line-height:1.6}
+.fw-col.unsafe{background:#FEE;border:1.5px dashed var(--red)}
+.fw-col.safe{background:var(--green-light);border:1.5px solid var(--green)}
+.fw-col h5{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.6rem}
+.fw-col.unsafe h5{color:#C62828}
+.fw-col.safe h5{color:#2E7D32}
+.fw-col code{background:rgba(0,0,0,0.05);border-radius:4px;padding:.1rem .35rem;font-family:monospace;font-size:.78rem;color:var(--navy)}
+.fw-col .hl-red{color:#C62828;font-weight:700}
+.fw-col .hl-green{color:#2E7D32;font-weight:700}
+.tone-tabs{display:flex;gap:.4rem;margin:1.4rem 0 .3rem;flex-wrap:wrap}
+.tone-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.tone-tab:hover{border-color:var(--orange);color:var(--orange)}
+.tone-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.note-preview{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;margin-top:.8rem}
+.np-head{background:#F5F5F7;padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--text-muted)}
+.np-head .sdot{width:9px;height:9px;border-radius:50%}
+.np-body{padding:1.3rem 1.5rem}
+.np-subj{font-size:.74rem;color:var(--text-muted);margin-bottom:.6rem}
+.np-subj b{color:var(--navy)}
+.np-text{font-size:.87rem;color:var(--text-primary);line-height:1.7;transition:opacity .3s}
+.np-sign{margin-top:.9rem;font-size:.82rem;color:var(--text-secondary);font-style:italic}
+
+/* ─── HOURS TALLY ─── */
+.tally{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);padding:1.5rem;margin-top:1.4rem}
+.tally-head{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.tally-rows{margin-top:1rem;display:flex;flex-direction:column;gap:.7rem}
+.tally-row{display:grid;grid-template-columns:1.4fr auto auto;gap:1rem;align-items:center;padding:.75rem 1rem;background:var(--bg-light);border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:all .25s}
+.tally-row:hover{border-color:var(--orange)}
+.tally-row.claimed{border-color:var(--green);background:var(--green-light)}
+.tally-task{font-size:.84rem;color:var(--navy);font-weight:600}
+.tally-task span{display:block;font-size:.72rem;font-weight:500;color:var(--text-muted)}
+.tally-hrs{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--orange);white-space:nowrap}
+.tally-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.tally-row.claimed .tally-check{background:var(--green);border-color:var(--green)}
+.tally-row.claimed .tally-check::after{content:'✓';color:#fff;font-size:.72rem;font-weight:800}
+.tally-total{margin-top:1.1rem;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;background:var(--navy-dark);border-radius:10px;color:#fff}
+.tally-total .tt-l{font-size:.82rem;color:rgba(255,255,255,0.75);font-weight:600}
+.tally-total .tt-v{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--orange-light)}
+.tally-note{margin-top:.9rem;font-size:.8rem;line-height:1.55;padding:.8rem 1rem;border-radius:8px;background:var(--orange-glow);color:var(--text-primary)}
+.tally-note strong{color:var(--orange)}
+
+/* ─── SUNDAY FINALE ─── */
+.sunday{display:none;margin-top:1.4rem;background:linear-gradient(135deg,#2A2440,#1A1B2E);border-radius:var(--radius);padding:1.8rem;color:#fff;animation:popIn .5s ease}
+.sunday.show{display:block}
+.sunday h4{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:.8rem}
+.sunday h4 em{font-style:normal;color:var(--orange-light)}
+.sunday-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1rem}
+.sunday-tile{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:9px;padding:.8rem;text-align:center}
+.sunday-tile .v{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--orange-light)}
+.sunday-tile .l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.55);font-weight:700;margin-top:.25rem}
+.sunday p{font-size:.87rem;line-height:1.65;color:rgba(255,255,255,0.85)}
+.sunday p strong{color:var(--orange-light)}
+
+/* ─── FOOTER / RECAP ─── */
+.footer-cta{text-align:center;padding:3rem 2rem 5.5rem;background:var(--navy-dark);color:#fff}
+.footer-cta h2{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:.6rem}
+.footer-cta h2 em{color:var(--orange);font-style:normal}
+.footer-cta>p{font-size:.92rem;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 1.8rem}
+.recap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;max-width:1050px;margin:0 auto 1.8rem;text-align:left}
+.recap-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.recap-card .rn{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-light);margin-bottom:.35rem}
+.recap-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;margin-bottom:.35rem;color:#fff}
+.recap-card p{font-size:.76rem;color:rgba(255,255,255,0.65);line-height:1.55}
+.footer-brand{margin-top:2rem;font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff}
+.footer-brand span{color:var(--orange)}
+.footer-tagline{font-size:.78rem;color:rgba(255,255,255,0.55);letter-spacing:.04em;margin-top:.2rem}
+.footer-note{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1.4rem;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ─── COMPLETION BAR ─── */
+.completion-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:.7rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 -2px 12px rgba(0,0,0,0.05)}
+.completion-info{display:flex;align-items:center;gap:.8rem;font-size:.82rem;color:var(--text-primary);font-weight:600}
+.completion-track{flex:1;max-width:280px;height:8px;background:var(--bg-light);border-radius:4px;overflow:hidden;margin:0 1rem}
+.completion-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:4px;transition:width .5s ease}
+.completion-percent{font-family:'DM Serif Display',serif;color:var(--orange);font-size:1.15rem}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:880px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-mascot{width:170px;margin:0 auto}
+  .usecase-banner{text-align:left}
+  .budget-strip{grid-template-columns:repeat(2,1fr)}
+  .pick-grid,.rule-grid{grid-template-columns:1fr}
+  .week-plan{grid-template-columns:repeat(2,1fr)}
+  .firewall{grid-template-columns:1fr}
+  .rubric-row{grid-template-columns:1fr 1fr}
+  .rubric-row.head{display:none}
+  .tally-row{grid-template-columns:1fr auto}
+  .sunday-grid,.recap-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:.7rem 1rem}
+  .section{padding:2.2rem 1rem}
+  .hero{padding:2.5rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="header-left">
+    <svg class="logo-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="477" cy="380" rx="285" ry="324" fill="#EBE3D6"/>
+      <ellipse cx="477" cy="380" rx="240" ry="270" fill="#412C23"/>
+      <circle cx="389" cy="430" r="36" fill="#fff"/>
+      <circle cx="565" cy="430" r="36" fill="#fff"/>
+      <circle cx="389" cy="430" r="14" fill="#2B2D42"/>
+      <circle cx="565" cy="430" r="14" fill="#2B2D42"/>
+      <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <ellipse cx="477" cy="1350" rx="430" ry="100" fill="#EF7F1A"/>
+      <ellipse cx="477" cy="1350" rx="380" ry="78" fill="#FF9429"/>
+    </svg>
+    <div>
+      <div class="header-title">Moksh<span>Path</span></div>
+      <div class="header-tag">Week 1 · Fun While You Learn</div>
+    </div>
+  </div>
+  <div class="progress-pill"><span class="dot"></span> <span id="headerProgressText">0 of 5 chapters explored</span></div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span style="width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block"></span> Story Project · AI for Teachers</div>
+      <h1>Ms. Anaya Reclaims Her <em>Sunday</em></h1>
+      <p class="hero-sub">Meet Ms. Anaya — a Grade 6 teacher who loves her students and quietly dreads Sundays, the day lesson-planning and marking swallow whole. This week she tries something new: she lets AI <em>draft</em> while she <em>decides</em>. Across five chapters she sets ground rules, plans a differentiated week, builds a fair rubric, writes parent updates behind a privacy firewall — and wins back the hours that were never supposed to belong to work. Every choice you make below teaches the same quiet lesson.</p>
+      <div class="usecase-banner">
+        <div class="usecase-icon">🍎</div>
+        <div class="usecase-text"><strong>The Mission:</strong> By next Sunday afternoon, Anaya wants a standards-aligned week planned, a fair assessment ready, and parent notes sent — <strong>without</strong> giving up her weekend or a single student's private data. The recurring rule she never breaks: <strong>AI drafts, Anaya decides.</strong></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="hero-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBE3D6"/><stop offset="1" stop-color="#D1D0CC"/></linearGradient>
+          <linearGradient id="faceGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A6A48"/><stop offset="1" stop-color="#412C23"/></linearGradient>
+          <linearGradient id="feetGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9429"/><stop offset="1" stop-color="#EF7F1A"/></linearGradient>
+        </defs>
+        <ellipse cx="210" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="740" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="477" cy="380" rx="285" ry="324" fill="url(#bodyGrad)"/>
+        <ellipse cx="477" cy="392" rx="240" ry="225" fill="url(#faceGrad)"/>
+        <circle cx="389" cy="430" r="38" fill="#fff"/>
+        <circle cx="565" cy="430" r="38" fill="#fff"/>
+        <circle cx="389" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="565" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="395" cy="424" r="5" fill="#fff"/>
+        <circle cx="571" cy="424" r="5" fill="#fff"/>
+        <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <ellipse cx="477" cy="1350" rx="430" ry="105" fill="url(#feetGrad)"/>
+        <ellipse cx="477" cy="1320" rx="380" ry="78" fill="#FF9429"/>
+      </svg>
+    </div>
+  </div>
+  <div class="budget-strip">
+    <div class="budget-chip"><div class="bv">1 Sunday</div><div class="bl">To reclaim</div></div>
+    <div class="budget-chip"><div class="bv">32 kids</div><div class="bl">Grade 6, one class</div></div>
+    <div class="budget-chip"><div class="bv">0 code</div><div class="bl">Required to learn</div></div>
+    <div class="budget-chip"><div class="bv">4 lessons</div><div class="bl">Woven into 1 story</div></div>
+  </div>
+</section>
+
+<!-- ─── TAB NAVIGATION ─── -->
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-target="s1">Ch 1 · Ground Rules</button>
+  <button class="tab-btn" data-target="s2">Ch 2 · Plan the Week</button>
+  <button class="tab-btn" data-target="s3">Ch 3 · Fair Assessment</button>
+  <button class="tab-btn" data-target="s4">Ch 4 · Parent Notes</button>
+  <button class="tab-btn" data-target="s5">Ch 5 · The Sunday</button>
+</div>
+
+<!-- ═══════════ CH 1: GROUND RULES (Lesson 1) ═══════════ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">1</div> Chapter One · Sunday Night, Take One</div>
+      <h2 class="section-title">Set Up the Workflow &amp; the Ground Rules</h2>
+      <p class="section-sub">Before Anaya asks AI for a single thing, she decides what AI is <strong>for</strong> — a drafting assistant, never a decision-maker — and draws two bright lines she will not cross: <strong>protect student data</strong> and <strong>verify every fact</strong>.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Sunday, 8:10 p.m. Anaya's tea has gone cold beside a stack of unplanned lessons. A colleague swears AI "gives her Sundays back," but Anaya has read the horror stories too — a made-up citation here, a student's name pasted into a random website there. So before she types anything, she does the professional thing: <em>she sets ground rules first, and uses AI to structure her work, not to replace her judgment.</em>
+    </div>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="ri">🧭</div>
+        <h4>AI drafts, I decide</h4>
+        <p>AI produces a first draft in seconds; Anaya reads every line and owns the final call. The teacher's judgment is the point, not the bottleneck.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔒</div>
+        <h4>No real student data</h4>
+        <p>No names, no roll numbers, no diagnoses, no photos into a general AI tool. She works with roles ("Student A") and needs, never identities.</p>
+      </div>
+      <div class="rule-card">
+        <div class="ri">🔍</div>
+        <h4>Verify before I trust</h4>
+        <p>Every fact, date, and quote gets checked against a real source. AI is confident even when it's wrong — so confidence is never her evidence.</p>
+      </div>
+    </div>
+
+    <div class="chat-mock">
+      <div class="chat-head"><span class="cdot"></span> AI Assistant · Setting up Anaya's workflow — the prompt showdown</div>
+      <div class="chat-body" id="promptChat">
+        <div class="chat-msg ai"><span class="who">Narrator</span>You get out of AI exactly what you put in. Below are three ways Anaya could open her session. <strong>Pick the prompt you think earns the most useful — and safest — answer</strong>, then see what comes back.</div>
+      </div>
+    </div>
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Pick Anaya's opening prompt</div>
+      <div class="scenario-q">Which prompt does Anaya send first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="pickPrompt(0)">"Plan my whole week for me."</button>
+        <button class="scenario-btn" onclick="pickPrompt(1)">"Here's my class list with names and test scores — tell me what to do with each child."</button>
+        <button class="scenario-btn" onclick="pickPrompt(2)">"Act as a Grade 6 planning assistant. My class of ~32 has three broad readiness levels (needs support / on-track / ready for more). Draft a week of fractions activities aligned to our 'compare &amp; add fractions' standard. Give me options I can adapt — I'll make the final calls. Don't invent facts; flag anything I should verify."</button>
+      </div>
+      <div class="scenario-feedback" id="promptFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Ethics &amp; privacy instincts (3 rounds)</div>
+      <div class="scenario-q" id="ethicsQ">Loading…</div>
+      <div class="scenario-options" id="ethicsOpts"></div>
+      <div class="scenario-feedback" id="ethicsFb"></div>
+      <button class="btn-secondary" id="ethicsNext" onclick="nextEthicsQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 2: PLAN THE WEEK (Lesson 2) ═══════════ -->
+<section class="section alt" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">2</div> Chapter Two · The Week Takes Shape</div>
+      <h2 class="section-title">Plan a Differentiated, Standards-Aligned Week</h2>
+      <p class="section-sub">A good week isn't one lesson repeated five times — it's one <strong>standard</strong> approached from many angles so every learner has a way in. AI can draft that scaffolding in minutes; Anaya tunes it to the kids in front of her.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Sunday, 8:40 p.m. The standard for the week is fixed: <em>compare and add fractions with unlike denominators.</em> Anaya asks AI to draft a five-day arc — hook, guided practice, a hands-on task, a check, and a stretch — then to spin each day into three readiness tiers. Below is the skeleton it returned. Click through the tiers to see how one standard bends to fit three kinds of learner.
+    </div>
+
+    <div class="week-plan">
+      <div class="day-col">
+        <div class="dc-head">Mon</div>
+        <div class="dc-body"><b>Hook</b>Pizza-slice fractions: which is more, ⅓ or ⅜? Kids argue, then measure.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Tue</div>
+        <div class="dc-body"><b>Guided</b>Model equivalent fractions with number lines &amp; fraction strips.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Wed</div>
+        <div class="dc-body"><b>Task</b>Recipe remix: scale a recipe up and add the fractional cups.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Thu</div>
+        <div class="dc-body"><b>Check</b>Quick exit ticket + small-group re-teach where needed.</div>
+      </div>
+      <div class="day-col">
+        <div class="dc-head">Fri</div>
+        <div class="dc-body"><b>Stretch</b>Design-a-garden project: budget fractional plots.</div>
+      </div>
+    </div>
+
+    <div class="tier-tabs">
+      <button class="tier-tab active" data-tier="support" onclick="setTier('support')">🌱 Needs support</button>
+      <button class="tier-tab" data-tier="core" onclick="setTier('core')">🌳 On-track (core)</button>
+      <button class="tier-tab" data-tier="stretch" onclick="setTier('stretch')">🚀 Ready for more</button>
+    </div>
+    <div class="tier-panel" id="tierPanel"></div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · The differentiation trap</div>
+      <div class="scenario-q">AI hands Anaya three tiers. What makes the "needs support" tier <em>real</em> differentiation rather than just "less work"?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="diffQ(0)">Give the same worksheet but only the first 3 questions — less to do.</button>
+        <button class="scenario-btn" onclick="diffQ(1)">Keep the same learning goal, but add scaffolds — fraction strips, worked examples, a partner — so they reach it a different way.</button>
+        <button class="scenario-btn" onclick="diffQ(2)">Give them a completely easier topic so nobody feels behind.</button>
+      </div>
+      <div class="scenario-feedback" id="diffFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Planning smarts (2 rounds)</div>
+      <div class="scenario-q" id="planQ">Loading…</div>
+      <div class="scenario-options" id="planOpts"></div>
+      <div class="scenario-feedback" id="planFb"></div>
+      <button class="btn-secondary" id="planNext" onclick="nextPlanQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 3: FAIR ASSESSMENT (Lesson 3) ═══════════ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">3</div> Chapter Three · Marking, Reimagined</div>
+      <h2 class="section-title">Build a Fair Rubric &amp; Mark with Human-in-the-Loop</h2>
+      <p class="section-sub">A fair assessment says <strong>up front</strong> what "good" looks like. AI can draft a clear rubric and even suggest feedback — but a grade is a judgment about a child, so Anaya keeps her hands firmly on the wheel: <strong>keep, fix, or discard</strong> every AI suggestion.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday's exit tickets are in — 32 short answers on adding fractions. Old Anaya would have marked these on Sunday, in silence, at 11 p.m. New Anaya asks AI to draft a rubric first, then to suggest feedback comments <em>from anonymised answers</em>. AI is fast and mostly good — but "mostly" is exactly why she reads every one. <em>AI drafts, Anaya decides.</em>
+    </div>
+
+    <div class="rubric">
+      <div class="rubric-head">🍎 Rubric · "Add two fractions with unlike denominators" (AI drafted, Anaya approved)</div>
+      <div class="rubric-row head">
+        <div class="rubric-cell">Criterion</div>
+        <div class="rubric-cell">Beginning (1)</div>
+        <div class="rubric-cell">Developing (2)</div>
+        <div class="rubric-cell">Secure (3)</div>
+      </div>
+      <div class="rubric-row">
+        <div class="rubric-cell crit">Finds common denominator</div>
+        <div class="rubric-cell">Adds denominators directly or leaves them unequal.</div>
+        <div class="rubric-cell">Finds a common denominator with a hint or one slip.</div>
+        <div class="rubric-cell">Chooses a correct common denominator independently.</div>
+      </div>
+      <div class="rubric-row">
+        <div class="rubric-cell crit">Adds &amp; simplifies</div>
+        <div class="rubric-cell">Sum is incorrect or not simplified at all.</div>
+        <div class="rubric-cell">Correct sum; simplification partial or missing.</div>
+        <div class="rubric-cell">Correct sum, fully simplified.</div>
+      </div>
+      <div class="rubric-row">
+        <div class="rubric-cell crit">Explains reasoning</div>
+        <div class="rubric-cell">No working or reasoning shown.</div>
+        <div class="rubric-cell">Some steps shown; reasoning unclear in places.</div>
+        <div class="rubric-cell">Clear steps a peer could follow.</div>
+      </div>
+      <div class="rubric-note">💡 <strong>Why a rubric first?</strong> Because grading without one is grading by mood. Anaya asked AI for a draft, then edited it: she cut a vague "neatness" row that didn't measure learning, and reworded "shows understanding" into the observable "explains reasoning." The rubric is now hers.</div>
+    </div>
+
+    <div class="mark-deck">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.2rem">🖊️ Help Anaya decide: Keep · Fix · Discard</div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin:.2rem 0 1rem">AI suggested a feedback comment for three <em>anonymised</em> answers. Human-in-the-loop means you don't rubber-stamp — judge each suggestion. Decide for all three to see Anaya's verdict.</p>
+
+      <div class="mark-card" id="mk1">
+        <div class="mark-label">AI-suggested comment · Student A</div>
+        <div class="mark-text">"Great job — full marks! You clearly mastered adding fractions."</div>
+        <div class="mark-src">Actual answer: found common denominator correctly, but forgot to simplify 6/8 → ¾.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk1','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk1','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk1','discard',this)">Discard</button>
+        </div>
+        <div class="mark-fb" id="fb-mk1"></div>
+      </div>
+
+      <div class="mark-card" id="mk2">
+        <div class="mark-label">AI-suggested comment · Student B</div>
+        <div class="mark-text">"You showed clear working, chose a common denominator, and simplified correctly. Next step: try it with three fractions."</div>
+        <div class="mark-src">Actual answer: fully correct, well-explained, ready for a stretch.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk2','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk2','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk2','discard',this)">Discard</button>
+        </div>
+        <div class="mark-fb" id="fb-mk2"></div>
+      </div>
+
+      <div class="mark-card" id="mk3">
+        <div class="mark-label">AI-suggested comment · Student C</div>
+        <div class="mark-text">"This is careless work. You clearly didn't try. See me."</div>
+        <div class="mark-src">Actual answer: attempted the method, got the denominator wrong, showed real effort in the working.</div>
+        <div class="mark-actions">
+          <button class="mark-btn" onclick="markDecide('mk3','keep',this)">Keep</button>
+          <button class="mark-btn" onclick="markDecide('mk3','fix',this)">Fix</button>
+          <button class="mark-btn" onclick="markDecide('mk3','discard',this)">Discard</button>
+        </div>
+        <div class="mark-fb" id="fb-mk3"></div>
+      </div>
+
+      <div class="mark-summary" id="markSummary"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 4: PARENT NOTES (Lesson 4) ═══════════ -->
+<section class="section alt" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">4</div> Chapter Four · Behind the Firewall</div>
+      <h2 class="section-title">Draft Parent Updates Behind a Privacy Firewall</h2>
+      <p class="section-sub">Parent notes are where AI saves the most time — and where a careless paste can leak a child's private data. Anaya's trick: draft with <strong>placeholders</strong>, let AI shape the tone, then fill in real names herself, offline, at the very end.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Thursday evening. Report notes for 32 families are due. The temptation is huge: paste the whole class spreadsheet into AI and say "write me 32 notes." Anaya doesn't. She builds a <em>privacy firewall</em> — AI never sees a real name or score. It writes the warm, clear scaffolding; she pours the real child into it afterward. Same time saved, zero data leaked.
+    </div>
+
+    <div class="firewall">
+      <div class="fw-col unsafe">
+        <h5>🚫 The tempting shortcut (never do this)</h5>
+        <p>"Write a report for <span class="hl-red">Aarav Sharma, roll 14</span>, who scored <span class="hl-red">54%</span> and has <span class="hl-red">ADHD</span>, and copy this to the parent."</p>
+        <p style="margin-top:.6rem">A real name, a real score, a health note — pasted into a general tool whose data handling you don't control. That's a child's private record leaving the building.</p>
+      </div>
+      <div class="fw-col safe">
+        <h5>✅ The privacy firewall (do this)</h5>
+        <p>"Draft a warm, specific parent note for <code>[STUDENT]</code> who is <span class="hl-green">making steady progress in fractions</span> and would benefit from <span class="hl-green">more reading-aloud at home</span>. Leave name and details as placeholders."</p>
+        <p style="margin-top:.6rem">AI writes the scaffolding from <span class="hl-green">needs, not identities</span>. Anaya fills <code>[STUDENT]</code> in herself, offline. Fast and safe.</p>
+      </div>
+    </div>
+
+    <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin:1.6rem 0 .2rem">✉️ Same note, three tones — you direct the voice</div>
+    <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.4rem">AI can write in whatever register a family needs. Anaya picks the tone; the placeholders stay until she fills them in privately. Try each.</p>
+    <div class="tone-tabs">
+      <button class="tone-tab active" data-tone="warm" onclick="setTone('warm')">🤝 Warm &amp; encouraging</button>
+      <button class="tone-tab" data-tone="direct" onclick="setTone('direct')">📋 Clear &amp; direct</button>
+      <button class="tone-tab" data-tone="concern" onclick="setTone('concern')">💛 Gentle concern</button>
+    </div>
+    <div class="note-preview">
+      <div class="np-head">
+        <span class="sdot" style="background:#FF5F57"></span><span class="sdot" style="background:#FEBC2E"></span><span class="sdot" style="background:#28C840"></span>
+        <span style="margin-left:.6rem">Draft · placeholders not yet filled</span>
+      </div>
+      <div class="np-body">
+        <div class="np-subj"><b>To:</b> Parent/Guardian of [STUDENT] &nbsp;·&nbsp; <b>Subject:</b> [STUDENT]'s week in maths</div>
+        <div class="np-text" id="noteText">Dear [PARENT], I wanted to share a quick, encouraging update. [STUDENT] has been making steady progress with fractions this week and contributed thoughtfully during our recipe-remix task. To keep the momentum, a little reading-aloud together at home would help. Thank you for all you do — please reach out any time.</div>
+        <div class="np-sign">— Ms. Anaya, Grade 6</div>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Spot the leak</div>
+      <div class="scenario-q">Anaya is about to hit send on an AI-drafted note. Which line means she must stop and edit first?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="leakQ(0)">"[STUDENT] is making steady progress in fractions."</button>
+        <button class="scenario-btn" onclick="leakQ(1)">"As you know, [STUDENT]'s counsellor mentioned the recent situation at home is settling — reassuring to hear."</button>
+        <button class="scenario-btn" onclick="leakQ(2)">"A little reading together at home would build on this week's momentum."</button>
+      </div>
+      <div class="scenario-feedback" id="leakFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Reports &amp; privacy (2 rounds)</div>
+      <div class="scenario-q" id="privQ">Loading…</div>
+      <div class="scenario-options" id="privOpts"></div>
+      <div class="scenario-feedback" id="privFb"></div>
+      <button class="btn-secondary" id="privNext" onclick="nextPrivQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CH 5: THE SUNDAY (Finale) ═══════════ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">5</div> Chapter Five · The Reclaimed Sunday</div>
+      <h2 class="section-title">Add Up the Hours — What Did Anaya Win Back?</h2>
+      <p class="section-sub">The whole week comes down to one honest tally. AI didn't do Anaya's job; it cleared the <strong>drafting drudgery</strong> around it. Tap each task to claim the hours back — and watch her Sunday reappear.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Sunday, take two. Same teacher, same class, same standards — but the tea is still hot. Anaya adds up where the week's drafting assistant saved her real time, and where she deliberately <em>spent</em> time (reading every mark, choosing every word). Tap each row to reclaim the hours. The lesson underneath the numbers: <em>AI drafts, Anaya decides — and that trade buys back a Sunday.</em>
+    </div>
+
+    <div class="tally">
+      <div class="tally-head">⏱️ The Hours-Reclaimed Tally</div>
+      <p style="font-size:.82rem;color:var(--text-secondary)">Estimated time AI drafting saved Anaya this week (she still reviewed and decided everything). Tap each task to claim it.</p>
+      <div class="tally-rows" id="tallyRows">
+        <div class="tally-row" data-hrs="2.5" onclick="claimHours(this)">
+          <div class="tally-task">Draft &amp; differentiate the week's plan<span>Ch 2 · three tiers from one standard</span></div>
+          <div class="tally-hrs">−2.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="1.5" onclick="claimHours(this)">
+          <div class="tally-task">Build the assessment rubric<span>Ch 3 · draft, then edit to make it hers</span></div>
+          <div class="tally-hrs">−1.5 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="2" onclick="claimHours(this)">
+          <div class="tally-task">Draft feedback comments (she read every one)<span>Ch 3 · human-in-the-loop marking</span></div>
+          <div class="tally-hrs">−2 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+        <div class="tally-row" data-hrs="3" onclick="claimHours(this)">
+          <div class="tally-task">Scaffold 32 parent notes behind the firewall<span>Ch 4 · placeholders, tone, then fill offline</span></div>
+          <div class="tally-hrs">−3 hrs</div>
+          <div class="tally-check"></div>
+        </div>
+      </div>
+      <div class="tally-total">
+        <div class="tt-l">Sunday hours reclaimed</div>
+        <div class="tt-v" id="tallyTotal">0.0 hrs</div>
+      </div>
+      <div class="tally-note" id="tallyNote">👆 Tap the rows above to see the hours add up. <strong>Honest caveat:</strong> these are drafting savings — the judgment work (reading, deciding, verifying) is time Anaya <em>kept</em>, on purpose. That's the deal.</div>
+    </div>
+
+    <div class="sunday" id="sundayFinale">
+      <h4>☀️ Sunday, 3:00 p.m. — <em>and Anaya is not working.</em></h4>
+      <div class="sunday-grid">
+        <div class="sunday-tile"><div class="v">~9 hrs</div><div class="l">Drafting time saved</div></div>
+        <div class="sunday-tile"><div class="v">0</div><div class="l">Student names leaked</div></div>
+        <div class="sunday-tile"><div class="v">32/32</div><div class="l">Marks she personally read</div></div>
+        <div class="sunday-tile"><div class="v">1</div><div class="l">Sunday, reclaimed</div></div>
+      </div>
+      <p>The plan is standards-aligned and differentiated. The rubric is fair and hers. Every mark passed through her eyes; not one child's data left the building. And the notes went home warm and specific. AI drafted the scaffolding around Anaya's week — <strong>she made every decision that actually mattered.</strong> The reward isn't in a spreadsheet. It's a hot cup of tea, a closed laptop, and a Sunday afternoon that finally belongs to her again. <strong>AI drafts. Anaya decides.</strong> 🍵</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER RECAP ─── -->
+<div class="footer-cta">
+  <h2>🍎 One week ago, Sunday belonged to the marking pile.</h2>
+  <p>Now Anaya has run the whole AI-for-teachers loop once — for real. Here's what her story secretly taught you: the four lessons of Week 1.</p>
+  <div class="recap-grid">
+    <div class="recap-card">
+      <div class="rn">Lesson 1</div>
+      <h4>AI Workflow &amp; Ground Rules</h4>
+      <p>AI drafts, you decide. Two bright lines: never feed real student data to general tools, and verify every fact — confidence isn't evidence. Chapter 1.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 2</div>
+      <h4>Differentiated, Standards-Aligned Planning</h4>
+      <p>One standard, many doors in. AI drafts three readiness tiers with the same goal; real differentiation adds scaffolds, not just less work. Chapter 2.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 3</div>
+      <h4>Fair Assessment &amp; Human-in-the-Loop</h4>
+      <p>A rubric before a grade. AI drafts feedback from anonymised work; you keep, fix, or discard every line, because a grade is a judgment about a child. Chapter 3.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 4</div>
+      <h4>Parent Notes Behind a Privacy Firewall</h4>
+      <p>Draft with placeholders and needs, not names and scores. AI shapes tone; you fill in the real child offline. Biggest time-saver, zero leaks. Chapter 4.</p>
+    </div>
+  </div>
+  <button class="btn-action" style="font-size:.9rem;padding:.8rem 1.8rem" onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">↻ Replay Anaya's week</button>
+  <div class="footer-brand">Moksh<span>Path</span></div>
+  <div class="footer-tagline">Guided Path to True Learning</div>
+  <div class="footer-note">Ms. Anaya is a teaching scenario. Time savings vary by tool, subject, and school policy — and your school's rules on AI and student data always come first. The point of Week 1 isn't to hand your judgment to a machine; it's to let a drafting assistant clear the drudgery so your real teaching gets more of you.</div>
+</div>
+
+<!-- ─── COMPLETION BAR ─── -->
+<div class="completion-bar">
+  <div class="completion-info"><span style="font-size:1.1rem">🍎</span><span>Anaya's Week</span></div>
+  <div class="completion-track"><div class="completion-fill" id="completionFill" style="width:0%"></div></div>
+  <div class="completion-percent" id="completionPct">0%</div>
+</div>
+
+<script>
+/* ───────── PROGRESS TRACKING ───────── */
+const visited = new Set();
+function markVisited(id){
+  visited.add(id);
+  const pct = Math.round((visited.size / 5) * 100);
+  document.getElementById('completionFill').style.width = pct + '%';
+  document.getElementById('completionPct').textContent = pct + '%';
+  document.getElementById('headerProgressText').textContent = `${visited.size} of 5 chapters explored`;
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    markVisited(btn.dataset.target);
+  });
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.3) {
+      markVisited(e.target.id);
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === e.target.id));
+    }
+  });
+}, {threshold:[0.3]});
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+/* ───────── CH 1: PROMPT SHOWDOWN ───────── */
+const promptResults = [
+  {ok:false, fb:'✗ Too vague — and it hands over the whole decision. AI replies with a generic template that ignores Anaya\'s standards, her class, and her judgment. "Plan it for me" makes AI the teacher; the rule is the opposite. Try the detailed one.',
+   chat:`<div class="chat-msg user"><span class="who">Anaya</span>Plan my whole week for me.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>Sure! Here's a generic 5-day plan: Monday — intro; Tuesday — practice; Wednesday — worksheet… <strong>(…a template with no standard, no differentiation, and no idea who your students are.)</strong></div>`},
+  {ok:false, fb:'✗ Stop — that\'s real student data. Names and scores pasted into a general AI tool is exactly the privacy line Anaya drew in her ground rules. A child\'s record must never leave the building this way. Work from needs, not identities.',
+   chat:`<div class="chat-msg user"><span class="who">Anaya</span>Here's my class list with names and test scores — tell me what to do with each child.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>⚠️ I can help with teaching strategies, but please don't share students' names or scores with me. Describe needs instead — e.g. "a group still finding common denominators." <strong>Even the tool is protecting the kids. So should you.</strong></div>`},
+  {ok:true, fb:'✓ Exactly. Role + her real situation + the standard + readiness levels (as needs, not names) + "I make the final calls" + "don\'t invent facts, flag what to verify." This prompt respects both bright lines and keeps Anaya in charge. This is where the week begins.',
+   chat:`<div class="chat-msg user"><span class="who">Anaya</span>Act as a Grade 6 planning assistant. ~32 students, three readiness levels. Draft a week of fractions activities aligned to "compare &amp; add fractions." Give me options to adapt — I'll decide. Don't invent facts; flag anything to verify.</div><div class="chat-msg ai"><span class="who">AI Assistant</span>Great constraints. Here's a 5-day arc — hook, guided practice, hands-on task, check, stretch — each in three tiers you can adapt. <strong>⚑ Verify:</strong> match the exact standard code to your syllabus; I can't confirm your board's wording. <strong>← Structured, safe, and yours to edit.</strong></div>`}
+];
+let promptAnswered = false;
+function pickPrompt(i){
+  const r = promptResults[i];
+  const btns = document.querySelectorAll('#s1 .scenario-panel:first-of-type .scenario-btn');
+  if (!promptAnswered){
+    btns.forEach((b,j) => { if (j===2) b.classList.add('correct'); else if (j===i && !r.ok) b.classList.add('wrong'); });
+    if (r.ok) promptAnswered = true;
+  }
+  const fb = document.getElementById('promptFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+  document.getElementById('promptChat').innerHTML = r.chat;
+}
+
+/* ethics quiz */
+const ethicsQs = [
+  {q:"Anaya wants AI to help sort her class into groups. What's the safe way to describe the students?", opts:["Paste the full name-and-score spreadsheet — it's faster","Describe needs anonymously: 'a group still finding common denominators, a group ready for multi-step problems'","Use first names only — surnames are the private part"], correct:1, explain:"Names, scores, roll numbers, and diagnoses are identifying data. Describe needs and readiness, never identities — that gets you the help without exposing a child."},
+  {q:"AI gives Anaya a neat historical 'fact' and a citation for a cross-curricular lesson. Best move?", opts:["Use it — it sounds authoritative and even has a source","Verify the fact and the citation against a real source before using it","Assume the citation is fake and delete the whole lesson"], correct:1, explain:"AI can invent confident, well-formatted facts and citations ('hallucinations'). Confidence is never evidence. A 60-second check against a real source is the actual skill."},
+  {q:"What's the single rule that keeps AI in its lane all week?", opts:["'AI decides, I approve' — trust the machine, save time","'AI drafts, I decide' — AI produces first drafts; the teacher owns every final call","'AI does the boring parts and the grading' — including the marks"], correct:1, explain:"Drafting is delegable; judgment about a child is not. 'AI drafts, I decide' is the through-line of the whole week — and the reason Anaya's Sunday is safe to reclaim."}
+];
+let eqIdx = 0;
+function renderEthicsQ(){
+  const s = ethicsQs[eqIdx];
+  document.getElementById('ethicsQ').textContent = `Round ${eqIdx+1}/3 — ${s.q}`;
+  document.getElementById('ethicsOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerEthicsQ(${i})">${o}</button>`).join('');
+  const fb = document.getElementById('ethicsFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('ethicsNext').style.display='none';
+}
+function answerEthicsQ(i){
+  const s = ethicsQs[eqIdx];
+  document.querySelectorAll('#ethicsOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('ethicsFb');
+  fb.className = 'scenario-feedback show ' + (i===s.correct ? 'success':'fail');
+  fb.innerHTML = (i===s.correct ? '✓ Spot on! ':'✗ Not quite. ') + s.explain + (eqIdx===ethicsQs.length-1 ? '<br><br>🎉 Chapter 1 complete — ground rules locked. Next: plan the week.' : '');
+  document.getElementById('ethicsNext').style.display = eqIdx < ethicsQs.length-1 ? 'inline-block':'none';
+}
+function nextEthicsQ(){ eqIdx++; if(eqIdx<ethicsQs.length) renderEthicsQ(); }
+renderEthicsQ();
+
+/* ───────── CH 2: TIERS ───────── */
+const tierInfo = {
+  support: `<span class="tp-lens">🌱 Needs support · same goal</span><br><strong>Same standard, more scaffolds.</strong> These learners still aim to add fractions with unlike denominators — but they get fraction strips they can physically line up, one worked example taped to the desk, a partner to think aloud with, and numbers kept friendly (halves, quarters, eighths). <em>The goal doesn't shrink; the path gets guardrails.</em> AI drafted these supports in seconds; Anaya chose which fit her actual kids.`,
+  core: `<span class="tp-lens">🌳 On-track · the core lesson</span><br><strong>The standard, straight up.</strong> On-track learners work the recipe-remix task with mixed denominators (thirds, fifths, sixths), show their steps, and simplify. They get a check-in mid-task and a chance to compare methods with a neighbour. This is the spine of the week — the tier AI drafts first, and the one Anaya tunes the other two around.`,
+  stretch: `<span class="tp-lens">🚀 Ready for more · deeper, not just harder</span><br><strong>Extend the thinking, don't just pile on sums.</strong> These learners scale a whole recipe, add three fractions, and justify <em>why</em> a common denominator works — then design a garden with fractional plots and a fixed budget. The stretch is depth and reasoning, not extra worksheets. <em>AI proposed the enrichment; Anaya kept the ones that connect to next week's standard.</em>`
+};
+function setTier(t){
+  document.querySelectorAll('.tier-tab').forEach(x => x.classList.toggle('active', x.dataset.tier===t));
+  const p = document.getElementById('tierPanel');
+  p.style.opacity=0;
+  setTimeout(()=>{ p.innerHTML = tierInfo[t]; p.style.opacity=1; }, 150);
+}
+document.getElementById('tierPanel').style.transition='opacity .2s';
+setTier('support');
+
+/* differentiation trap */
+const diffFbs = [
+  {ok:false, fb:'✗ "Fewer questions" isn\'t differentiation — it just lowers the amount, not the access. A struggling learner still needs a way <em>in</em> to the same idea, not a shorter version of the wall they\'re stuck on.'},
+  {ok:true, fb:'✓ Yes. Real differentiation keeps the <strong>same learning goal</strong> and changes the <em>route</em>: scaffolds, models, manipulatives, a partner. Everyone aims for the standard; some just get more support reaching it.'},
+  {ok:false, fb:'✗ Swapping in an easier topic quietly gives up on the child reaching the standard at all. Support them toward the goal — don\'t move the goal out of their reach.'}
+];
+function diffQ(i){
+  const r = diffFbs[i];
+  const btns = document.querySelectorAll('#s2 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled=true; if(diffFbs[j].ok)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('diffFb');
+  fb.className='scenario-feedback show '+(r.ok?'success':'fail');
+  fb.innerHTML = r.fb + (r.ok ? '' : '<br><br>The real answer: <strong>same goal, more scaffolds.</strong>');
+}
+
+/* planning quiz */
+const planQs = [
+  {q:"Why ask AI to align the week to a specific standard rather than just 'teach fractions'?", opts:["Standards make the plan longer and look more official","A named standard gives every activity a clear target to hit and to assess against — the plan and the rubric line up","AI can only work if you name a standard"], correct:1, explain:"When planning and assessment point at the same standard, you know what 'good' means and can check for it. Anaya still verifies the exact standard code against her own syllabus — AI can get the wording wrong."},
+  {q:"AI's draft week looks great but assumes 45-minute periods; Anaya's are 35. Best move?", opts:["Use it as-is — close enough","Adapt it: trim each day to fit 35 minutes and cut what doesn't serve the standard — the draft is a starting point, not a script","Throw it out and plan from scratch"], correct:1, explain:"A draft is clay, not a script. Anaya keeps the useful bones and reshapes the rest to her real timetable and her real class. AI drafts; she decides."}
+];
+let pqIdx=0;
+function renderPlanQ(){
+  const s = planQs[pqIdx];
+  document.getElementById('planQ').textContent = `Round ${pqIdx+1}/2 — ${s.q}`;
+  document.getElementById('planOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPlanQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('planFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('planNext').style.display='none';
+}
+function answerPlanQ(i){
+  const s=planQs[pqIdx];
+  document.querySelectorAll('#planOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('planFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(pqIdx===planQs.length-1?'<br><br>🎉 Chapter 2 complete — a week that fits real kids. Next: a fair way to mark it.':'');
+  document.getElementById('planNext').style.display = pqIdx<planQs.length-1?'inline-block':'none';
+}
+function nextPlanQ(){ pqIdx++; if(pqIdx<planQs.length) renderPlanQ(); }
+renderPlanQ();
+
+/* ───────── CH 3: KEEP / FIX / DISCARD ───────── */
+const markKey = {
+  mk1:{right:'fix', fb:{
+    fix:'✓ Correct — <strong>FIX.</strong> The maths is nearly there, but "full marks, mastered it" contradicts the un-simplified answer. Anaya keeps the warm tone and adds the truth: "Great denominator work — one more step: simplify 6/8 to ¾." Encouraging <em>and</em> honest.',
+    keep:'△ Kind, but inaccurate — praising "mastery" when a step was missed teaches the wrong thing and the child never learns to simplify. Verdict: <strong>FIX</strong> — keep the warmth, correct the claim.',
+    discard:'△ Too harsh a fate for a good bones. The comment just over-praises; it doesn\'t need deleting, it needs one honest edit. Verdict: <strong>FIX</strong>.'}},
+  mk2:{right:'keep', fb:{
+    keep:'✓ Correct — <strong>KEEP.</strong> It\'s accurate, specific, and even points to a next step (three fractions). This is AI drafting at its best — Anaya reads it, agrees, and moves on. Human-in-the-loop doesn\'t mean rewriting everything; it means <em>checking</em> everything.',
+    fix:'△ You can, but there\'s little to fix — it\'s accurate and gives a real next step. Over-editing good drafts wastes the time AI just saved. Verdict: <strong>KEEP</strong>.',
+    discard:'✗ Deleting a genuinely good, accurate comment throws away exactly the help AI is meant to give. Verdict: <strong>KEEP</strong>.'}},
+  mk3:{right:'discard', fb:{
+    discard:'✓ Correct — <strong>DISCARD.</strong> "Careless, didn\'t try, see me" is unkind <em>and</em> untrue — the child clearly attempted the method. AI misread effort as laziness. Anaya bins it and writes her own: "I can see your method here — let\'s fix the denominator together." Tone about a child is never outsourced.',
+    keep:'✗ Never send this. It\'s harsh and factually wrong — the working shows real effort. Keeping it would damage a child over an AI misread. Verdict: <strong>DISCARD</strong> and rewrite from scratch.',
+    fix:'△ You could rescue it, but the whole framing ("careless, didn\'t try") is wrong from the ground up — faster and kinder to start over. Verdict: <strong>DISCARD</strong>.'}}
+};
+const marked = {};
+function markDecide(id, verdict, btn){
+  const k = markKey[id];
+  marked[id] = true;
+  const card = document.getElementById(id);
+  card.className = 'mark-card decided-' + k.right;
+  card.querySelectorAll('.mark-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb-'+id);
+  fb.className = 'mark-fb show ' + (verdict===k.right ? 'good':'warn');
+  fb.innerHTML = k.fb[verdict];
+  if (marked.mk1 && marked.mk2 && marked.mk3){
+    const s = document.getElementById('markSummary');
+    s.innerHTML = '🎉 <strong>Chapter 3 complete.</strong> You just did what human-in-the-loop actually looks like: <strong>Fix</strong> the over-praise, <strong>Keep</strong> the good one, <strong>Discard</strong> the harsh misread. AI drafted three comments in seconds; your judgment made all three right. That\'s the trade — AI drafts, Anaya decides. Next: parent notes, safely.';
+    s.classList.add('show');
+    setTimeout(()=> s.scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+
+/* ───────── CH 4: TONE + LEAK ───────── */
+const tones = {
+  warm: 'Dear [PARENT], I wanted to share a quick, encouraging update. [STUDENT] has been making steady progress with fractions this week and contributed thoughtfully during our recipe-remix task. To keep the momentum, a little reading-aloud together at home would help. Thank you for all you do — please reach out any time.',
+  direct: 'Dear [PARENT], a brief update on [STUDENT]\'s maths. This week we worked on adding fractions with unlike denominators. [STUDENT] is progressing well and consistently shows working. Focus for home: 10 minutes of reading aloud, three evenings a week. Happy to discuss — my available times are [SLOT].',
+  concern: 'Dear [PARENT], I\'m reaching out with care about [STUDENT]\'s week in maths. [STUDENT] is trying hard, and I\'ve noticed a little extra support would help fractions click. Nothing to worry about — with some short, regular practice at home, I\'m confident we\'ll see this settle. Could we find a moment to talk this week?'
+};
+function setTone(t){
+  document.querySelectorAll('.tone-tab').forEach(x => x.classList.toggle('active', x.dataset.tone===t));
+  const n = document.getElementById('noteText');
+  n.style.opacity=0;
+  setTimeout(()=>{ n.textContent = tones[t]; n.style.opacity=1; }, 200);
+}
+
+/* leak spotter */
+const leakFbs = [
+  {ok:false, fb:'✗ This is fine to send — a placeholder plus a general, non-sensitive progress note. Nothing private is exposed here. Look again for the line that reveals something a family might not want written down.'},
+  {ok:true, fb:'✓ Stop — this one. A counsellor referral and a "situation at home" are <strong>sensitive personal data</strong> that should never be casually surfaced in a routine note (and definitely never typed into a general AI tool). Anaya deletes it entirely and keeps the note to observable schoolwork.'},
+  {ok:false, fb:'✗ This is a perfectly safe, helpful suggestion — no private data at all. The dangerous line is the one that surfaces a counsellor and a home situation.'}
+];
+function leakQ(i){
+  const r = leakFbs[i];
+  const btns = document.querySelectorAll('#s4 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled=true; if(leakFbs[j].ok)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb = document.getElementById('leakFb');
+  fb.className='scenario-feedback show '+(r.ok?'success':'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* privacy quiz */
+const privQs = [
+  {q:"What does Anaya's 'privacy firewall' actually mean in practice?", opts:["She turns off her wifi while writing notes","AI only ever sees placeholders and needs ([STUDENT], 'progressing in fractions') — real names and scores are filled in by her, offline","She encrypts the AI chat"], correct:1, explain:"The firewall is a workflow, not a setting: identifying data never enters the tool. AI drafts the scaffolding from needs; the real child is added by hand at the end, where you control it."},
+  {q:"AI drafts 32 warm notes with [STUDENT] placeholders. Before sending, Anaya should…", opts:["Send them straight out — the draft is done","Read each one, fill in the right child, and check nothing generic accidentally misdescribes a specific student", "Ask AI to also email them for her"], correct:1, explain:"Placeholders save the drafting time; the teacher still reviews every note so a warm template never says something untrue about a real child. AI drafts, Anaya decides — even here."}
+];
+let vqIdx=0;
+function renderPrivQ(){
+  const s=privQs[vqIdx];
+  document.getElementById('privQ').textContent=`Round ${vqIdx+1}/2 — ${s.q}`;
+  document.getElementById('privOpts').innerHTML=s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerPrivQ(${i})">${o}</button>`).join('');
+  const fb=document.getElementById('privFb'); fb.className='scenario-feedback'; fb.innerHTML='';
+  document.getElementById('privNext').style.display='none';
+}
+function answerPrivQ(i){
+  const s=privQs[vqIdx];
+  document.querySelectorAll('#privOpts .scenario-btn').forEach((b,j)=>{ b.disabled=true; if(j===s.correct)b.classList.add('correct'); else if(j===i)b.classList.add('wrong'); });
+  const fb=document.getElementById('privFb');
+  fb.className='scenario-feedback show '+(i===s.correct?'success':'fail');
+  fb.innerHTML=(i===s.correct?'✓ Spot on! ':'✗ Not quite. ')+s.explain+(vqIdx===privQs.length-1?'<br><br>🎉 Chapter 4 complete — notes sent, data safe. Finale: add up the reclaimed hours.':'');
+  document.getElementById('privNext').style.display=vqIdx<privQs.length-1?'inline-block':'none';
+}
+function nextPrivQ(){ vqIdx++; if(vqIdx<privQs.length) renderPrivQ(); }
+renderPrivQ();
+
+/* ───────── CH 5: HOURS TALLY ───────── */
+let claimedHrs = 0;
+const totalRows = 4;
+let claimedCount = 0;
+function claimHours(row){
+  if (row.classList.contains('claimed')) return;
+  row.classList.add('claimed');
+  claimedHrs += parseFloat(row.dataset.hrs);
+  claimedCount++;
+  document.getElementById('tallyTotal').textContent = claimedHrs.toFixed(1) + ' hrs';
+  const note = document.getElementById('tallyNote');
+  if (claimedCount < totalRows){
+    note.innerHTML = `⏳ <strong>${claimedHrs.toFixed(1)} hours</strong> reclaimed so far — and every one of them was drafting drudgery, not judgment. Keep tapping.`;
+  } else {
+    note.innerHTML = `🎉 <strong>${claimedHrs.toFixed(1)} hours</strong> of drafting saved — nearly a whole working day. And here\'s the honest part: Anaya <em>kept</em> the judgment time (reading marks, choosing words, verifying facts) on purpose. That\'s the deal that makes it safe. <strong>AI drafts, Anaya decides.</strong>`;
+    document.getElementById('sundayFinale').classList.add('show');
+    setTimeout(()=> document.getElementById('sundayFinale').scrollIntoView({behavior:'smooth', block:'center'}), 400);
+  }
+}
+</script>
+</body>
+</html>

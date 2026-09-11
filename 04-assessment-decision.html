@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Assessment, Decision &amp; Hiring Operations with AI · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#2E7D5B; --red:#C0392B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+.disclaimer{max-width:680px;margin:26px 0 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.02em;border-left:2px solid var(--line);padding-left:14px}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== principle cards (shared) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== Figure 1 · hours reclaimed calculator ===== */
+.hr-flex{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:start}
+.hr-rows{display:grid;gap:16px}
+.hr-row{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.hr-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.hr-name{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark)}
+.hr-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.hr-val strong{color:var(--orange-dark);font-size:14px}
+.hr-bars{position:relative;height:26px;background:var(--cream);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.hr-before{position:absolute;left:0;top:0;height:100%;background:repeating-linear-gradient(45deg,var(--line),var(--line) 6px,#efe4d2 6px,#efe4d2 12px);border-radius:6px}
+.hr-after{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-dark));border-radius:6px;transition:width .5s ease}
+.hr-slider label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.hr-slider input[type=range]{width:100%;accent-color:var(--orange);cursor:pointer}
+.hr-side{background:var(--brown-dark);color:var(--paper);border-radius:14px;padding:24px;position:sticky;top:90px;overflow:hidden}
+.hr-side::after{content:"";position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.35}
+.hr-side .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#FBE7CB;margin-bottom:6px}
+.hr-big{font-family:'Fraunces',serif;font-weight:800;font-size:56px;line-height:1;color:var(--yellow)}
+.hr-unit{font-family:'JetBrains Mono',monospace;font-size:12px;color:#E8D9C5;margin-bottom:14px}
+.hr-meter{height:8px;background:rgba(255,255,255,.14);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.hr-meter div{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--orange-dark));transition:width .5s}
+.hr-meterlab{font-family:'JetBrains Mono',monospace;font-size:10px;color:#E8D9C5;margin-bottom:16px;display:flex;justify-content:space-between}
+.hr-sub{font-size:13px;color:#E8D9C5;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;max-width:none}
+.hr-sub strong{color:var(--orange-light)}
+
+/* ===== Figure 2 · decision gate / debrief ===== */
+.dg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.dg-cand{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;transition:border-color .3s}
+.dg-cand h4{font-family:'Fraunces',serif;font-size:18px;color:var(--brown-dark);margin-bottom:10px;display:flex;justify-content:space-between;align-items:baseline}
+.dg-cand h4 .sc{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange-dark);font-weight:600}
+.dg-crit{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:13px;color:var(--brown)}
+.dg-crit:first-of-type{border-top:none}
+.dg-dots{display:flex;gap:3px}
+.dg-dots span{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dg-dots span.on{background:var(--orange)}
+.dg-summary{background:rgba(0,141,210,0.06);border:1px solid rgba(0,141,210,0.22);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.dg-summary .st{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px}
+.dg-summary p{font-size:14px;color:var(--brown);margin:0;max-width:none}
+.dg-gate{background:var(--paper);border:2px dashed var(--orange-dark);border-radius:14px;padding:20px;transition:all .3s}
+.dg-gate.decided{border-style:solid;border-color:var(--green);background:rgba(46,125,91,0.06)}
+.dg-gate .gt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--orange-dark);margin-bottom:10px}
+.dg-gate.decided .gt{color:var(--green)}
+.dg-gate p{font-size:14px;color:var(--brown);margin:0 0 14px;max-width:none}
+.dg-btns{display:flex;gap:10px;flex-wrap:wrap}
+.dg-btns button{font-family:'JetBrains Mono',monospace;font-size:11px;padding:10px 16px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;border:1px solid var(--line);background:var(--paper);color:var(--brown);transition:all .2s}
+.dg-btns button:hover{border-color:var(--brown-dark)}
+.dg-btns button.human{background:var(--green);color:#fff;border-color:var(--green)}
+.dg-btns button.auto{background:var(--paper);color:var(--red);border-color:var(--red)}
+.dg-result{margin-top:14px;font-size:13px;padding:12px 14px;border-radius:9px;display:none;line-height:1.6}
+.dg-result.show{display:block}
+.dg-result.ok{background:rgba(46,125,91,0.1);color:#1f5c42;border:1px solid rgba(46,125,91,0.3)}
+.dg-result.block{background:rgba(192,57,43,0.1);color:#8a2a20;border:1px solid rgba(192,57,43,0.3)}
+
+/* ===== Figure 3 · funnel / adverse-impact + tone tuner ===== */
+.fn-flex{display:grid;grid-template-columns:1fr;gap:20px}
+.fn-stage{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.fn-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.fn-name{font-family:'Fraunces',serif;font-size:16px;color:var(--brown-dark)}
+.fn-rate{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.fn-rate b{color:var(--brown-dark)}
+.fn-bars{display:grid;gap:6px}
+.fn-barrow{display:flex;align-items:center;gap:8px}
+.fn-barlab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);width:64px;flex-shrink:0}
+.fn-track{flex:1;height:16px;background:var(--cream);border-radius:5px;overflow:hidden}
+.fn-fill{height:100%;border-radius:5px;transition:width .6s ease}
+.fn-fill.a{background:linear-gradient(90deg,var(--accent),#00b4e0)}
+.fn-fill.b{background:linear-gradient(90deg,var(--orange),var(--orange-dark))}
+.fn-flag{margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.04em;padding:5px 10px;border-radius:6px;display:inline-block}
+.fn-flag.ok{background:rgba(46,125,91,0.12);color:var(--green)}
+.fn-flag.warn{background:rgba(192,57,43,0.12);color:var(--red)}
+.fn-note{font-size:13px;color:var(--muted);border-left:2px solid var(--orange);padding-left:14px;margin-top:4px}
+
+.tt-wrap{margin-top:8px}
+.tt-msg{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;min-height:150px;transition:border-color .3s}
+.tt-from{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.tt-from .badge{color:var(--orange-dark);font-weight:600}
+.tt-body{font-size:15px;line-height:1.7;color:var(--brown)}
+.tt-approve{margin-top:16px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tt-approve .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.tt-approve .k strong{display:block;color:var(--brown-dark);font-size:11px;letter-spacing:0.12em;margin-bottom:2px}
+.tt-approve p{font-size:13px;color:var(--muted);margin:0;max-width:none;flex:1;min-width:200px}
+
+@media(max-width:700px){
+  .hr-flex{grid-template-columns:1fr}
+  .hr-side{position:static}
+  .dg-grid{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">SCHOOL OF AI CAREERS</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 4 · AI for Recruiters · Lesson 04</div>
+  <h1>The machine summarises. The panel <em>decides</em>.</h1>
+  <p class="lede">By the end of a hiring process, a recruiter is drowning in operations — scheduling, comms, pipeline reports, debrief notes — and staring down the one moment that matters most: the decision about a person's livelihood. AI can reclaim real hours across the operational load, and it can organise the evidence a panel weighs. What it must never do is make the call. There is a hard gate in every fair process, and it reads the same everywhere: a human decides, and no candidate is auto-rejected. AI supports. The recruiter and the panel verify and decide.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The hours reclaimed across hiring operations</h2>
+  <p class="lead">You can't reclaim time you haven't measured. Before reaching for AI, list the recurring operational tasks that quietly eat the recruiting week — then estimate, honestly, how much of each is first-draft or organising work a model could accelerate under your review. Reclaimed time is only a win if it goes back into the human parts of the job, not into rushing the decision.</p>
+
+  <p>Drag the sliders to match your own week. The bars show <em>before</em> (your current hours, hatched) against <em>after</em> AI drafts the first version or organises the raw material and you verify and finalise (solid orange). Most recruiters are startled less by the total than by how much of the load is repetitive text-shaping and coordination that never needed a recruiter to start from a blank page — and by how little of it is the judgement work that actually needs them.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Hiring-operations hours reclaimed per week</span>
+      <div class="controls"><button onclick="hrReset()">↺ Reset</button></div>
+    </div>
+    <div class="hr-flex">
+      <div class="hr-rows" id="hrRows"><!-- filled by JS --></div>
+      <div class="hr-side">
+        <div class="lbl">Estimated time reclaimed</div>
+        <div class="hr-big"><span id="hrHours">0</span></div>
+        <div class="hr-unit">hours / week · <span id="hrYear">0</span> hrs a year</div>
+        <div class="hr-meter"><div id="hrMeter" style="width:0%"></div></div>
+        <div class="hr-meterlab"><span>Admin load on your week</span><span id="hrLoad">—</span></div>
+        <p class="hr-sub">That's roughly <strong id="hrDays">0</strong> working days a year returned to sourcing, candidate care, and the judgement only a recruiter can do — <em>if</em> you spend it on the human work and never on rushing a decision. AI supports; you verify and decide.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>Two honest caveats. First, AI drafting and organising adds a verification step, so the "after" bars are never zero — a candidate message or a pipeline report sent unread goes out under your name, and a wrong one damages a candidate and your credibility. Second, reclaimed time is a gift only if you protect its purpose. The whole point of clearing operations is to give the decision more human attention, not less. If the hours you save get spent auto-advancing candidates faster, you've automated the wrong thing.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The structured debrief and the decision gate</h2>
+  <p class="lead">A structured debrief lays each candidate's evidence side by side against the same criteria, so a panel argues from what was observed rather than from who spoke loudest. AI can assemble that comparison and summarise it cleanly. Then it must stop. The next step — the decision — belongs to humans, and there is one rule that never bends: no candidate is auto-rejected by a tool.</p>
+
+  <p>Below, AI has summarised two candidates' evidence against the role's criteria. Read it, then reach the decision gate. Try the "auto-reject" path and watch it refuse — a tool does not close a person's application on its own. The panel decides, from the evidence, with a human accountable for the outcome. That gate is not a nicety; in many jurisdictions, auto-rejection without human review is exactly the practice employment and AI law is tightening around.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Evidence against criteria — then the human gate</span>
+      <div class="controls"><button onclick="dgReset()">↺ Reset</button></div>
+    </div>
+    <div class="dg-summary">
+      <div class="st">◆ AI-assembled summary — support, not verdict</div>
+      <p>Both candidates cleared the structured interview. Against the four role criteria, the evidence is close: Candidate A is stronger on stakeholder management, Candidate B on technical depth. Neither is a clear outlier. AI has organised the evidence; it offers no recommendation and casts no vote.</p>
+    </div>
+    <div class="dg-grid">
+      <div class="dg-cand" id="dgA">
+        <h4>Candidate A <span class="sc">evidence</span></h4>
+        <div class="dg-crit">Stakeholder management <span class="dg-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></div>
+        <div class="dg-crit">Technical depth <span class="dg-dots"><span class="on"></span><span class="on"></span><span></span><span></span></span></div>
+        <div class="dg-crit">Ownership <span class="dg-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+        <div class="dg-crit">Collaboration <span class="dg-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+      </div>
+      <div class="dg-cand" id="dgB">
+        <h4>Candidate B <span class="sc">evidence</span></h4>
+        <div class="dg-crit">Stakeholder management <span class="dg-dots"><span class="on"></span><span class="on"></span><span></span><span></span></span></div>
+        <div class="dg-crit">Technical depth <span class="dg-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span></div>
+        <div class="dg-crit">Ownership <span class="dg-dots"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></span></div>
+        <div class="dg-crit">Collaboration <span class="dg-dots"><span class="on"></span><span class="on"></span><span></span><span></span></span></div>
+      </div>
+    </div>
+    <div class="dg-gate" id="dgGate">
+      <div class="gt" id="dgGt">◇ Decision gate — human decides</div>
+      <p id="dgP">The evidence is assembled. Who decides what happens next? Try each path.</p>
+      <div class="dg-btns">
+        <button class="auto" onclick="dgDecide('auto')">Let AI auto-reject B</button>
+        <button class="human" onclick="dgDecide('human')">Panel decides from evidence</button>
+      </div>
+      <div class="dg-result" id="dgRes"></div>
+    </div>
+  </div>
+
+  <p>Notice what the tool did and didn't do. It made the evidence legible and comparable — genuinely useful, and a fair way to run a debrief. It did not rank the humans, recommend a rejection, or act. The moment a system starts closing applications on its own, you've handed a machine a decision about someone's livelihood that it cannot be accountable for, cannot explain, and cannot be trusted to make without importing bias. AI summarises. The panel decides. No auto-reject. Those three sentences are the spine of a defensible process.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Watching the funnel — and owning the message</h2>
+  <p class="lead">A hiring process can be fair at every individual step and still produce an unfair pattern in aggregate. That's why recruiters watch the funnel: the rate at which each group advances from stage to stage. A simple check — often framed as a four-fifths rule of thumb — flags when one group's selection rate falls well below another's, signalling possible adverse impact worth investigating. AI can surface the pattern; a human decides what it means.</p>
+
+  <p>The demo below shows two illustrative groups moving through the pipeline, with a selection-rate ratio at the final stage. Toggle the scenario and watch the flag change. The numbers are a teaching device, not real data or a legal test — the real four-fifths analysis needs proper data, and a disparity is a prompt to investigate, never proof of discrimination and never something a tool decides for you.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3a · Funnel &amp; adverse-impact monitor</span>
+      <div class="controls">
+        <button id="fnOK" class="active" onclick="fnSet('ok')">Balanced funnel</button>
+        <button id="fnWarn" onclick="fnSet('warn')">Disparity flagged</button>
+      </div>
+    </div>
+    <div class="fn-flex" id="fnFlex"><!-- filled by JS --></div>
+    <div class="fn-note" id="fnNote"></div>
+  </div>
+
+  <p>The four-fifths ratio is a smoke alarm, not a verdict. A ratio below roughly 0.8 says "look here," not "you discriminated." Small samples swing wildly; a real analysis controls for that and asks whether each screening step is genuinely job-related. What the monitor does well is stop a quietly unfair pattern from hiding inside individually reasonable decisions. What it must never do is auto-adjust, auto-reject, or auto-anything — it flags, a human investigates, and a human decides whether the process needs to change.</p>
+
+  <h3>The rejection message — kind, timely, and yours</h3>
+  <p>Most candidates who apply will be rejected, and how you tell them is a large part of your reputation and their dignity. AI can draft a kind, clear, timely rejection in seconds — a real improvement on the silence most candidates get. But the recruiter reviews it, personalises it where it matters, and owns it. Tune the message below and watch the reminder that never changes.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3b · Rejection-message tone tuner</span>
+      <div class="controls">
+        <button id="tt0" class="active" onclick="ttSet(0)">Curt draft</button>
+        <button id="tt1" onclick="ttSet(1)">Kind &amp; clear</button>
+        <button id="tt2" onclick="ttSet(2)">With feedback</button>
+      </div>
+    </div>
+    <div class="tt-wrap">
+      <div class="tt-msg" id="ttMsg">
+        <div class="tt-from">
+          <span>To: Candidate · Re: Your application — update</span>
+          <span class="badge" id="ttBadge"></span>
+        </div>
+        <div class="tt-body" id="ttBody"></div>
+      </div>
+      <div class="tt-approve">
+        <span class="k"><strong>Human gate</strong>Draft ≠ sent</span>
+        <p id="ttNote"></p>
+      </div>
+    </div>
+  </div>
+
+  <p>A timely, human rejection costs little and means a lot. The candidate you turn down today applies again in two years, refers a friend, or writes the review that shapes who applies next. AI removes the excuse of "no time to reply" — but a rejection sent unread, or one that leaks a reason you can't defend, does more harm than silence. Read it, make it human, and send it under your name. The tool drafts the message; the recruiter owns the relationship.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Hiring operations, kept honest</h2>
+  <p class="lead">The operational half of recruiting is where AI gives back the most obvious hours — scheduling, comms, reporting, debrief prep. The temptation is to let convenience creep toward the decision itself. The discipline is to keep AI on the operations and keep humans on the judgement, every time.</p>
+
+  <p>The line is the same one running through the whole week: AI supports, the recruiter and panel verify and decide. Use it to draft the pipeline report you'll sanity-check, to schedule and coordinate, to assemble the debrief you'll then argue from evidence, to draft the candidate comms you'll personalise. What it must never become is the thing that rejects, ranks, or decides — or a reason to stop watching the funnel for the patterns individual decisions can hide. The four uses below keep AI in the assistant's chair.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Coordinate</span><h4>Scheduling &amp; comms</h4><p>Let AI draft interview invites, reminders, and coordination messages — then review before they send. The logistics are automatable; the tone a candidate receives still shapes how they see you, so it's yours to check.</p></div>
+    <div class="crit"><span class="k">Report</span><h4>Pipeline, then sanity-check</h4><p>Have AI summarise pipeline status and stage-to-stage rates into a report. Then sanity-check the numbers and watch the funnel for disparity. A tidy report that hides an unfair pattern is worse than none.</p></div>
+    <div class="crit"><span class="k">Debrief</span><h4>Assemble, then argue</h4><p>Use AI to lay evidence against criteria side by side. Then make the panel decide from that evidence. The comparison is support for a human decision, never a recommendation or a vote.</p></div>
+    <div class="crit"><span class="k">Respond</span><h4>Timely, kind, owned</h4><p>Draft rejections and offers that are clear and humane — then review, personalise, and send them yourself. No auto-reject, no ghosting. The message goes out under your name and your accountability.</p></div>
+  </div>
+
+  <h3>The honest limits, one more time</h3>
+  <p>Everything in this lesson depends on the same guardrails. <strong>Candidate privacy:</strong> never put a candidate's identifiable data into a consumer AI tool — under GDPR and its equivalents, keep identity in your sanctioned system and prompt with placeholders. <strong>Bias &amp; adverse impact:</strong> a process fair at each step can still be unfair in aggregate — watch the funnel, treat a four-fifths flag as a prompt to investigate, and remember AI can import the very bias you're screening for. <strong>No auto-rejection:</strong> a tool does not close an application, rank the humans, or decide; auto-reject without human review is exactly what employment and AI law is tightening around. <strong>Hallucination:</strong> AI will confidently invent a candidate's qualification or a number in a report — verify everything against the source. AI supports. The recruiter and the panel verify and decide. That doesn't change when the task is a debrief or a rejection instead of a screen — it matters most here, because this is the moment a person's livelihood is on the line.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Assessment and hiring operations is where AI gives recruiters the most hours back — and where the human gate matters most, because a person's livelihood is decided. Let AI reclaim the operational load and organise the evidence; keep the decision with humans; watch the funnel for patterns individual choices can hide; and hold the hard line that no candidate is ever auto-rejected by a tool.</p>
+  <ul>
+    <li>Measure the hours first · reclaim operational time, then spend it on judgement, not rushing</li>
+    <li>AI summarises, the panel decides · evidence against criteria supports a human call</li>
+    <li>No auto-reject · a tool never closes, ranks, or decides a person's application</li>
+    <li>Watch the funnel · a four-fifths flag is a prompt to investigate, decided by a human</li>
+    <li>AI supports, the recruiter verifies and decides · the message and the decision are yours to own</li>
+  </ul>
+</div>
+
+<p class="disclaimer">This lesson is professional education for recruiters on workflow and judgement. It is not legal, compliance, or HR advice, and not an endorsement of any specific tool. AI systems described here are drafting and decision-support aids, not autonomous hiring decision-makers, and must never make, rank, or auto-reject a hiring decision. The four-fifths references are an illustrative rule of thumb, not a legal test. Always follow your organisation's policies, your jurisdiction's employment and privacy law (including GDPR and equivalents), obtain candidate consent where required, apply human review before any AI output affects a candidate, and never auto-reject an applicant without a human decision.</p>
+
+</div>
+<footer>MokshPath · Guided Path to True Learning · Lesson 04 · Week 4 complete — AI for Recruiters ✦</footer>
+<script>
+
+/* ============ Figure 1 · Hours reclaimed ============ */
+const HR_TASKS=[
+  {name:'Candidate outreach &amp; sourcing msgs',before:5,save:0.5,max:12},
+  {name:'Interview scheduling &amp; coordination',before:4,save:0.55,max:10},
+  {name:'Candidate comms &amp; status updates',before:4,save:0.5,max:10},
+  {name:'Pipeline &amp; reporting',before:3,save:0.55,max:8}
+];
+let hrState=HR_TASKS.map(t=>t.before);
+const hrRows=document.getElementById('hrRows');
+(function buildHR(){
+  HR_TASKS.forEach((t,i)=>{
+    const row=document.createElement('div');
+    row.className='hr-row';
+    row.innerHTML=
+      '<div class="hr-head"><span class="hr-name">'+t.name+'</span>'+
+      '<span class="hr-val" id="hrv'+i+'"></span></div>'+
+      '<div class="hr-bars"><div class="hr-before" id="hrb'+i+'"></div><div class="hr-after" id="hra'+i+'"></div></div>'+
+      '<div class="hr-slider"><label>Hours you spend now <span id="hrl'+i+'"></span></label>'+
+      '<input type="range" min="0" max="'+t.max+'" step="0.5" value="'+t.before+'" oninput="hrUpd('+i+',this.value)"></div>';
+    hrRows.appendChild(row);
+  });
+})();
+function hrUpd(i,v){hrState[i]=parseFloat(v);hrRender();}
+function hrRender(){
+  let saved=0,totalBefore=0,totalMax=0;
+  HR_TASKS.forEach((t,i)=>{
+    const before=hrState[i],after=before*(1-t.save);
+    saved+=before-after;totalBefore+=before;totalMax+=t.max;
+    const pctB=before/t.max*100,pctA=after/t.max*100;
+    document.getElementById('hrb'+i).style.width=pctB+'%';
+    document.getElementById('hra'+i).style.width=pctA+'%';
+    document.getElementById('hrv'+i).innerHTML=before.toFixed(1)+' hrs → <strong>'+after.toFixed(1)+' hrs</strong>';
+    document.getElementById('hrl'+i).textContent=before.toFixed(1)+' hrs';
+  });
+  document.getElementById('hrHours').textContent=saved.toFixed(1);
+  const yr=saved*46;
+  document.getElementById('hrYear').textContent=Math.round(yr);
+  document.getElementById('hrDays').textContent=(yr/7.5).toFixed(0);
+  const load=Math.min(100,totalBefore/totalMax*100);
+  document.getElementById('hrMeter').style.width=load+'%';
+  const lab=load<30?'Light':load<55?'Moderate':load<78?'Heavy':'At risk';
+  document.getElementById('hrLoad').textContent=lab;
+}
+function hrReset(){
+  hrState=HR_TASKS.map(t=>t.before);
+  HR_TASKS.forEach((t,i)=>{hrRows.querySelectorAll('input')[i].value=t.before});
+  hrRender();
+}
+hrRender();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hrRender();o.unobserve(e.target)}}),{threshold:0.3}).observe(hrRows);
+
+/* ============ Figure 2 · Decision gate ============ */
+function dgDecide(mode){
+  const gate=document.getElementById('dgGate');
+  const res=document.getElementById('dgRes');
+  res.className='dg-result show';
+  if(mode==='auto'){
+    gate.classList.remove('decided');
+    res.classList.add('block');
+    document.getElementById('dgGt').textContent='◇ Blocked — no auto-reject';
+    document.getElementById('dgP').textContent='A tool cannot close a person\'s application on its own.';
+    res.innerHTML='<strong>✕ Refused.</strong> Auto-rejection without human review is exactly the practice this process forbids — and that employment and AI law is tightening around. AI has no accountability for a decision about someone\'s livelihood, cannot explain it, and can import bias it cannot see. The application stays open until a human decides. Choose the panel path.';
+  }else{
+    gate.classList.add('decided');
+    res.classList.add('ok');
+    document.getElementById('dgGt').textContent='◆ Decided by the panel';
+    document.getElementById('dgP').textContent='The evidence was assembled by AI; the decision was made by humans.';
+    res.innerHTML='<strong>✓ Human decision recorded.</strong> The panel weighed the evidence against criteria, discussed the close call between A and B, and made the call — with a named human accountable for it. AI summarised; the panel decided. That is the defensible path, and the candidate not selected still gets a kind, timely, human reply.';
+  }
+}
+function dgReset(){
+  const gate=document.getElementById('dgGate');
+  gate.classList.remove('decided');
+  document.getElementById('dgRes').className='dg-result';
+  document.getElementById('dgGt').textContent='◇ Decision gate — human decides';
+  document.getElementById('dgP').textContent='The evidence is assembled. Who decides what happens next? Try each path.';
+}
+
+/* ============ Figure 3a · Funnel / adverse impact ============ */
+const FN_STAGES=['Applied','Screened','Interviewed','Offered'];
+const FN={
+  ok:{
+    a:[100,62,40,24],
+    b:[100,60,38,22],
+    ratio:0.92,
+    note:'Selection-rate ratio at the final stage ≈ 0.92 — comfortably above the ~0.8 four-fifths rule of thumb. The two groups advance at similar rates; no flag here. This is an illustrative check, not a legal test, and it never decides anything on its own.'
+  },
+  warn:{
+    a:[100,64,44,30],
+    b:[100,40,20,11],
+    ratio:0.37,
+    note:'Selection-rate ratio ≈ 0.37 — well below the ~0.8 threshold. That is a smoke alarm, not a verdict: a human investigates whether a screening step is genuinely job-related, whether the sample is too small to trust, and what the pattern means. A disparity is a prompt to look, never proof — and never something the tool acts on.'
+  }
+};
+const fnFlex=document.getElementById('fnFlex');
+function fnSet(k){
+  document.getElementById('fnOK').classList.toggle('active',k==='ok');
+  document.getElementById('fnWarn').classList.toggle('active',k==='warn');
+  const d=FN[k];
+  let html='';
+  FN_STAGES.forEach((s,i)=>{
+    const ra=(d.a[i]/d.a[0]*100).toFixed(0),rb=(d.b[i]/d.b[0]*100).toFixed(0);
+    html+='<div class="fn-stage"><div class="fn-head"><span class="fn-name">'+s+'</span>'+
+      '<span class="fn-rate">Group A <b>'+ra+'%</b> · Group B <b>'+rb+'%</b></span></div>'+
+      '<div class="fn-bars">'+
+        '<div class="fn-barrow"><span class="fn-barlab">Group A</span><div class="fn-track"><div class="fn-fill a" style="width:'+ra+'%"></div></div></div>'+
+        '<div class="fn-barrow"><span class="fn-barlab">Group B</span><div class="fn-track"><div class="fn-fill b" style="width:'+rb+'%"></div></div></div>'+
+      '</div></div>';
+  });
+  const flagCls=d.ratio>=0.8?'ok':'warn';
+  const flagTxt=d.ratio>=0.8
+    ? '◆ Ratio ≈ '+d.ratio.toFixed(2)+' · above ~0.8 · no flag'
+    : '◇ Ratio ≈ '+d.ratio.toFixed(2)+' · below ~0.8 · flag — investigate';
+  html+='<div><span class="fn-flag '+flagCls+'">'+flagTxt+'</span></div>';
+  fnFlex.innerHTML=html;
+  document.getElementById('fnNote').textContent=d.note;
+}
+fnSet('ok');
+
+/* ============ Figure 3b · Rejection tone tuner ============ */
+const TT=[
+  {badge:'◇ Curt draft',border:'var(--line)',
+   body:'Dear Applicant, thank you for your interest. We have decided to move forward with other candidates. We will keep your details on file. Regards, Recruitment.',
+   note:'A cold, generic rejection is barely better than silence — and it becomes a candidate\'s lasting impression of the company. This is a draft, not a decision. The recruiter reviews it, warms it, and owns how the candidate is treated.'},
+  {badge:'◆ Kind &amp; clear',border:'var(--orange)',
+   body:'Hi [Name], thank you for the time you gave us through the interview process — we genuinely appreciated it. After careful consideration by the panel, we\'ve decided to move ahead with another candidate for this role. This was a close and considered decision, not a reflection of your ability, and we\'d be glad to stay in touch about future openings. Wishing you the very best.',
+   note:'Warmer and honest — but still a draft. The recruiter checks that it is accurate and defensible, personalises the details, and sends it under their name. AI removed the excuse of "no time to reply"; the care and accountability are still the recruiter\'s.'},
+  {badge:'◆ With brief feedback',border:'var(--accent)',
+   body:'Hi [Name], thank you for interviewing with us. The panel was impressed by your ownership examples; for this role we ultimately prioritised deeper stakeholder-management experience, which is where the selected candidate was stronger. This was a close decision against our criteria, not a judgement of your potential. We\'d welcome an application from you in future and wish you well.',
+   note:'Specific, evidence-based feedback is a gift — and a risk if it isn\'t accurate or defensible. The recruiter verifies every claim against the actual scorecard, ensures it is fair and consistent with what other candidates were told, approves it, and owns it. AI must never invent a reason.'}
+];
+function ttSet(i){
+  const t=TT[i];
+  [0,1,2].forEach(j=>document.getElementById('tt'+j).classList.toggle('active',j===i));
+  document.getElementById('ttBadge').innerHTML=t.badge;
+  document.getElementById('ttBody').textContent=t.body;
+  document.getElementById('ttMsg').style.borderColor=t.border;
+  document.getElementById('ttNote').textContent=t.note;
+}
+ttSet(0);
+
+</script>
+</body>
+</html>

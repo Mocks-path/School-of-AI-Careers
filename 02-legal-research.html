@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Legal Research &amp; Analysis with AI · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.tagline{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .tagline{display:none}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+}
+
+/* ============ Figure 1 · research flow with VERIFY gate ============ */
+.flow{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px}
+.fchain{display:flex;align-items:stretch;gap:0;margin-bottom:22px;flex-wrap:wrap}
+.fnode{
+  flex:1;min-width:88px;text-align:center;padding:14px 6px;background:var(--cream);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;transition:all .25s;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.fnode .fidx{display:block;font-family:'Fraunces',serif;font-size:20px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.fnode h5{font-family:'Fraunces',serif;font-size:14px;color:var(--brown-dark);line-height:1.1}
+.fnode:hover{border-color:var(--orange);transform:translateY(-3px)}
+.fnode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.fnode.active h5{color:var(--paper)}
+.fnode.active .fidx{color:var(--orange)}
+.fnode.gate{border-color:var(--orange-dark);background:#FDEBD7}
+.fnode.gate h5{color:var(--orange-dark)}
+.fnode.gate .fidx{color:var(--orange-dark)}
+.fnode.gate.active{background:var(--orange-dark);border-color:var(--orange-dark)}
+.fnode.gate.active h5,.fnode.gate.active .fidx{color:#fff}
+.fnode.gate.pulse{animation:gatePulse 1.1s ease infinite}
+@keyframes gatePulse{0%,100%{box-shadow:0 0 0 0 rgba(213,82,34,.35)}50%{box-shadow:0 0 0 8px rgba(213,82,34,0)}}
+.flink{width:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--line);font-size:16px}
+.fpanel{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:20px;min-height:120px}
+.fpanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fpanel .flab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--orange-dark);margin-bottom:8px}
+.fpanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:8px}
+.fpanel p{font-size:14.5px;color:var(--brown-dark);margin:0;max-width:none}
+.fpanel.gatep{background:var(--brown-dark)}
+.fpanel.gatep .flab{color:var(--yellow)}
+.fpanel.gatep h4{color:var(--paper)}
+.fpanel.gatep p{color:#F3E7D5}
+@media(max-width:700px){
+  .fchain{gap:6px}
+  .fnode{flex:1 1 40%}
+  .flink{display:none}
+}
+
+/* ============ Figure 2 · ungrounded vs grounded ============ */
+.gr-toggle{display:flex;gap:8px;margin-bottom:0}
+.citebox{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden}
+.cite-body{padding:24px}
+.cite-quote{
+  font-family:'Fraunces',serif;font-size:19px;line-height:1.4;color:var(--brown-dark);
+  padding:18px 20px;border-radius:10px;position:relative;margin-bottom:16px;
+  border-left:4px solid var(--line);background:var(--cream);
+}
+.cite-quote.bad{border-left-color:var(--orange-dark)}
+.cite-quote.good{border-left-color:var(--accent)}
+.cite-src{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;color:var(--muted);margin-top:10px;display:block}
+.cite-flag{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;padding:6px 12px;border-radius:20px;margin-bottom:16px}
+.cite-flag.bad{background:#F7E0DA;color:#B23A22}
+.cite-flag.good{background:#E6F0DC;color:#4B6B2E}
+.checklist{list-style:none;display:grid;gap:10px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--brown-dark);line-height:1.4}
+.checklist li .mk{flex-shrink:0;width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;margin-top:1px}
+.checklist li.pass .mk{background:#4B6B2E}
+.checklist li.fail .mk{background:var(--orange-dark)}
+.chead{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:20px 0 12px}
+
+/* ============ Figure 3 · research brief builder ============ */
+.brief{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.bchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.bchip{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
+  background:var(--paper);border:1px dashed var(--line);color:var(--muted);
+  padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;user-select:none;
+}
+.bchip:hover{border-color:var(--orange)}
+.bchip.on{background:var(--brown-dark);color:#fff;border-style:solid;border-color:var(--brown-dark)}
+.bchip.on::before{content:"✓ ";color:var(--yellow)}
+.bquery{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:16px;min-height:96px}
+.bqlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px}
+.bqtext{font-family:'Fraunces',serif;font-size:20px;line-height:1.4;color:var(--brown-dark)}
+.bqtext .add{color:var(--orange-dark);font-weight:600}
+.bmeter{display:flex;align-items:center;gap:14px;margin-top:8px}
+.bmeter .btrack{flex:1;height:10px;border-radius:6px;background:var(--cream);border:1px solid var(--line);overflow:hidden}
+.bmeter .bfill{height:100%;width:20%;background:linear-gradient(90deg,var(--orange),var(--accent));transition:width .4s ease}
+.bmeter .bpct{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--brown-dark);min-width:120px;text-align:right}
+.bnote{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:14px;color:var(--brown-dark);line-height:1.5}
+
+@media(max-width:700px){
+  .bqtext{font-size:17px}
+  .cite-quote{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">School of AI Careers</span></div>
+  <div class="tagline">Guided Path to True Learning</div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 2 · Lesson 02 · AI for Lawyers</div>
+  <h1>Legal research, <em>verified</em>.</h1>
+  <p class="lede">AI can compress a day of legal research into minutes — and it can invent an authority that looks perfect and does not exist, in the same breath. This lesson is about the durable workflow that keeps the speed and removes the danger: frame the question well, let AI generate leads, and pass everything through a non-negotiable verification gate before a single citation reaches a brief or a client.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 03</div>
+  <h2>The research workflow — and its one gate</h2>
+  <p class="lead">Research with AI is not "ask and paste." It is a chain of six moves, and one of them is a gate that everything must pass through. Skip the gate and you have not saved time — you have manufactured risk at speed. Learn the whole flow, then learn to guard the gate.</p>
+
+  <p>Traditional research is slow but self-correcting: you read the actual case, so you know it exists and what it holds. AI research is fast but not self-correcting: the model produces fluent text that may describe a real authority, a distorted one, or a wholly invented one, and it cannot tell you which. The workflow below keeps the speed of generation while restoring the discipline of verification. The critical move is stage four — <strong>VERIFY</strong> — where every proposition and every citation the model produced is pulled to primary source, confirmed to exist, and confirmed to still be good law. Nothing crosses that gate unchecked.</p>
+  <p>Click through the stages. Notice that stages one to three are cheap and forgiving — a bad frame just wastes a prompt. From the VERIFY gate onward, mistakes become expensive: a false citation in a synthesis becomes a false citation in a filing. That is why the gate is drawn in a different colour, and why it never gets skipped.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The research workflow</span>
+      <div class="controls">
+        <button onclick="flowStep(-1)">◀ Prev</button>
+        <button onclick="flowStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="fchain" id="fChain">
+      <div class="fnode" data-k="issue" onclick="pickFlow('issue')"><span class="fidx">1</span><h5>Issue</h5></div>
+      <div class="flink">→</div>
+      <div class="fnode" data-k="frame" onclick="pickFlow('frame')"><span class="fidx">2</span><h5>Frame</h5></div>
+      <div class="flink">→</div>
+      <div class="fnode" data-k="search" onclick="pickFlow('search')"><span class="fidx">3</span><h5>Search / Generate</h5></div>
+      <div class="flink">→</div>
+      <div class="fnode gate" data-k="verify" onclick="pickFlow('verify')"><span class="fidx">4</span><h5>VERIFY</h5></div>
+      <div class="flink">→</div>
+      <div class="fnode" data-k="synth" onclick="pickFlow('synth')"><span class="fidx">5</span><h5>Synthesize</h5></div>
+      <div class="flink">→</div>
+      <div class="fnode" data-k="apply" onclick="pickFlow('apply')"><span class="fidx">6</span><h5>Apply</h5></div>
+    </div>
+    <div class="fpanel" id="fPanel"></div>
+  </div>
+
+  <h3>The gate is the profession</h3>
+  <p>Everything before VERIFY is a machine being fast. Everything from VERIFY onward is a lawyer being accountable. A model that hands you ten perfect-looking authorities has done nothing useful until you have confirmed which of them are real, on point, and still good law. The verification gate is not a step you add when you have time — it is the step that turns AI output into legal work you can sign.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 03</div>
+  <h2>Ungrounded vs grounded</h2>
+  <p class="lead">The single most dangerous thing AI does in legal research is state a false authority with total confidence. The defence is not to distrust everything — it is to ground every claim in a primary source you have opened yourself. Toggle between the two and watch the same fluent paragraph go from liability to asset.</p>
+
+  <p>An <strong>ungrounded</strong> answer is generated from the model's patterns alone. It reads beautifully, cites a case with a plausible name and a real-looking citation, and quotes a holding that fits your argument perfectly — because it was written to fit, not because it was found. Courts across jurisdictions have sanctioned lawyers who filed exactly this. A <strong>grounded</strong> answer is the same paragraph after verification: every citation pulled to the actual reporter, every quote checked against the real text, every case confirmed as still good law. The prose barely changes. The professional risk changes completely.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · The same paragraph, two states</span>
+      <div class="controls gr-toggle" id="grBtns">
+        <button class="active" onclick="setGr('bad',this)">Ungrounded</button>
+        <button onclick="setGr('good',this)">Grounded &amp; verified</button>
+      </div>
+    </div>
+    <div class="citebox">
+      <div class="cite-body">
+        <span class="cite-flag" id="grFlag"></span>
+        <div class="cite-quote" id="grQuote"></div>
+        <div class="chead">Verification checklist</div>
+        <ul class="checklist" id="grCheck"></ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Fluency is not authority</h3>
+  <p>Internalise the tell: the more perfectly a citation fits your argument, the more you owe it a check. Real law is messy and rarely lines up flawlessly; a suspiciously clean holding is a reason for suspicion, not relief. The verification checklist is short and always the same — does the case exist, does the quote match, is it the right court, is it still good law, does it actually say what the model claims. Run it every time, on every citation, before anything is filed.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 03</div>
+  <h2>The research brief builder</h2>
+  <p class="lead">A vague question gets a vague, ungroundable answer — and vague answers are exactly where hallucinations hide. The fastest way to make AI research safer is to sharpen the question before you ask it. Add each element below and watch a hopeless query become a researchable one.</p>
+
+  <p>"What's the law on non-competes?" is not a research question; it is a conversation opener that invites the model to guess across every jurisdiction and era at once. A researchable question is specific about four things: the <strong>jurisdiction</strong> whose law binds you, the <strong>area</strong> of law, the concrete <strong>facts</strong> that make your matter yours, and the procedural <strong>posture</strong> that shapes what you actually need. Each element you add does two jobs: it narrows what the model can plausibly invent, and it gives you a sharper standard to verify the answer against. Toggle the chips and watch the query — and the sharpness meter — improve.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · From vague to researchable</span>
+      <div class="controls">
+        <button onclick="briefAll()">Add all elements</button>
+        <button onclick="briefNone()">↺ Reset to vague</button>
+      </div>
+    </div>
+    <div class="brief">
+      <div class="bchips" id="bChips">
+        <span class="bchip" data-k="juris" onclick="toggleChip('juris')">+ Jurisdiction</span>
+        <span class="bchip" data-k="area" onclick="toggleChip('area')">+ Area of law</span>
+        <span class="bchip" data-k="facts" onclick="toggleChip('facts')">+ Key facts</span>
+        <span class="bchip" data-k="posture" onclick="toggleChip('posture')">+ Procedural posture</span>
+      </div>
+      <div class="bquery">
+        <div class="bqlab">Your research question</div>
+        <div class="bqtext" id="bQuery"></div>
+      </div>
+      <div class="bmeter">
+        <div class="btrack"><div class="bfill" id="bFill"></div></div>
+        <div class="bpct" id="bPct"></div>
+      </div>
+      <div class="bnote" id="bNote"></div>
+    </div>
+  </div>
+
+  <h3>The question is half the verification</h3>
+  <p>A sharp question does not just get a better answer — it makes the answer checkable. When you have named the jurisdiction, the area, the facts and the posture, you know exactly what a correct authority must satisfy, and a wrong or invented one has nowhere to hide. Vague in, ungroundable out. The discipline of framing is the same discipline as verifying, applied a step earlier.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Legal research with AI keeps its speed only when it keeps its gate. Frame the question with jurisdiction, area, facts and posture; let AI generate leads and first-pass synthesis; then pass every proposition and every citation through verification to primary source before it reaches a synthesis, a brief, or a client. Fluency is never authority, and a perfect-sounding citation is a reason to check, not to trust. The next lesson takes this verified research into the drafting of documents that actually leave your desk.</p>
+  <ul>
+    <li>Six-stage flow: Issue → Frame → Search/Generate → VERIFY → Synthesize → Apply</li>
+    <li>VERIFY is a gate, not a step — nothing crosses it unchecked</li>
+    <li>Ungrounded answers hallucinate authorities; grounding pulls every claim to primary source</li>
+    <li>Checklist every citation: exists · quote matches · right court · still good law · actually says it</li>
+    <li>A sharp question (jurisdiction · area · facts · posture) is half the verification</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · School of AI Careers · Lesson 02 of Week 2 · Next up: Drafting Legal Documents with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · research workflow flow ===== */
+const FLOW={
+  issue:{lab:'Stage 1 · cheap & forgiving',head:'Name the legal issue',body:'Turn the client’s story into a legal question — the actual issue in dispute, not the symptom. AI can help spot candidate issues in a fact pattern, but you decide which one controls. A wrong guess here only costs a prompt, so explore freely.',gate:false},
+  frame:{lab:'Stage 2 · cheap & forgiving',head:'Frame it for research',body:'Sharpen the issue into a researchable question: jurisdiction, area of law, the facts that matter, the posture. AI can suggest framings and sub-questions. The sharper the frame, the less room the model has to invent — and the easier the answer is to verify later.',gate:false},
+  search:{lab:'Stage 3 · cheap & forgiving',head:'Search & generate leads',body:'Let AI generate candidate authorities, arguments and a first-pass summary — fast and in volume. Treat every output as a LEAD, never a finding. At this stage the model is a tireless research assistant handing you starting points, not conclusions you can rely on.',gate:false},
+  verify:{lab:'Stage 4 · THE GATE',head:'VERIFY — the non-negotiable gate',body:'Pull every proposition and every citation to primary source. Confirm each authority actually exists, says what the model claims, comes from the binding court, and is still good law. Anything that fails is cut. Nothing — no citation, no holding, no quote — crosses this gate unverified. This is where AI output becomes legal work you can sign.',gate:true},
+  synth:{lab:'Stage 5 · now expensive',head:'Synthesize the verified law',body:'Build the analysis from ONLY what survived the gate. AI can help structure and phrase the synthesis, but every authority in it is now one you have personally confirmed. Mistakes here are expensive — a false citation in a synthesis becomes a false citation downstream — which is exactly why the gate came first.',gate:false},
+  apply:{lab:'Stage 6 · fully accountable',head:'Apply to the matter',body:'Apply the verified, synthesized law to this client’s facts and decide what it means for strategy and advice. This is pure judgment and pure accountability — the work the client is paying for. AI may help you draft the write-up; you own the conclusion and everything under your name.',gate:false}
+};
+const FORDER=['issue','frame','search','verify','synth','apply'];
+let flowCur='issue';
+function pickFlow(k){
+  flowCur=k;
+  document.querySelectorAll('#fChain .fnode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=FLOW[k],p=el('fPanel');
+  p.className='fpanel'+(d.gate?' gatep':'');
+  p.innerHTML='<div class="flab">'+d.lab+'</div><h4>'+d.head+'</h4><p>'+d.body+'</p>';
+  p.classList.add('swap');void p.offsetWidth;
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+function flowStep(dir){
+  let i=FORDER.indexOf(flowCur)+dir;
+  if(i<0)i=FORDER.length-1;if(i>=FORDER.length)i=0;
+  pickFlow(FORDER[i]);
+}
+pickFlow('issue');
+/* keep the gate quietly pulsing to draw the eye */
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){document.querySelector('.fnode.gate').classList.add('pulse');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('fChain'));
+
+/* ===== Figure 2 · ungrounded vs grounded ===== */
+const GR={
+  bad:{
+    flag:'⚠ Ungrounded · generated, not found',
+    flagcls:'bad',
+    qcls:'bad',
+    quote:'“A restrictive covenant will not be enforced where it is broader than reasonably necessary to protect a legitimate interest.” <span class="cite-src">— Harwell v. Renner Industries, 512 Rptr. 340, 347 (2016)</span>',
+    check:[
+      ['fail','Case exists in the reporter — cannot confirm; no such volume/page found'],
+      ['fail','Quotation matches the real text — nothing to match it against'],
+      ['fail','Right / binding court for this matter — court unverified'],
+      ['fail','Still good law (not overruled) — status unknown'],
+      ['fail','Actually stands for the stated proposition — unverifiable']
+    ]
+  },
+  good:{
+    flag:'✓ Grounded · pulled & verified',
+    flagcls:'good',
+    qcls:'good',
+    quote:'“A restrictive covenant will not be enforced where it is broader than reasonably necessary to protect a legitimate interest.” <span class="cite-src">— [Verified primary authority; citation confirmed in the reporter, quote matched to the opinion, court confirmed binding, treatment checked as still good law.]</span>',
+    check:[
+      ['pass','Case exists in the reporter — confirmed against primary source'],
+      ['pass','Quotation matches the real text — checked word for word'],
+      ['pass','Right / binding court for this matter — jurisdiction confirmed'],
+      ['pass','Still good law (not overruled) — subsequent treatment checked'],
+      ['pass','Actually stands for the stated proposition — read in context']
+    ]
+  }
+};
+function setGr(mode,btn){
+  document.querySelectorAll('#grBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d=GR[mode];
+  const f=el('grFlag');f.className='cite-flag '+d.flagcls;f.textContent=d.flag;
+  const q=el('grQuote');q.className='cite-quote '+d.qcls;q.innerHTML=d.quote;
+  let h='';
+  d.check.forEach(([st,txt])=>{
+    h+='<li class="'+st+'"><span class="mk">'+(st==='pass'?'✓':'✕')+'</span><span>'+txt+'</span></li>';
+  });
+  el('grCheck').innerHTML=h;
+}
+setGr('bad',document.querySelector('#grBtns button'));
+
+/* ===== Figure 3 · research brief builder ===== */
+const BRIEF={
+  base:'What’s the law on non-competes?',
+  parts:{
+    juris:{on:false,txt:'in this jurisdiction'},
+    area:{on:false,txt:'for a post-employment restrictive covenant'},
+    facts:{on:false,txt:'binding a mid-level engineer for 18 months within 50 miles'},
+    posture:{on:false,txt:'now being challenged as unenforceable at a preliminary injunction'}
+  }
+};
+const BORDER=['juris','area','facts','posture'];
+function renderBrief(){
+  let onCount=0;
+  BORDER.forEach(k=>{if(BRIEF.parts[k].on)onCount++;});
+  BORDER.forEach(k=>{
+    document.querySelector('#bChips .bchip[data-k="'+k+'"]').classList.toggle('on',BRIEF.parts[k].on);
+  });
+  let txt;
+  if(onCount===0){
+    txt='What’s the law on non-competes?';
+  }else{
+    txt='Under the law <span class="add">'+ (BRIEF.parts.juris.on?BRIEF.parts.juris.txt:'[jurisdiction?]')+'</span>, is a non-compete';
+    if(BRIEF.parts.area.on)txt+=' <span class="add">'+BRIEF.parts.area.txt+'</span>';
+    if(BRIEF.parts.facts.on)txt+=' <span class="add">'+BRIEF.parts.facts.txt+'</span>';
+    txt+=' enforceable';
+    if(BRIEF.parts.posture.on)txt+=' <span class="add">'+BRIEF.parts.posture.txt+'</span>';
+    txt+='?';
+  }
+  el('bQuery').innerHTML=txt;
+  const pct=[20,40,60,80,100][onCount];
+  el('bFill').style.width=pct+'%';
+  const labels=['very vague','vague','getting there','sharp','researchable & checkable'];
+  el('bPct').textContent=pct+'% · '+labels[onCount];
+  const notes=[
+    'A conversation opener, not a question. It invites the model to guess across every jurisdiction, era and fact pattern at once — the perfect conditions for a confident hallucination.',
+    'Naming the jurisdiction is the single biggest gain: it fixes which law actually binds you and cuts off most invented, out-of-jurisdiction authorities.',
+    'With the area of law pinned down, the model — and you — can reason about the right doctrine. The answer starts to have a shape you can verify against.',
+    'Concrete facts turn a doctrine question into your matter. Now a correct authority must fit these facts, and a wrong one has far fewer places to hide.',
+    'Fully researchable. Every element gives you a standard the answer must satisfy — so verification is faster, and an invented or off-point authority stands out immediately.'
+  ];
+  el('bNote').textContent=notes[onCount];
+}
+function toggleChip(k){BRIEF.parts[k].on=!BRIEF.parts[k].on;renderBrief();}
+function briefAll(){BORDER.forEach(k=>BRIEF.parts[k].on=true);renderBrief();}
+function briefNone(){BORDER.forEach(k=>BRIEF.parts[k].on=false);renderBrief();}
+renderBrief();
+
+</script>
+</body>
+</html>

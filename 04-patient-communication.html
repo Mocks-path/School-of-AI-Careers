@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Patient Communication, Practice Management &amp; Professional Growth with AI · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#2E7D5B; --red:#C0392B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+.disclaimer{max-width:680px;margin:26px 0 0;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:0.02em;border-left:2px solid var(--line);padding-left:14px}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== principle cards (shared) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== Figure 1 · hours reclaimed / burnout calculator ===== */
+.hr-flex{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:start}
+.hr-rows{display:grid;gap:16px}
+.hr-row{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.hr-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.hr-name{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark)}
+.hr-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.hr-val strong{color:var(--orange-dark);font-size:14px}
+.hr-bars{position:relative;height:26px;background:var(--cream);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.hr-before{position:absolute;left:0;top:0;height:100%;background:repeating-linear-gradient(45deg,var(--line),var(--line) 6px,#efe4d2 6px,#efe4d2 12px);border-radius:6px}
+.hr-after{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-dark));border-radius:6px;transition:width .5s ease}
+.hr-slider label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.hr-slider input[type=range]{width:100%;accent-color:var(--orange);cursor:pointer}
+.hr-side{background:var(--brown-dark);color:var(--paper);border-radius:14px;padding:24px;position:sticky;top:90px;overflow:hidden}
+.hr-side::after{content:"";position:absolute;bottom:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.35}
+.hr-side .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#FBE7CB;margin-bottom:6px}
+.hr-big{font-family:'Fraunces',serif;font-weight:800;font-size:56px;line-height:1;color:var(--yellow)}
+.hr-unit{font-family:'JetBrains Mono',monospace;font-size:12px;color:#E8D9C5;margin-bottom:14px}
+.hr-meter{height:8px;background:rgba(255,255,255,.14);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.hr-meter div{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow),var(--orange-dark));transition:width .5s}
+.hr-meterlab{font-family:'JetBrains Mono',monospace;font-size:10px;color:#E8D9C5;margin-bottom:16px;display:flex;justify-content:space-between}
+.hr-sub{font-size:13px;color:#E8D9C5;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;max-width:none}
+.hr-sub strong{color:var(--orange-light)}
+
+/* ===== Figure 2 · privacy firewall ===== */
+.pf-wrap{display:grid;gap:0}
+.pf-lane{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.pf-lane .lane-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-block;padding:4px 9px;border-radius:5px}
+.lane-tag.raw{background:rgba(213,82,34,0.12);color:var(--orange-dark)}
+.lane-tag.clean{background:rgba(0,141,210,0.12);color:var(--accent)}
+.pf-text{font-size:14px;line-height:1.7;color:var(--brown)}
+.pii{background:rgba(213,82,34,0.16);color:var(--orange-dark);border-radius:3px;padding:0 3px;font-weight:600;transition:all .3s}
+.pii.masked{background:var(--brown-dark);color:var(--yellow);font-family:'JetBrains Mono',monospace;font-size:.85em;letter-spacing:0.02em}
+.pf-gate{display:flex;align-items:center;gap:14px;padding:14px 20px;margin:2px 0}
+.pf-gate .gicon{width:34px;height:34px;flex-shrink:0}
+.pf-gate .gtxt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--muted)}
+.pf-gate .gtxt strong{color:var(--brown-dark);text-transform:uppercase;letter-spacing:0.1em;display:block;font-size:10px;margin-bottom:2px}
+.pf-signoff{background:var(--paper);border:1px dashed var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;transition:all .3s;flex-wrap:wrap}
+.pf-signoff.locked{border-color:var(--orange-dark)}
+.pf-signoff.approved{border-color:var(--accent);border-style:solid;background:rgba(0,141,210,0.05)}
+.pf-signoff .sbadge{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;padding:5px 10px;border-radius:5px;white-space:nowrap}
+.pf-signoff.locked .sbadge{background:var(--orange-dark);color:#fff}
+.pf-signoff.approved .sbadge{background:var(--accent);color:#fff}
+.pf-signoff p{font-size:13px;color:var(--muted);margin:0;max-width:none;flex:1;min-width:220px}
+.pf-btn{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--brown-dark);border:none;color:#fff;padding:9px 16px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:0.08em;transition:all .2s;margin-left:auto;white-space:nowrap}
+.pf-btn:hover{background:var(--orange-dark)}
+.pf-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== Figure 3 · health-literacy tuner ===== */
+.tone-flex{display:grid;grid-template-columns:1fr;gap:0}
+.tone-msg{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:200px;transition:border-color .3s}
+.tone-from{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.tone-from .badge{color:var(--orange-dark);font-weight:600}
+.tone-grade{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+.tone-body{font-size:15px;line-height:1.7;color:var(--brown)}
+.tone-approve{margin-top:20px;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tone-approve .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.tone-approve .k strong{display:block;color:var(--brown-dark);font-size:11px;letter-spacing:0.12em;margin-bottom:2px}
+.tone-approve p{font-size:13px;color:var(--muted);margin:0;max-width:none;flex:1;min-width:200px}
+
+@media(max-width:700px){
+  .hr-flex{grid-template-columns:1fr}
+  .hr-side{position:static}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Moksh<span class="dot" style="color:var(--orange)">Path</span> <span class="sub">SCHOOL OF AI CAREERS</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 3 · AI for Doctors · Lesson 04</div>
+  <h1>Give the minutes back to the <em>patient</em>.</h1>
+  <p class="lede">Much of what exhausts a clinician isn't medicine — it's the after-visit summaries, the portal messages, the letters, the forms that fill the pyjama-time hours after the clinic closes. This is exactly the drafting AI can accelerate, and the payoff is real: minutes returned to sleep, to family, to the patient conversation that actually needs you. But every word that reaches a patient still carries your clinical duty — and no patient's identifiable data belongs in a consumer chatbot. AI drafts. The clinician verifies, and decides.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The hours reclaimed — and the burnout behind them</h2>
+  <p class="lead">You can't reclaim time you haven't measured, and you can't address burnout you've never named. Before reaching for AI, list the recurring communication and admin tasks that quietly consume the week — then estimate, honestly, how much of each is first-draft work a model could accelerate under your review.</p>
+
+  <p>Drag the sliders to match your own week. The bars show <em>before</em> (your current hours, hatched) against <em>after</em> AI drafts the first version and you verify and finalise (solid orange). The burnout gauge on the right isn't science — it's a mirror. Most clinicians are startled less by the total than by how much of the load is repetitive text-shaping that never needed a doctor to start from a blank page, and by how directly that load maps onto why they're tired.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Communication &amp; admin hours reclaimed per week</span>
+      <div class="controls"><button onclick="hrReset()">↺ Reset</button></div>
+    </div>
+    <div class="hr-flex">
+      <div class="hr-rows" id="hrRows"><!-- filled by JS --></div>
+      <div class="hr-side">
+        <div class="lbl">Estimated time reclaimed</div>
+        <div class="hr-big"><span id="hrHours">0</span></div>
+        <div class="hr-unit">hours / week · <span id="hrYear">0</span> hrs a year</div>
+        <div class="hr-meter"><div id="hrMeter" style="width:0%"></div></div>
+        <div class="hr-meterlab"><span>Admin load on your week</span><span id="hrLoad">—</span></div>
+        <p class="hr-sub">That's roughly <strong id="hrDays">0</strong> working days a year returned to patients, rest, and the work only a clinician can do — <em>if</em> you protect the reclaimed time instead of refilling it. AI drafts; you verify and decide.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>Two honest caveats. First, AI drafting adds a verification step, so the "after" bars are never zero — a patient message or after-visit summary sent unread is a safety risk, not a time-saver, and it goes out under your name. Second, reclaimed time is only a gift if you protect it. If every hour AI frees up gets refilled with more patients, you've bought faster burnout, not a healthier practice. The tool gives you a choice; the choice is yours.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The privacy firewall</h2>
+  <p class="lead">The moment before you paste text into an AI tool is the most important moment in the whole workflow. Whatever crosses that line may leave your control — and in medicine, that line is protected by law. Identifiable patient information does not belong in a consumer AI tool, full stop.</p>
+
+  <p>Public AI tools are not part of your protected record. Text you paste can be stored, processed on servers you don't control, and — depending on the service — used to improve the model. A patient's name, date of birth, medical-record number, address, a rare diagnosis that identifies them: none of it belongs in an unvetted chatbot, because that disclosure can breach HIPAA, GDPR, and their equivalents, and cannot be undone. The discipline is simple and non-negotiable: <strong>de-identify first, get a human sign-off, then send.</strong> Watch the firewall clean the text below, and note the gate that won't open until a human has checked it — because nothing AI touches reaches a patient without a clinician's review.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · De-identify before it crosses the line</span>
+      <div class="controls">
+        <button id="pfToggle" onclick="pfClean()">Run the firewall</button>
+      </div>
+    </div>
+    <div class="pf-wrap">
+      <div class="pf-lane">
+        <span class="lane-tag raw">◇ Raw draft — never paste this</span>
+        <div class="pf-text" id="pfText">
+          Please draft a friendly after-visit summary for <span class="pii" data-clean="[PATIENT]">Mrs Anita Sharma</span>, DOB <span class="pii" data-clean="[DOB]">14/03/1958</span>, MRN <span class="pii" data-clean="[MRN]">MRN-88421</span>, seen today at <span class="pii" data-clean="[SITE]">Green Valley Clinic, Pune</span> for <span class="pii" data-clean="[CONDITION]">newly diagnosed type 2 diabetes</span>. Her daughter <span class="pii" data-clean="[CONTACT]">Priya (+91 98xxx xxxxx)</span> will help with follow-up.
+        </div>
+      </div>
+      <div class="pf-gate">
+        <svg class="gicon" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="15" width="20" height="14" rx="3" fill="#2F1D19"/>
+          <path id="pfShackle" d="M11 15v-4a6 6 0 0 1 12 0v4" stroke="#EF7F1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="17" cy="21" r="2.2" fill="#FECC00"/>
+        </svg>
+        <div class="gtxt"><strong>Firewall</strong><span id="pfGateMsg">Identifiable patient details (PHI) are blocked from the tool.</span></div>
+      </div>
+      <div class="pf-lane">
+        <span class="lane-tag clean">◆ Safe to send — de-identified</span>
+        <div class="pf-text" id="pfClean" style="opacity:.45">
+          Run the firewall to see the version that's safe to paste into an AI tool.
+        </div>
+      </div>
+      <div class="pf-signoff locked" id="pfSign">
+        <span class="sbadge" id="pfBadge">Sign-off required</span>
+        <p id="pfSignMsg">A clinician must confirm the text carries no patient-identifying detail before it goes to the tool — and must review the AI output again before anything reaches the patient. This gate does not open automatically.</p>
+        <button class="pf-btn" id="pfApprove" onclick="pfApproveFn()" disabled>Approve &amp; send</button>
+      </div>
+    </div>
+  </div>
+
+  <p>De-identifying isn't just a compliance box — it usually makes the AI output better and safer to reuse. A prompt to "write a warm, plain-language after-visit summary for a patient newly diagnosed with type 2 diabetes, using placeholders for name and details" gets you a sound, reusable structure you fill in yourself, without ever exposing the patient. And the sign-off gate matters as much as the masking: automation is not permission. A clinician looks, a clinician confirms, a clinician is accountable — both before text goes to the tool and before the result reaches the patient. Always check your institution's data policy and your jurisdiction's privacy law first; many tools are simply not sanctioned for protected health information at all.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>The plain-language health-literacy tuner</h2>
+  <p class="lead">The hardest patient messages to write are rarely the longest — they're the ones where a dense clinical explanation has to become something a worried patient can actually understand and act on. AI can re-express a paragraph of jargon at a patient-friendly reading level in seconds. What it can't do is know whether the simpler version is still clinically accurate and safe — or carry the duty for how the patient relies on it.</p>
+
+  <p>Here's a genuinely dense clinical explanation: technically correct, and nearly unreadable to a non-clinician. Instead of leaving the patient to struggle, the clinician asks AI to re-express it — at a lower reading level, warmer, or in the patient's first language. Cycle the versions below. Each is a <em>draft option</em>, not a decision. The reminder underneath never changes: the clinician reads it, verifies it is still accurate and safe, approves it, and owns it — and AI must never triage, diagnose, or give advice of record.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Re-expressing a clinical explanation</span>
+      <div class="controls">
+        <button id="tn0" class="active" onclick="toneSet(0)">Clinical draft</button>
+        <button id="tn1" onclick="toneSet(1)">Plain language</button>
+        <button id="tn2" onclick="toneSet(2)">Warmer</button>
+        <button id="tn3" onclick="toneSet(3)">Translated</button>
+      </div>
+    </div>
+    <div class="tone-flex">
+      <div class="tone-msg" id="toneMsg">
+        <div class="tone-from">
+          <span>To: Patient · Re: Your test results &amp; next steps</span>
+          <span class="badge" id="toneBadge">◇ Dense clinical draft</span>
+        </div>
+        <div class="tone-grade" id="toneGrade">Reading level · college / clinical</div>
+        <div class="tone-body" id="toneBody"></div>
+      </div>
+      <div class="tone-approve">
+        <span class="k"><strong>Human gate</strong>Draft ≠ sent</span>
+        <p id="toneNote">Every version above is a suggestion. Nothing reaches a patient until the clinician verifies it is still clinically accurate and safe, approves it, and presses send. AI must not triage or give advice of record — the words go out under your duty to the patient, so they're yours to own.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>Plain-language rewriting carries a specific danger: simplification can quietly change clinical meaning. "Take with food if it upsets your stomach" is not "take with food"; "call us if it gets worse" is not the same as a defined red-flag warning. A model chasing readability can smooth away the exact safety qualifier that protects the patient. Treat every plain-language draft as a first pass to check line-by-line against the clinical substance, and treat any translation of medical instructions as a draft for a fluent human to verify, never a finished message. And hold the hard line: an AI tool does not triage symptoms, does not diagnose, and does not give the advice of record. It shapes words you have already decided are safe. Convenience never outranks a patient understanding — accurately and safely — what to do next.</p>
+
+  <h3>How to ask for a good draft</h3>
+  <p>The difference between a useless AI draft and a genuinely helpful one is almost always the request. A one-line prompt gets a one-size-fits-nobody reply. A well-framed one gets a draft that's 80% there. These four patterns turn AI from a novelty into a reliable drafting partner for patient communication — no technical skill required, just clear instructions.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Give it a role</span><h4>Set the voice</h4><p>"You're a clinician writing a reassuring, plain-language note to a worried patient." A defined role produces a defined tone — far better than a blank request that averages every message ever written.</p></div>
+    <div class="crit"><span class="k">Set the frame</span><h4>Audience, level, purpose</h4><p>Say who reads it, at what reading level, and what it must achieve. "A short note at a grade-six reading level explaining a new diabetes diagnosis without alarming the patient" beats "write a summary."</p></div>
+    <div class="crit"><span class="k">Feed the facts</span><h4>Provide the raw material</h4><p>Paste your points — de-identified — and let AI shape them. It's a rewriter, not a mind-reader. The diagnosis, the plan, and the safety advice come from you; the phrasing can come from it.</p></div>
+    <div class="crit"><span class="k">Iterate</span><h4>Refine, don't restart</h4><p>"Simpler." "Keep the red-flag warning exactly as written." "Shorter." Treat the first draft as a conversation, not a verdict. Two or three nudges usually beats re-prompting from scratch.</p></div>
+  </div>
+
+  <p>Even with a perfect prompt, the last step never changes: you read the whole thing, checking it is still clinically accurate and safe, before it leaves your hands. AI is fluent, which is exactly what makes it dangerous — it can phrase a subtly wrong instruction so smoothly that you nod past the error. Fluency is not accuracy. The final read is where your clinical judgement and your duty to the patient re-enter, and it is not optional.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Practice management &amp; professional growth</h2>
+  <p class="lead">The same drafting power that clears your communication load can sharpen your practice — if you point it at organisation, reflection, and learning rather than just output. Used well, AI becomes a tireless assistant and a thinking partner. Used lazily, it becomes a way to stop reading the evidence, and to stop thinking.</p>
+
+  <p>The line is the same one running through this whole week: AI proposes, you verify and decide. Use it to draft the patient-education handout you'll then check for safety, to structure a quality-improvement reflection you'll make honest, to summarise a guideline you'll still read in the source, to rehearse a difficult conversation before you have it. What it must never become is the author of your clinical judgement, the keeper of your obligations, or a stand-in for a colleague, a specialist, or your own reading. The four uses below keep AI in the assistant's chair, where it belongs.</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Organise</span><h4>Draft patient education</h4><p>Have AI draft a de-identified education handout or FAQ — then check every dose, instruction, and red-flag against guidance before it reaches a patient. A wrong number the model invented is your error to catch.</p></div>
+    <div class="crit"><span class="k">Reflect</span><h4>Structure, then get honest</h4><p>Ask AI to scaffold a reflective practice entry or QI write-up. Then rewrite it as what actually happened. The machine's tidy version is a starting frame, not the truth of the work.</p></div>
+    <div class="crit"><span class="k">Digest</span><h4>Summarise, then verify</h4><p>Have AI condense a long guideline or paper into key points — then read the source on anything that changes management. Summaries drop nuance, misstate findings, and sometimes invent them.</p></div>
+    <div class="crit"><span class="k">Rehearse</span><h4>Role-play the hard talk</h4><p>Practise breaking difficult news or a boundary conversation with AI playing the other side. Low stakes to rehearse; the real conversation, and the care in it, is still yours to lead and own.</p></div>
+  </div>
+
+  <h3>The honest limits, one more time</h3>
+  <p>Everything in this lesson depends on the same guardrails. <strong>Patient privacy:</strong> never put identifiable patient data into a consumer AI tool — under HIPAA, GDPR, and their equivalents, de-identification comes first, and many tools are not permitted for protected health information at all. <strong>Hallucination:</strong> AI invents doses, instructions, and facts in fluent, plausible prose, so verify everything against the source before it reaches a patient. <strong>Bias &amp; health equity:</strong> generated tone and phrasing carry assumptions that land differently across languages, cultures, and literacy levels — review for whom the message serves and whom it may leave behind. <strong>Not a cleared device:</strong> a general-purpose chatbot does not triage, does not diagnose, and does not give advice of record; it is decision-support and drafting, never the decision-maker. AI drafts. The clinician verifies and decides. That doesn't change when the task is a patient message instead of a clinic note — it just matters even more, because it is the patient, directly, on the other end.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Patient communication and practice management is where AI gives clinicians the most obvious time back — and where the human guardrails matter most, because the words reach a patient directly. Let AI draft the summaries, messages, letters, and handouts; de-identify anything before it crosses the line; keep a human review before anything reaches a patient; and never let a tool triage or advise in your place.</p>
+  <ul>
+    <li>Measure the hours first · reclaim time, then protect it from being refilled</li>
+    <li>De-identify before it crosses the line · a consumer tool is not your protected record</li>
+    <li>Human gate both ways · a clinician reviews before the tool and before the patient</li>
+    <li>Plain language is a draft, not a decision · verify it is still accurate and safe</li>
+    <li>AI drafts, the clinician verifies and decides · never triage, diagnose, or advise of record</li>
+  </ul>
+</div>
+
+<p class="disclaimer">This lesson is professional education for clinicians on workflow and judgement. It is not medical advice, not legal or compliance advice, and not an endorsement of any specific tool. AI systems described here are drafting and decision-support aids, not cleared diagnostic devices, and must never triage, diagnose, or give advice of record. Always follow your institution's policies, your jurisdiction's privacy law (HIPAA, GDPR, and equivalents), and your own professional obligations before using AI with any patient information.</p>
+
+</div>
+<footer>MokshPath · Guided Path to True Learning · Lesson 04 · Week 3 complete — AI for Doctors ✦</footer>
+<script>
+
+/* ============ Figure 1 · Hours reclaimed / burnout ============ */
+const HR_TASKS=[
+  {name:'After-visit summaries',before:3,save:0.55,max:8},
+  {name:'Patient portal messages',before:5,save:0.5,max:12},
+  {name:'Referral &amp; discharge letters',before:3,save:0.55,max:8},
+  {name:'Forms &amp; prior authorisations',before:3,save:0.5,max:8}
+];
+let hrState=HR_TASKS.map(t=>t.before);
+const hrRows=document.getElementById('hrRows');
+(function buildHR(){
+  HR_TASKS.forEach((t,i)=>{
+    const row=document.createElement('div');
+    row.className='hr-row';
+    row.innerHTML=
+      '<div class="hr-head"><span class="hr-name">'+t.name+'</span>'+
+      '<span class="hr-val" id="hrv'+i+'"></span></div>'+
+      '<div class="hr-bars"><div class="hr-before" id="hrb'+i+'"></div><div class="hr-after" id="hra'+i+'"></div></div>'+
+      '<div class="hr-slider"><label>Hours you spend now <span id="hrl'+i+'"></span></label>'+
+      '<input type="range" min="0" max="'+t.max+'" step="0.5" value="'+t.before+'" oninput="hrUpd('+i+',this.value)"></div>';
+    hrRows.appendChild(row);
+  });
+})();
+function hrUpd(i,v){
+  hrState[i]=parseFloat(v);
+  hrRender();
+}
+function hrRender(){
+  let saved=0,totalBefore=0,totalMax=0;
+  HR_TASKS.forEach((t,i)=>{
+    const before=hrState[i],after=before*(1-t.save);
+    saved+=before-after;totalBefore+=before;totalMax+=t.max;
+    const pctB=before/t.max*100,pctA=after/t.max*100;
+    document.getElementById('hrb'+i).style.width=pctB+'%';
+    document.getElementById('hra'+i).style.width=pctA+'%';
+    document.getElementById('hrv'+i).innerHTML=before.toFixed(1)+' hrs → <strong>'+after.toFixed(1)+' hrs</strong>';
+    document.getElementById('hrl'+i).textContent=before.toFixed(1)+' hrs';
+  });
+  document.getElementById('hrHours').textContent=saved.toFixed(1);
+  const yr=saved*46;
+  document.getElementById('hrYear').textContent=Math.round(yr);
+  document.getElementById('hrDays').textContent=(yr/7.5).toFixed(0);
+  const load=Math.min(100,totalBefore/totalMax*100);
+  document.getElementById('hrMeter').style.width=load+'%';
+  const lab=load<30?'Light':load<55?'Moderate':load<78?'Heavy':'At risk';
+  document.getElementById('hrLoad').textContent=lab;
+}
+function hrReset(){
+  hrState=HR_TASKS.map(t=>t.before);
+  HR_TASKS.forEach((t,i)=>{hrRows.querySelectorAll('input')[i].value=t.before});
+  hrRender();
+}
+hrRender();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hrRender();o.unobserve(e.target)}}),{threshold:0.3}).observe(hrRows);
+
+/* ============ Figure 2 · Privacy firewall ============ */
+let pfCleaned=false,pfApproved=false;
+function pfClean(){
+  pfCleaned=!pfCleaned;
+  const spans=document.querySelectorAll('#pfText .pii');
+  spans.forEach(s=>{
+    if(pfCleaned){
+      if(!s.dataset.orig)s.dataset.orig=s.textContent;
+      s.textContent=s.dataset.clean;
+      s.classList.add('masked');
+    }else{
+      s.textContent=s.dataset.orig;
+      s.classList.remove('masked');
+    }
+  });
+  const clean=document.getElementById('pfClean');
+  if(pfCleaned){
+    clean.style.opacity='1';
+    clean.innerHTML='Write a warm, plain-language <strong>after-visit summary</strong> for a patient <strong>newly diagnosed with type 2 diabetes</strong>. Use placeholders for the name, dates, and contacts. No patient names, identifiers, or record numbers included.';
+    document.getElementById('pfToggle').textContent='Show raw draft';
+    document.getElementById('pfGateMsg').textContent='Identifiable patient details replaced. Text is now safe to check.';
+    document.getElementById('pfApprove').disabled=false;
+  }else{
+    clean.style.opacity='.45';
+    clean.innerHTML='Run the firewall to see the version that\'s safe to paste into an AI tool.';
+    document.getElementById('pfToggle').textContent='Run the firewall';
+    document.getElementById('pfGateMsg').textContent='Identifiable patient details (PHI) are blocked from the tool.';
+    document.getElementById('pfApprove').disabled=true;
+    pfApproved=false;pfRenderSign();
+  }
+}
+function pfApproveFn(){
+  if(!pfCleaned)return;
+  pfApproved=!pfApproved;pfRenderSign();
+}
+function pfRenderSign(){
+  const sign=document.getElementById('pfSign');
+  if(pfApproved){
+    sign.classList.remove('locked');sign.classList.add('approved');
+    document.getElementById('pfBadge').textContent='Clinician approved ✓';
+    document.getElementById('pfSignMsg').textContent='A clinician checked the de-identified text and confirmed no patient detail remains. Only now does it go to the tool — and the AI output will be reviewed again before it reaches the patient. The clinician who approved it is accountable.';
+    document.getElementById('pfApprove').textContent='Undo sign-off';
+  }else{
+    sign.classList.add('locked');sign.classList.remove('approved');
+    document.getElementById('pfBadge').textContent='Sign-off required';
+    document.getElementById('pfSignMsg').textContent='A clinician must confirm the text carries no patient-identifying detail before it goes to the tool — and must review the AI output again before anything reaches the patient. This gate does not open automatically.';
+    document.getElementById('pfApprove').textContent='Approve & send';
+  }
+}
+
+/* ============ Figure 3 · Health-literacy tuner ============ */
+const TONES=[
+  {badge:'◇ Dense clinical draft',grade:'Reading level · college / clinical',border:'var(--line)',
+   body:'Your recent laboratory investigations are consistent with a diagnosis of type 2 diabetes mellitus, with an elevated glycated haemoglobin indicative of chronic hyperglycaemia. We recommend initiation of metformin therapy alongside lifestyle modification, with reassessment of glycaemic control in three months. Should you experience polyuria, polydipsia, or symptoms suggestive of hypoglycaemia, timely review is advised.'},
+  {badge:'◆ Re-expressed: plain language',grade:'Reading level · grade 6',border:'var(--orange)',
+   body:'Your blood tests show you have type 2 diabetes. This means there is too much sugar in your blood. We would like you to start a medicine called metformin and make some changes to eating and activity. We will check your blood sugar again in about three months. Call us if you are very thirsty, are passing a lot of urine, or feel shaky, sweaty, or dizzy.'},
+  {badge:'◆ Re-expressed: warmer',grade:'Reading level · grade 6 · reassuring',border:'var(--orange)',
+   body:'I know a new diagnosis can feel worrying, so I want to explain it simply. Your blood tests show you have type 2 diabetes — there is a bit too much sugar in your blood, and this is something we can manage well together. We would like to start a gentle medicine (metformin) and make small changes to food and activity, and we will check in again in three months. Please call us if you feel very thirsty, are passing lots of urine, or feel shaky or dizzy — and reach out any time with questions.'},
+  {badge:'◆ Re-expressed: translated (Hindi)',grade:'Reading level · grade 6 · Hindi',border:'var(--accent)',
+   body:'आपकी जाँच से पता चलता है कि आपको टाइप 2 डायबिटीज़ (मधुमेह) है — इसका मतलब है कि आपके खून में शक्कर की मात्रा थोड़ी ज़्यादा है। हम चाहते हैं कि आप मेटफ़ॉर्मिन नामक दवा शुरू करें और खान-पान व गतिविधि में कुछ बदलाव करें। लगभग तीन महीने बाद हम आपकी शक्कर दोबारा जाँचेंगे। अगर आपको बहुत प्यास लगे, बार-बार पेशाब आए, या कमज़ोरी/चक्कर महसूस हो तो हमें ज़रूर बताएँ।'}
+];
+function toneSet(i){
+  const t=TONES[i];
+  [0,1,2,3].forEach(j=>document.getElementById('tn'+j).classList.toggle('active',j===i));
+  document.getElementById('toneBadge').textContent=t.badge;
+  document.getElementById('toneGrade').textContent=t.grade;
+  document.getElementById('toneBody').textContent=t.body;
+  document.getElementById('toneMsg').style.borderColor=t.border;
+  document.getElementById('toneNote').textContent=
+    i===3
+      ? 'A machine translation of medical instructions can shift meaning invisibly. Treat it as a first draft for a fluent human to verify — never a finished message. You still confirm it is accurate and safe, approve it, and own it. AI does not triage or advise of record.'
+      : i===1
+      ? 'Plain language can quietly drop a safety qualifier. Read this line-by-line against the clinical draft — the red-flag symptoms and the follow-up window must survive the rewrite exactly. You verify accuracy and safety, approve it, and own it.'
+      : i===2
+      ? 'A warmer tone is welcome — but reassurance must never soften a safety instruction. Check that every red-flag warning is still present and clear. You verify it is accurate and safe, approve it, and own it. AI must not triage or advise of record.'
+      : 'Every version above is a suggestion. Nothing reaches a patient until the clinician verifies it is still clinically accurate and safe, approves it, and presses send. AI must not triage or give advice of record — the words go out under your duty to the patient, so they\'re yours to own.';
+}
+toneSet(0);
+
+</script>
+</body>
+</html>
